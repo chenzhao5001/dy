@@ -8,13 +8,10 @@ public class User {
     private String token;
     private String unionid;
     private String phone;
-    private String pwd;
     private String name;
     private String head;
     private int type;
     private int status;
-    private int follow_num;
-    private int funs_num;
     private String sign_name;
     private int sex;
     private int teach_age;
@@ -53,14 +50,6 @@ public class User {
         this.phone = phone;
     }
 
-    public String getPwd() {
-        return pwd;
-    }
-
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
-    }
-
     public String getName() {
         return name;
     }
@@ -91,22 +80,6 @@ public class User {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public int getFollow_num() {
-        return follow_num;
-    }
-
-    public void setFollow_num(int follow_num) {
-        this.follow_num = follow_num;
-    }
-
-    public int getFuns_num() {
-        return funs_num;
-    }
-
-    public void setFuns_num(int funs_num) {
-        this.funs_num = funs_num;
     }
 
     public String getSign_name() {
@@ -157,8 +130,6 @@ public class User {
                 ", name='" + name + '\'' +
                 ", type=" + type +
                 ", status=" + status +
-                ", follow_num=" + follow_num +
-                ", funs_num=" + funs_num +
                 ", sign_name='" + sign_name + '\'' +
                 ", sex=" + sex +
                 ", teach_age=" + teach_age +
