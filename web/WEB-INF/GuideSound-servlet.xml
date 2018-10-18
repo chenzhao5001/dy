@@ -28,6 +28,7 @@
             <mvc:exclude-mapping path="/statics/**"/>
             <mvc:exclude-mapping path="/user/login"/>
             <mvc:exclude-mapping path="/user/identifying_code"/>
+            <mvc:exclude-mapping path="/user/phone_login"/>
             <mvc:exclude-mapping path="/video/verify_list"/>
             <mvc:exclude-mapping path="/video/verify"/>
             <mvc:exclude-mapping path="/video/set_status"/>

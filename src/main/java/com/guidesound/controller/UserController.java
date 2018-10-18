@@ -1,6 +1,8 @@
 package com.guidesound.controller;
 
 import com.guidesound.Service.IUserService;
+import com.guidesound.dao.IUser;
+import com.guidesound.dao.IVerifyCode;
 import com.guidesound.models.User;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.ServiceResponse;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,6 +27,10 @@ public class UserController extends BaseController{
 
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IVerifyCode iVerifyCode;
+    @Autowired
+    private IUser iUser;
 
     /**
      * 用户登录
@@ -70,6 +77,9 @@ public class UserController extends BaseController{
         //请求调用第三方发送第三方接口，发送短信
         ///
 
+        String code = "1234";
+        int time = (int) (new Date().getTime() / 1000);
+        iVerifyCode.addVerifyCode(phone,code,time,time);
         return JSONResult.ok();
     }
 
@@ -77,7 +87,7 @@ public class UserController extends BaseController{
     /**
      *手机号登录
      */
-    @RequestMapping(value = "/phonelogin")
+    @RequestMapping(value = "/phone_login")
     public @ResponseBody JSONResult phoneLogin(HttpServletRequest request) {
         String phone = request.getParameter("phone");
         String code = request.getParameter("code");
@@ -87,72 +97,25 @@ public class UserController extends BaseController{
             return JSONResult.build(201,"参数错误",null);
         }
 
-        List<User> userList = userService.phoneLogin(phone);
+        int time = (int) (new Date().getTime() / 1000) - 600;
+        int count = iVerifyCode.selectCode(phone,code,time);
+        if(count <= 0) {
+            return JSONResult.build(201,"验证码错误",null);
+        }
+
+        List<User> userList = iUser.getUserByPhone(phone);
         if(userList.isEmpty()) {
-            rep.setCode(202);
-            rep.setMsg("手机号未注册");
-            return null;
+            User user = new User();
+            user.setPhone(phone);
+            user.setCreate_time((int) (new Date().getTime() / 1000));
+            user.setUpdate_time((int) (new Date().getTime() / 1000));
+            iUser.addUserByPhone(user);
+            user.setToken(TockenUtil.makeTocken(user.getId()));
+            return JSONResult.ok(user);
         }
         User user = userList.get(0);
-        System.out.println(user.getPwd());
-        System.out.println(DigestUtils.md5Hex(code));
-        if(!user.getPwd().equals(DigestUtils.md5Hex(code))) {
-            rep.setCode(202);
-            rep.setMsg("密码错误");
-            return null;
-        }
-
-        UserRepTemp userRepTemp = new UserRepTemp();
-
-        String token = TockenUtil.makeTocken(user.getId());
-
-        userRepTemp.token = token;
-        userRepTemp.id = user.getId();
-        userRepTemp.unionid = user.getUnionid();
-        userRepTemp.name = user.getName();
-        userRepTemp.head = user.getHead();
-        userRepTemp.status = user.getStatus();
-
-        rep.setCode(200);
-        rep.setMsg("ok");
-        rep.setData(userRepTemp);
-        return null;
-    }
-
-    /**
-     *手机号注册
-     */
-    @RequestMapping(value = "/phone_register")
-    public @ResponseBody ServiceResponse phoneRegister(HttpServletRequest request, HttpServletResponse response) {
-        String phone = request.getParameter("phone");
-        String pwd = request.getParameter("pwd");
-
-        ServiceResponse serviceResponse = new ServiceResponse();
-        if(phone == null || pwd == null) {
-            serviceResponse.setCode(201);
-            serviceResponse.setMsg("缺失参数");
-            return serviceResponse;
-        }
-
-        List<User> userList = userService.phoneLogin(phone);
-        if(userList != null && !userList.isEmpty()) {
-            serviceResponse.setCode(202);
-            serviceResponse.setMsg("此手机号已经被注册");
-            return serviceResponse;
-        }
-
-        User user = (User)request.getAttribute("user_info");
-
-        if(user.getPhone() == "") {
-            serviceResponse.setCode(203);
-            serviceResponse.setMsg("已经注册过了");
-            return serviceResponse;
-        }
-
-        userService.phoneRegister(user.getId(),phone,DigestUtils.md5Hex(pwd));
-        serviceResponse.setCode(200);
-        serviceResponse.setMsg("ok");
-        return serviceResponse;
+        user.setToken(TockenUtil.makeTocken(user.getId()));
+        return JSONResult.ok(user);
     }
 
     /**

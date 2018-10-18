@@ -1,6 +1,8 @@
 package com.guidesound.dao;
 
 import com.guidesound.models.User;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -30,7 +32,9 @@ public interface IUser {
     @Update("update user set type = #{arg1} where id= #{arg0}")
     public void updateType(int id,int type);
 
-
+    @Insert("insert into user (phone) values (#{phone})")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
+    public void addUserByPhone(User user);
 
 
 }

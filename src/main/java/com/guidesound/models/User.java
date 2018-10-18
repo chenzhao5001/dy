@@ -5,6 +5,7 @@ package com.guidesound.models;
  */
 public class User {
     private int id;
+    private String token;
     private String unionid;
     private String phone;
     private String pwd;
@@ -20,6 +21,13 @@ public class User {
     private int create_time;
     private int update_time;
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public int getId() {
         return id;
