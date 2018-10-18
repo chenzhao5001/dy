@@ -2,8 +2,10 @@ package com.guidesound.controller;
 
 import com.guidesound.Service.IUserService;
 import com.guidesound.models.User;
+import com.guidesound.util.JSONResult;
 import com.guidesound.util.ServiceResponse;
 import com.guidesound.util.TockenUtil;
+import com.guidesound.util.ToolsFunction;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,35 +60,46 @@ public class UserController extends BaseController{
         return rep;
     }
 
+    @RequestMapping(value = "/identifying_code")
+    @ResponseBody
+    public JSONResult getIdentifyingCode(String phone) {
+        if(phone == null || !ToolsFunction.isNumeric(phone) || phone.length() != 11) {
+            return JSONResult.build(201,"参数错误",null);
+        }
+        ///
+        //请求调用第三方发送第三方接口，发送短信
+        ///
+
+        return JSONResult.ok();
+    }
 
 
     /**
      *手机号登录
      */
     @RequestMapping(value = "/phonelogin")
-    public @ResponseBody LoginRep phoneLogin(HttpServletRequest request, HttpServletResponse response) {
+    public @ResponseBody JSONResult phoneLogin(HttpServletRequest request) {
         String phone = request.getParameter("phone");
-        String pwd = request.getParameter("pwd");
+        String code = request.getParameter("code");
         LoginRep rep = new LoginRep();
-        if(phone == null || pwd == null ) {
-            rep.setCode(201);
-            rep.setMsg("缺少参数");
-            return rep;
+
+        if(phone == null || code == null || !ToolsFunction.isNumeric(phone) || phone.length() != 11) {
+            return JSONResult.build(201,"参数错误",null);
         }
 
         List<User> userList = userService.phoneLogin(phone);
         if(userList.isEmpty()) {
             rep.setCode(202);
             rep.setMsg("手机号未注册");
-            return rep;
+            return null;
         }
         User user = userList.get(0);
         System.out.println(user.getPwd());
-        System.out.println(DigestUtils.md5Hex(pwd));
-        if(!user.getPwd().equals(DigestUtils.md5Hex(pwd))) {
+        System.out.println(DigestUtils.md5Hex(code));
+        if(!user.getPwd().equals(DigestUtils.md5Hex(code))) {
             rep.setCode(202);
             rep.setMsg("密码错误");
-            return rep;
+            return null;
         }
 
         UserRepTemp userRepTemp = new UserRepTemp();
@@ -103,7 +116,7 @@ public class UserController extends BaseController{
         rep.setCode(200);
         rep.setMsg("ok");
         rep.setData(userRepTemp);
-        return rep;
+        return null;
     }
 
     /**

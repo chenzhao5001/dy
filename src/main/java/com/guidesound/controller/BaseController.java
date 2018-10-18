@@ -22,6 +22,6 @@ public class BaseController {
         if(log == null ) {
             log = (Logger) LogManager.getLogger();
         }
-        log.info(123);
+//        log.info(123);
     }
 }
