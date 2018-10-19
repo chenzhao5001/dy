@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="guidesound">
+  <artifact type="war" name="guidesound">
     <output-path>$PROJECT_DIR$/out/artifacts/guidesound</output-path>
-    <root id="root">
+    <root id="archive" name="guidesound.war">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: com.alibaba:druid:1.1.10" />
@@ -32,6 +32,11 @@
           <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-api:2.1" />
           <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-core:2.1" />
           <element id="library" level="project" name="Maven: org.json:json:20160810" />
+          <element id="library" level="project" name="Maven: com.fasterxml:classmate:1.0.0" />
+          <element id="library" level="project" name="Maven: javax.el:el-api:2.2" />
+          <element id="library" level="project" name="Maven: javax.validation:validation-api:1.1.0.Final" />
+          <element id="library" level="project" name="Maven: org.hibernate:hibernate-validator:5.1.0.Final" />
+          <element id="library" level="project" name="Maven: org.jboss.logging:jboss-logging:3.1.3.GA" />
         </element>
         <element id="directory" name="classes">
           <element id="module-output" name="guide_sound" />

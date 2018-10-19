@@ -21,9 +21,6 @@ public class SignMap {
         watch_type.put(3,"高中");
         watch_type.put(4,"大学");
 
-
-
-
     }
 
     public static String getSubjectById(int id) {
@@ -38,6 +35,14 @@ public class SignMap {
             return watch_type.get(id);
         }
         return "未知";
+    }
+
+    public static Map<Integer,String> getSubjectList() {
+        return subjectMap;
+    }
+
+    public static Map<Integer,String> getWatchList() {
+        return watch_type;
     }
 
 

@@ -2,24 +2,34 @@ package com.guidesound.controller;
 
 import com.guidesound.Service.IVideoService;
 import com.guidesound.dao.IVideo;
+import com.guidesound.dto.VideoDTO;
 import com.guidesound.models.User;
 import com.guidesound.models.Video;
+import com.guidesound.util.JSONResult;
 import com.guidesound.util.ServiceResponse;
+import com.guidesound.util.SignMap;
 import com.guidesound.util.ToolsFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+
 
 /**
  * 视频控制器
@@ -40,112 +50,58 @@ public class VideoController extends BaseController {
      */
     @RequestMapping(value = "/add")
     public @ResponseBody
-    ServiceResponse addVideo(HttpServletRequest request) throws IOException {
+    JSONResult addVideo(@Valid VideoDTO videoDTO,BindingResult result) throws IOException {
 
-        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
-        String title = multipartRequest.getParameter("title");
-        String subject = multipartRequest.getParameter("subject");
-        String watch_type = multipartRequest.getParameter("watch_type");
-        String content = multipartRequest.getParameter("content");
-        MultipartFile picture = multipartRequest.getFile("picture");
-        MultipartFile viedo = multipartRequest.getFile("video");
-
-
-        if (
-                title == null
-                        || subject == null
-                        || watch_type == null
-                        || viedo == null
-                        || picture == null
-                        || content == null
-                ) {
-
-            ServiceResponse rsp = new ServiceResponse();
-            String temp= "缺少参数";
-            if(title == null) {
-                temp += " title";
+        if (result.hasErrors()) {
+            List<ObjectError> errors = result.getAllErrors();
+            String err = "";
+            for (ObjectError error : errors) {
+                err += error.getDefaultMessage();
             }
-            if(subject == null) {
-                temp += " subject";
-            }
-            if(watch_type == null) {
-                temp += " watch_type";
-            }
-            if(viedo == null) {
-                temp += " viedo";
-            }
-
-            if(picture == null) {
-                temp += " picture";
-            }
-            if(content == null) {
-                temp += " content";
-            }
-
-            rsp.msg = temp;
-            rsp.code = 201;
-            return rsp;
+            return JSONResult.errorMsg(err);
         }
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss_");//设置日期格式
-        String strDate = df.format(new Date());// new Date()为获取当前系统时间
-
-        String savePath = multipartRequest.getServletContext().getRealPath("");
-        System.out.println(savePath);
-        File file = new File(savePath);
-        savePath = file.getParent() + "/upload";
-//        savePath = savePath.substring(0,savePath.lastIndexOf("webapps") + 8) + "upload";
-
-
-        System.out.println(savePath);
-        File filePath = new File(savePath);
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String tmpPath = req.getServletContext().getRealPath("")
+                + "/tmp/";
+        File filePath = new File(tmpPath);
         if (!filePath.exists() && !filePath.isDirectory()) {
             filePath.mkdir();
         }
-        String pathPic = savePath + "/" + strDate + picture.getOriginalFilename();
-        String pathVideo = savePath + "/" + strDate + viedo.getOriginalFilename();
-        System.out.println(pathPic);
-        System.out.println(pathVideo);
-        //上传
-        picture.transferTo(new File(pathPic));
-        viedo.transferTo(new File(pathVideo));
+        String savaPath = tmpPath + System.currentTimeMillis() + "_" + ToolsFunction.getRandomString(4) + ".mp4";
+        ToolsFunction.videoChange(videoDTO.getViedo_url(),savaPath);
+        filePath = new File(savaPath);
+        String url = ToolsFunction.upFileToServicer(filePath);
 
         Video video = new Video();
-        User user = (User)multipartRequest.getAttribute("user_info");
+        User user = (User)req.getAttribute("user_info");
         video.setUser_id(user.getId());
-        video.setTitle(title);
-        video.setSubject(Integer.parseInt(subject));
-        video.setWatch_type(Integer.parseInt(watch_type));
-        video.setContent(content);
+        video.setTitle(videoDTO.getTitle());
+        video.setSubject(Integer.parseInt(videoDTO.getSubject()));
+        video.setWatch_type(Integer.parseInt(videoDTO.getWatch_type()));
+        video.setContent(videoDTO.getContent());
 
-        String picNetPath = multipartRequest.getContextPath();
-        System.out.println(picNetPath);
-        System.out.println(123);
-        String showPicPath = "http://" + request.getServerName()
-                + ":"+ request.getServerPort()
-//                + multipartRequest.getContextPath()
-                + "/upload"
-                + "/" + strDate
-                + picture.getOriginalFilename();
-        String videoPicPath = "http://" + request.getServerName()
-                + ":"+ request.getServerPort()
-//                + multipartRequest.getContextPath()
-                + "/upload"
-                + "/" + strDate
-                + viedo.getOriginalFilename();
-        video.setPic_up_path(showPicPath);
-        video.setVideo_up_path(videoPicPath);
-        video.setVideo_temp_path(pathVideo);
+
+        video.setPic_up_path(videoDTO.getPicture_url());
+        video.setVideo_up_path(videoDTO.getViedo_url());
+        video.setVideo_temp_path("");
+        video.setVideo_show_path(url);
 
         video.setCreate_time((int) (new Date().getTime() / 1000));
         video.setUpdate_time((int) (new Date().getTime() / 1000));
         videoService.addVideo(video);
+        return JSONResult.ok(url);
+    }
 
-        ServiceResponse rsp = new ServiceResponse();
-        rsp.msg = "新增视频完成";
-        rsp.code = 200;
-        rsp.data = videoPicPath;
-        return rsp;
+    @RequestMapping(value = "/subject_list")
+    @ResponseBody
+    public JSONResult getSubjectList() {
+        return JSONResult.ok(SignMap.getSubjectList());
+    }
+
+    @RequestMapping(value = "/watch_type_list")
+    @ResponseBody
+    public JSONResult getWatchType() {
+        return JSONResult.ok(SignMap.getWatchList());
     }
 
 

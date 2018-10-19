@@ -15,6 +15,7 @@
         pic_up_path,
         video_up_path,
         video_temp_path,
+        video_show_path,
         create_time,
         update_time
         )
@@ -27,6 +28,7 @@
         #{pic_up_path},
         #{video_up_path},
         #{video_temp_path},
+        #{video_show_path},
         #{create_time},
         #{update_time}
         )
