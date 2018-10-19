@@ -106,10 +106,10 @@ public class ToolsFunction {
      */
     public static String upFileToServicer(File file) throws IOException {
 
-        RequestBody fileBody = RequestBody.create(MediaType.parse("image/png"), file);
+        RequestBody fileBody = RequestBody.create(MediaType.parse("video/mp4"), file);
         MultipartBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("upload","show_video_"+ getRandomString(5),fileBody)
+                .addFormDataPart("upload","show_video_"+ getRandomString(5) + ".mp4",fileBody)
                 .addFormDataPart("sign","guide_sound")
                 .build();
 

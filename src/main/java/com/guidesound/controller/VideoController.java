@@ -69,9 +69,10 @@ public class VideoController extends BaseController {
         }
         String savaPath = tmpPath + System.currentTimeMillis() + "_" + ToolsFunction.getRandomString(4) + ".mp4";
         ToolsFunction.videoChange(videoDTO.getViedo_url(),savaPath);
+
+
         filePath = new File(savaPath);
         String url = ToolsFunction.upFileToServicer(filePath);
-
         Video video = new Video();
         User user = (User)req.getAttribute("user_info");
         video.setUser_id(user.getId());
