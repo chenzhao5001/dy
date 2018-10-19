@@ -10,7 +10,10 @@ public class VideoShow {
     String content;
     String pic_up_path;
     String video_show_path;
+    int play_count;
+    int praise_count;
     int create_time;
+
 
     public int getId() {
         return id;
@@ -82,5 +85,21 @@ public class VideoShow {
 
     public void setCreate_time(int create_time) {
         this.create_time = create_time;
+    }
+
+    public int getPlay_count() {
+        return play_count;
+    }
+
+    public void setPlay_count(int play_count) {
+        this.play_count = play_count;
+    }
+
+    public int getPraise_count() {
+        return praise_count;
+    }
+
+    public void setPraise_count(int praise_count) {
+        this.praise_count = praise_count;
     }
 }

@@ -2,17 +2,16 @@ package com.guidesound.controller;
 
 import com.guidesound.Service.IVideoService;
 import com.guidesound.dao.IVideo;
+import com.guidesound.dao.IVideoPlay;
+import com.guidesound.dao.IVideoPraise;
 import com.guidesound.dto.VideoDTO;
-import com.guidesound.models.User;
-import com.guidesound.models.Video;
-import com.guidesound.models.VideoShow;
+import com.guidesound.models.*;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.ServiceResponse;
 import com.guidesound.util.SignMap;
 import com.guidesound.util.ToolsFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +24,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
+import java.util.*;
 
 
 /**
@@ -40,10 +37,12 @@ public class VideoController extends BaseController {
 
     @Autowired
     private IVideoService videoService;
-
     @Autowired
     private IVideo iVideo;
-
+    @Autowired
+    private IVideoPlay iVideoPlay;
+    @Autowired
+    private IVideoPraise iVideoPraise;
     /**
      * 视频上传
      */
@@ -120,6 +119,33 @@ public class VideoController extends BaseController {
         int end = (iPage -1)*iSize + iSize;
 
         List<VideoShow> list_temp  = iVideo.selectVideo(status,begin,end);
+        List<Integer> idList = new ArrayList<>();
+        for(VideoShow item:list_temp) {
+            idList.add(item.getId());
+        }
+
+
+        List<PlayCount> playCounts = iVideoPlay.playCount(idList);
+        Map<Integer,Integer> playMap = new HashMap<>();
+        for (PlayCount item : playCounts) {
+            playMap.put(item.getVideo_id(),item.getCount());
+        }
+
+        List<PraiseCount> praiseCounts = iVideoPraise.praiseCount(idList);
+        Map<Integer,Integer> praiseMap = new HashMap<>();
+        for (PraiseCount item : praiseCounts) {
+            praiseMap.put(item.getVideo_id(),item.getCount());
+        }
+
+        for(VideoShow item:list_temp) {
+            if(playMap.get(item.getId()) != null) {
+                item.setPlay_count(playMap.get(item.getId()));
+            }
+            if(praiseMap.get(item.getId()) != null) {
+                item.setPraise_count(praiseMap.get(item.getId()));
+            }
+        }
+
         class Temp {
             int count = count_temp;
             List<VideoShow> list = list_temp;
@@ -140,6 +166,27 @@ public class VideoController extends BaseController {
             }
         }
         return JSONResult.ok(new Temp());
+    }
+
+
+    @RequestMapping(value = "/add_play")
+    @ResponseBody
+    public JSONResult addPlay(String video_id) {
+        if(video_id == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+        iVideoPlay.addPlay(currentUser.getId(),Integer.parseInt(video_id),(int)(new Date().getTime() /1000),(int)(new Date().getTime() /1000));
+        return JSONResult.ok();
+    }
+
+    @RequestMapping(value = "/add_praise")
+    @ResponseBody
+    public JSONResult addPraise(String video_id) {
+        if(video_id == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+        iVideoPraise.addPraise(currentUser.getId(),Integer.parseInt(video_id),(int)(new Date().getTime() /1000),(int)(new Date().getTime() /1000));
+        return JSONResult.ok();
     }
 
 
