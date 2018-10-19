@@ -5,6 +5,7 @@ import com.guidesound.dao.IVideo;
 import com.guidesound.dto.VideoDTO;
 import com.guidesound.models.User;
 import com.guidesound.models.Video;
+import com.guidesound.models.VideoShow;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.ServiceResponse;
 import com.guidesound.util.SignMap;
@@ -18,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -103,6 +102,44 @@ public class VideoController extends BaseController {
     @ResponseBody
     public JSONResult getWatchType() {
         return JSONResult.ok(SignMap.getWatchList());
+    }
+
+    /**
+     * 获取视频列表
+     */
+    @RequestMapping(value = "/video_list")
+    public @ResponseBody
+    JSONResult selectVideo(String status, String content, String page, String size) { ;
+        status = status == null ? "0":status;
+        content = content == null ? "":content;
+        int iPage = page == null ? 1:Integer.parseInt(page);
+        int iSize = size == null ? 20:Integer.parseInt(size);
+
+        int count_temp = iVideo.getVideoCount(status);
+        int begin = (iPage -1)*iSize;
+        int end = (iPage -1)*iSize + iSize;
+
+        List<VideoShow> list_temp  = iVideo.selectVideo(status,begin,end);
+        class Temp {
+            int count = count_temp;
+            List<VideoShow> list = list_temp;
+            public int getCount() {
+                return count;
+            }
+
+            public void setCount(int count) {
+                this.count = count;
+            }
+
+            public List<VideoShow> getList() {
+                return list;
+            }
+
+            public void setList(List<VideoShow> list) {
+                this.list = list;
+            }
+        }
+        return JSONResult.ok(new Temp());
     }
 
 
@@ -206,26 +243,12 @@ public class VideoController extends BaseController {
         return rsp;
     }
 
-    @RequestMapping(value = "/verify_list")
-    public @ResponseBody RepList   selectVideo(String status) {
-        RepList repList = new RepList();
-        if(status == null) {
-            status = "0";
-        }
-        List<Video> list = iVideo.selectVideo(Integer.parseInt(status));
-        repList.setCode(200);
-        repList.setMsg("ok");
-        repList.setList(list);
-        return repList;
-    }
-
-
-    @RequestMapping(value = "/verify")
-    public String verify(ModelMap model) {
-        RepList repList = selectVideo("0");
-        model.addAttribute("video_list",repList.getList());
-        return "verify";
-    }
+//    @RequestMapping(value = "/verify")
+//    public String verify(ModelMap model) {
+//        RepList repList = selectVideo("0","","","");
+//        model.addAttribute("video_list",repList.getList());
+//        return "verify";
+//    }
 }
 
 class RepList {
