@@ -4,11 +4,8 @@ import com.guidesound.Service.IUserService;
 import com.guidesound.dao.IUser;
 import com.guidesound.dao.IVerifyCode;
 import com.guidesound.models.User;
-import com.guidesound.util.JSONResult;
-import com.guidesound.util.ServiceResponse;
-import com.guidesound.util.TockenUtil;
-import com.guidesound.util.ToolsFunction;
-import org.apache.commons.codec.digest.DigestUtils;
+import com.guidesound.models.UserInfo;
+import com.guidesound.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -128,48 +125,80 @@ public class UserController extends BaseController{
         System.out.println(currentUser);
         rep.setCode(200);
         rep.setMsg("用户退出");
-
         return rep;
     }
 
+    /**
+     * 获得用户类型列表
+     */
+    @RequestMapping(value = "/type_list")
+    @ResponseBody
+    public JSONResult getUserType() {
+        return JSONResult.ok(SignMap.getUserTypeList());
+    }
+
+    /**
+     * 设置用户类型
+     */
+    @RequestMapping(value = "/set_type")
+    @ResponseBody
+    public JSONResult setUserType(String user_type) {
+        if(user_type == null) {
+            return JSONResult.errorMsg("需要user_type");
+        }
+
+        if(!SignMap.getUserTypeList().containsKey(Integer.parseInt(user_type))) {
+            return JSONResult.errorMsg("设置的类型不存在");
+        }
+        iUser.updateType(currentUser.getId(),user_type);
+        return JSONResult.ok();
+    }
+
+
+    /**
+     *息获得用户信息
+     */
+    @RequestMapping(value = "/info")
+    @ResponseBody
+    public JSONResult getUserInfoById(String user_id) {
+
+        if(user_id == null) {
+            return JSONResult.errorMsg("需要user_id");
+        }
+        UserInfo uesrInfo = iUser.getUserInfo(user_id);
+        if (uesrInfo == null) {
+            return JSONResult.errorMsg("此用户不存在");
+        }
+        return JSONResult.ok(uesrInfo);
+    }
     /**
      * 关注用户
      * @return
      */
     @RequestMapping(value = "/follow")
-    public @ResponseBody ServiceResponse addFuns(HttpServletRequest request) {
-        User user = (User)request.getAttribute("user_info");
-        String userID = request.getParameter("user_id");
-        ServiceResponse rep = new ServiceResponse();
-        if(userID == null) {
-            rep.setCode(201);
-            rep.setMsg("缺少参数");
-            return rep;
+    @ResponseBody
+    public JSONResult addFuns(String user_id) {
+        if(user_id == null) {
+            return JSONResult.errorMsg("参数缺少user_id");
         }
 
-        userService.followUser(Integer.parseInt(userID),user.getId());
-        rep.setCode(200);
-        rep.setMsg("ok");
-        return rep;
+        iUser.followUser(currentUser.getId(),
+                Integer.parseInt(user_id),
+                (int)(new Date().getTime() /1000));
+        return JSONResult.ok();
     }
 
     /**
      *取消关注
      */
-    @RequestMapping(value = "/delete_follow")
-    public @ResponseBody ServiceResponse deleteFollow(HttpServletRequest request) {
-        User user = (User)request.getAttribute("user_info");
-        String userID = request.getParameter("user_id");
-        ServiceResponse rep = new ServiceResponse();
-        if(userID == null) {
-            rep.setCode(201);
-            rep.setMsg("缺少参数");
-            return rep;
+    @RequestMapping(value = "/cancel_follow")
+    public @ResponseBody JSONResult deleteFollow(String user_id) {
+        if(user_id == null) {
+            return JSONResult.errorMsg("参数缺少user_id");
         }
-        userService.cannelFollow(Integer.parseInt(userID),user.getId());
-        rep.setCode(200);
-        rep.setMsg("ok");
-        return rep;
+
+        iUser.cancelFollow(currentUser.getId(),Integer.parseInt(user_id),(int)(new Date().getTime() /1000));
+        return JSONResult.ok();
     }
 
     /**

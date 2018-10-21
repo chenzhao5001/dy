@@ -6,6 +6,7 @@ import java.util.Map;
 public class SignMap {
     static Map<Integer,String> subjectMap;
     static Map<Integer,String> watch_type;
+    static Map<Integer,String> user_type;
 
     static {
         subjectMap = new HashMap<>();
@@ -20,6 +21,16 @@ public class SignMap {
         watch_type.put(2,"初中");
         watch_type.put(3,"高中");
         watch_type.put(4,"大学");
+
+        user_type = new HashMap<>();
+        user_type.put(0,"未知");
+        user_type.put(1,"教师");
+        user_type.put(2,"家长");
+        user_type.put(3,"学生");
+        user_type.put(4,"机构");
+
+
+
 
     }
 
@@ -43,6 +54,10 @@ public class SignMap {
 
     public static Map<Integer,String> getWatchList() {
         return watch_type;
+    }
+
+    public static Map<Integer,String> getUserTypeList() {
+        return user_type;
     }
 
 

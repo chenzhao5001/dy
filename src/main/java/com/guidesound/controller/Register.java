@@ -53,7 +53,7 @@ public class Register extends BaseController {
         }
 
         iUser.updateStatus(user.getId(),2);
-        iUser.updateType(user.getId(),1);
+        iUser.updateType(user.getId(),"1");
 
         Student student = new Student();
         student.setUser_id(user.getId());
@@ -88,7 +88,7 @@ public class Register extends BaseController {
         }
 
         iUser.updateStatus(user.getId(),2);
-        iUser.updateType(user.getId(),2);
+        iUser.updateType(user.getId(),"2");
 
 
         Teacher teacher = new Teacher();
@@ -123,7 +123,7 @@ public class Register extends BaseController {
 
 
         iUser.updateStatus(user.getId(),2);
-        iUser.updateType(user.getId(),3);
+        iUser.updateType(user.getId(),"3");
 
         Parent parent = new Parent();
         parent.setUser_id(user.getId());
