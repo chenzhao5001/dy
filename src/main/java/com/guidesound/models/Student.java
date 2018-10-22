@@ -3,6 +3,8 @@ package com.guidesound.models;
 public class Student {
     int user_id;
     int grade;
+    int level;
+    int sex;
     int create_time;
     int update_time;
 
@@ -36,5 +38,21 @@ public class Student {
 
     public void setUpdate_time(int update_time) {
         this.update_time = update_time;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
     }
 }

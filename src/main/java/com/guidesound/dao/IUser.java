@@ -41,5 +41,23 @@ public interface IUser {
     @Update("update userFuns set deleted = 1,update_time = #{arg2} where user_id= #{arg1} and funs_user_id = #{arg0}")
     public void cancelFollow(int id,int user_id,int update_time);
 
+    @Insert("insert into userPraise (user_id,praise_user_id,create_time) values (#{arg1},#{arg0},#{arg2})")
+    public void praiseUser(int id,int user_id,int create_time);
+
+    @Select("select count(*) from userFuns where user_id = #{arg0}")
+    public int getFunsById(String user_id);
+    @Select("select count(*) from userFuns where funs_user_id = #{arg0}")
+    public int getFollowById(String user_id);
+
+    @Select("select count(*) from userPraise where user_id = #{arg0}")
+    public int getPraiseById(String user_id);
+    @Select("select id from student where user_id = #{arg0}")
+    public int findStudentInfoId(String user_id);
+
+    @Update("update user set head = #{arg1} where id = #{arg0}")
+    public void updateHead(int id,String head);
+    @Update("update user set sign_name = #{arg1} where id = #{arg0}")
+    public void updateSignName(int id,String signName);
+
 }
 

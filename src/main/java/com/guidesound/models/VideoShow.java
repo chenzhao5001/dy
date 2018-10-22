@@ -12,7 +12,11 @@ public class VideoShow {
     String video_show_path;
     int play_count;
     int praise_count;
+    int chat_count;
+    String user_head;
+    boolean follow;
     int create_time;
+
 
 
     public int getId() {
@@ -101,5 +105,29 @@ public class VideoShow {
 
     public void setPraise_count(int praise_count) {
         this.praise_count = praise_count;
+    }
+
+    public int getChat_count() {
+        return chat_count;
+    }
+
+    public void setChat_count(int chat_count) {
+        this.chat_count = chat_count;
+    }
+
+    public String getUser_head() {
+        return user_head;
+    }
+
+    public void setUser_head(String user_head) {
+        this.user_head = user_head;
+    }
+
+    public boolean isFollow() {
+        return follow;
+    }
+
+    public void setFollow(boolean follow) {
+        this.follow = follow;
     }
 }

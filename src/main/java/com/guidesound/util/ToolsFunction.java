@@ -2,10 +2,13 @@ package com.guidesound.util;
 
 import okhttp3.*;
 import org.json.JSONObject;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -137,5 +140,19 @@ public class ToolsFunction {
             sb.append(str.charAt(number));
         }
         return sb.toString();
+    }
+
+    public static boolean paramCheck(BindingResult result,StringBuilder errMsg) {
+        if (result.hasErrors()) {
+            List<ObjectError> errors = result.getAllErrors();
+            String err = "";
+            for (ObjectError error : errors) {
+                err += error.getDefaultMessage();
+            }
+            errMsg.append(err);
+            return false;
+        }
+        return true;
+
     }
  }

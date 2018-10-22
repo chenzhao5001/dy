@@ -2,14 +2,13 @@ package com.guidesound.controller;
 
 import com.guidesound.Service.IVideoService;
 import com.guidesound.dao.IVideo;
+import com.guidesound.dao.IVideoChat;
 import com.guidesound.dao.IVideoPlay;
 import com.guidesound.dao.IVideoPraise;
 import com.guidesound.dto.VideoDTO;
 import com.guidesound.models.*;
-import com.guidesound.util.JSONResult;
-import com.guidesound.util.ServiceResponse;
-import com.guidesound.util.SignMap;
-import com.guidesound.util.ToolsFunction;
+import com.guidesound.resp.ListResp;
+import com.guidesound.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
@@ -43,6 +43,8 @@ public class VideoController extends BaseController {
     private IVideoPlay iVideoPlay;
     @Autowired
     private IVideoPraise iVideoPraise;
+    @Autowired
+    private IVideoChat iVideoChat;
     /**
      * 视频上传
      */
@@ -108,7 +110,9 @@ public class VideoController extends BaseController {
      */
     @RequestMapping(value = "/video_list")
     public @ResponseBody
-    JSONResult selectVideo(String status, String content, String page, String size) { ;
+    JSONResult selectVideo(
+            HttpServletRequest request,
+            String status, String content, String page, String size) { ;
         status = status == null ? "0":status;
         content = content == null ? "":content;
         int iPage = page == null ? 1:Integer.parseInt(page);
@@ -124,48 +128,43 @@ public class VideoController extends BaseController {
             idList.add(item.getId());
         }
 
-
-        List<PlayCount> playCounts = iVideoPlay.playCount(idList);
-        Map<Integer,Integer> playMap = new HashMap<>();
-        for (PlayCount item : playCounts) {
-            playMap.put(item.getVideo_id(),item.getCount());
+        Cookie[] cookies = request.getCookies();
+        int user_id = 0;
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    user_id = TockenUtil.getUserIdByTocket(token);
+                }
+            }
+        }
+        if(user_id != 0) {
+            List<Integer> videoIds = iVideo.getCollectionVideoById(user_id);
+            if(videoIds != null) {
+                for(VideoShow item:list_temp) {
+                    if(videoIds.contains(item.getId())) {
+                        item.setFollow(true);
+                    }
+                }
+            }
         }
 
-        List<PraiseCount> praiseCounts = iVideoPraise.praiseCount(idList);
-        Map<Integer,Integer> praiseMap = new HashMap<>();
-        for (PraiseCount item : praiseCounts) {
-            praiseMap.put(item.getVideo_id(),item.getCount());
+        List<User> heads = iVideo.getUserHeadByIds(idList);
+        Map<Integer,String> headMap = new HashMap<>();
+        for (User user : heads) {
+            headMap.put(user.getId(),user.getHead());
         }
 
         for(VideoShow item:list_temp) {
-            if(playMap.get(item.getId()) != null) {
-                item.setPlay_count(playMap.get(item.getId()));
-            }
-            if(praiseMap.get(item.getId()) != null) {
-                item.setPraise_count(praiseMap.get(item.getId()));
+            if(headMap.containsKey(item.getUser_id())) {
+                item.setUser_head(headMap.get(item.getUser_id()));
             }
         }
 
-        class Temp {
-            int count = count_temp;
-            List<VideoShow> list = list_temp;
-            public int getCount() {
-                return count;
-            }
-
-            public void setCount(int count) {
-                this.count = count;
-            }
-
-            public List<VideoShow> getList() {
-                return list;
-            }
-
-            public void setList(List<VideoShow> list) {
-                this.list = list;
-            }
-        }
-        return JSONResult.ok(new Temp());
+        ListResp ret = new ListResp();
+        ret.setCount(count_temp);
+        ret.setList(list_temp);
+        return JSONResult.ok(ret);
     }
 
 
@@ -173,8 +172,10 @@ public class VideoController extends BaseController {
     @ResponseBody
     public JSONResult addPlay(String video_id) {
         if(video_id == null) {
-            return JSONResult.errorMsg("缺少参数");
+            return JSONResult.errorMsg("缺少参数 video_id");
         }
+
+        iVideoPlay.addMainPlay(Integer.parseInt(video_id));
         iVideoPlay.addPlay(currentUser.getId(),Integer.parseInt(video_id),(int)(new Date().getTime() /1000),(int)(new Date().getTime() /1000));
         return JSONResult.ok();
     }
@@ -185,10 +186,34 @@ public class VideoController extends BaseController {
         if(video_id == null) {
             return JSONResult.errorMsg("缺少参数");
         }
+
+        int count = iVideoPraise.getVideoPraise(Integer.parseInt(video_id),currentUser.getId());
+        if(count > 0) {
+            return JSONResult.errorMsg("此用户已经评论过该视频");
+        }
+
+        iVideoPraise.addMainPraise(Integer.parseInt(video_id));
         iVideoPraise.addPraise(currentUser.getId(),Integer.parseInt(video_id),(int)(new Date().getTime() /1000),(int)(new Date().getTime() /1000));
         return JSONResult.ok();
     }
 
+    @RequestMapping(value = "/chat_video")
+    @ResponseBody
+    public JSONResult chatVideo(String video_id,String content) {
+
+        if(video_id == null || content == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        System.out.println(iVideoChat);
+
+        iVideoChat.chatMainVideo(Integer.parseInt(video_id));
+        iVideoChat.chatVideo(currentUser.getId()
+                ,Integer.parseInt(video_id)
+                ,content
+                ,(int)(new Date().getTime()/1000) );
+        return JSONResult.ok();
+    }
 
 
     /**
@@ -210,6 +235,8 @@ public class VideoController extends BaseController {
         rep.setList(list);
         return rep;
     }
+
+
 
     @RequestMapping(value = "/get_info")
     public @ResponseBody RepVideo  getVideo(HttpServletRequest request) {

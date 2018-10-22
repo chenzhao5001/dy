@@ -1,12 +1,8 @@
-package com.guidesound.models;
+package com.guidesound.resp;
 
-/**
- * 用户表
- */
-public class User {
+public class UserResp {
     private int id;
     private String token;
-    private String unionid;
     private String phone;
     private String name;
     private String head;
@@ -16,16 +12,13 @@ public class User {
     private String sign_name;
     private int sex;
     private int teach_age;
+
+    private int funs_counts;
+    private int follow_count;
+    private int praise_count;
+    private int video_count;
+    private int article_count;
     private int create_time;
-    private int update_time;
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public int getId() {
         return id;
@@ -35,12 +28,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUnionid() {
-        return unionid;
+    public String getToken() {
+        return token;
     }
 
-    public void setUnionid(String unionid) {
-        this.unionid = unionid;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getPhone() {
@@ -115,35 +108,51 @@ public class User {
         this.teach_age = teach_age;
     }
 
+    public int getFuns_counts() {
+        return funs_counts;
+    }
+
+    public void setFuns_counts(int funs_counts) {
+        this.funs_counts = funs_counts;
+    }
+
+    public int getFollow_count() {
+        return follow_count;
+    }
+
+    public void setFollow_count(int follow_count) {
+        this.follow_count = follow_count;
+    }
+
+    public int getPraise_count() {
+        return praise_count;
+    }
+
+    public void setPraise_count(int praise_count) {
+        this.praise_count = praise_count;
+    }
+
+    public int getVideo_count() {
+        return video_count;
+    }
+
+    public void setVideo_count(int video_count) {
+        this.video_count = video_count;
+    }
+
+    public int getArticle_count() {
+        return article_count;
+    }
+
+    public void setArticle_count(int article_count) {
+        this.article_count = article_count;
+    }
+
     public int getCreate_time() {
         return create_time;
     }
 
     public void setCreate_time(int create_time) {
         this.create_time = create_time;
-    }
-
-    public int getUpdate_time() {
-        return update_time;
-    }
-
-    public void setUpdate_time(int update_time) {
-        this.update_time = update_time;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", unionid='" + unionid + '\'' +
-                ", name='" + name + '\'' +
-                ", type=" + type +
-                ", status=" + status +
-                ", sign_name='" + sign_name + '\'' +
-                ", sex=" + sex +
-                ", teach_age=" + teach_age +
-                ", create_time=" + create_time +
-                ", update_time=" + update_time +
-                '}';
     }
 }

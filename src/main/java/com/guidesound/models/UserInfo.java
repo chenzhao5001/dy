@@ -9,8 +9,14 @@ public class UserInfo {
     private int level;
     private int status;
     private String sign_name;
-    private int sex;
-    private int teach_age;
+
+
+    private int funs_counts;
+    private int follow_count;
+    private int praise_count;
+    private int video_count;
+    private int article_count;
+
     private int create_time;
 
     public int getId() {
@@ -69,21 +75,6 @@ public class UserInfo {
         this.sign_name = sign_name;
     }
 
-    public int getSex() {
-        return sex;
-    }
-
-    public void setSex(int sex) {
-        this.sex = sex;
-    }
-
-    public int getTeach_age() {
-        return teach_age;
-    }
-
-    public void setTeach_age(int teach_age) {
-        this.teach_age = teach_age;
-    }
 
     public int getCreate_time() {
         return create_time;
@@ -99,5 +90,45 @@ public class UserInfo {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public int getFuns_counts() {
+        return funs_counts;
+    }
+
+    public void setFuns_counts(int funs_counts) {
+        this.funs_counts = funs_counts;
+    }
+
+    public int getFollow_count() {
+        return follow_count;
+    }
+
+    public void setFollow_count(int follow_count) {
+        this.follow_count = follow_count;
+    }
+
+    public int getPraise_count() {
+        return praise_count;
+    }
+
+    public void setPraise_count(int praise_count) {
+        this.praise_count = praise_count;
+    }
+
+    public int getVideo_count() {
+        return video_count;
+    }
+
+    public void setVideo_count(int video_count) {
+        this.video_count = video_count;
+    }
+
+    public int getArticle_count() {
+        return article_count;
+    }
+
+    public void setArticle_count(int article_count) {
+        this.article_count = article_count;
     }
 }
