@@ -70,7 +70,6 @@ public class VideoController extends BaseController {
         String savaPath = tmpPath + System.currentTimeMillis() + "_" + ToolsFunction.getRandomString(4) + ".mp4";
         ToolsFunction.videoChange(videoDTO.getViedo_url(),savaPath);
 
-
         filePath = new File(savaPath);
         String url = ToolsFunction.upFileToServicer(filePath);
         Video video = new Video();
@@ -80,7 +79,7 @@ public class VideoController extends BaseController {
         video.setSubject(Integer.parseInt(videoDTO.getSubject()));
         video.setWatch_type(Integer.parseInt(videoDTO.getWatch_type()));
         video.setContent(videoDTO.getContent());
-
+        video.setDuration(Integer.parseInt(videoDTO.getDuration()));
 
         video.setPic_up_path(videoDTO.getPicture_url());
         video.setVideo_up_path(videoDTO.getViedo_url());
@@ -96,7 +95,7 @@ public class VideoController extends BaseController {
     @RequestMapping(value = "/subject_list")
     @ResponseBody
     public JSONResult getSubjectList() {
-        return JSONResult.ok(SignMap.getSubjectList());
+        return JSONResult.ok(SignMap.getSubjectClassifyList());
     }
 
     @RequestMapping(value = "/watch_type_list")
@@ -125,9 +124,10 @@ public class VideoController extends BaseController {
         List<VideoShow> list_temp  = iVideo.selectVideo(status,begin,end);
         List<Integer> idList = new ArrayList<>();
         for(VideoShow item:list_temp) {
+            item.setWatch_type_name(SignMap.getWatchById(item.getWatch_type()));
+            item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
             idList.add(item.getId());
         }
-
         Cookie[] cookies = request.getCookies();
         int user_id = 0;
         if(cookies != null) {

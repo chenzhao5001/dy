@@ -218,6 +218,7 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("参数缺少user_id");
         }
 
+
         iUser.followUser(currentUser.getId(),
                 Integer.parseInt(user_id),
                 (int)(new Date().getTime() /1000));

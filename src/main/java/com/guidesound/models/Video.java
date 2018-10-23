@@ -6,6 +6,7 @@ public class Video {
     String title;
     int subject;
     int watch_type;
+    int duration;
     String content;
     String pic_up_path;
     String video_up_path;
@@ -110,6 +111,13 @@ public class Video {
         this.update_time = update_time;
     }
 
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
 
     @Override
     public String toString() {

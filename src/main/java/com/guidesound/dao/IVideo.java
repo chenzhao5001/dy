@@ -32,7 +32,7 @@ public interface IVideo {
     @Select("select count(*) from video where user_id = #{arg0}")
     int getVideoByUserId(String usre_id);
 
-    @Select("select video_id from video_collection where user_id = #{arg0}")
+    @Select("select video_id from videoCollection where user_id = #{arg0}")
     List<Integer> getCollectionVideoById(int user_id);
 
     @Select("<script>"

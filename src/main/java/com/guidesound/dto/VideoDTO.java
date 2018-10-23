@@ -16,6 +16,8 @@ public class VideoDTO {
     String picture_url;
     @NotNull(message = "content:不能为空;")
     String content;
+    @NotNull(message = "duration:不能为空;")
+    String duration;
 
     public String getTitle() {
         return title;
@@ -63,5 +65,13 @@ public class VideoDTO {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }

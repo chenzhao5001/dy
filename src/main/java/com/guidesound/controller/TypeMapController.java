@@ -34,4 +34,22 @@ public class TypeMapController {
         return JSONResult.ok(SignMap.getUserTypeList());
     }
 
+    /**
+     * 获取学科类别接口
+     */
+    @RequestMapping(value = "/subject_classify_list")
+    @ResponseBody
+    public JSONResult getSubjectClassifyList() {
+        return JSONResult.ok(SignMap.getSubjectClassifyList());
+    }
+
+    /**
+     * 获取学科类型信息接口
+     */
+    @RequestMapping(value = "/subject_type_list")
+    @ResponseBody
+    public JSONResult getSubjectTypeList() {
+        return JSONResult.ok(SignMap.getSubjectTypeList());
+    }
+
 }

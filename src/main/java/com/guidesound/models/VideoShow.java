@@ -6,7 +6,13 @@ public class VideoShow {
     int user_id;
     String title;
     int subject;
+    String subject_name;
+
     int watch_type;
+    String watch_type_name;
+
+    int duration;
+
     String content;
     String pic_up_path;
     String video_show_path;
@@ -130,4 +136,30 @@ public class VideoShow {
     public void setFollow(boolean follow) {
         this.follow = follow;
     }
+
+
+    public String getSubject_name() {
+        return subject_name;
+    }
+
+    public void setSubject_name(String subject_name) {
+        this.subject_name = subject_name;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public String getWatch_type_name() {
+        return watch_type_name;
+    }
+
+    public void setWatch_type_name(String watch_type_name) {
+        this.watch_type_name = watch_type_name;
+    }
+
 }
