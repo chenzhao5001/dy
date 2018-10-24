@@ -11,7 +11,6 @@ import com.guidesound.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
@@ -123,18 +122,45 @@ public class UserController extends BaseController{
         }
 
         List<User> userList = iUser.getUserByPhone(phone);
+        User user = null;
         if(userList.isEmpty()) {
-            User user = new User();
+            user = new User();
             user.setPhone(phone);
             user.setCreate_time((int) (new Date().getTime() / 1000));
             user.setUpdate_time((int) (new Date().getTime() / 1000));
+            user.setLevel(1);
             iUser.addUserByPhone(user);
             user.setToken(TockenUtil.makeTocken(user.getId()));
-            return JSONResult.ok(user);
         }
-        User user = userList.get(0);
+        user = userList.get(0);
         user.setToken(TockenUtil.makeTocken(user.getId()));
-        return JSONResult.ok(user);
+
+        UserResp userResp = new UserResp();
+        userResp.setId(user.getId());
+        userResp.setToken(TockenUtil.makeTocken(user.getId()));
+        userResp.setPhone(user.getPhone());
+        userResp.setName(user.getName());
+        userResp.setHead(user.getHead());
+        userResp.setType(user.getType());
+        userResp.setLevel(user.getLevel());
+        userResp.setStatus(user.getStatus());
+        userResp.setSign_name(user.getSign_name());
+        userResp.setTeach_age(user.getTeach_age());
+
+        int funCount = iUser.getFunsById(String.valueOf(user.getId()));
+        int followCount = iUser.getFollowById(String.valueOf(user.getId()));
+        int praiseCount = iUser.getPraiseById(String.valueOf(user.getId()));
+        int videoCount = iVideo.getVideoByUserId(String.valueOf(user.getId()));
+        int articleCount =  iArticle.getCountByUserId(String.valueOf(user.getId()));
+
+        userResp.setFuns_counts(funCount);
+        userResp.setFollow_count(followCount);
+        userResp.setPraise_count(praiseCount);
+        userResp.setVideo_count(videoCount);
+        userResp.setArticle_count(articleCount);
+        userResp.setCreate_time(user.getCreate_time());
+
+        return JSONResult.ok(userResp);
     }
 
     /**

@@ -74,7 +74,7 @@ public class ArticleController extends BaseController {
     /**
      *取消搜藏
      */
-    @RequestMapping("/cancelCollect")
+    @RequestMapping("/cancel_collect")
     @ResponseBody
     JSONResult cancelCollect(String article_id) {
         if(article_id == null) {

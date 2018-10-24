@@ -25,7 +25,7 @@ public interface IUser {
 
     @Update("update user set status = #{arg1} where id= #{arg0}")
     public void updateStatus(int id,int status);
-    @Update("update user set type = #{arg1} where id= #{arg0}")
+    @Update("update user set type = #{arg1} ,level = 2 where id= #{arg0} and level = 1")
     public void updateType(int id,String type);
 
     @Insert("insert into user (phone) values (#{phone})")
