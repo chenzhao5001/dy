@@ -21,10 +21,10 @@ public interface IArticle {
     @Update("update article set deleted = 1 where id = #{arg1} and user_id = #{arg0}")
     void delete(int user_id,int article_id);
 
-    @Select("select id from articleCollection where deleted = 0 and user_id = #{arg0} and article_id = #{arg1}")
+    @Select("select id from articleCollection where user_id = #{arg0} and article_id = #{arg1} and deleted = 0")
     Integer findCollection(int user_id,int article_id);
 
-    @Insert("insert into articleCollection (user_id,article_id,create_time}) value (#{arg0},#{arg1},#{arg2})")
+    @Insert("insert into articleCollection (user_id,article_id,create_time) value (#{arg0},#{arg1},#{arg2})")
     void collect(int user_id,int article_id,int time);
 
     @Update("update article set collection_count = collection_count + 1 where id = #{arg0}")
@@ -36,15 +36,16 @@ public interface IArticle {
     @Update("update articleCollection set deleted = 1 where user_id = #{arg0} and article_id = #{arg1}")
     void cancelCollection(int user_id,int article_id);
 
-    @Select("select id from articlePraise where user_id = #{arg0} and article = #{arg1} and deleted = 0")
+    @Select("select id from articlePraise where user_id = #{arg0} and article_id = #{arg1} and deleted = 0")
     Integer findPraise(int user_id,int article_id);
     @Update("update article set praise_count = praise_count + 1 where id = #{arg0}")
     void addMainPraise(int article_id);
     @Insert("insert into articlePraise (user_id,article_id,create_time) value (#{arg0},#{arg1},#{arg2})")
     void addPraise(int user_id,int article_id,int time);
 
-    @Insert("insert into articleChat (user_id,article_id,content) value (#{arg0},#(arg1),#{arg2})")
-    void addComment(int user_id,int article_id,String content,int time);
+    @Insert("insert into articleChat (user_id,article_id,comment,create_time) " +
+            "value (#{arg0},#{arg1},#{arg2},#{arg3})")
+    void addComment(int user_id,int article_id,String comment,int time);
     @Update("update article set chat_count = chat_count + 1 where id = #{arg0}")
     void addMainComment(int article);
 
@@ -63,9 +64,10 @@ public interface IArticle {
     @Select("select * from article where user_id = #{arg0} and deleted = 0 limit #{arg1},#{arg2}")
     List<ArticleInfo> getListById(int user_id,int begin,int end);
 
-    @Select("select count(*) from aticleChat where article_id = #{arg0} and deleted = 0")
+    @Select("select count(*) from articleChat where article_id = #{arg0} and deleted = 0")
     int CommentCount(int article_id);
-    @Select("select * from aticleChat where article_id = #{arg0} and deleted = 0 limit #{arg1},#{arg2}")
+
+    @Select("select * from articleChat where article_id = #{arg0} and deleted = 0 limit #{arg1},#{arg2}")
     List<AtricleComment> getCollectList(int article_id,int begin,int end);
 
 }
