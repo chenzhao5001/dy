@@ -2,7 +2,8 @@ package com.guidesound.controller;
 
 import com.guidesound.dao.IArticle;
 import com.guidesound.dto.ArticleDTO;
-import com.guidesound.dto.VideoDTO;
+import com.guidesound.models.ArticleInfo;
+import com.guidesound.resp.ListResp;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.ToolsFunction;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/article")
@@ -52,7 +54,9 @@ public class ArticleController extends BaseController {
         return JSONResult.ok();
     }
 
-
+    /**
+    /*收藏文章
+     */
     @RequestMapping("/collect")
     @ResponseBody
     JSONResult collect(String article_id) {
@@ -67,28 +71,132 @@ public class ArticleController extends BaseController {
         return JSONResult.ok();
     }
 
+    /**
+     *取消搜藏
+     */
     @RequestMapping("/cancelCollect")
     JSONResult cancelCollect(String article_id) {
         if(article_id == null) {
             return JSONResult.errorMsg("缺少article_id");
         }
         if(null == iArticle.findCollection(currentUser.getId(),Integer.parseInt(article_id))) {
+            iArticle.cancelCollection(currentUser.getId(),Integer.parseInt(article_id));
+            iArticle.cancelMainCollection(Integer.parseInt(article_id));
+        }
+        return JSONResult.ok();
+    }
 
+    /**
+     *给文章点赞
+     */
+    JSONResult praise(String article_id) {
+        if (article_id == null) {
+            JSONResult.errorMsg("缺少参数 article_id");
         }
 
-        return null;
+        if(null == iArticle.findPraise(currentUser.getId(),Integer.parseInt(article_id))) {
+            iArticle.addPraise(currentUser.getId(),Integer.parseInt(article_id),(int)(new Date().getTime() /1000));
+            iArticle.addMainPraise(Integer.parseInt(article_id));
+        }
+        return JSONResult.ok();
     }
 
-    JSONResult praise(String article_id) {
-        return  null;
-    }
-
+    /**
+     * 评论文章
+     */
     JSONResult Comment(String article_id,String content) {
+        if(article_id == null || content == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+        iArticle.addComment(currentUser.getId()
+                ,Integer.parseInt(article_id)
+                ,content
+                ,(int)(new Date().getTime() / 1000));
+
+        iArticle.addMainComment(Integer.parseInt(article_id));
+        return JSONResult.ok();
+    }
+
+    /**
+     *获得文章列表
+     */
+    JSONResult getList(String page,String size) {
+        int iPage = page == null ?0:Integer.parseInt(page);
+        int iSize = size == null ?0:Integer.parseInt(size);
+
+        int begin = (iPage - 1)*iSize;
+        int end = (iPage - 1)*iSize + 20;
+        int count = iArticle.count();
+        List<ArticleInfo> list = null;
+        if(count > 0) {
+            list = iArticle.getList(begin,end);
+        }
+        ListResp listResp = new ListResp();
+        listResp.setCount(count);
+        listResp.setList(list);
+        return JSONResult.ok(listResp);
+    }
+
+    /**
+     *获得文章列表2
+     */
+    JSONResult getListByUserId(String user_id,String page,String size) {
+        if (user_id == null) {
+            return JSONResult.errorMsg("user_id");
+        }
+
+        int iPage = page == null ?0:Integer.parseInt(page);
+        int iSize = size == null ?0:Integer.parseInt(size);
+        int begin = (iPage - 1)*iSize;
+        int end = (iPage - 1)*iSize + 20;
+
+        int count = iArticle.countByUserID(currentUser.getId());
+        Object list = null;
+        if(count > 0) {
+            list =iArticle.getListById(currentUser.getId(),begin,end);
+        }
+
+        ListResp listResp = new ListResp();
+        listResp.setCount(count);
+        listResp.setList(list);
+        return JSONResult.ok(listResp);
+    }
+
+
+
+    /**
+     *获得文章详情
+     */
+    JSONResult getContent(String articel_id) {
+
         return null;
     }
 
-    JSONResult getListByUserid(String user_id) {
-        return null;
-    }
 
+    /**
+     *获得评论列表
+     */
+    JSONResult getCommentList(String article_id,String page,String size) {
+
+        if (article_id == null) {
+            return JSONResult.errorMsg("article_id");
+        }
+
+        int iPage = page == null ?0:Integer.parseInt(page);
+        int iSize = size == null ?0:Integer.parseInt(size);
+        int begin = (iPage - 1)*iSize;
+        int end = (iPage - 1)*iSize + 20;
+
+
+        int count = iArticle.CommentCount(Integer.parseInt(article_id));
+        Object list = null;
+        if(count > 0) {
+            list = iArticle.getCollectList(Integer.parseInt(article_id),begin,end);
+        }
+
+        ListResp listResp = new ListResp();
+        listResp.setCount(count);
+        listResp.setList(list);
+        return JSONResult.ok(listResp);
+    }
 }

@@ -1,6 +1,8 @@
 package com.guidesound.dao;
 
 import com.guidesound.dto.ArticleDTO;
+import com.guidesound.models.ArticleInfo;
+import com.guidesound.models.AtricleComment;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -29,10 +31,10 @@ public interface IArticle {
     void addMainCollection(int article_id);
 
     @Update("update article set collection_count = collection_count - 1 where id = #{arg0}")
-    void cancelCollection(int article_id);
+    void cancelMainCollection(int article_id);
 
-    @Update("update articleCollection set deleted = 1 where user_id = #{arg0} and #{arg1}")
-    void cancelMainCollection(int user_id,int article_id);
+    @Update("update articleCollection set deleted = 1 where user_id = #{arg0} and article_id = #{arg1}")
+    void cancelCollection(int user_id,int article_id);
 
     @Select("select id from articlePraise where user_id = #{arg0} and article = #{arg1} and deleted = 0")
     Integer findPraise(int user_id,int article_id);
@@ -41,14 +43,29 @@ public interface IArticle {
     @Insert("insert into articlePraise (user_id,article_id,create_time) value (#{arg0},#{arg1},#{arg2})")
     void addPraise(int user_id,int article_id,int time);
 
-    void addComment(int user_id,int article,String comment,int time);
+    @Insert("insert into articleChat (user_id,article_id,content) value (#{arg0},#(arg1),#{arg2})")
+    void addComment(int user_id,int article_id,String content,int time);
     @Update("update article set chat_count = chat_count + 1 where id = #{arg0}")
     void addMainComment(int article);
+
+    @Update("update articleChat set deleted = 1 where user_id = #{arg0} and article_id = #{arg1}")
     void deleteComment(int user_id,int article_id);
+    @Update("update article set chat_count = chat_count - 1 where id = #{arg0}")
     void reduceMainComment(int article_id);
-    void deleteCommentById(int article);
-    List<Object> getCollectList(int article_id);
 
+    @Select("select count(*) from article where deleted = 0")
+    int count();
+    @Select("select * from article where deleted = 0 limit #{arg0},#{arg1}")
+    List<ArticleInfo> getList(int begin,int end);
 
-    
+    @Select("select count(*) from article where user_id = #{arg0} and deleted = 0")
+    int countByUserID(int user_id);
+    @Select("select * from article where user_id = #{arg0} and deleted = 0 limit #{arg1},#{arg2}")
+    List<ArticleInfo> getListById(int user_id,int begin,int end);
+
+    @Select("select count(*) from aticleChat where article_id = #{arg0} and deleted = 0")
+    int CommentCount(int article_id);
+    @Select("select * from aticleChat where article_id = #{arg0} and deleted = 0 limit #{arg1},#{arg2}")
+    List<AtricleComment> getCollectList(int article_id,int begin,int end);
+
 }
