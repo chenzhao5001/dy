@@ -138,6 +138,7 @@ public class UserController extends BaseController{
         UserResp userResp = new UserResp();
         userResp.setId(user.getId());
         userResp.setToken(TockenUtil.makeTocken(user.getId()));
+        userResp.setUnionid(user.getUnionid());
         userResp.setPhone(user.getPhone());
         userResp.setName(user.getName());
         userResp.setHead(user.getHead());

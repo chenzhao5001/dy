@@ -3,6 +3,7 @@ package com.guidesound.resp;
 public class UserResp {
     private int id;
     private String token;
+    private String unionid;
     private String phone;
     private String name;
     private String head;
@@ -34,6 +35,14 @@ public class UserResp {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getUnionid() {
+        return unionid;
+    }
+
+    public void setUnionid(String unionid) {
+        this.unionid = unionid;
     }
 
     public String getPhone() {
