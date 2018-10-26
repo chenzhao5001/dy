@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -83,6 +85,13 @@ public class UserController extends BaseController{
         userResp.setVideo_count(videoCount);
         userResp.setArticle_count(articleCount);
         userResp.setCreate_time(user.getCreate_time());
+
+
+        //种cookie
+        Cookie cookie = new Cookie("token",token);//创建新cookie
+        cookie.setPath("/");//设置作用域
+        response.addCookie(cookie);//将cookie添加到response的cookie数组中返回给客户端
+
         return JSONResult.ok(userResp);
     }
 

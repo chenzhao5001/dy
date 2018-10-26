@@ -28,6 +28,7 @@ public class ArticleController extends BaseController {
     JSONResult add(@Valid ArticleDTO articleDTO, BindingResult result) {
         StringBuilder msg = new StringBuilder();
         if(!ToolsFunction.paramCheck(result,msg)) {
+            System.out.println(msg.toString());
             return JSONResult.errorMsg(msg.toString());
         }
         if(articleDTO.getHead_pic2() == null) {
