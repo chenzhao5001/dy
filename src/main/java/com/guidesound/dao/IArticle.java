@@ -4,6 +4,7 @@ import com.guidesound.dto.ArticleDTO;
 import com.guidesound.models.ArticleInfo;
 import com.guidesound.models.AtricleComment;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -16,6 +17,7 @@ public interface IArticle {
 
     @Insert("insert into article (user_id,head,head_pic1,head_pic2,head_pic3,content,create_time)" +
             "value (#{user_id},#{head},#{head_pic1},#{head_pic2},#{head_pic3},#{content},#{create_time})")
+    @Options(useGeneratedKeys=true, keyProperty="article_id", keyColumn="id")
     void add(ArticleDTO articleDTO);
 
     @Update("update article set deleted = 1 where id = #{arg1} and user_id = #{arg0}")
@@ -69,5 +71,8 @@ public interface IArticle {
 
     @Select("select * from articleChat where article_id = #{arg0} and deleted = 0 limit #{arg1},#{arg2}")
     List<AtricleComment> getCollectList(int article_id,int begin,int end);
+
+    @Select("select content from article where id = #{arg0}")
+    String getContentById(int article_id);
 
 }

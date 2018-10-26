@@ -8,11 +8,17 @@ import com.guidesound.util.JSONResult;
 import com.guidesound.util.ToolsFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.tools.Tool;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -25,10 +31,9 @@ public class ArticleController extends BaseController {
 
     @RequestMapping(value = "/add")
     @ResponseBody
-    JSONResult add(@Valid ArticleDTO articleDTO, BindingResult result) {
+    JSONResult add(@Valid ArticleDTO articleDTO, BindingResult result,HttpServletRequest request) throws IOException {
         StringBuilder msg = new StringBuilder();
         if(!ToolsFunction.paramCheck(result,msg)) {
-            System.out.println(msg.toString());
             return JSONResult.errorMsg(msg.toString());
         }
         if(articleDTO.getHead_pic2() == null) {
@@ -38,11 +43,16 @@ public class ArticleController extends BaseController {
             articleDTO.setHead_pic3("");
         }
 
+        String urlContent = ToolsFunction.upTextToServicer(articleDTO.getContent());
+        articleDTO.setContent(urlContent);
         articleDTO.setUser_id(currentUser.getId());
         articleDTO.setCreate_time((int)(new Date().getTime() / 1000));
         iArticle.add(articleDTO);
 
-        return JSONResult.ok();
+        String contextpath = request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
+        contextpath += "/article/preview?article_id=";
+        contextpath += articleDTO.getArticle_id();
+        return JSONResult.ok(contextpath);
     }
 
     @RequestMapping("/delete")
@@ -210,5 +220,22 @@ public class ArticleController extends BaseController {
         listResp.setCount(count);
         listResp.setList(list);
         return JSONResult.ok(listResp);
+    }
+
+
+    @RequestMapping("/edit")
+    public String articleEdit(HttpServletRequest request, HttpServletResponse response) {
+        //种cookie
+        Cookie cookie = new Cookie("token","Z3VpZGVfc291bmQ6MTk=");//创建新cookie
+        cookie.setPath("/");//设置作用域
+        response.addCookie(cookie);//将cookie添加到response的cookie数组中返回给客户端
+        return "edit";
+    }
+
+    @RequestMapping("/preview")
+    public String articlePreview(String article_id, ModelMap mode) {
+        String content = iArticle.getContentById(Integer.parseInt(article_id));
+        mode.addAttribute("content", ToolsFunction.httpGet(content));
+        return "preview";
     }
 }

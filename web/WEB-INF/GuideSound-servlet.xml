@@ -34,6 +34,7 @@
             <mvc:exclude-mapping path="/video/set_status"/>
             <mvc:exclude-mapping path="/video/video_list"/>
             <mvc:exclude-mapping path="/edit/**"/>
+            <mvc:exclude-mapping path="/article/edit"/>
             <bean class="com.guidesound.interceptor.Common"/>
         </mvc:interceptor>
     </mvc:interceptors>

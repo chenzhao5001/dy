@@ -8,7 +8,6 @@ public class ArticleInfo {
     String head_pic2;
     String head_pic3;
 
-
     int collection_count;
     int chat_count;
     int priase_count;

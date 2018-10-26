@@ -18,6 +18,7 @@ public class ToolsFunction {
 
     private static final OkHttpClient client = new OkHttpClient();
 
+
     public static String timeStamp2Date(String seconds,String format) {
         if(seconds == null || seconds.isEmpty() || seconds.equals("null")){
             return "";
@@ -128,6 +129,35 @@ public class ToolsFunction {
         return url;
     }
 
+
+    /**
+     *上传文件到文件服务器
+     */
+    public static String upTextToServicer(String content) throws IOException {
+
+        RequestBody fileBody = RequestBody.create(MediaType.parse("text/html"), content);
+        MultipartBody formBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("upload","article_"+ getRandomString(5) ,fileBody)
+                .addFormDataPart("sign","guide_sound")
+                .build();
+
+        Request req = new Request.Builder()
+                .url("http://139.199.123.168/fileservice/upload")
+                .post(formBody)
+                .build();
+        Response resp;
+        resp = client.newCall(req).execute();
+        String jsonString = resp.body().string();
+        JSONObject json = new JSONObject(jsonString);
+        String url = json.getString("data");
+        return url;
+    }
+
+
+
+
+
     /**
      *生成随机字符串
      */
@@ -154,5 +184,30 @@ public class ToolsFunction {
         }
         return true;
 
+    }
+
+
+    static public String content;
+    public static String httpGet(String url) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request.Builder builder = new Request.Builder();
+        Request request = builder.get().url(url).build();
+
+        Call call = okHttpClient.newCall(request);
+        final String reps;
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                content =  response.body().string();
+
+            }
+        });
+        return content;
     }
  }

@@ -3,11 +3,10 @@
 <html>
 
 <head>
-
     <meta charset="utf-8">
     <meta name="robots" content="noindex, nofollow">
     <title>导音文章编辑</title>
-    <script src="statics/ckeditor/ckeditor.js"></script>
+    <script src="/statics/ckeditor/ckeditor.js"></script>
 
     <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
@@ -51,7 +50,7 @@
         <input class = "title" placeholder="请输入文章标题（5-30个汉字）" type="text" name = "head" value>
     </div>
 
-        <br>
+    <br>
     <div>
         <textarea  style="text-align:center" id="editor1" name="content" rows="10" ></textarea>
     </div>
@@ -85,16 +84,16 @@
                 </h4>
             </div>
             <div class="modal-body" id="test"
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                </button>
-                <button type="button" class="btn btn-primary">
-                    提交更改
-                </button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-primary">
+                提交更改
+            </button>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal -->
 </div>
 
 <script>
@@ -141,10 +140,10 @@
     }
     function set_pic(pic,object)
     {
-         var img = $(object).attr("src");
-         $("#"+ pic ).attr("src",img);
-         $("#h_" + pic).val(img);
-         $("#myModal").modal('hide');
+        var img = $(object).attr("src");
+        $("#"+ pic ).attr("src",img);
+        $("#h_" + pic).val(img);
+        $("#myModal").modal('hide');
     }
 </script>
 <script>

@@ -17,6 +17,7 @@ public class ArticleDTO {
 
     int user_id;
     int create_time;
+    int article_id;
 
 
 
@@ -74,5 +75,13 @@ public class ArticleDTO {
 
     public void setCreate_time(int create_time) {
         this.create_time = create_time;
+    }
+
+    public int getArticle_id() {
+        return article_id;
+    }
+
+    public void setArticle_id(int article_id) {
+        this.article_id = article_id;
     }
 }
