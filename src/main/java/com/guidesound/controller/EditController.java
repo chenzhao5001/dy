@@ -55,7 +55,7 @@ public class EditController {
         String pathPic = savePath + "/" + strDate + picture.getOriginalFilename();
 //        File temp = new File(pathPic);
         picture.transferTo(new File(pathPic));
-        ToolsFunction.zoomImage(pathPic,pathPic,270,120);
+//        ToolsFunction.zoomImage(pathPic,pathPic,270,120);
 
         RequestBody fileBody = RequestBody.create(MediaType.parse("image/png"), new File(pathPic));
 

@@ -36,6 +36,24 @@
             box-sizing: border-box;
             -webkit-writing-mode: horizontal-tb !important;
         }
+
+        .src-image-select {
+            max-width: 240px;
+            max-height: 135px;
+
+            min-width: 240px;
+            min-height: 135px;
+        }
+        .src-image-size {
+            width: 240px;
+            height: 135px;
+            border: solid 1px;
+            border-color: grey;
+            float: left;
+            margin: 5px 5px;
+            text-align: center;
+            text-align: center;
+        }
     </style>
 
 
@@ -60,15 +78,27 @@
     <br>
     <span style= "font-size: 20px; margin: 20px 20px"> 标题图片</span>
     <br>
-    <a  data-toggle="modal" data-target="#myModal" onclick= select_pic1() style="float: left;margin-right: 20px" href="javacript:void(0)"><div><img id="pic_1" src="" alt="选择标题图片1"></div></a>
-    <a  data-toggle="modal" data-target="#myModal" onclick= select_pic2() style="float: left;margin-right: 20px" href="javacript:void(0)"><div><img id="pic_2" src="" alt="选择标题图片2"></div></a>
-    <a  data-toggle="modal" data-target="#myModal" onclick= select_pic3() href="javacript:void(0)"><div><img id ="pic_3" src="" alt="选择标题图片3"></div></a>
+    <div>
+        <div style = "margin: 0 auto">
+            <div class="src-image-size">
+                <a data-toggle="modal" data-target="#myModal" onclick= select_pic1()  href="javacript:void(0)"><div><img class="src-image-select"  id="pic_1" src="" alt="选择标题图片1"></div></a>
+            </div>
+            <div class="src-image-size">
+                <a data-toggle="modal" data-target="#myModal" onclick= select_pic2()  href="javacript:void(0)"><div><img class="src-image-select" id="pic_2" src="" alt="选择标题图片2"></div></a>
+            </div>
+            <div class="src-image-size">
+                <a data-toggle="modal" data-target="#myModal" onclick= select_pic3() href="javacript:void(0)"><div><img class="src-image-select" id ="pic_3" src="" alt="选择标题图片3"></div></a>
+            </div>
+        </div>
+    </div>
 
 
     <input id = "h_pic_1" type="text" name="head_pic1" style="display: none" value>
     <input id = "h_pic_2" type="text" name="head_pic2" style="display: none" value>
     <input id = "h_pic_3" type="text" name="head_pic3" style="display: none" value>
-    <div style="text-align: center">
+    <br>
+    <br>
+    <div style="clear: both; text-align: center;margin-bottom: 20px ">
         <input type="submit" class="btn btn-success">
     </div>
 </form>
@@ -85,7 +115,7 @@
                     选择标题图片
                 </h4>
             </div>
-            <div class="modal-body" id="test"
+            <div class="modal-body" id="test">
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">关闭
@@ -109,7 +139,7 @@
         arr.each(function (i,o) {
             var dom = $(o);
             dom.attr('src');
-            str += "<img src=" +  dom.attr('src') + " img_width=\"240\" img_height=\"135\" onclick=set_pic(\"pic_1\",this) \">"
+            str += "<img src=" +  dom.attr('src') + " width=\"240\" height=\"135\" onclick=set_pic(\"pic_1\",this) \">"
         });
 
         $("#test").append("<div>" + str + "</div>")
@@ -122,7 +152,7 @@
         arr.each(function (i,o) {
             var dom = $(o);
             dom.attr('src');
-            str += "<img src=" +  dom.attr('src') + " img_width=\"240\" img_height=\"135\" onclick=set_pic(\"pic_2\",this) \">"
+            str += "<img src=" +  dom.attr('src') + " width=\"240\" height=\"135\" onclick=set_pic(\"pic_2\",this) \">"
         });
 
         $("#test").append("<div>" + str + "</div>")
@@ -135,7 +165,7 @@
         arr.each(function (i,o) {
             var dom = $(o);
             dom.attr('src');
-            str += "<img src=" +  dom.attr('src') + " img_width=\"240\" img_height=\"135\" onclick=set_pic(\"pic_3\",this) \">"
+            str += "<img src=" +  dom.attr('src') + " width=\"240\" height=\"135\" onclick=set_pic(\"pic_3\",this) \">"
         });
 
         $("#test").append("<div>" + str + "</div>")
