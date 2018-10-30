@@ -44,6 +44,7 @@
 <body>
 
 
+<i type="add">+</i>
 <div style="font-size: 20px; margin:20px 20px;border-bottom: 2px solid  ">发表文章</div>
 <form method="post" action="/article/add">
     <div>
@@ -51,12 +52,13 @@
     </div>
 
     <br>
-    <div>
-        <textarea  style="text-align:center" id="editor1" name="content" rows="10" ></textarea>
+    <div style="margin: 0 auto; width: 75%">
+        <textarea  style="text-align:center" id="editor1" name="content"  rows="30" cols="50" ></textarea>
     </div>
 
     <br>
-    <span> 选择图片</span>
+    <br>
+    <span style= "font-size: 20px; margin: 20px 20px"> 标题图片</span>
     <br>
     <a  data-toggle="modal" data-target="#myModal" onclick= select_pic1() style="float: left;margin-right: 20px" href="javacript:void(0)"><div><img id="pic_1" src="" alt="选择标题图片1"></div></a>
     <a  data-toggle="modal" data-target="#myModal" onclick= select_pic2() style="float: left;margin-right: 20px" href="javacript:void(0)"><div><img id="pic_2" src="" alt="选择标题图片2"></div></a>
@@ -158,8 +160,12 @@
             { name: 'paragraph', items: [ 'NumberedList', 'BulletedList' ] },
             { name: 'insert', items: [ 'EasyImageUpload' ] }
         ],
+        imageStyleFormat:{
+            title: 'Full size image',
+            className: 'image-full-size'
+        },
         height: 250,
-//        uiColor:'#FFF',
+    //        uiColor:'#FFF',
 
         cloudServices_uploadUrl: '/edit/upload',
         // Note: this is a token endpoint to be used for CKEditor 4 samples only. Images uploaded using this token may be deleted automatically at any moment.

@@ -57,6 +57,7 @@ public class UserServiceImpl implements IUserService {
             u_temp.setPhone("");
             u_temp.setType(0);
             u_temp.setStatus(0);
+            u_temp.setLevel(1);
             u_temp.setSign_name("");
             u_temp.setSex(0);
             u_temp.setTeach_age(0);

@@ -28,8 +28,8 @@ The outline is not a part of the element's dimensions. A border needs to be used
 
 .easyimage img, .cke_widget_uploadeasyimage img {
 	display: block;
-	height: auto;
-	margin: 0 auto;
+	height: 120px;
+	width: 270px;
 	max-width: 100%;
 }
 

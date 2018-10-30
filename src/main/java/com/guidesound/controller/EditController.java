@@ -1,6 +1,7 @@
 package com.guidesound.controller;
 
 import com.guidesound.util.ServiceResponse;
+import com.guidesound.util.ToolsFunction;
 import okhttp3.*;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,7 @@ public class EditController {
 
     @RequestMapping(value = "/upload")
     @ResponseBody
-    public Object upload(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public Object upload(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
         MultipartFile picture = multipartRequest.getFile("file");
@@ -52,9 +53,11 @@ public class EditController {
             filePath.mkdir();
         }
         String pathPic = savePath + "/" + strDate + picture.getOriginalFilename();
-        File temp = new File(pathPic);
-        picture.transferTo(temp);
-        RequestBody fileBody = RequestBody.create(MediaType.parse("image/png"), temp);
+//        File temp = new File(pathPic);
+        picture.transferTo(new File(pathPic));
+        ToolsFunction.zoomImage(pathPic,pathPic,270,120);
+
+        RequestBody fileBody = RequestBody.create(MediaType.parse("image/png"), new File(pathPic));
 
         OkHttpClient okHttpClient  = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
@@ -64,7 +67,7 @@ public class EditController {
 
         MultipartBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("upload",strDate + picture.getOriginalFilename(),fileBody)
+                .addFormDataPart("upload",strDate + ToolsFunction.getRandomString(8),fileBody)
                 .addFormDataPart("sign","guide_sound")
                 .build();
 
@@ -74,6 +77,7 @@ public class EditController {
                 .build();
         Response resp;
         resp = client.newCall(req).execute();
+        file.delete();
         String jsonString = resp.body().string();
         System.out.println(jsonString);
         JSONObject json = new JSONObject(jsonString);
