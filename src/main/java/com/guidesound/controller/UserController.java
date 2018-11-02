@@ -139,9 +139,63 @@ public class UserController extends BaseController{
             user.setUpdate_time((int) (new Date().getTime() / 1000));
             user.setLevel(1);
             iUser.addUserByPhone(user);
-            user.setToken(TockenUtil.makeTocken(user.getId()));
+//            user.setToken(TockenUtil.makeTocken(user.getId()));
+        } else {
+            user = userList.get(0);
         }
-        user = userList.get(0);
+        user.setToken(TockenUtil.makeTocken(user.getId()));
+        UserResp userResp = new UserResp();
+        userResp.setId(user.getId());
+        userResp.setToken(TockenUtil.makeTocken(user.getId()));
+        userResp.setUnionid(user.getUnionid());
+        userResp.setPhone(user.getPhone());
+        userResp.setName(user.getName());
+        userResp.setHead(user.getHead());
+        userResp.setType(user.getType());
+        userResp.setLevel(user.getLevel());
+        userResp.setStatus(user.getStatus());
+        userResp.setSign_name(user.getSign_name());
+        userResp.setTeach_age(user.getTeach_age());
+
+        int funCount = iUser.getFunsById(String.valueOf(user.getId()));
+        int followCount = iUser.getFollowById(String.valueOf(user.getId()));
+        int praiseCount = iUser.getPraiseById(String.valueOf(user.getId()));
+        int videoCount = iVideo.getVideoByUserId(String.valueOf(user.getId()));
+        int articleCount =  iArticle.getCountByUserId(String.valueOf(user.getId()));
+
+        userResp.setFuns_counts(funCount);
+        userResp.setFollow_count(followCount);
+        userResp.setPraise_count(praiseCount);
+        userResp.setVideo_count(videoCount);
+        userResp.setArticle_count(articleCount);
+        userResp.setCreate_time(user.getCreate_time());
+
+        return JSONResult.ok(userResp);
+    }
+
+    /**
+     *昵称登录
+     */
+    @RequestMapping(value = "/name_login")
+    @ResponseBody
+    public JSONResult loginByName(String name) {
+        if(name == null) {
+            return JSONResult.errorMsg("缺少name参数");
+        }
+
+        List<User> userList = iUser.getUserByName(name);
+        User user = null;
+        if(userList.isEmpty()) {
+            user = new User();
+            user.setName(name);
+            user.setCreate_time((int) (new Date().getTime() / 1000));
+            user.setUpdate_time((int) (new Date().getTime() / 1000));
+            user.setLevel(1);
+            iUser.addUserByName(user);
+            user.setToken(TockenUtil.makeTocken(user.getId()));
+        } else {
+            user = userList.get(0);
+        }
         user.setToken(TockenUtil.makeTocken(user.getId()));
 
         UserResp userResp = new UserResp();

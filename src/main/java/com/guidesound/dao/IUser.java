@@ -20,6 +20,9 @@ public interface IUser {
     @Select("select * from user where phone = #{arg0}")
     public List<User> getUserByPhone(String phone);
 
+    @Select("select * from user where name = #{arg0}")
+    public List<User> getUserByName(String name);
+
     @Update("update user set phone = #{arg1},pwd = #{arg2} ,status = 1 where id = #{arg0}")
     public void phoneRegister(int id,String phone,String pwd);
 
@@ -31,6 +34,11 @@ public interface IUser {
     @Insert("insert into user (phone) values (#{phone})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     public void addUserByPhone(User user);
+
+    @Insert("insert into user (name,create_time) values (#{name},#{create_time})")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
+    public void addUserByName(User user);
+
 
     @Select("select * from user where id = #{arg0}")
     public UserInfo getUserInfo(String id);
