@@ -57,6 +57,9 @@ public interface IUser {
     @Select("select count(*) from userFuns where funs_user_id = #{arg0}")
     public int getFollowById(String user_id);
 
+    @Select("select count(id) from userFuns where user_id = #{arg0} and funs_user_id = #{arg1} and deleted = 0")
+    public int getIdByUserAndFunsId(int userId,int funsId);
+
     @Select("select count(*) from userPraise where user_id = #{arg0}")
     public int getPraiseById(String user_id);
     @Select("select id from student where user_id = #{arg0}")
@@ -66,6 +69,7 @@ public interface IUser {
     public void updateHead(int id,String head);
     @Update("update user set sign_name = #{arg1} where id = #{arg0}")
     public void updateSignName(int id,String signName);
+
 
 }
 

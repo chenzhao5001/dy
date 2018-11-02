@@ -9,7 +9,7 @@ public class UserInfo {
     private int level;
     private int status;
     private String sign_name;
-
+    private boolean follow;
 
     private int funs_counts;
     private int follow_count;
@@ -130,5 +130,13 @@ public class UserInfo {
 
     public void setArticle_count(int article_count) {
         this.article_count = article_count;
+    }
+
+    public boolean isFollow() {
+        return follow;
+    }
+
+    public void setFollow(boolean follow) {
+        this.follow = follow;
     }
 }

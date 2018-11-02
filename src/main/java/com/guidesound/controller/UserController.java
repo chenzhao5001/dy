@@ -279,8 +279,6 @@ public class UserController extends BaseController{
         }
         UserInfo userInfo = iUser.getUserInfo(user_id);
 
-
-
         if (userInfo == null) {
             return JSONResult.errorMsg("此用户不存在");
         }
@@ -295,6 +293,12 @@ public class UserController extends BaseController{
         userInfo.setPraise_count(praiseCount);
         userInfo.setVideo_count(videoCount);
         userInfo.setArticle_count(articleCount);
+
+        if (iUser.getIdByUserAndFunsId(Integer.parseInt(user_id),currentUser.getId()) == 0) {
+            userInfo.setFollow(false);
+        } else {
+            userInfo.setFollow(true);
+        }
         return JSONResult.ok(userInfo);
     }
     /**

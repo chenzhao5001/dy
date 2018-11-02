@@ -4,6 +4,7 @@
 
 <mapper namespace="com.guidesound.dao.IUserFuns">
 
+
     <select id="getUserFunsNum" parameterType="int"
             resultType="int">
         SELECT COUNT (*)
@@ -35,8 +36,10 @@
 
     <select id="getUserFunsInfo" resultType="com.guidesound.models.UserFuns">
         SELECT *
-        FROM user
-        WHERE userId = #{0} and funsId = #{1}
+        FROM userFuns
+        WHERE userId = #{0} and funsId = #{1} and deleted = 0
     </select>
+
+
 
 </mapper>
