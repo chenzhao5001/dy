@@ -5,7 +5,6 @@ import com.guidesound.util.ToolsFunction;
 import okhttp3.*;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,9 +14,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -101,6 +101,10 @@ public class EditController {
 
         model.addAttribute("content",ret);
         return "content";
+    }
+
+    public void foo() {
+        Map<String,String> m = new Hashtable<>();
     }
 
 }

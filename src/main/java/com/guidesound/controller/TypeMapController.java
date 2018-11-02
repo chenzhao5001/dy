@@ -22,7 +22,7 @@ public class TypeMapController {
     @RequestMapping(value = "/grade_type_list")
     @ResponseBody
     public JSONResult getGradeType() {
-        return JSONResult.ok(SignMap.getGradeTypeList());
+        return JSONResult.ok(SignMap.getGradeTypeInfo());
     }
 
     /**
@@ -49,7 +49,7 @@ public class TypeMapController {
     @RequestMapping(value = "/subject_type_list")
     @ResponseBody
     public JSONResult getSubjectTypeList() {
-        return JSONResult.ok(SignMap.getSubjectTypeList());
+        return JSONResult.ok(SignMap.getSubjectTypeInfo());
     }
 
 }

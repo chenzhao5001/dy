@@ -1,7 +1,6 @@
 package com.guidesound.util;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 class Content {
     String name;
@@ -30,6 +29,61 @@ class Content {
     }
 }
 
+class ListItem implements Comparable<ListItem> {
+    int id;
+    String gradeName;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getGradeName() {
+        return gradeName;
+    }
+
+    public void setGradeName(String gradeName) {
+        this.gradeName = gradeName;
+    }
+    @Override
+    public int compareTo(ListItem o) {
+        return this.getId() - o.getId();
+    }
+}
+
+class ListInfo {
+    int id;
+    String level;
+    List<ListItem> list;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public List<ListItem> getList() {
+        return list;
+    }
+
+    public void setList(List<ListItem> list) {
+        this.list = list;
+    }
+}
+
 public class SignMap {
     static Map<Integer,String> subject_classify;
     static Map<Integer,Content> subject_type;
@@ -45,7 +99,7 @@ public class SignMap {
         subject_classify.put(2,"音乐");
         subject_classify.put(3,"美术");
         subject_classify.put(4,"舞蹈");
-        subject_classify.put(5,"美术");
+        subject_classify.put(5,"武术");
         subject_classify.put(6,"其他");
 
         subject_type = new HashMap<>();
@@ -111,29 +165,28 @@ public class SignMap {
 
 
         grade_type = new HashMap<>();
-        grade_type.put(1,new Content("1-3岁",1));
-        grade_type.put(2,new Content("4-6岁",1));
-        grade_type.put(3,new Content("1-6岁",1));
+        grade_type.put(101,new Content("1-3岁",1));
+        grade_type.put(102,new Content("4-6岁",1));
+        grade_type.put(199,new Content("1-6岁",1));
 
-        grade_type.put(4,new Content("1年级",2));
-        grade_type.put(5,new Content("2年级",2));
-        grade_type.put(6,new Content("3年级",2));
-        grade_type.put(7,new Content("4年级",2));
-        grade_type.put(8,new Content("5年级",2));
-        grade_type.put(9,new Content("6年级",2));
-
-        grade_type.put(10,new Content("初一",3));
-        grade_type.put(11,new Content("初二",3));
-        grade_type.put(12,new Content("初三",3));
-
-        grade_type.put(13,new Content("高一",4));
-        grade_type.put(14,new Content("高二",4));
-        grade_type.put(15,new Content("高三",4));
+        grade_type.put(201,new Content("1年级",2));
+        grade_type.put(202,new Content("2年级",2));
+        grade_type.put(203,new Content("3年级",2));
+        grade_type.put(204,new Content("4年级",2));
+        grade_type.put(205,new Content("5年级",2));
+        grade_type.put(206,new Content("6年级",2));
+        grade_type.put(299,new Content("小学",2));
 
 
-        grade_type.put(101,new Content("小学",2));
-        grade_type.put(102,new Content("初中",3));
-        grade_type.put(103,new Content("高中",4));
+        grade_type.put(301,new Content("初一",3));
+        grade_type.put(302,new Content("初二",3));
+        grade_type.put(303,new Content("初三",3));
+        grade_type.put(399,new Content("初中",3));
+
+        grade_type.put(401,new Content("高一",4));
+        grade_type.put(402,new Content("高二",4));
+        grade_type.put(403,new Content("高三",4));
+        grade_type.put(499,new Content("高中",4));
 
     }
 
@@ -180,7 +233,128 @@ public class SignMap {
         return grade_type;
     }
 
+    public static Object getGradeTypeInfo() {
+        ListInfo gradeInfo1 = new ListInfo();//小学前
+        ListInfo gradeInfo2 = new ListInfo();//小学
+        ListInfo gradeInfo3 = new ListInfo();//初中
+        ListInfo gradeInfo4 = new ListInfo();//高中
 
+        gradeInfo1.setId(1);
+        gradeInfo1.setLevel("小学前");
+        gradeInfo1.setList(new ArrayList<>());
+        gradeInfo2.setId(2);
+        gradeInfo2.setLevel("小学");
+        gradeInfo2.setList(new ArrayList<>());
+        gradeInfo3.setId(3);
+        gradeInfo3.setLevel("初中");
+        gradeInfo3.setList(new ArrayList<>());
+        gradeInfo4.setId(4);
+        gradeInfo4.setLevel("高中");
+        gradeInfo4.setList(new ArrayList<>());
 
+        for(Integer key : grade_type.keySet()) {
+            Content content = grade_type.get(key);
+            ListItem gradeItem = new ListItem();
+            gradeItem.setId(key);
+            gradeItem.setGradeName(content.getName());
+            if (content.getPro_id() == 1) {
+                gradeInfo1.getList().add(gradeItem);
+            }
+            if (content.getPro_id() == 2) {
+                gradeInfo2.getList().add(gradeItem);
+            }
+            if (content.getPro_id() == 3) {
+                gradeInfo3.getList().add(gradeItem);
+            }
+            if (content.getPro_id() == 4) {
+                gradeInfo4.getList().add(gradeItem);
+            }
+        }
+
+        Collections.sort(gradeInfo1.getList());
+        Collections.sort(gradeInfo2.getList());
+        Collections.sort(gradeInfo3.getList());
+        Collections.sort(gradeInfo4.getList());
+
+        List<ListInfo> list  = new ArrayList<>();
+        list.add(gradeInfo1);
+        list.add(gradeInfo2);
+        list.add(gradeInfo3);
+        list.add(gradeInfo4);
+        return list;
+    }
+
+    public static Object getSubjectTypeInfo() {
+
+        ListInfo info1 = new ListInfo();//文化课
+        ListInfo info2 = new ListInfo();//音乐
+        ListInfo info3 = new ListInfo();//美术
+        ListInfo info4 = new ListInfo();//舞蹈
+        ListInfo info5 = new ListInfo();//武术
+        ListInfo info6 = new ListInfo();//其他
+
+        info1.setId(1);
+        info1.setLevel("文化课");
+        info1.setList(new ArrayList<>());
+        info2.setId(2);
+        info2.setLevel("音乐");
+        info2.setList(new ArrayList<>());
+        info3.setId(3);
+        info3.setLevel("美术");
+        info3.setList(new ArrayList<>());
+        info4.setId(4);
+        info4.setLevel("舞蹈");
+        info4.setList(new ArrayList<>());
+        info5.setId(5);
+        info5.setLevel("武术");
+        info5.setList(new ArrayList<>());
+        info6.setId(6);
+        info6.setLevel("其他");
+        info6.setList(new ArrayList<>());
+
+        for(Integer key : subject_type.keySet()) {
+            Content content = subject_type.get(key);
+            ListItem item = new ListItem();
+            item.setId(key);
+            item.setGradeName(content.getName());
+            switch (content.getPro_id()) {
+                case 1:
+                    info1.getList().add(item);
+                    break;
+                case 2:
+                    info2.getList().add(item);
+                    break;
+                case 3:
+                    info3.getList().add(item);
+                    break;
+                case 4:
+                    info4.getList().add(item);
+                    break;
+                case 5:
+                    info5.getList().add(item);
+                    break;
+                case 6:
+                    info6.getList().add(item);
+                    break;
+            }
+        }
+
+        Collections.sort(info1.getList());
+        Collections.sort(info2.getList());
+        Collections.sort(info3.getList());
+        Collections.sort(info4.getList());
+        Collections.sort(info5.getList());
+        Collections.sort(info6.getList());
+
+        List<ListInfo> list  = new ArrayList<>();
+        list.add(info1);
+        list.add(info2);
+        list.add(info3);
+        list.add(info4);
+        list.add(info5);
+        list.add(info6);
+        return list;
+
+    }
 
 }
