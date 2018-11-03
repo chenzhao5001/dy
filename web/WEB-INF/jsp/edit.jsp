@@ -78,24 +78,38 @@
     <br>
     <span style= "font-size: 20px; margin: 20px 20px"> 标题图片</span>
     <br>
+
+    <div>
+        <span>封面</span>
+        <form>
+            <input id= "pic_s1" name="pic_type" type="radio"  value="1" checked> 单图
+            <input id= "pic_s2" name="pic_type" type="radio"  value="2"> 多图
+            <input id= "pic_s3" name="pic_type" type="radio"  value="3"> 自动
+        </form>
+    </div>
+
     <div>
         <div style = "margin: 0 auto">
-            <div class="src-image-size">
+            <div class="src-image-size" id="pic_div1">
                 <a data-toggle="modal" data-target="#myModal" onclick= select_pic1()  href="javacript:void(0)"><div><img class="src-image-select"  id="pic_1" src="" alt="选择标题图片1"></div></a>
             </div>
-            <div class="src-image-size">
+            <div class="src-image-size" id="pic_div2" style="display:none ">
                 <a data-toggle="modal" data-target="#myModal" onclick= select_pic2()  href="javacript:void(0)"><div><img class="src-image-select" id="pic_2" src="" alt="选择标题图片2"></div></a>
             </div>
-            <div class="src-image-size">
+            <div class="src-image-size" id="pic_div3" style="display:none ">
                 <a data-toggle="modal" data-target="#myModal" onclick= select_pic3() href="javacript:void(0)"><div><img class="src-image-select" id ="pic_3" src="" alt="选择标题图片3"></div></a>
             </div>
         </div>
     </div>
 
 
+
     <input id = "h_pic_1" type="text" name="head_pic1" style="display: none" value>
     <input id = "h_pic_2" type="text" name="head_pic2" style="display: none" value>
     <input id = "h_pic_3" type="text" name="head_pic3" style="display: none" value>
+
+
+
     <br>
     <br>
     <div style="clear: both; text-align: center;margin-bottom: 20px ">
@@ -130,9 +144,34 @@
 
 <script>
 
+    $(document).ready(function(){
+        $("#pic_s1").click(function(){
+            $("#pic_div1").css("display","");
+            $("#pic_div2").css("display","none");
+            $("#pic_div3").css("display","none");
+            $("#pic_1").attr("src","");
+            $("#pic_2").attr("src","");
+            $("#pic_3").attr("src","");
+        });
+        $("#pic_s2").click(function(){
+            $("#pic_div1").css("display","");
+            $("#pic_div2").css("display","");
+            $("#pic_div3").css("display","");
+            $("#pic_1").attr("src","");
+            $("#pic_2").attr("src","");
+            $("#pic_3").attr("src","");
+        });
+        $("#pic_s3").click(function(){
+            $("#pic_div1").css("display","none");
+            $("#pic_div2").css("display","none");
+            $("#pic_div3").css("display","none");
+            $("#pic_1").attr("src","");
+            $("#pic_2").attr("src","");
+            $("#pic_3").attr("src","");
+        });
+    })
+
     function select_pic1() {
-
-
         $("#test").empty();
         var str  = '';
         var arr = $("iframe").eq(0).contents().find("figure img");
