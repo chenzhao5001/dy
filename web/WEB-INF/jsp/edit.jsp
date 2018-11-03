@@ -54,6 +54,13 @@
             text-align: center;
             text-align: center;
         }
+        .header-image {
+            max-width: 65px;
+            max-height:65px;
+
+            min-width: 65px;
+            min-height:65px;
+        }
     </style>
 
 
@@ -81,11 +88,9 @@
 
     <div>
         <span>封面</span>
-        <form>
             <input id= "pic_s1" name="pic_type" type="radio"  value="1" checked> 单图
             <input id= "pic_s2" name="pic_type" type="radio"  value="2"> 多图
             <input id= "pic_s3" name="pic_type" type="radio"  value="3"> 自动
-        </form>
     </div>
 
     <div>
@@ -102,19 +107,57 @@
         </div>
     </div>
 
+    <br style="clear: both">
 
+    <div style="display: inline;margin-right: 20px">
+        学科：
+        <select>
+            <option value ="volvo">Volvo</option>
+            <option value ="saab">Saab</option>
+            <option value="opel">Opel</option>
+            <option value="audi">Audi</option>
+        </select>
+    </div>
+
+    <div style="display: inline;margin-right: 20px">
+        阶段：
+        <select>
+            <option value ="volvo">Volvo</option>
+            <option value ="saab">Saab</option>
+            <option value="opel">Opel</option>
+            <option value="audi">Audi</option>
+        </select>
+    </div>
+
+    <div style="display: inline;margin-right: 20px">
+        年级：
+        <select>
+            <option value ="volvo">Volvo</option>
+            <option value ="saab">Saab</option>
+            <option value="opel">Opel</option>
+            <option value="audi">Audi</option>
+        </select>
+    </div>
 
     <input id = "h_pic_1" type="text" name="head_pic1" style="display: none" value>
     <input id = "h_pic_2" type="text" name="head_pic2" style="display: none" value>
     <input id = "h_pic_3" type="text" name="head_pic3" style="display: none" value>
 
 
+    <br>
+    <br>
+    <div>
+            <%--<div style="clear: both;margin-bottom: 20px;display: inline">--%>
+                <%--<button class="btn btn-success">预览</button>--%>
+            <%--</div>--%>
 
-    <br>
-    <br>
-    <div style="clear: both; text-align: center;margin-bottom: 20px ">
-        <input type="submit" class="btn btn-success">
+            <div style="clear: both; text-align:center;margin-bottom: 20px ">
+                <span  data-toggle="modal" data-target="#myModal_2" id="pre_view" class="btn btn-success">预览</span>
+                <input type="submit" class="btn btn-success">
+            </div>
     </div>
+
+
 </form>
 
 <!-- 模态框（Modal） -->
@@ -140,6 +183,30 @@
         </div>
     </div><!-- /.modal-content -->
 </div><!-- /.modal -->
+</div>
+
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal_2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width: 300px;margin: 0 auto">
+            <div class="modal-header">
+                <span style="margin: 0 100px;font-size: 20px">预览</span>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+            </div>
+            <div style="width: 300px;height:450px">
+                <div id="article_header">1111</div>
+                <div style="float: left"><img class = "header-image" src="" alt="test" style="border: solid silver"></div>
+                <div style="float: left">1111</div>
+                <button style="float: right;margin-right: 20px">关注</button>
+
+                <div id = "artile_content" style="clear: both">11111</div>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
 </div>
 
 <script>
