@@ -1,10 +1,14 @@
 package com.guidesound.controller;
 
 import com.guidesound.dao.IArticle;
+import com.guidesound.dao.IUser;
 import com.guidesound.dto.ArticleDTO;
 import com.guidesound.models.ArticleInfo;
+import com.guidesound.models.User;
 import com.guidesound.resp.ListResp;
 import com.guidesound.util.JSONResult;
+import com.guidesound.util.SignMap;
+import com.guidesound.util.TockenUtil;
 import com.guidesound.util.ToolsFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,11 +20,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.tools.Tool;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/article")
@@ -28,6 +33,8 @@ public class ArticleController extends BaseController {
 
     @Autowired
     private IArticle iArticle;
+    @Autowired
+    private IUser iUser;
 
     @RequestMapping(value = "/add")
     @ResponseBody
@@ -224,10 +231,19 @@ public class ArticleController extends BaseController {
 
 
     @RequestMapping("/edit")
-    public String articleEdit(HttpServletRequest request, HttpServletResponse response) {
+    public String articleEdit(HttpServletRequest request, HttpServletResponse response, ModelMap mode) {
         //种cookie
-        Cookie cookie = new Cookie("token","Z3VpZGVfc291bmQ6MTk=");//创建新cookie
+        User user = iUser.getUser(1);
+        String token = TockenUtil.makeTocken(user.getId());
+        Cookie cookie = new Cookie("token",token);//创建新cookie
         cookie.setPath("/");//设置作用域
+
+
+
+        Map info = new HashMap<String,Object>();
+        info.put("user",user);
+        info.put("subject", SignMap.getSubjectClassifyList());
+        mode.addAllAttributes(info);
         response.addCookie(cookie);//将cookie添加到response的cookie数组中返回给客户端
         return "edit";
     }

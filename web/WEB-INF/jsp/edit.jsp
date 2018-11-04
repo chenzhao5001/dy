@@ -55,11 +55,12 @@
             text-align: center;
         }
         .header-image {
-            max-width: 65px;
-            max-height:65px;
-
-            min-width: 65px;
-            min-height:65px;
+            max-width: 35px;
+            max-height:35px;
+            min-width: 35px;
+            min-height:35px;
+            border-radius:50%;
+            margin: 10px 10px;
         }
     </style>
 
@@ -68,97 +69,101 @@
 
 <body>
 
+<div style="height: 50px;background-color: #0cba4d ">
+    <div style="float: left;margin: 10px 20px;font-size: 20px;">导音教育</div>
+    <div style="float:right;margin: 15px 5px;font-size: 15px">${requestScope.user.name }</div>
+    <div style="padding: 5px 5px;float:right;"><img style="border-radius:50%;min-width: 40px;min-height:40px;" height="40px" weight="40px" src="${requestScope.user.head }" alt=""></div>
+</div>
 
-<i type="add">+</i>
-<div style="font-size: 20px; margin:20px 20px;border-bottom: 2px solid  ">发表文章</div>
-<form method="post" action="/article/add">
-    <div>
-        <input class = "title" placeholder="请输入文章标题（5-30个汉字）" type="text" name = "head" value>
-    </div>
+<div>
 
-    <br>
-    <div style="margin: 0 auto; width: 75%">
-        <textarea  style="text-align:center" id="editor1" name="content"  rows="30" cols="50" ></textarea>
-    </div>
+</div>
 
-    <br>
-    <br>
-    <span style= "font-size: 20px; margin: 20px 20px"> 标题图片</span>
-    <br>
+<div style="margin: 0 auto;width: 50%">
+    <div style="font-size: 20px; margin:20px 20px;border-bottom: 2px solid  ">发表文章</div>
+    <form method="post" action="/article/add">
+        <div>
+            <input id = "article_head" class = "title" placeholder="请输入文章标题（5-30个汉字）" type="text" name = "head" value>
+        </div>
+        <br>
+        <div style="margin: 0 auto; width: 100%">
+            <textarea  style="text-align:center" id="editor1" name="content"  rows="50" cols="50" ></textarea>
+        </div>
 
-    <div>
-        <span>封面</span>
+        <br>
+        <br>
+        <span style= "font-size: 20px; margin: 20px 20px"> 标题图片</span>
+        <br>
+
+        <div>
+            <span>封面</span>
             <input id= "pic_s1" name="pic_type" type="radio"  value="1" checked> 单图
             <input id= "pic_s2" name="pic_type" type="radio"  value="2"> 多图
             <input id= "pic_s3" name="pic_type" type="radio"  value="3"> 自动
-    </div>
+        </div>
 
+        <div>
+            <div style = "margin: 0 auto">
+                <div class="src-image-size" id="pic_div1">
+                    <a data-toggle="modal" data-target="#myModal" onclick= select_pic1()  href="javacript:void(0)"><div><img class="src-image-select"  id="pic_1" src="" alt="选择标题图片1"></div></a>
+                </div>
+                <div class="src-image-size" id="pic_div2" style="display:none ">
+                    <a data-toggle="modal" data-target="#myModal" onclick= select_pic2()  href="javacript:void(0)"><div><img class="src-image-select" id="pic_2" src="" alt="选择标题图片2"></div></a>
+                </div>
+                <div class="src-image-size" id="pic_div3" style="display:none ">
+                    <a data-toggle="modal" data-target="#myModal" onclick= select_pic3() href="javacript:void(0)"><div><img class="src-image-select" id ="pic_3" src="" alt="选择标题图片3"></div></a>
+                </div>
+            </div>
+        </div>
+
+        <br style="clear: both">
+
+        <div style="display: block;margin: 10px 10px">
+            学科：
+            <select>
+                <option value ="volvo">Volvo</option>
+                <option value ="saab">Saab</option>
+                <option value="opel">Opel</option>
+                <option value="audi">Audi</option>
+            </select>
+        </div>
+
+        <div style="display: block;margin: 10px 10px">
+            阶段：
+            <select>
+                <option value ="volvo">Volvo</option>
+                <option value ="saab">Saab</option>
+                <option value="opel">Opel</option>
+                <option value="audi">Audi</option>
+            </select>
+        </div>
+
+        <div style="display: block;margin: 10px 10px">
+            年级：
+            <select>
+                <option value ="volvo">Volvo</option>
+                <option value ="saab">Saab</option>
+                <option value="opel">Opel</option>
+                <option value="audi">Audi</option>
+            </select>
+        </div>
+
+        <input id = "h_pic_1" type="text" name="head_pic1" style="display: none" value>
+        <input id = "h_pic_2" type="text" name="head_pic2" style="display: none" value>
+        <input id = "h_pic_3" type="text" name="head_pic3" style="display: none" value>
+
+    </form>
+</div>
+
+    <br>
+    <br>
     <div>
-        <div style = "margin: 0 auto">
-            <div class="src-image-size" id="pic_div1">
-                <a data-toggle="modal" data-target="#myModal" onclick= select_pic1()  href="javacript:void(0)"><div><img class="src-image-select"  id="pic_1" src="" alt="选择标题图片1"></div></a>
-            </div>
-            <div class="src-image-size" id="pic_div2" style="display:none ">
-                <a data-toggle="modal" data-target="#myModal" onclick= select_pic2()  href="javacript:void(0)"><div><img class="src-image-select" id="pic_2" src="" alt="选择标题图片2"></div></a>
-            </div>
-            <div class="src-image-size" id="pic_div3" style="display:none ">
-                <a data-toggle="modal" data-target="#myModal" onclick= select_pic3() href="javacript:void(0)"><div><img class="src-image-select" id ="pic_3" src="" alt="选择标题图片3"></div></a>
-            </div>
+        <div style="clear: both; text-align:center;margin-bottom: 20px ">
+            <span  id="preview_article" data-toggle="modal" data-target="#myModal_2" id="pre_view" class="btn btn-success" onclick="showPre()">预览</span>
+            <input type="submit" class="btn btn-success">
         </div>
     </div>
 
-    <br style="clear: both">
-
-    <div style="display: inline;margin-right: 20px">
-        学科：
-        <select>
-            <option value ="volvo">Volvo</option>
-            <option value ="saab">Saab</option>
-            <option value="opel">Opel</option>
-            <option value="audi">Audi</option>
-        </select>
-    </div>
-
-    <div style="display: inline;margin-right: 20px">
-        阶段：
-        <select>
-            <option value ="volvo">Volvo</option>
-            <option value ="saab">Saab</option>
-            <option value="opel">Opel</option>
-            <option value="audi">Audi</option>
-        </select>
-    </div>
-
-    <div style="display: inline;margin-right: 20px">
-        年级：
-        <select>
-            <option value ="volvo">Volvo</option>
-            <option value ="saab">Saab</option>
-            <option value="opel">Opel</option>
-            <option value="audi">Audi</option>
-        </select>
-    </div>
-
-    <input id = "h_pic_1" type="text" name="head_pic1" style="display: none" value>
-    <input id = "h_pic_2" type="text" name="head_pic2" style="display: none" value>
-    <input id = "h_pic_3" type="text" name="head_pic3" style="display: none" value>
-
-
-    <br>
-    <br>
-    <div>
-            <%--<div style="clear: both;margin-bottom: 20px;display: inline">--%>
-                <%--<button class="btn btn-success">预览</button>--%>
-            <%--</div>--%>
-
-            <div style="clear: both; text-align:center;margin-bottom: 20px ">
-                <span  data-toggle="modal" data-target="#myModal_2" id="pre_view" class="btn btn-success">预览</span>
-                <input type="submit" class="btn btn-success">
-            </div>
-    </div>
-
-
-</form>
 
 <!-- 模态框（Modal） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -197,12 +202,12 @@
                 </button>
             </div>
             <div style="width: 300px;height:450px">
-                <div id="article_header">1111</div>
-                <div style="float: left"><img class = "header-image" src="" alt="test" style="border: solid silver"></div>
-                <div style="float: left">1111</div>
+                <div id="article_header" style="text-align: center;font-weight: bold"></div>
+                <div style="float: left"><img class = "header-image" src="${requestScope.user.head }" alt="test" style="border: solid silver"></div>
+                <div style="float: left">${requestScope.user.name }</div>
                 <button style="float: right;margin-right: 20px">关注</button>
 
-                <div id = "artile_content" style="clear: both">11111</div>
+                <div id = "artile_content" style="margin: 10px 10px 10px 10px; clear: both;height:350px;overflow:auto"></div>
             </div>
 
         </div><!-- /.modal-content -->
@@ -238,6 +243,30 @@
         });
     })
 
+    function showPre() {
+
+        var head = $("#article_head").val();
+        var content = CKEDITOR.instances.editor1.getData();
+
+
+
+        if(head == "") {
+            alert("缺少标题");
+            $("#preview_article").attr("data-target","");
+            return;
+        }
+        if(content == "") {
+            alert("缺少内容");
+            $("#preview_article").attr("data-target","");
+            return;
+        }
+        $("#preview_article").attr("data-target","#myModal_2");
+        $("#article_header").text(head);
+
+        $("#artile_content").html(content);
+
+
+    }
     function select_pic1() {
         $("#test").empty();
         var str  = '';
@@ -301,11 +330,8 @@
             className: 'image-full-size'
         },
         height: 250,
-    //        uiColor:'#FFF',
 
         cloudServices_uploadUrl: '/edit/upload',
-        // Note: this is a token endpoint to be used for CKEditor 4 samples only. Images uploaded using this token may be deleted automatically at any moment.
-        // To create your own token URL please visit https://ckeditor.com/ckeditor-cloud-services/.
         cloudServices_tokenUrl: 'https://33333.cke-cs.com/token/dev/ijrDsqFix838Gh3wGO3F77FSW94BwcLXprJ4APSp3XQ26xsUHTi0jcb1hoBt'
     } );
 </script>
