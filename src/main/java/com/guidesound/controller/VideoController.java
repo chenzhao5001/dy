@@ -1,10 +1,7 @@
 package com.guidesound.controller;
 
 import com.guidesound.Service.IVideoService;
-import com.guidesound.dao.IVideo;
-import com.guidesound.dao.IVideoChat;
-import com.guidesound.dao.IVideoPlay;
-import com.guidesound.dao.IVideoPraise;
+import com.guidesound.dao.*;
 import com.guidesound.dto.VideoDTO;
 import com.guidesound.models.*;
 import com.guidesound.resp.ListResp;
@@ -45,6 +42,8 @@ public class VideoController extends BaseController {
     private IVideoPraise iVideoPraise;
     @Autowired
     private IVideoChat iVideoChat;
+    @Autowired
+    private IVideoCollection iVideoCollection;
     /**
      * 视频上传
      */
@@ -122,6 +121,8 @@ public class VideoController extends BaseController {
         int end = (iPage -1)*iSize + iSize;
 
         List<VideoShow> list_temp  = iVideo.selectVideo(status,begin,end);
+
+
         List<Integer> idList = new ArrayList<>();
         for(VideoShow item:list_temp) {
             item.setWatch_type_name(SignMap.getWatchById(item.getWatch_type()));
@@ -252,6 +253,38 @@ public class VideoController extends BaseController {
         rsp.msg = "ok";
         rsp.video = video;
         return rsp;
+    }
+
+    /**
+     * 收藏视频
+     */
+    @RequestMapping(value = "/collection")
+    @ResponseBody
+    public JSONResult collectionVideo(String video_id) {
+        if ( video_id == null ) {
+            return JSONResult.errorMsg("缺少参数video_id ");
+        }
+
+        int count = iVideoCollection.getVideoCollection(Integer.parseInt(video_id),currentUser.getId());
+        if ( count == 0) {
+            iVideoCollection.addCollection(currentUser.getId(),Integer.parseInt(video_id),(int) (new Date().getTime() / 1000),0);
+        }
+        return JSONResult.ok();
+    }
+
+    /**
+     * 取消收藏
+     */
+    @RequestMapping(value = "/delete_collection")
+    @ResponseBody
+    public JSONResult deleteCollection(String video_id) {
+
+        if ( video_id == null ) {
+            return JSONResult.errorMsg("缺少参数 video_id");
+        }
+
+        iVideoCollection.deleteCollection(currentUser.getId(),Integer.parseInt(video_id));
+        return JSONResult.ok();
     }
 
     @RequestMapping(value = "/set_status")

@@ -236,4 +236,23 @@ public class ToolsFunction {
             ex.printStackTrace();
         }
     }
+
+
+    public static String trimStr(String str, String indexStr){
+        if(str == null){
+            return null;
+        }
+        StringBuilder newStr = new StringBuilder(str);
+        if(newStr.indexOf(indexStr) == 0){
+            newStr = new StringBuilder(newStr.substring(indexStr.length()));
+
+        }else if(newStr.indexOf(indexStr) == newStr.length() - indexStr.length()){
+            newStr = new StringBuilder(newStr.substring(0,newStr.lastIndexOf(indexStr)));
+
+        }else if(newStr.indexOf(indexStr) < (newStr.length() - indexStr.length())){
+            newStr =  new StringBuilder(newStr.substring(0,newStr.indexOf(indexStr))
+                   + newStr.substring(newStr.indexOf(indexStr)+indexStr.length(),newStr.length()));
+        }
+        return newStr.toString();
+    }
  }

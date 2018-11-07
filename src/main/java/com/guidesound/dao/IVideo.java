@@ -23,6 +23,26 @@ public interface IVideo {
     @Select("select * from video where examine_status = #{arg0} and deleted = 0 limit #{arg1},#{arg2}")
     List<VideoShow> selectVideo(String status, int begin, int end);
 
+    @Select("select * from video where examine_status = #{arg0} and deleted = 0 and content like title limit #{arg1},#{arg2}")
+    List<VideoShow> selectVideoByContent(String status, String content,int begin, int end);
+
+    @Select("select * from video where examine_status = #{arg0} and deleted = 0  limit #{arg1},#{arg2} order by praise_count desc")
+    List<VideoShow> selectVideoOrderByPraise(String status, int begin, int end);
+
+    @Select("select * from video where examine_status = #{arg0} and deleted = 0  limit #{arg1},#{arg2} order by play_count desc")
+    List<VideoShow> selectVideoOrderByPlay(String status, String content,int begin, int end);
+
+    @Select("select * from video where examine_status = #{arg0} and deleted = 0  limit #{arg1},#{arg2} order by create_time desc")
+    List<VideoShow> selectVideoOrderByCreatetime(String status,int begin, int end);
+
+
+    @Select("select * from video where examine_status = #{arg0} and deleted = 0 and #{arg1} like title limit #{arg2},#{arg3} order by praise_count desc")
+    List<VideoShow> selectVideoByContentOrderByPraise(String status,String content,int begin, int end);
+    @Select("select * from video where examine_status = #{arg0} and deleted = 0 and #{arg1} like title limit #{arg2},#{arg3} order by play_count desc")
+    List<VideoShow> selectVideoByContentOrderByPlay(String status, String content,int begin, int end);
+    @Select("select * from video where examine_status = #{arg0} and deleted = 0 and #{arg1} like title limit #{arg2},#{arg3} order by create_time desc")
+    List<VideoShow> selectVideoByContentOrderByCreatetime(String status, String content,int begin, int end);
+
     @Update("update video set video_show_path = #{arg1} where id = #{arg0}")
     void setVideoShowPath(int id,String path);
 
@@ -42,5 +62,6 @@ public interface IVideo {
             + "</foreach>"
             + "</script>")
     List<User> getUserHeadByIds(@Param("iList") List<Integer> iList);
+
 
 }

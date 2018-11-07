@@ -62,6 +62,7 @@
             border-radius:50%;
             margin: 10px 10px;
         }
+
     </style>
 
 
@@ -315,7 +316,7 @@
 </script>
 <script>
     CKEDITOR.replace( 'editor1', {
-        extraPlugins: 'easyimage',
+        extraPlugins: ['easyimage','autogrow'],
         removePlugins: 'image',
         removeDialogTabs: 'link:advanced',
         toolbar: [
@@ -329,7 +330,6 @@
             title: 'Full size image',
             className: 'image-full-size'
         },
-        height: 250,
 
         cloudServices_uploadUrl: '/edit/upload',
         cloudServices_tokenUrl: 'https://33333.cke-cs.com/token/dev/ijrDsqFix838Gh3wGO3F77FSW94BwcLXprJ4APSp3XQ26xsUHTi0jcb1hoBt'

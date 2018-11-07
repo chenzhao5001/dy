@@ -70,6 +70,48 @@ public interface IUser {
     @Update("update user set sign_name = #{arg1} where id = #{arg0}")
     public void updateSignName(int id,String signName);
 
+    @Update("update user set name = #{arg1} where id = #{arg0}")
+    public void updateName(int id,String name);
+
+    @Update("update user set sex = #{arg1} where id = #{arg0}")
+    public void updateSex(int id,int sex);
+
+    @Update("update user set grade = #{arg1} where id = #{arg0}")
+    public void updateGrade(int id,int grade);
+
+    @Update("update user set phone = #{arg1} where id = #{arg0}")
+    public void updatePhone(int id,String phone);
+
+    @Update("update user set province = #{arg1},city = #{arg2},area = #{arg3} where id = #{arg0}")
+    public void updateProvinceAndCity(int id,String province,String city,String area);
+
+    @Update("update user set subject = #{arg1} where id = #{arg0}")
+    public void updateSubject(int id,int subject);
+
+    @Update("update user set grade_level = #{arg1} where id = #{arg0}")
+    public void updateGradeLevel(int id,int grade);
+
+    @Update("update user set teach_age = #{arg1} where id = #{arg0}")
+    public void updateTeachAge(int id,int age);
+
+    @Update("update user set identity_auth_pic1 = #{arg1},identity_auth_pic2 = #{arg2}  where id = #{arg0}")
+    public void identityAuth(int id,String pic1,String pic2);
+
+    @Update("update user set education_auth_pic1 = #{arg1},education_auth_pic2 = #{arg2}  where id = #{arg0}")
+    public void educationAuth(int id,String pic1,String pic2);
+
+    @Update("update user set qualification_pic1 = #{arg1},qualification_pic2 = #{arg2}  where id = #{arg0}")
+    public void qualificationAuth(int id,String pic1,String pic2);
+
+    @Update("update user set juridical_pic1 = #{arg1},juridical_pic2 = #{arg2}  where id = #{arg0}")
+    public void juridicalAuth(int id,String pic1,String pic2);
+    @Update("update user set business_pic1 = #{arg1},business_pic2 = #{arg2}  where id = #{arg0}")
+    public void businessAuth(int id,String pic1,String pic2);
+
+    @Update("update user set company_name = #{arg1} where id = #{arg0}")
+    public void setCompanyName(int id,String companyName);
+
+
 
 }
 

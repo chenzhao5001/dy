@@ -403,6 +403,162 @@ public class UserController extends BaseController{
         return JSONResult.ok();
     }
 
+    /**
+     *修改昵称
+     */
+    @RequestMapping(value = "/update_name")
+    @ResponseBody
+    JSONResult upName(String name) {
+        if (name == null) {
+            return JSONResult.errorMsg("缺少参数name");
+        }
+        iUser.updateName(currentUser.getId(),name);
+        return JSONResult.ok();
+    }
+
+    /**
+     *修改性别接口
+     */
+    @RequestMapping(value = "/update_sex")
+    @ResponseBody
+    JSONResult upSex(String sex) {
+        if ( sex == null ) {
+            return JSONResult.errorMsg("缺少参数sex");
+        }
+        iUser.updateSex(currentUser.getId(),Integer.parseInt(sex));
+        return JSONResult.ok();
+
+    }
+
+    /**
+     *修改年级接口
+     */
+    @RequestMapping(value = "/update_grade")
+    @ResponseBody
+    JSONResult updateGrade(String grade) {
+        if (grade == null) {
+            return JSONResult.errorMsg("缺少参数grade");
+        }
+        iUser.updateGrade(currentUser.getId(),Integer.parseInt(grade));
+        return JSONResult.ok();
+    }
+
+    /**
+     *绑定手机号
+     */
+    @RequestMapping(value = "/update_phone")
+    @ResponseBody
+    JSONResult updatePhone(String phone) {
+        if ( phone == null ) {
+            return JSONResult.errorMsg("缺少请求参数phone");
+        }
+        iUser.updatePhone(currentUser.getId(),phone);
+        return JSONResult.ok();
+    }
+
+    /**
+     *设置省市接口
+     */
+    @RequestMapping(value = "/set_area")
+    @ResponseBody
+    public JSONResult setArea(String province, String city,String area) {
+        if (province == null || city == null || area == null) {
+            return JSONResult.errorMsg("缺少province 或 city 或 area 字段");
+        }
+        iUser.updateProvinceAndCity(currentUser.getId(),province,city,area);
+        return  JSONResult.ok();
+    }
+
+    /**
+     *设置学科接口
+     */
+    @RequestMapping(value = "/set_subject")
+    @ResponseBody
+
+    public JSONResult setSubject(String subject) {
+        if ( subject == null ) {
+            return JSONResult.errorMsg("缺少subject");
+        }
+        iUser.updateSubject(currentUser.getId(),Integer.parseInt(subject));
+        return  JSONResult.ok();
+    }
+
+    /**
+     * 设置年级阶段接口
+     */
+
+    @RequestMapping(value = "/set_grade_level")
+    @ResponseBody
+
+    public JSONResult setGradeLevel(String grade_level) {
+        if( grade_level == null) {
+            return JSONResult.errorMsg("缺少grade_level 参数");
+        }
+        iUser.updateGradeLevel(currentUser.getId(),Integer.parseInt(grade_level));
+        return JSONResult.ok();
+    }
+
+    /**
+     * 设置教龄接口
+     */
+
+    @RequestMapping(value = "/set_teach_age")
+    @ResponseBody
+    public JSONResult setTeachAge(String teach_age) {
+        if ( teach_age == null ) {
+            return JSONResult.errorMsg("缺少 teach_age 参数");
+        }
+
+        iUser.updateTeachAge(currentUser.getId(),Integer.parseInt(teach_age));
+        return JSONResult.ok();
+    }
+
+    /**
+     * 设置身份认证接口
+     */
+    public JSONResult identityAuth(String pic1,String pic2) {
+        if( pic1 == null || pic2== null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        return null;
+    }
+
+    public JSONResult educationAuth(String pic1,String pic2) {
+        if( pic1 == null || pic2== null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        return null;
+    }
+
+    public JSONResult qualificationAuth(String pic1,String pic2) {
+        if( pic1 == null || pic2== null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        return null;
+    }
+
+    public JSONResult juridicalAuth(String pic1,String pic2) {
+        if( pic1 == null || pic2== null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        return null;
+    }
+
+    public JSONResult businessAuth(String pic1,String pic2) {
+        if( pic1 == null || pic2== null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+        return null;
+    }
+
+    public JSONResult setCompanyName(String pic1,String pic2) {
+        return null;
+    }
+
 }
 
 
