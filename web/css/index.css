@@ -1,0 +1,138 @@
+* {
+    margin: 0;
+    padding: 0;
+    background: #f9f9f9;
+}
+.home {
+    /*width: 1920px;*/
+    width: 100%;
+    height: 100%;
+    background: #F9FAFB;
+}
+.topBar {
+    width:100%;
+    height:42px;
+    clear: both;
+    margin-top: 30px;
+    /*background: aqua;*/
+}
+.logoContainer {
+    padding: 0 58px;
+    /*line-height: 12px;*/
+    display: inline;
+    float: left;
+}
+.logo {
+    display: inline-block;
+    width: 180px;
+    height:50px;
+    background: url("../static/dy-logo.png") no-repeat;
+}
+
+.btns {
+    padding:10px 56px 10px 12px;
+    line-height: 32px;
+    display: inline-block;
+    float: right;
+ }
+.btns .btn {
+    position: relative;
+    float: left;
+    padding: 0 10px;
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    color: #00b80c;
+    font-size: 16px;
+}
+.btns .btn img {
+    width: 140px;
+/*    height:41px;*/
+    position: absolute;
+    top:22px;
+    left: 20px;
+    display: none;
+}
+.btns .btn3 img {
+    width: 140px;
+ /*   height:41px;*/
+    position: absolute;
+    top:22px;
+    left: -2px;
+    display: none;
+}
+.btn1:hover .img1 {
+    display: block;
+}
+.btn2:hover .img2 {
+    display: block;
+}
+.btn3:hover .img3 {
+    display: block;
+}
+.title {
+    padding: 26px 0 40px 0;
+    font-weight: bold;
+    text-align: center;
+}
+.title span {
+    font-size: 34px;
+    font-weight: bold;
+}
+.container {
+    display: block;
+    width: 100%;
+    /*padding: 0 200px;*/
+    clear: both;
+    overflow: hidden;
+    text-align: center;
+}
+.slideCon {
+    float:left;
+    /*margin-left: 200px;*/
+    margin-left: 13%;
+}
+.slideCon span {
+    display: block;
+    margin-bottom: 12px;
+    color: #767676;
+    font-size: 20px;
+}
+.carousel {
+    width: 620px;
+    height: 500px;
+}
+carousel div{
+    float: left;
+    height: 100%;
+}
+.pro {
+    width: 10px;
+    background: antiquewhite;
+}
+.back {
+    float: right;
+    width: 10px;
+    background: antiquewhite;
+}
+.slideImgs {
+    width: 76%;
+}
+.TDcode {
+    float: right;
+    margin-right:19%;
+}
+.TDcode span {
+    display: block;
+    color: #767676;
+     font-size: 20px;
+}
+.img {
+    width: 207px;
+    height: 203px;
+}
+.img img {
+    width: 222px;
+    height: 224px;
+}
+

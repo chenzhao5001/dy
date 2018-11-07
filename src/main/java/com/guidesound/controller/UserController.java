@@ -516,10 +516,13 @@ public class UserController extends BaseController{
     /**
      * 设置身份认证接口
      */
+    @RequestMapping(value = "/identity_auth")
+    @ResponseBody
     public JSONResult identityAuth(String pic1,String pic2) {
         if( pic1 == null || pic2== null) {
             return JSONResult.errorMsg("缺少参数");
         }
+
 
         return null;
     }
