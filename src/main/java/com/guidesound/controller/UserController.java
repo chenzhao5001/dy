@@ -592,7 +592,6 @@ public class UserController extends BaseController{
         iUser.setCompanyName(currentUser.getId(),company_name);
         return JSONResult.ok();
     }
-
 }
 
 
