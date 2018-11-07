@@ -522,44 +522,75 @@ public class UserController extends BaseController{
         if( pic1 == null || pic2== null) {
             return JSONResult.errorMsg("缺少参数");
         }
-
-
-        return null;
+        iUser.identityAuth(currentUser.getId(),pic1,pic2);
+        return JSONResult.ok();
     }
 
+    /**
+     * 学历认证接口
+     */
+    @RequestMapping(value = "/education_auth")
+    @ResponseBody
     public JSONResult educationAuth(String pic1,String pic2) {
         if( pic1 == null || pic2== null) {
-            return JSONResult.errorMsg("缺少参数");
+            return JSONResult.errorMsg("缺少参数 pic1 或 pic2");
         }
-
-        return null;
+        iUser.educationAuth(currentUser.getId(),pic1,pic2);
+        return JSONResult.ok();
     }
 
+    /**
+     * 资质认证接口
+     */
+    @RequestMapping(value = "/qualification_auth")
+    @ResponseBody
     public JSONResult qualificationAuth(String pic1,String pic2) {
-        if( pic1 == null || pic2== null) {
-            return JSONResult.errorMsg("缺少参数");
+        if( pic1 == null || pic2 == null) {
+            return JSONResult.errorMsg("缺少参数 pic1  或 pic2");
         }
 
-        return null;
+        iUser.qualificationAuth(currentUser.getId(),pic1,pic2);
+        return JSONResult.ok();
     }
+
+    /**
+     * 法人认证接口
+     */
+    @RequestMapping(value = "/juridical_auth")
+    @ResponseBody
 
     public JSONResult juridicalAuth(String pic1,String pic2) {
         if( pic1 == null || pic2== null) {
-            return JSONResult.errorMsg("缺少参数");
+            return JSONResult.errorMsg("缺少参数 pic1  或 pic2");
         }
-
-        return null;
+        iUser.juridicalAuth(currentUser.getId(),pic1,pic2);
+        return JSONResult.ok();
     }
 
+    /**
+     * 营业执照认证接口
+     */
+    @RequestMapping(value = "/business_auth")
+    @ResponseBody
     public JSONResult businessAuth(String pic1,String pic2) {
         if( pic1 == null || pic2== null) {
-            return JSONResult.errorMsg("缺少参数");
+            return JSONResult.errorMsg("缺少参数 pic1  或 pic2");
         }
-        return null;
+        iUser.businessAuth(currentUser.getId(),pic1,pic2);
+        return JSONResult.ok();
     }
 
-    public JSONResult setCompanyName(String pic1,String pic2) {
-        return null;
+    /**
+     * 设置公司名称
+     */
+    @RequestMapping(value = "/company_name")
+    @ResponseBody
+    public JSONResult setCompanyName(String company_name) {
+        if ( company_name == null ) {
+            return JSONResult.errorMsg("缺少参数 company_name");
+        }
+        iUser.setCompanyName(currentUser.getId(),company_name);
+        return JSONResult.ok();
     }
 
 }

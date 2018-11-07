@@ -109,7 +109,7 @@ public interface IUser {
     public void businessAuth(int id,String pic1,String pic2);
 
     @Update("update user set company_name = #{arg1} where id = #{arg0}")
-    public void setCompanyName(int id,String companyName);
+    public void setCompanyName(int user_id,String companyName);
 
 
 
