@@ -36,16 +36,7 @@ h2 {
   -ms-flex: 0 0 auto;
   flex: 0 0 auto;
 }
-.carousel figure {
-  margin: 0;
-  width: 40%;
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  -webkit-transition: -webkit-transform 0.5s;
-  transition: -webkit-transform 0.5s;
-  transition: transform 0.5s;
-  transition: transform 0.5s, -webkit-transform 0.5s;
-}
+
 .carousel figure img {
   width: 100%;
   box-sizing: border-box;
@@ -56,28 +47,82 @@ h2 {
   left: 0;
   top: 0;
 }
-.carousel nav {
-  display: block;
-  position: absolute;
-  top: 50%;
-  width: 100%;
-}
-.carousel nav .prev{
-  position: absolute;
-  cursor: pointer;
-  width: 52px;
-  height: 52px;
-  left: 0;
-  background-image: url("../static/indexSpr.png");
-  background-position: -60px -4px;
-}
-.carousel nav .next{
-  position: absolute;
-  cursor: pointer;
-  width: 52px;
-  height: 52px;
-  right: 0;
-  background-image: url("../static/indexSpr.png") ;
-  background-position: -62px -54px;
-}
 
+
+/*PC端样式*/
+@media screen and (max-width:3000px) and (min-width:320px){
+  .carousel figure {
+    margin: 0;
+    width: 40%;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transition: -webkit-transform 0.5s;
+    transition: -webkit-transform 0.5s;
+    transition: transform 0.5s;
+    transition: transform 0.5s, -webkit-transform 0.5s;
+  }
+  .carousel nav {
+    display: block;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+  }
+  .carousel nav .prev{
+    position: absolute;
+    cursor: pointer;
+    width: 52px;
+    height: 52px;
+    left: 0;
+    background-image: url("../static/indexSpr.png");
+    background-position: -60px -4px;
+  }
+  .carousel nav .next{
+    position: absolute;
+    cursor: pointer;
+    width: 52px;
+    height: 52px;
+    right: 0;
+    background-image: url("../static/indexSpr.png") ;
+    background-position: -62px -54px;
+  }
+
+}
+/*移动端样式*/
+@media screen and (max-width:400px){
+    .carousel figure {
+    margin: 0;
+    width: 20%;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transition: -webkit-transform 0.5s;
+    transition: -webkit-transform 0.5s;
+    transition: transform 0.5s;
+    transition: transform 0.5s, -webkit-transform 0.5s;
+  }
+  .carousel nav {
+    display: block;
+    position: absolute;
+    top: 28%;
+    width: 50%;
+  }
+  .carousel nav .prev{
+    position: absolute;
+    cursor: pointer;
+    width: 52px;
+    height: 52px;
+    left: -10%;
+    background-image: url("../static/indexSpr.png");
+    background-position: -60px -4px;
+  }
+  .carousel nav .next{
+    position: absolute;
+    cursor: pointer;
+    width: 52px;
+    height: 52px;
+    right: -10%;
+    background-image: url("../static/indexSpr.png") ;
+    background-position: -62px -54px;
+  }
+
+
+}
