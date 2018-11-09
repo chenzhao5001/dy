@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" type="text/css" href="../css/index.css" />
     <link rel="stylesheet" type="text/css" href="../css/normalize.css" />
     <link rel="stylesheet" type="text/css" href="../css/demo.css">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
     <link rel="stylesheet" href="../css/style.css">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
     <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
@@ -41,6 +40,7 @@
     <div class="title">看视频、读文章、 发现好老师</div>
     <!--轮播图以及二维码-->
     <div class="container">
+
         <!--轮播图容器-->
         <div class="slideCon">
             <!--标题-->
@@ -63,10 +63,43 @@
                     <nav class="nav next"></nav>
                 </nav>
             </div>
-
-
-
         </div>
+        <section class="homeMain isShow">
+            <span>软件部分功能展示</span>
+            <div class="swiper-container slider" id="slider_1">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <div class="swiper-lazy-preloader"></div>
+                <a class="pic" href="#"><img data-src="../static/image0.png" class="swiper-lazy" /></a></div>
+              <div class="swiper-slide">
+                <div class="swiper-lazy-preloader"></div>
+                <a class="pic" href="#"><img data-src="../static/image1.png" class="swiper-lazy" /></a></div>
+              <div class="swiper-slide">
+                <div class="swiper-lazy-preloader"></div>
+                <a class="pic" href="#"><img data-src="../static/image2.png" class="swiper-lazy" /></a></div>
+              <div class="swiper-slide">
+                <div class="swiper-lazy-preloader"></div>
+                <a class="pic" href="#"><img data-src="../static/image3.png" class="swiper-lazy" /></a></div>
+              <div class="swiper-slide">
+                <div class="swiper-lazy-preloader"></div>
+                <a class="pic" href="#"><img data-src="../static/image4.png" class="swiper-lazy" /></a></div>
+              <div class="swiper-slide">
+                <div class="swiper-lazy-preloader"></div>
+                <a class="pic" href="#"><img data-src="../static/image5.png" class="swiper-lazy" /></a></div>
+              <div class="swiper-slide">
+                <div class="swiper-lazy-preloader"></div>
+                <a class="pic" href="#"><img data-src="../static/image6.png" class="swiper-lazy" /></a></div>
+              <div class="swiper-slide">
+                <div class="swiper-lazy-preloader"></div>
+                <a class="pic" href="#"><img data-src="../static/image7.png" class="swiper-lazy" /></a></div>                                                                
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+            <!-- Add Arrows --> 
+          </div>
+        </section>
+
+
         <!--二维码容器-->
         <div class="TDcode">
             <span>老师入驻平台火热进行中</span>
@@ -78,5 +111,7 @@
     </div>
 </div>
 <script type="text/javascript" src="../js/index.js"></script>
+<script type="text/javascript" src="../js/swiper-3.3.1.min.js"></script>
+<script type="text/javascript" src="../js/home.js"></script>
 </body>
 </html>

@@ -176,6 +176,9 @@ public class VideoController extends BaseController {
             return JSONResult.errorMsg("缺少参数 video_id");
         }
 
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+
         iVideoPlay.addMainPlay(Integer.parseInt(video_id));
         iVideoPlay.addPlay(currentUser.getId(),Integer.parseInt(video_id),(int)(new Date().getTime() /1000),(int)(new Date().getTime() /1000));
         return JSONResult.ok();
@@ -188,6 +191,8 @@ public class VideoController extends BaseController {
             return JSONResult.errorMsg("缺少参数");
         }
 
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         int count = iVideoPraise.getVideoPraise(Integer.parseInt(video_id),currentUser.getId());
         if(count > 0) {
             return JSONResult.errorMsg("此用户已经评论过该视频");
@@ -207,6 +212,9 @@ public class VideoController extends BaseController {
         }
 
         System.out.println(iVideoChat);
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
 
         iVideoChat.chatMainVideo(Integer.parseInt(video_id));
         iVideoChat.chatVideo(currentUser.getId()
@@ -265,6 +273,8 @@ public class VideoController extends BaseController {
             return JSONResult.errorMsg("缺少参数video_id ");
         }
 
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         int count = iVideoCollection.getVideoCollection(Integer.parseInt(video_id),currentUser.getId());
         if ( count == 0) {
             iVideoCollection.addCollection(currentUser.getId(),Integer.parseInt(video_id),(int) (new Date().getTime() / 1000),0);
@@ -282,7 +292,8 @@ public class VideoController extends BaseController {
         if ( video_id == null ) {
             return JSONResult.errorMsg("缺少参数 video_id");
         }
-
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iVideoCollection.deleteCollection(currentUser.getId(),Integer.parseInt(video_id));
         return JSONResult.ok();
     }

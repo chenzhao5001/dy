@@ -63,4 +63,17 @@ function carousel(root) {
 	function rotateCarousel(imageIndex) {
 		figure.style.transform = 'rotateY(' + imageIndex * -theta + 'rad)';
 	}
+
 }
+// 判断浏览器屏幕宽度
+$(function(){
+	// if ($(window).width()  > 400) {
+	// 	$('.slideCon').css("display", "block");
+	// 	$('.wrap').css("display", "none");
+	// } else {
+	// 	$('.slideCon').css("display", "none")
+	// 	$('.wrap').css("display", "block")
+	// }
+
+	
+})

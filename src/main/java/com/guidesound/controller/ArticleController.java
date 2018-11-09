@@ -10,6 +10,7 @@ import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
 import com.guidesound.util.TockenUtil;
 import com.guidesound.util.ToolsFunction;
+import org.omg.CORBA.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -49,6 +50,7 @@ public class ArticleController extends BaseController {
         if(articleDTO.getHead_pic3() == null) {
             articleDTO.setHead_pic3("");
         }
+        User currentUser = (User)request.getAttribute("user_info");
 
         String urlContent = ToolsFunction.upTextToServicer(articleDTO.getContent());
         articleDTO.setContent(urlContent);
@@ -64,10 +66,11 @@ public class ArticleController extends BaseController {
 
     @RequestMapping("/delete")
     @ResponseBody
-    JSONResult delete(String article_id) {
+    JSONResult delete(HttpServletRequest request,String article_id) {
         if(article_id == null) {
             return JSONResult.errorMsg("缺少参数 article_id");
         }
+        User currentUser = (User)request.getAttribute("user_info");
         iArticle.delete(currentUser.getId(),Integer.parseInt(article_id));
         return JSONResult.ok();
     }
@@ -77,10 +80,11 @@ public class ArticleController extends BaseController {
      */
     @RequestMapping("/collect")
     @ResponseBody
-    JSONResult collect(String article_id) {
+    JSONResult collect(HttpServletRequest request,String article_id) {
         if(article_id == null ) {
             return JSONResult.errorMsg("缺少参数article_id");
         }
+        User currentUser = (User)request.getAttribute("user_info");
         if(null == iArticle.findCollection(currentUser.getId(),Integer.parseInt(article_id))) {
             iArticle.addMainCollection(Integer.parseInt(article_id));
             iArticle.collect(currentUser.getId(),Integer.parseInt(article_id),
@@ -94,10 +98,11 @@ public class ArticleController extends BaseController {
      */
     @RequestMapping("/cancel_collect")
     @ResponseBody
-    JSONResult cancelCollect(String article_id) {
+    JSONResult cancelCollect(HttpServletRequest request,String article_id) {
         if(article_id == null) {
             return JSONResult.errorMsg("缺少article_id");
         }
+        User currentUser = (User)request.getAttribute("user_info");
         if(null != iArticle.findCollection(currentUser.getId(),Integer.parseInt(article_id))) {
             iArticle.cancelCollection(currentUser.getId(),Integer.parseInt(article_id));
             iArticle.cancelMainCollection(Integer.parseInt(article_id));
@@ -111,11 +116,12 @@ public class ArticleController extends BaseController {
 
     @RequestMapping("/praise")
     @ResponseBody
-    JSONResult praise(String article_id) {
+    JSONResult praise(HttpServletRequest request,String article_id) {
         if (article_id == null) {
             JSONResult.errorMsg("缺少参数 article_id");
         }
 
+        User currentUser = (User)request.getAttribute("user_info");
         if(null == iArticle.findPraise(currentUser.getId(),Integer.parseInt(article_id))) {
             iArticle.addPraise(currentUser.getId(),Integer.parseInt(article_id),(int)(new Date().getTime() /1000));
             iArticle.addMainPraise(Integer.parseInt(article_id));
@@ -128,10 +134,11 @@ public class ArticleController extends BaseController {
      */
     @RequestMapping("/comment")
     @ResponseBody
-    JSONResult Comment(String article_id,String comment) {
+    JSONResult Comment(HttpServletRequest request,String article_id,String comment) {
         if(article_id == null || comment == null) {
             return JSONResult.errorMsg("缺少参数");
         }
+        User currentUser = (User)request.getAttribute("user_info");
         iArticle.addComment(currentUser.getId()
                 ,Integer.parseInt(article_id)
                 ,comment
@@ -168,7 +175,7 @@ public class ArticleController extends BaseController {
      */
     @RequestMapping("/list_by_userid")
     @ResponseBody
-    JSONResult getListByUserId(String user_id,String page,String size) {
+    JSONResult getListByUserId(HttpServletRequest request,String user_id,String page,String size) {
         if (user_id == null) {
             return JSONResult.errorMsg("user_id");
         }
@@ -178,6 +185,7 @@ public class ArticleController extends BaseController {
         int begin = (iPage - 1)*iSize;
         int end = (iPage - 1)*iSize + 20;
 
+        User currentUser = (User)request.getAttribute("user_info");
         int count = iArticle.countByUserID(currentUser.getId());
         Object list = null;
         if(count > 0) {

@@ -6,8 +6,9 @@
 .home {
     /*width: 1920px;*/
     width: 100%;
-    height: 100%;
+    /*height: 100%;*/
     background: #F9FAFB;
+
 }
 .topBar {
     width:100%;
@@ -66,10 +67,13 @@
     width: 100%;
     /*padding: 0 200px;*/
     clear: both;
-    overflow: hidden;
+    /*overflow: hidden;*/
     text-align: center;
+    margin-bottom:20px;
 }
-
+.slideCon{
+    display: block;
+}
 .slideCon span {
     display: block;
     margin-bottom: 12px;
@@ -105,14 +109,36 @@
 }
 .img {
     width: 230px;
-    height: 203px;
+    height: 224px;
 }
 .img img {
     width: 222px;
     height: 224px;
 }
+.isShow{
+    display: none;
+}
+.homeMain{padding:10px;min-width:320px; max-width:640px; margin:0 auto;overflow-x:hidden;overflow-y:auto; position: relative;}
+
+
+.swiper-container {margin:4px auto; height:auto;position: relative;overflow: hidden;z-index: 1;}
+.swiper-wrapper {position: relative;width: 100%;height: 100%;z-index: 1;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;-webkit-transition-property: -webkit-transform;-moz-transition-property: -moz-transform;-o-transition-property: -o-transform;-ms-transition-property: -ms-transform;transition-property: transform;-webkit-box-sizing: content-box;-moz-box-sizing: content-box;box-sizing: content-box;}
+.swiper-slide, .swiper-wrapper {-webkit-transform: translate3d(0, 0, 0);-moz-transform: translate3d(0, 0, 0);-o-transform: translate(0, 0);-ms-transform: translate3d(0, 0, 0);transform: translate3d(0, 0, 0)}
+.swiper-slide {-webkit-flex-shrink: 0;-ms-flex: 0 0 auto;flex-shrink: 0;width: 100%; height:100%; position: relative; z-index:100; overflow:hidden; float:left; font-size:0;}
+#tSlider_1 .swiper-wrapper{ padding-left:8px; -webkit-box-sizing:border-box; box-sizing:border-box;}
+.ulImg{ position:relative; padding-bottom:100%; display:block; overflow: hidden;}
+.bg-lazy{ background:url(../img/loazy_img.png) no-repeat center center; background-size:100%; display:block; width:100%; height:100%;}
+#tSlider_1 .swiper-slide a{ display:block; width:100%; height:100%; box-sizing:border-box; padding:0 2%; overflow:hidden;}
+.swiper-slide img{ width:60%; height:auto;}
+.swiper-pagination {position: absolute;text-align: center;-webkit-transition: .3s;-moz-transition: .3s;-o-transition: .3s;transition: .3s;-webkit-transform: translate3d(0, 0, 0);-ms-transform: translate3d(0, 0, 0);-o-transform: translate3d(0, 0, 0);transform: translate3d(0, 0, 0);z-index: 10;  height:6px; line-height:6px; bottom:12px; text-align:center; right:10px;}
+.swiper-pagination-bullet {display:inline-block; width:6px; height:6px; -webkit-border-radius:50%; -moz-border-radius:50%; border-radius:50%; background:#999; text-indent:-9999px; overflow:hidden; margin:0 4px; opacity:0.6;-moz-opacity:0.6;filter:alpha(opacity=60);}
+.swiper-pagination-bullet-active { width:8px;opacity: 1;background: #ffd447;}
+
 /*PC端样式*/
-@media screen and (max-width:3000px) and (min-width:400px){
+@media screen and (max-width:3000px) and (min-width:1024px){
+    .home{
+        min-width: 1300px;
+    }
     .carousel {
     width: 620px;
     height: 500px;
@@ -139,37 +165,72 @@
     float: right;
  }
 }
-/*移动端样式*/
-@media screen and (max-width:400px){
-    .carousel {
+/*!*移动端样式*!*/
+@media screen and (max-width:1024px){
+    .home{
+        min-width: 320px;
+    }
+    /*.carousel {
     width: 620px;
     height: 256px;
+    }*/
+    body {
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
     }
+    /**/
     .logoContainer {
-    padding: 0 100px;
-    display: inline;
-    float: left;
+    display: block;
+    width: 100%;
+    text-align: center;
+    }
+    .logo {
+    width: 12rem;
+    }
+    .topBar{
+        margin-top:15px;
     }
     .title {
-        margin-top: 16px;
-        padding: 10px 0 20px 0;
-        font-size: 24px;
+        /*margin-top: 3rem;*/
+        padding: 1.5rem 0 0rem 0;
+        font-size: 1.4rem;
         font-weight: bold;
         text-align: center;
-        margin-top: 50px;
     }
     .slideCon {
+        display: none;
+    }
+    .TDcode  span{
+        font-size: 1rem;
+    }
+    /*.slideCon {
     float:left;
     margin-left: -32%;
-    }
+    }*/
     .btns {
-        padding:2px 56px 10px 12px;
-        line-height: 32px;
-        display: inline-block;
-        float: right;
+        display: none;
      }
     .TDcode {
-        float: right;      
+        float: none;
+        text-align: center;
+        margin-right: 0;
     }
-    .container{padding-bottom: 50px;}
+    .TDcode .img{
+        margin: 0 auto;
+    }
+    .isShow{
+        display: block;
+    }
+    .homeMain span{
+        font-size:1rem;
+        color:#767676;
+    }
+
+    /*轮播样式*/
+
+
+
+   
 }
+

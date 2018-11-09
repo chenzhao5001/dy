@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -234,8 +236,9 @@ public class UserController extends BaseController{
     @RequestMapping(value = "/logout")
     public  @ResponseBody ServiceResponse logout(HttpServletRequest request, HttpServletResponse response) {
         ServiceResponse rep = new ServiceResponse();
-        System.out.println(currentUser);
-        rep.setCode(200);
+
+//        System.out.println(currentUser);
+//        rep.setCode(200);
         rep.setMsg("用户退出");
         return rep;
     }
@@ -262,6 +265,8 @@ public class UserController extends BaseController{
         if(!SignMap.getUserTypeList().containsKey(Integer.parseInt(user_type))) {
             return JSONResult.errorMsg("设置的类型不存在");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iUser.updateType(currentUser.getId(),user_type);
         return JSONResult.ok();
     }
@@ -294,6 +299,9 @@ public class UserController extends BaseController{
         userInfo.setVideo_count(videoCount);
         userInfo.setArticle_count(articleCount);
 
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+
         if (iUser.getIdByUserAndFunsId(Integer.parseInt(user_id),currentUser.getId()) == 0) {
             userInfo.setFollow(false);
         } else {
@@ -312,6 +320,8 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("参数缺少user_id");
         }
 
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
 
         iUser.followUser(currentUser.getId(),
                 Integer.parseInt(user_id),
@@ -329,6 +339,9 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("参数缺少user_id");
         }
 
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+
         iUser.cancelFollow(currentUser.getId(),Integer.parseInt(user_id),(int)(new Date().getTime() /1000));
         return JSONResult.ok();
     }
@@ -342,6 +355,9 @@ public class UserController extends BaseController{
         if (user_id == null) {
             return JSONResult.errorMsg("参数缺少user_id");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+
         iUser.praiseUser(currentUser.getId(),
                 Integer.parseInt(user_id),
                 (int)(new Date().getTime() /1000));
@@ -359,6 +375,8 @@ public class UserController extends BaseController{
         if(!ToolsFunction.paramCheck(result,msg)) {
             return JSONResult.errorMsg(msg.toString());
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
 
         Student student = new Student();
         student.setUser_id(currentUser.getId());
@@ -385,6 +403,8 @@ public class UserController extends BaseController{
         if(head_url == null) {
             return JSONResult.errorMsg("缺少参数head_url");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iUser.updateHead(currentUser.getId(),head_url);
         return JSONResult.ok();
     }
@@ -399,6 +419,8 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("缺少参数sign_name");
         }
 
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iUser.updateSignName(currentUser.getId(),sign_name);
         return JSONResult.ok();
     }
@@ -412,6 +434,8 @@ public class UserController extends BaseController{
         if (name == null) {
             return JSONResult.errorMsg("缺少参数name");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iUser.updateName(currentUser.getId(),name);
         return JSONResult.ok();
     }
@@ -425,6 +449,9 @@ public class UserController extends BaseController{
         if ( sex == null ) {
             return JSONResult.errorMsg("缺少参数sex");
         }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iUser.updateSex(currentUser.getId(),Integer.parseInt(sex));
         return JSONResult.ok();
 
@@ -439,6 +466,8 @@ public class UserController extends BaseController{
         if (grade == null) {
             return JSONResult.errorMsg("缺少参数grade");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iUser.updateGrade(currentUser.getId(),Integer.parseInt(grade));
         return JSONResult.ok();
     }
@@ -452,6 +481,8 @@ public class UserController extends BaseController{
         if ( phone == null ) {
             return JSONResult.errorMsg("缺少请求参数phone");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iUser.updatePhone(currentUser.getId(),phone);
         return JSONResult.ok();
     }
@@ -465,6 +496,8 @@ public class UserController extends BaseController{
         if (province == null || city == null || area == null) {
             return JSONResult.errorMsg("缺少province 或 city 或 area 字段");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iUser.updateProvinceAndCity(currentUser.getId(),province,city,area);
         return  JSONResult.ok();
     }
@@ -479,6 +512,8 @@ public class UserController extends BaseController{
         if ( subject == null ) {
             return JSONResult.errorMsg("缺少subject");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iUser.updateSubject(currentUser.getId(),Integer.parseInt(subject));
         return  JSONResult.ok();
     }
@@ -494,6 +529,8 @@ public class UserController extends BaseController{
         if( grade_level == null) {
             return JSONResult.errorMsg("缺少grade_level 参数");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iUser.updateGradeLevel(currentUser.getId(),Integer.parseInt(grade_level));
         return JSONResult.ok();
     }
@@ -509,6 +546,9 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("缺少 teach_age 参数");
         }
 
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+
         iUser.updateTeachAge(currentUser.getId(),Integer.parseInt(teach_age));
         return JSONResult.ok();
     }
@@ -522,6 +562,8 @@ public class UserController extends BaseController{
         if( pic1 == null || pic2== null) {
             return JSONResult.errorMsg("缺少参数");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iUser.identityAuth(currentUser.getId(),pic1,pic2);
         return JSONResult.ok();
     }
@@ -535,6 +577,9 @@ public class UserController extends BaseController{
         if( pic1 == null || pic2== null) {
             return JSONResult.errorMsg("缺少参数 pic1 或 pic2");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+
         iUser.educationAuth(currentUser.getId(),pic1,pic2);
         return JSONResult.ok();
     }
@@ -548,6 +593,9 @@ public class UserController extends BaseController{
         if( pic1 == null || pic2 == null) {
             return JSONResult.errorMsg("缺少参数 pic1  或 pic2");
         }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
 
         iUser.qualificationAuth(currentUser.getId(),pic1,pic2);
         return JSONResult.ok();
@@ -563,6 +611,8 @@ public class UserController extends BaseController{
         if( pic1 == null || pic2== null) {
             return JSONResult.errorMsg("缺少参数 pic1  或 pic2");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iUser.juridicalAuth(currentUser.getId(),pic1,pic2);
         return JSONResult.ok();
     }
@@ -576,6 +626,9 @@ public class UserController extends BaseController{
         if( pic1 == null || pic2== null) {
             return JSONResult.errorMsg("缺少参数 pic1  或 pic2");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+
         iUser.businessAuth(currentUser.getId(),pic1,pic2);
         return JSONResult.ok();
     }
@@ -589,6 +642,8 @@ public class UserController extends BaseController{
         if ( company_name == null ) {
             return JSONResult.errorMsg("缺少参数 company_name");
         }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         iUser.setCompanyName(currentUser.getId(),company_name);
         return JSONResult.ok();
     }

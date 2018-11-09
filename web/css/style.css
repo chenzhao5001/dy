@@ -102,7 +102,7 @@ h2 {
   .carousel nav {
     display: block;
     position: absolute;
-    top: 28%;
+    /*top: 28%;*/
     width: 50%;
   }
   .carousel nav .prev{
@@ -112,7 +112,7 @@ h2 {
     height: 52px;
     left: -10%;
     background-image: url("../static/indexSpr.png");
-    background-position: -60px -4px;
+    /*background-position: -60px -4px;*/
   }
   .carousel nav .next{
     position: absolute;
@@ -123,6 +123,8 @@ h2 {
     background-image: url("../static/indexSpr.png") ;
     background-position: -62px -54px;
   }
-
-
+  .slideImgs {
+    width: 260px;
+    height: 360px;
+  }
 }
