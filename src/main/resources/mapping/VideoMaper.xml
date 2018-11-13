@@ -48,6 +48,43 @@
         WHERE user_id = #{userId} and deleted = 0
     </select>
 
+
+    <select id="findVideoCount"
+            resultType="int">
+        SELECT  count(*)
+        FROM video
+        WHERE 1 =1
+        <if test="content != null ">
+            and  title LIKE CONCAT('%',#{content},'%')
+        </if>
+        and status = #{status}
+        and deleted = 0
+    </select>
+
+    <select id="findVideo"
+            resultType="com.guidesound.models.VideoShow">
+        SELECT *
+        FROM video
+
+        WHERE 1 =1
+        <if test="content != null ">
+            and  title LIKE CONCAT('%',#{content},'%')
+        </if>
+        and status = #{status}
+
+        <if test= "sType == 1 ">
+            order by praise_count
+        </if>
+        <if test="sType == 2 ">
+            order by play_count
+        </if>
+        <if test="sType == 3 ">
+            order by create_time
+        </if>
+        limit #{begin},#{end}
+
+    </select>
+
     <!--<update id="setVideoStatus">-->
         <!--UPDATE video-->
         <!--SET-->

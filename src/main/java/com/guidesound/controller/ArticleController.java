@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -251,6 +252,9 @@ public class ArticleController extends BaseController {
         Map info = new HashMap<String,Object>();
         info.put("user",user);
         info.put("subject", SignMap.getSubjectClassifyList());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        info.put("created_time", sdf.format(new Date(Long.valueOf(user.getCreate_time()+"000"))));
+
         mode.addAllAttributes(info);
         response.addCookie(cookie);//将cookie添加到response的cookie数组中返回给客户端
         return "edit";

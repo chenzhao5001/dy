@@ -14,6 +14,23 @@ h2 {
   color: #555;
   margin-bottom: 0;
 }
+
+.carousel {/*
+  padding: 20px;*/
+  -webkit-perspective: 500px;
+  perspective: 500px;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
 .carousel > * {
   -webkit-box-flex: 0;
   -ms-flex: 0 0 auto;
@@ -34,22 +51,6 @@ h2 {
 
 /*PC端样式*/
 @media screen and (max-width:3000px) and (min-width:320px){
-  .carousel {/*
-  padding: 20px;*/
-    -webkit-perspective: 580px;
-    perspective: 500px;
-    /*overflow: hidden;*/
-  display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-  }
   .carousel figure {
     margin: 0;
     width: 40%;
@@ -63,7 +64,7 @@ h2 {
   .carousel nav {
     display: block;
     position: absolute;
-    top: 40%;
+    top: 50%;
     width: 100%;
   }
   .carousel nav .prev{
@@ -71,7 +72,7 @@ h2 {
     cursor: pointer;
     width: 52px;
     height: 52px;
-    left: -14%;
+    left: 0;
     background-image: url("../static/indexSpr.png");
     background-position: -60px -4px;
   }
@@ -80,7 +81,7 @@ h2 {
     cursor: pointer;
     width: 52px;
     height: 52px;
-    right: -14%;
+    right: 0;
     background-image: url("../static/indexSpr.png") ;
     background-position: -62px -54px;
   }
@@ -88,23 +89,6 @@ h2 {
 }
 /*移动端样式*/
 @media screen and (max-width:400px){
-  .carousel {/*
-  padding: 20px;*/
-    margin-bottom: 10px;
-    -webkit-perspective: 500px;
-    perspective: 500px;
-    /*overflow: hidden;*/
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-  }
     .carousel figure {
     margin: 0;
     width: 20%;
@@ -126,7 +110,7 @@ h2 {
     cursor: pointer;
     width: 52px;
     height: 52px;
-    left: 10%;
+    left: -10%;
     background-image: url("../static/indexSpr.png");
     /*background-position: -60px -4px;*/
   }
@@ -135,7 +119,7 @@ h2 {
     cursor: pointer;
     width: 52px;
     height: 52px;
-    right: 10%;
+    right: -10%;
     background-image: url("../static/indexSpr.png") ;
     background-position: -62px -54px;
   }

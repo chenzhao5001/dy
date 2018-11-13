@@ -3,6 +3,7 @@ package com.guidesound.controller;
 import com.guidesound.Service.IVideoService;
 import com.guidesound.dao.*;
 import com.guidesound.dto.VideoDTO;
+import com.guidesound.find.VideoFind;
 import com.guidesound.models.*;
 import com.guidesound.resp.ListResp;
 import com.guidesound.util.*;
@@ -103,6 +104,30 @@ public class VideoController extends BaseController {
         return JSONResult.ok(SignMap.getWatchList());
     }
 
+    @RequestMapping(value = "/find_video")
+    @ResponseBody
+    JSONResult findVideo(HttpServletRequest request) {
+        String sType = request.getParameter("s_type");
+        if(request.getParameter("s_type") == null ) {
+            return JSONResult.errorMsg("缺少 s_type 参数");
+        }
+        String content = request.getParameter("content") == null ? "":request.getParameter("content");
+        int iPage = request.getParameter("page") == null ? 1:Integer.parseInt(request.getParameter("page"));
+        int iSize = request.getParameter("size") == null ? 1:Integer.parseInt(request.getParameter("size"));
+
+        int count_temp = iVideo.getVideoCount("0");
+        int begin = (iPage -1)*iSize;
+        int end = (iPage -1)*iSize + iSize;
+//        if( sType == "1") {
+//            List<VideoShow> list_temp  = iVideo.selectVideo(status,begin,end);
+//        } else {
+//
+//        }
+//        List<VideoShow> list_temp  = iVideo.selectVideo(status,begin,end);
+
+        return null;
+    }
+
     /**
      * 获取视频列表
      */
@@ -110,17 +135,36 @@ public class VideoController extends BaseController {
     public @ResponseBody
     JSONResult selectVideo(
             HttpServletRequest request,
-            String status, String content, String page, String size) { ;
+            String status, String content, String page, String size, String s_type) {
         status = status == null ? "0":status;
-        content = content == null ? "":content;
+        content = content == "" ? null:content;
         int iPage = page == null ? 1:Integer.parseInt(page);
         int iSize = size == null ? 20:Integer.parseInt(size);
+        int sType = s_type == null ? 0:Integer.parseInt(s_type);
 
-        int count_temp = iVideo.getVideoCount(status);
         int begin = (iPage -1)*iSize;
         int end = (iPage -1)*iSize + iSize;
+        VideoFind videoFind = new VideoFind();
+        videoFind.setContent(content);
+        videoFind.setStatus(0);
+        videoFind.setsType(1);
+        videoFind.setBegin(begin);
+        videoFind.setEnd(end);
 
-        List<VideoShow> list_temp  = iVideo.selectVideo(status,begin,end);
+
+        int count_temp = iVideo.findVideoCount(videoFind);
+        if (count_temp == 0) {
+            ListResp ret = new ListResp();
+            ret.setCount(count_temp);
+            ret.setList(null);
+            return JSONResult.ok(ret);
+        }
+
+
+
+//        List<VideoShow> list_temp  = iVideo.selectVideo(status,begin,end);
+
+        List<VideoShow> list_temp  = iVideo.findVideo(videoFind);
 
 
         List<Integer> idList = new ArrayList<>();

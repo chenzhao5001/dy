@@ -1,5 +1,6 @@
 package com.guidesound.dao;
 
+import com.guidesound.find.VideoFind;
 import com.guidesound.models.User;
 import com.guidesound.models.Video;
 import com.guidesound.models.VideoShow;
@@ -63,5 +64,7 @@ public interface IVideo {
             + "</script>")
     List<User> getUserHeadByIds(@Param("iList") List<Integer> iList);
 
+    List<VideoShow> findVideo(VideoFind videoFind);
+    int findVideoCount(VideoFind videoFind);
 
 }
