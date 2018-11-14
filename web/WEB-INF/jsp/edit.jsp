@@ -484,6 +484,9 @@
 
             // 点击预览
             $(".preview").on("click",function(){
+
+                var content = CKEDITOR.instances.editor1.getData();
+                console.log(content);
 //            $.ajax({
 //                url:"",
 //                type:post,
