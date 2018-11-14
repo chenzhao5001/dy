@@ -45,24 +45,31 @@ public class ArticleController extends BaseController {
         if(!ToolsFunction.paramCheck(result,msg)) {
             return JSONResult.errorMsg(msg.toString());
         }
-        if(articleDTO.getHead_pic2() == null) {
-            articleDTO.setHead_pic2("");
-        }
-        if(articleDTO.getHead_pic3() == null) {
-            articleDTO.setHead_pic3("");
-        }
-        User currentUser = (User)request.getAttribute("user_info");
 
+        User currentUser = (User)request.getAttribute("user_info");
         String urlContent = ToolsFunction.upTextToServicer(articleDTO.getContent());
         articleDTO.setContent(urlContent);
         articleDTO.setUser_id(currentUser.getId());
         articleDTO.setCreate_time((int)(new Date().getTime() / 1000));
         iArticle.add(articleDTO);
 
-        String contextpath = request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
-        contextpath += "/article/preview?article_id=";
-        contextpath += articleDTO.getArticle_id();
-        return JSONResult.ok(contextpath);
+//        String contextpath = request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
+//        contextpath += "/article/preview?article_id=";
+//        contextpath += articleDTO.getArticle_id();
+        return JSONResult.ok("/article/finish");
+    }
+
+    @RequestMapping("/finish")
+    String finish(HttpServletRequest request,ModelMap mode) {
+
+        User currentUser = (User)request.getAttribute("user_info");
+        Map info = new HashMap<String,Object>();
+        info.put("user",currentUser);
+        info.put("subject", SignMap.getSubjectClassifyList());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        info.put("created_time", sdf.format(new Date(Long.valueOf(currentUser.getCreate_time()+"000"))));
+        mode.addAllAttributes(info);
+        return "edit_success";
     }
 
     @RequestMapping("/delete")

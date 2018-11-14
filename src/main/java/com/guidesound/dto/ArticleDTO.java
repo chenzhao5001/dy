@@ -9,11 +9,22 @@ public class ArticleDTO {
 
     @NotNull(message = "head_pic1:不能为空;")
     String head_pic1;
-
+    @NotNull(message = "head_pic2:不能为空;")
     String head_pic2;
+    @NotNull(message = "head_pic3:不能为空;")
     String head_pic3;
     @NotNull(message = "content:不能为空;")
     String content;
+
+    @NotNull(message = "subject_class:不能为空;")
+    String subject_class;
+    @NotNull(message = "subject:不能为空;")
+    String subject;
+    @NotNull(message = "grade_class:不能为空;")
+    String grade_class;
+    @NotNull(message = "grade:不能为空;")
+    String grade;
+
 
     int user_id;
     int create_time;
@@ -83,5 +94,37 @@ public class ArticleDTO {
 
     public void setArticle_id(int article_id) {
         this.article_id = article_id;
+    }
+
+    public String getSubject_class() {
+        return subject_class;
+    }
+
+    public void setSubject_class(String subject_class) {
+        this.subject_class = subject_class;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getGrade_class() {
+        return grade_class;
+    }
+
+    public void setGrade_class(String grade_class) {
+        this.grade_class = grade_class;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 }

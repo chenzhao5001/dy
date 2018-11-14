@@ -15,8 +15,8 @@ public interface IArticle {
     @Select("select count(*) from article where user_id = #{arg0}")
     int getCountByUserId(String user_id);
 
-    @Insert("insert into article (user_id,head,head_pic1,head_pic2,head_pic3,content,create_time)" +
-            "value (#{user_id},#{head},#{head_pic1},#{head_pic2},#{head_pic3},#{content},#{create_time})")
+    @Insert("insert into article (user_id,head,head_pic1,head_pic2,head_pic3,content,subject_class,subject,grade_class,grade, create_time)" +
+            "value (#{user_id},#{head},#{head_pic1},#{head_pic2},#{head_pic3},#{content},#{subject_class},#{subject},#{grade_class},#{grade},#{create_time})")
     @Options(useGeneratedKeys=true, keyProperty="article_id", keyColumn="id")
     void add(ArticleDTO articleDTO);
 
