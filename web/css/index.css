@@ -98,7 +98,7 @@
 }
 .TDcode {
     float: right;
-    margin-right: 14%;
+    margin-right: 10%;
 
 }
 .TDcode span {
@@ -173,12 +173,13 @@
     }
 
     .list{
-        width: 790px;
+        width: 700px;
         height: 500px;
         overflow: hidden;
         position: absolute;
         left: 0;
         margin-left: 32px;
+        background: transparent;
     }
 
     .btn{

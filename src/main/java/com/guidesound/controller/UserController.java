@@ -468,7 +468,11 @@ public class UserController extends BaseController{
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
-        iUser.updateGrade(currentUser.getId(),Integer.parseInt(grade));
+        int level = currentUser.getLevel();
+        if(level == 2) {
+            level = 3;
+        }
+        iUser.updateGrade(currentUser.getId(),Integer.parseInt(grade),level);
         return JSONResult.ok();
     }
 

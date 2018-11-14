@@ -3,6 +3,9 @@ body {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
 }
+html,body{
+  height: 100%;
+}
 
 h1 {
   text-align: center;
@@ -17,7 +20,7 @@ h2 {
 .zzc{
   background: rgba(0,0,0,.5);
   /*opacity: 0.5;*/
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0px;
   width: 100%;
@@ -65,7 +68,7 @@ h2 {
 .nm .headLine h5{
   margin: 0 0px 10px 0;
   padding: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-style: normal;
   font-weight: normal;
 }
@@ -85,267 +88,346 @@ h2 {
   color:#adadad;
 }
 .Hcontent{
+  height: 435px;
   margin-top: 10px;
   text-indent:2em;
+  overflow: auto;
 }
-  .container {
-    margin: 0;
-    padding: 0;
-  }
-  .topBar {
-    width: 100%;
-    padding: 5px 20px;
-    /*padding: 5px 20px;*/
-    /*background: tan;*/
-    overflow: hidden;
-    border-bottom: 1px solid #e4e4e4;
-  } 
-  .logo {
-    display: inline-block;
-    /*float: left;*/
-    height: 50px;
-  }
-  .logo img{
-    display: inline-block;
-  }
-  .loginBar {
-    display: inline-block;
-    width: 160px;
-    float: right;
-    overflow: hidden;
-    padding-right: 50px;
-  }
-  .photo {
-    display: inline-block;
-    width:50px;
-    height: 50px;
-    float: left;
-    overflow: hidden;
-    border-radius: 50%;
-  }
-  .photo img {
-    width: 50px;
-    height: 50px;
-    /*cursor: pointer;*/
-  }
-  .userName {
-    display: inline-block;
-    float: left;
-    margin-left: 14px;
-    line-height: 50px;
-  }
-  .exit {
-    display: inline-block;
-    cursor: pointer;
-    margin-left: 14px;
-    line-height: 50px;
-  }
-  /*主体内容区域*/
-  .inner {
-    width: 660px;
-    margin: 0 auto;
-    padding-bottom: 30px;
-  }
-  .topLine {
-    /*position: relative;*/
-    width: 100%;
-    padding-top: 30px;
-    padding-bottom: 10px;
-    font-size: 16px;
-    border-bottom: 1px solid #e4e4e4;
-  }
-  .title {
-    width: 100%;
-    position: relative;
-  }
-  .title input {
-    /*position: relative;*/
-    width: 100%;
-    margin-top: 18px;
-    padding: 5px 0;
-    font-size: 14px;
-    border: 0;
-  }
-  .title input::placeholder {
-    color: #999;
-  }
-  .title input:focus {
-    outline: none;
-    border: 0;
-  }
-  .closex{
-    cursor: pointer;
-    visibility: hidden;
-    color:#a3a3a3;
-    position: absolute;
-    right: 46px;
-    bottom: -1px;
-    display: inline-block;
-    /*width: 20px;*/
-    /*height: 100%;*/
-  }
-  .numbers {
-    position: absolute;
-    color: #999;
-    right: 0px;
-    bottom: 0px;
-  }
-  .text {
-    padding-top: 10px;
-    padding-bottom: 20px;
-  }
-  .textarea {
-    width: 100%;
-    height: 350px;
-    border: 1px solid #999;
-  }
-  .textarea:focus {
-    outline: none;
-    border: 1px solid #999;
-  }
-  .coverAndImgs {
-    width: 100%;
-  }
-  .coverStyles {
-    padding-bottom: 10px;
-    font-size: 14px;
-    color: #999;
-    overflow: hidden;
-  }
-  .coverStyles input{
-    cursor: pointer;
-  }
-  .coverTitle {
-    display: inline-block;
-    float:left;
-  }
-  .coverInner {
-    margin-left: 20px;
-    float: left;
-  }
-  .coverInner .el-radio {
-    margin-right: 60px;
-  }
-  .imgs {
-    /*margin-top: 20px;*/
-    width: 100%;
-    padding-left: 104px;
-    overflow: hidden;
-  }
-  .imgInner {
-    width: 100px;
-    height: 64px;
-    float: left;
-    margin-right: 10px;
-    margin-bottom: 30px;
-    background: #e8e8e8;
-    background-size: 100px 64px;
-    display: none;
-    cursor: pointer;
-  }
-  .selectedImg{
-    width: 100%;
-    height: 100%;
-  }
-  .imgCon {
-    overflow: hidden;
-    text-align: center;
-  }
-  .selImgs {
-  }
-  el-dialog__header {
-    text-align: left;
-  }
-  .imgCon {
-    width: 100%;
-    overflow: hidden;
-    /*padding: 14px;*/
-  }
-  .imgInner {
-    width: 130px;
-    height: 65px;
-    overflow: hidden;
-  }
-  .imgIn {
-    width: 130px;
-    height: 65px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    float: left;
-    cursor: pointer;
-  }
-  .addSig {
-    display: inline-block;
-    width: 100%;
-    line-height: 60px;
-    text-align: center;
-    font-size: 36px;
-    color: #999;
-    cursor: pointer;
-  }
-  .subjects,
-  .grand{
-    margin-top: 5px;
-    padding-bottom: 10px;
-    font-size: 14px;
-    color: #999;
-    overflow: hidden;
-  }
-  .subInner,
-  .grandInner{
-    display: inline-block;
-    float:left;
-  }
-  .subTitle,
-  .grandTitle{
-    padding-right: 10px;
-  }
-  .subs select,
-  .grands select{
-    width: 160px;
-    height: 30px;
-    border-radius: 0;
-  }
-  /*底部*/
-  .footer {
-    width: 100%;
-    border-top: 1px solid #ccc;
-  }
-  .btns {
-    display: inline-block;
-    width: 300px;
-    margin: 10px 45%;
-  }
-  .preview,
-  .publish {
-    float:left;
-    cursor: pointer;
-    padding: 14px 46px;
-    margin-right: 10px;
-    border: 1px solid #e8e8e8;
-  }
-  .preview:focus,
-  .publish:focus {
-    outline: none;
-    border: 1px solid #e8e8e8;
-  }
-  .preview {
+.container {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+.topBar {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 5px 20px;
+  /*padding: 5px 20px;*/
+  /*background: tan;*/
+  overflow: hidden;
+  border-bottom: 1px solid #e4e4e4;
+}
+.logo {
+  display: inline-block;
+  /*float: left;*/
+  height: 50px;
+}
+.logo img{
+  display: inline-block;
+}
+.loginBar {
+  display: inline-block;
+  width: 160px;
+  float: right;
+  overflow: hidden;
+  /*padding-right: 50px;*/
+}
+.photo {
+  display: inline-block;
+  width: 44px;
+  height: 44px;
+  float: left;
+  overflow: hidden;
+  border-radius: 50%;
+  margin-top: 5px;
+}
+.photo img {
+  width: 100%;
+  height: 100%;
+  /*cursor: pointer;*/
+}
+.userName {
+  display: inline-block;
+  float: left;
+  margin-left: 14px;
+  line-height: 50px;
+}
+.exit {
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 14px;
+  line-height: 50px;
 
-  }
-  .publish {
-    color: #fff;
-    background: #3c6;
-  }
-  .dilog{visibility: hidden; width: 465px; height: 260px; position: absolute; left: 35%; top: 35%;  background: #ccc; overflow: hidden; padding: 12px; padding-right: 0;padding-left: 18px;padding-right: 4px;z-index: 999}
-    .dilog .dilogtitle{ overflow: hidden; padding-bottom: 12px; }
-  .eveimg{ float: left; width: 104px; height: 82px; margin-right: 12px; margin-bottom: 12px; cursor: pointer;}
-    .eveimg img{width: 104px; height: 82px;}
-  .dilog .dm{ overflow: hidden;  }
-   .dilog .db{ margin: 0 auto; }
-    .dilog .db .dbq{ width: 82px; height: 36px;  border:0;background: #f9f9f9; color: #909090; margin-left:132px; margin-right: 20px; cursor: pointer;}
-     .dilog .db .dbs{ width: 82px; height: 36px;  background: #33cc66; color: #fff;border:0;cursor: pointer;}
-     .dilog .eveimg{ position: relative; }
-     .dilog .dmz{position: absolute; left: 0; top: 0; width:100%; height: 100%; background: #000; z-index: 999; opacity: 0; }
-     .coverTitle label {
-      cursor: pointer;
-     }
+}
+.userName,.exit{
+  color:#3a3a3a;
+  font-size:12px;
+}
+/*主体内容区域*/
+.content{
+  width: 100%;
+  height: 92%;
+  background-color: #F7F9F9;
+}
+.inner {
+  width: 660px;
+  margin: 0 auto;
+  padding-bottom: 30px;
+}
+.topLine {
+  /*position: relative;*/
+  width: 100%;
+  padding-top: 30px;
+  padding-bottom: 10px;
+  font-size: 16px;
+  border-bottom: 1px solid #e4e4e4;
+}
+.title {
+  width: 100%;
+  position: relative;
+}
+.title input {
+  /*position: relative;*/
+  width: 100%;
+  margin-top: 18px;
+  padding: 5px 0;
+  font-size: 14px;
+  border: 0;
+  background-color: #F7F9F9;
+  font-size:16px;
+}
+.title input::placeholder {
+  color: #999;
+  font-size:16px;
+}
+.title input:focus {
+  outline: none;
+  border: 0;
+}
+.closex{
+  cursor: pointer;
+  visibility: hidden;
+  color:#a3a3a3;
+  position: absolute;
+  right: 46px;
+  bottom: -1px;
+  display: inline-block;
+  /*width: 20px;*/
+  /*height: 100%;*/
+}
+.numbers {
+  position: absolute;
+  color: #999;
+  right: 0px;
+  bottom: 0px;
+  font-size: 14px;
+}
+.text {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+.textarea {
+  width: 100%;
+  height: 350px;
+  border: 1px solid #e8e8e8;
+}
+.textarea:focus {
+  outline: none;
+  border: 1px solid #999;
+}
+.coverAndImgs {
+  width: 100%;
+}
+.coverStyles {
+  padding-bottom: 10px;
+  font-size: 14px;
+  color: #999;
+  overflow: hidden;
+}
+.coverStyles input{
+  cursor: pointer;
+}
+.coverTitle {
+  display: inline-block;
+  float:left;
+}
+.coverInner {
+  margin-left: 20px;
+  float: left;
+}
+.coverInner .el-radio {
+  margin-right: 60px;
+}
+.imgs {
+  /*margin-top: 20px;*/
+  width: 100%;
+  padding-left: 104px;
+  overflow: hidden;
+}
+.imgInner {
+  width: 100px;
+  height: 64px;
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 30px;
+  background: #e8e8e8;
+  background-size: 100px 64px;
+  display: none;
+  cursor: pointer;
+}
+.selectedImg{
+  width: 100%;
+  height: 100%;
+}
+.imgCon {
+  overflow: hidden;
+  text-align: center;
+}
+.selImgs {
+}
+el-dialog__header {
+  text-align: left;
+}
+.imgCon {
+  width: 100%;
+  overflow: hidden;
+  /*padding: 14px;*/
+}
+.imgInner {
+  width: 130px;
+  height: 65px;
+  overflow: hidden;
+}
+.imgIn {
+  width: 130px;
+  height: 65px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  float: left;
+  cursor: pointer;
+}
+.addSig {
+  display: inline-block;
+  width: 100%;
+  line-height: 60px;
+  text-align: center;
+  font-size: 36px;
+  color: #999;
+  cursor: pointer;
+}
+.subjects,
+.grand{
+  margin-top: 5px;
+  padding-bottom: 10px;
+  font-size: 14px;
+  color: #999;
+  overflow: hidden;
+}
+.subInner,
+.grandInner{
+  display: inline-block;
+  float:left;
+}
+.subTitle,
+.grandTitle{
+  padding-right: 10px;
+}
+.subs,
+.grands,.dubs,.drands{
+  /*width: 160px;*/
+  height: 30px;
+  border-radius: 0;
+}
+/*底部*/
+.footer {
+  width: 100%;
+  border-top: 1px solid #ccc;
+}
+.btns {
+  display: inline-block;
+  width: 300px;
+  margin: 10px 45%;
+}
+.preview,
+.publish {
+  float:left;
+  cursor: pointer;
+  padding: 14px 46px;
+  margin-right: 10px;
+  border: 1px solid #e8e8e8;
+}
+.preview:focus,
+.publish:focus {
+  outline: none;
+  border: 1px solid #e8e8e8;
+}
+.preview {
+  background-color: #f9f9f9;
+}
+.publish {
+  color: #fff;
+  background: #3c6;
+}
+.zhezhao{
+  background: rgba(0,0,0,.5);
+  /*opacity: 0.5;*/
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+}
+.dilog{
+  visibility: hidden;
+  width: 481px;
+  /*height: 310px;*/
+  position: absolute;
+  left: 35%;
+  top: 35%;
+  background: #fff;
+  overflow: hidden;
+  padding: 0 15px 15px 15px;
+  padding-right: 0;
+  z-index: 999
+}
+
+.dilog .dilogtitle{
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+  font-size: 12px;
+  border-bottom: 1px solid #F2F2F2;
+}
+.eveimg{ float: left; width: 104px; height: 82px; margin-right: 12px; margin-bottom: 12px; cursor: pointer;}
+.eveimg img{width: 104px; height: 82px;}
+.dilog .dm{
+  height: 188px;
+  overflow: auto;
+  margin-top: 14px;
+}
+.dilog .db{
+  margin: 28px auto;
+}
+.dilog .db .dbq{
+  width: 70px;
+  height: 28px;
+  border:1px solid #e8e8e8;
+  background: #f9f9f9;
+  color: #909090;
+  margin-left:132px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+.dilog .db .dbs{ width: 70px; height: 28px;  background: #33cc66; color: #fff;border:0;cursor: pointer;}
+.dilog .eveimg{ position: relative; }
+.dilog .dmz{position: absolute; left: 0; top: 0; width:100%; height: 100%; background: #000; z-index: 999; opacity: 0; }
+.coverTitle label {
+  cursor: pointer;
+}
+
+
+.warn{
+  display: none;
+  width: 260px;
+  height: 30px;
+  background-color: #ff4343;
+  font-size:14px;
+  color:#fff;
+  text-align: center;
+  line-height: 30px;
+  position: absolute;
+  left: 50%;
+  top:17%;
+  margin-left:-130px;
+}

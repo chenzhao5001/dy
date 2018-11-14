@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!--<link rel="stylesheet" type="text/css" href="../css/publisharticle.css" />-->
-    <script type="text/javascript" src="../js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="../../js/jquery-2.1.4.js"></script>
     <title>导音教育</title>
     <style>
         *{
@@ -135,11 +135,14 @@
             <p class="mxz">继续发表文章</p>
         </div>
     </div>
+
 </div>
 <script>
     $(".mxz").on('click',function(){
-        location.href="./publisharticle.html"
+        location.href="http://139.199.123.168/article/edit"
     })
+    var d = []
+    console.log(d[0])
 </script>
 </body>
 </html>

@@ -76,8 +76,8 @@ public interface IUser {
     @Update("update user set sex = #{arg1} where id = #{arg0}")
     public void updateSex(int id,int sex);
 
-    @Update("update user set grade = #{arg1} where id = #{arg0}")
-    public void updateGrade(int id,int grade);
+    @Update("update user set grade = #{arg1},level = #{arg2} where id = #{arg0}")
+    public void updateGrade(int id,int grade,int level);
 
     @Update("update user set phone = #{arg1} where id = #{arg0}")
     public void updatePhone(int id,String phone);
@@ -88,7 +88,7 @@ public interface IUser {
     @Update("update user set subject = #{arg1} where id = #{arg0}")
     public void updateSubject(int id,int subject);
 
-    @Update("update user set grade_level = #{arg1} where id = #{arg0}")
+    @Update("update user set grade_level = #{arg1},level = 3 where id = #{arg0}")
     public void updateGradeLevel(int id,int grade);
 
     @Update("update user set teach_age = #{arg1} where id = #{arg0}")
