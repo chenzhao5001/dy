@@ -28,18 +28,18 @@ The outline is not a part of the element's dimensions. A border needs to be used
 }
 
 .easyimage img, .cke_widget_uploadeasyimage img {
-	display: block;
-	height: 135px;
-	width: 270px;
-	margin: 0 auto;
-	max-width: 100%;
-
 	/*display: block;*/
-	/*height: auto;*/
-	/*width: auto;*/
+	/*height: 135px;*/
+	/*width: 270px;*/
 	/*margin: 0 auto;*/
-	/*!*max-width: 100%;*!*/
-	/*max-height: 270px;*/
+	/*max-width: 100%;*/
+
+	display: block;
+	height: auto;
+	width: auto;
+	margin: 0 auto;
+	/*max-width: 100%;*/
+	max-height: 270px;
 }
 
 .cke_widget_wrapper_easyimage-side, :not(.cke_widget_wrapper_easyimage):not(.cke_widget_wrapper_easyimage-side) > .easyimage-side,
