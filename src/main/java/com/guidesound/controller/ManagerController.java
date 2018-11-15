@@ -32,7 +32,7 @@ public class ManagerController {
             return JSONResult.errorMsg("验证码错误");
         }
 
-        
+
 
         return null;
     }
@@ -48,13 +48,11 @@ public class ManagerController {
         VerifyCodeUtils.outputImage(w, h, response.getOutputStream(), verifyCode);
     }
 
-
     @RequestMapping(value = "/current_video_list")
     @ResponseBody
     JSONResult currentVideoList(HttpServletRequest request, HttpServletResponse response) {
         return null;
     }
-
 
     @RequestMapping(value = "/new_video_list")
     @ResponseBody
@@ -67,6 +65,4 @@ public class ManagerController {
     JSONResult examineVideo(HttpServletRequest request, HttpServletResponse response) {
         return null;
     }
-
-
 }

@@ -82,8 +82,8 @@ public interface IUser {
     @Update("update user set phone = #{arg1} where id = #{arg0}")
     public void updatePhone(int id,String phone);
 
-    @Update("update user set province = #{arg1},city = #{arg2},area = #{arg3} where id = #{arg0}")
-    public void updateProvinceAndCity(int id,String province,String city,String area);
+    @Update("update user set province = #{arg1},city = #{arg2},area = #{arg3},level = #{arg4} where id = #{arg0}")
+    public void updateProvinceAndCity(int id,String province,String city,String area,int level);
 
     @Update("update user set subject = #{arg1} where id = #{arg0}")
     public void updateSubject(int id,int subject);

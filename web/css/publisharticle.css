@@ -88,7 +88,7 @@ h2 {
   color:#adadad;
 }
 .Hcontent{
-  height: 435px;
+  height: 412px;
   margin-top: 10px;
   text-indent:2em;
   overflow: auto;
@@ -377,7 +377,7 @@ el-dialog__header {
   top: 35%;
   background: #fff;
   overflow: hidden;
-  padding: 0 15px 15px 15px;
+  /*padding: 0 15px 15px 15px;*/
   padding-right: 0;
   z-index: 999
 }
@@ -388,6 +388,8 @@ el-dialog__header {
   overflow: hidden;
   font-size: 12px;
   border-bottom: 1px solid #F2F2F2;
+  box-sizing: border-box;
+  padding-left: 15px;
 }
 .eveimg{ float: left; width: 104px; height: 82px; margin-right: 12px; margin-bottom: 12px; cursor: pointer;}
 .eveimg img{width: 104px; height: 82px;}
@@ -395,9 +397,12 @@ el-dialog__header {
   height: 188px;
   overflow: auto;
   margin-top: 14px;
+  box-sizing: border-box;
+  padding-left: 15px;
 }
 .dilog .db{
   margin: 28px auto;
+  text-align: center;
 }
 .dilog .db .dbq{
   width: 70px;
@@ -405,13 +410,24 @@ el-dialog__header {
   border:1px solid #e8e8e8;
   background: #f9f9f9;
   color: #909090;
-  margin-left:132px;
-  margin-right: 20px;
+  /*margin-left:132px;*/
+  /*margin-right: 20px;*/
   cursor: pointer;
 }
-.dilog .db .dbs{ width: 70px; height: 28px;  background: #33cc66; color: #fff;border:0;cursor: pointer;}
+.dilog .db .dbs{ width: 70px; height: 28px;  background: #33cc66; color: #fff;border:0;cursor: pointer;
+  margin-left:20px;}
 .dilog .eveimg{ position: relative; }
-.dilog .dmz{position: absolute; left: 0; top: 0; width:100%; height: 100%; background: #000; z-index: 999; opacity: 0; }
+.dilog .dmz{position: absolute; left: 0; top: 0; width:100%; height: 100%; background: rgba(0,0,0,0); z-index: 999;}
+.dmz .induce{
+  width: 28px;
+  height: 28px;
+  background: url("../static/c8b0c816e9f874200aaad257228857f.png") no-repeat;
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  right: 0;
+  visibility: hidden;
+}
 .coverTitle label {
   cursor: pointer;
 }

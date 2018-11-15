@@ -76,15 +76,17 @@
         //                var json1 = ['http://www.nvsay.com/uploads/allimg/150608/34-15060QFG2S1.png','https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1542067569402&di=315bb829be86326bbd013597005ea525&imgtype=0&src=http%3A%2F%2Fwww.ithov.com%2Fuploads%2Fallimg%2F120831%2F200SB526-2.jpg','https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1542067664045&di=c5dae8d86bd1c9be6ff70a2bfc18fc30&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D487155973%2C1932661456%26fm%3D214%26gp%3D0.jpg','https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1542067569398&di=2b777b167970d2a14094e0680a0151cc&imgtype=0&src=http%3A%2F%2Fimage002.server110.com%2F20170527%2Ff2e940bbe60c9b5d335b74c42986dee0.jpg','https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1542067569396&di=6c05cb35a1607d26341cbd7c5839b667&imgtype=0&src=http%3A%2F%2F00imgmini.eastday.com%2Fmobile%2F20180930%2F20180930103513_1b17a97d7242224608653885a6d83b6e_2.jpeg']
         $(".dm").html("");
         $.each(arr, function (n, value) {
-        var dos = "<div class='eveimg'><img src="+value+"><div class='dmz'></div></div>";
+        var dos = "<div class='eveimg'><img src="+value+"><div class='dmz'><div class='induce'></div></div></div>";
         $(".dm").append(dos);
 
         });
         // 点击图片
         $(".dm .dmz").click(function () {
-        console.log($(this))
-        $(".dm .dmz").css('opacity', 0)
-        this.style.opacity = 0.6
+        //                    console.log($(this))
+        $(".dm .dmz").css('background', 'rgba(0,0,0,0)')
+        $(this).css('background', 'rgba(0,0,0,0.6)')
+        $(".dmz .induce").css("visibility", "hidden")
+        $(this).children(".induce").css("visibility", "visible")
 
         })
         })
@@ -93,11 +95,13 @@
         var imgn = "";
         console.log($(".dmz"))
         $(".dmz").each(function(index,ele){
-        console.log($(ele).css("opacity"))
-        if($(ele).css("opacity") == 0.6){
+        //                    console.log($(ele).children(".induce").css("visibility"))
+        //                    console.log($(ele).children(".induce").css("visibility") == "visible")
+        if($(ele).children(".induce").css("visibility") == "visible"){
         imgn=$(this).siblings().attr("src");  // 获取图片路径
         }
         })
+        $(".dmz .induce").css("visibility", "hidden")
         console.log(imgn)
         if (imgn != "") {
         $("#"+selectId+" .ximg").html("");
@@ -165,10 +169,12 @@
 
         // 年级二级联动
         var secondLevel = [];
+        var grade_class_id = "";
         $(".grands").on("change",function(){
         fau.forEach(function(ele,index){
         if(ele.level == $(".grands").val()){
         secondLevel = ele.list
+        grade_class_id = ele.id
         }
 
         })
@@ -177,6 +183,16 @@
         var socs=" <option value ='"+ele.gradeName+"'>"+ele.gradeName+"</option>"
         $(".drands").append(socs);
 
+        })
+        canshu.grands = grade_class_id
+        canshu.drands = fau[0].id
+        })
+
+        $(".drands").on("change",function(){
+        secondLevel.forEach(function(ele,index){
+        if(ele.gradeName == $(".drands").val()){
+        canshu.drands = ele.id
+        }
         })
         })
 
@@ -200,10 +216,12 @@
 
         // 学科二级联动
         var twoLevel = [];
+        var sub_class_id="";
         $(".subs").on("change",function(){
         dat.forEach(function(ele,index){
         if(ele.level == $(".subs").val()){
         twoLevel = ele.list
+        sub_class_id = ele.id
         }
 
         })
@@ -213,25 +231,27 @@
         $(".dubs").append(docs);
 
         })
+        canshu.subs = sub_class_id
+        canshu.dubs = twoLevel[0].id;
+        console.log(twoLevel[0].id)
         })
-
-
+        $(".dubs").on("change",function(){
+        twoLevel.forEach(function(ele,index){
+        if(ele.gradeName == $(".dubs").val()){
+        canshu.dubs = ele.id
+        }
+        })
+        })
         // 点击预览
         $(".preview").on("click",function(){
-        //            $.ajax({
-        //                url:"",
-        //                type:post,
-        //                success:function (data) {
+
         $(".zzc").css("display","block");
         $(".headLine h5").text($(".title input").val())
         $(".headInfo li:eq(1)").text($(".userName").text())
         $(".headInfo li:eq(0) img").attr("src",$(".photo img").attr("src"))
         var content = CKEDITOR.instances.editor1.getData();
-        console.log(content);
         $(".Hcontent").html(content)
-        //                }
-        //            })
-        //
+
         })
         $(".closeCurcle").on("click",function(){
         $(".zzc").css("display","none");
@@ -239,11 +259,11 @@
 
         // 点击发表
         var canshu = {
-        "head":$(".title input").val(),
+        "head": '',
         "head_pic1": '',
         "head_pic2": '',
         "head_pic3": '',
-        "content": CKEDITOR.instances.editor1.getData(),
+        "content": '',
         "subs": 1,
         "dubs": 101,
         "grands": 1,
@@ -251,7 +271,8 @@
         }
         $(".publish").on("click",function(){
         var cent = CKEDITOR.instances.editor1.getData();
-        console.log($(".subjects .subs").val());
+        canshu.content = cent;
+        canshu.head = $(".title input").val();
         // 先判断标题是否有
         if($(".title input").val() == ""){
         show("请填写标题");
@@ -267,9 +288,7 @@
         }else if($(".grand .drands").val() == "" || $(".grand .drands").val() == null){
         show("请选择适用年级");
         }else {
-        //                    var head_pic1 = "";
-        //                    var head_pic2 = "";
-        //                    var head_pic3 = "";
+
         $(".coverStyles input").each(function (index,ele) {
         if(ele&&ele.checked){
         var indexval=index+1;
@@ -278,7 +297,6 @@
         if($(".imgInner .ximg img").length<3){
         show("图片不要少于三张")
         }else{
-        console.log($(".imgInner .ximg img"))
         var threeArr = [];
         $(".imgInner .ximg img").each(function(index,ele){
         console.log($(ele).attr("src"));
@@ -292,14 +310,12 @@
         if($(".imgInner .ximg img").length<1){
         show("请选择图片")
         }else{
-        console.log($(".imgInner .ximg img").attr("src"))
         canshu.head_pic1 = $(".imgInner .ximg img").attr("src")
         }
         }else if(indexval == 3){
         var cents = CKEDITOR.instances.editor1.getData();
         $(".hideImg").html(cents);
         $(".hideImg img").each(function(index,ele){
-        console.log($(ele).attr("src"))
         arr[index]=$(ele).attr("src")
         })
         //                                console.log(arr.length);
@@ -318,16 +334,18 @@
         }
         }
         })
-        console.log(canshu.head_pic1);
-        //                    canshu.subs = $(".subs")
+
         $.ajax({
         url:"/article/add",
         type:"post",
         data:{"head":canshu.head, "head_pic1": canshu.head_pic1, "head_pic2": canshu.head_pic2, "head_pic3": canshu.head_pic3,content:canshu.content, "subject_class":canshu.subs, "subject": canshu.dubs, "grade_class": canshu.grands, "grade": canshu.drands},
         success:function(data){
-        console.log(data);
+        //                            console.log(data);
         if(data.status == 200){
         location.href="/article/finish";
+        } else {
+        alert(23);
+        show("没有发表成功")
         }
         }
         })
@@ -370,7 +388,7 @@
         </div>
         <!--标题-->
         <div class="title">
-        <input type="text" placeholder="请输入文章标题" maxlength="30" value='' onkeydown="myFunction()">
+        <input type="text" placeholder="请输入文章标题" maxlength="30" value='' onkeyup="myFunction()">
         <div class="numbers">0/30</div>
         <span class="closex">×</span>
         </div>
