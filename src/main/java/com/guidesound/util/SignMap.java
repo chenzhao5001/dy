@@ -151,7 +151,7 @@ public class SignMap {
         subject_type.put(699,new Content("全部",6));
 
 
-        watch_type = new HashMap<>();
+        watch_type = new TreeMap<>();
         watch_type.put(1,"小学前");
         watch_type.put(2,"小学");
         watch_type.put(3,"初中");

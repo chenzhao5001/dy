@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户控制器
@@ -22,7 +25,35 @@ public class TypeMapController {
     @RequestMapping(value = "/watch_type_list")
     @ResponseBody
     public JSONResult getWatchType() {
-        return JSONResult.ok(SignMap.getWatchList());
+        class Item {
+            int id;
+            String type;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getType() {
+                return type;
+            }
+
+            public void setType(String reason) {
+                this.type = reason;
+            }
+        }
+
+        List<Item> list = new ArrayList<>();
+        for (Map.Entry<Integer, String> entry : SignMap.getWatchList().entrySet()) {
+            Item item = new Item();
+            item.setId(entry.getKey());
+            item.setType(entry.getValue());
+            list.add(item);
+        }
+        return JSONResult.ok(list);
     }
 
     @RequestMapping(value = "/grade_type_list")

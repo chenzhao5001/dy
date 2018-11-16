@@ -4,6 +4,7 @@ import com.guidesound.find.VideoFind;
 import com.guidesound.models.User;
 import com.guidesound.models.Video;
 import com.guidesound.models.VideoShow;
+import com.guidesound.util.VideoExamine;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -66,5 +67,7 @@ public interface IVideo {
 
     List<VideoShow> findVideo(VideoFind videoFind);
     int findVideoCount(VideoFind videoFind);
+    
+    List<VideoExamine> getVideoByAdminId(int admin_id);
 
 }
