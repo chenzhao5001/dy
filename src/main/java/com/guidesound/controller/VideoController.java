@@ -135,7 +135,7 @@ public class VideoController extends BaseController {
     public @ResponseBody
     JSONResult selectVideo(
             HttpServletRequest request,
-            String status, String content, String page, String size, String s_type) {
+            String status, String content, String page, String size, String s_type,String subject,String grade_class) {
         status = status == null ? "0":status;
         content = content == "" ? null:content;
         int iPage = page == null ? 1:Integer.parseInt(page);

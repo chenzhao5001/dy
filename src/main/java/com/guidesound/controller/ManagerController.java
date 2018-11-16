@@ -1,7 +1,11 @@
 package com.guidesound.controller;
 
+import com.guidesound.dao.IInUser;
+import com.guidesound.dao.IVerifyCode;
+import com.guidesound.models.InUser;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.VerifyCodeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +19,8 @@ import java.io.IOException;
 @RequestMapping("/admin")
 public class ManagerController {
 
+    @Autowired
+    private IInUser iInUser;
     @RequestMapping(value = "/login")
     @ResponseBody
     JSONResult logIn(HttpServletRequest request, HttpServletResponse response) {
@@ -23,16 +29,19 @@ public class ManagerController {
         String pwd = request.getParameter("pwd");
         String code = request.getParameter("code");
         if(account == null || pwd == null || code == null) {
-            JSONResult.errorMsg("缺少参数");
+            return JSONResult.errorMsg("缺少参数");
         }
         HttpSession session = request.getSession(true);
         String temp = (String) session.getAttribute("verCode");
 
-        if (temp == null || temp != code) {
-            return JSONResult.errorMsg("验证码错误");
+//        if (temp == null || temp != code) {
+//            return JSONResult.errorMsg("验证码错误");
+//        }
+
+        InUser inUser = iInUser.getUserByName(account);
+        if(inUser == null || inUser.getPwd() != pwd) {
+            return JSONResult.errorMsg("账号密码错误");
         }
-
-
 
         return null;
     }

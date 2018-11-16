@@ -16,6 +16,18 @@ public class UserInfo {
     private int praise_count;
     private int video_count;
     private int article_count;
+    private int sex;
+    private int grade;
+    private String province;
+    private String city;
+    private String area;
+
+    private int identity_status;
+    private int education_status;
+    private int qualification_status;
+    private int juridical_status;
+    private int business_status;
+
 
     private int create_time;
 
@@ -138,5 +150,85 @@ public class UserInfo {
 
     public void setFollow(boolean follow) {
         this.follow = follow;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public int getIdentity_status() {
+        return identity_status;
+    }
+
+    public void setIdentity_status(int identity_status) {
+        this.identity_status = identity_status;
+    }
+
+    public int getEducation_status() {
+        return education_status;
+    }
+
+    public void setEducation_status(int education_status) {
+        this.education_status = education_status;
+    }
+
+    public int getQualification_status() {
+        return qualification_status;
+    }
+
+    public void setQualification_status(int qualification_status) {
+        this.qualification_status = qualification_status;
+    }
+
+    public int getJuridical_status() {
+        return juridical_status;
+    }
+
+    public void setJuridical_status(int juridical_status) {
+        this.juridical_status = juridical_status;
+    }
+
+    public int getBusiness_status() {
+        return business_status;
+    }
+
+    public void setBusiness_status(int business_status) {
+        this.business_status = business_status;
     }
 }

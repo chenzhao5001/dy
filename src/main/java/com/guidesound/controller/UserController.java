@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.security.auth.Subject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -369,28 +370,120 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value = "/update_student_basic_info")
     @ResponseBody
-    public JSONResult addStudentBasicInfo(@Valid StudentInfoDTO studentInfoDTO, BindingResult result) {
-
-        StringBuilder msg = new StringBuilder();
-        if(!ToolsFunction.paramCheck(result,msg)) {
-            return JSONResult.errorMsg(msg.toString());
+    public JSONResult addStudentBasicInfo(String sex,String grade) {
+        if(sex == null || grade == null) {
+            return JSONResult.errorMsg("缺少参数");
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
 
-        Student student = new Student();
-        student.setUser_id(currentUser.getId());
-        student.setLevel(Integer.parseInt(studentInfoDTO.getLevel()));
-        student.setGrade(Integer.parseInt(studentInfoDTO.getGrade()));
-        student.setSex(Integer.parseInt(studentInfoDTO.getSex()));
-        student.setCreate_time((int)(new Date().getTime() / 1000));
-        student.setUpdate_time((int)(new Date().getTime() / 1000));
-        Student temp = iStudent.find(currentUser.getId());
-        if(temp == null) { //新建
-            iStudent.add(student);
-        } else { //修改
-            iStudent.update(student);
+        int level = currentUser.getLevel();
+        if( level < 3) {
+            level = 3;
         }
+
+        iUser.setStudentBasicInfo(currentUser.getId(),sex,grade,level);
+        return JSONResult.ok();
+    }
+
+    /**
+     *学生完善高级信息
+     */
+    @RequestMapping(value = "/update_student_high_info")
+    @ResponseBody
+    JSONResult addStudentHighInfo(String province,String city,String area,String phone ) {
+        if( province == null || city == null || area == null || phone == null ) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        int level = currentUser.getLevel();
+        if( level < 4) {
+            level = 4;
+        }
+        iUser.setStudentHighInfo(currentUser.getId(),province,city,area,phone,level);
+        return JSONResult.ok();
+    }
+
+    /**
+     *家长完善基本信息
+     */
+    @RequestMapping(value = "/update_parent_basic_info")
+    @ResponseBody
+    JSONResult addParentBasicInfo(String sex,String grade) {
+        if(sex == null || grade == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        int level = currentUser.getLevel();
+        if( level < 3) {
+            level = 3;
+        }
+
+        iUser.setParentBasicInfo(currentUser.getId(),sex,grade,level);
+        return JSONResult.ok();
+    }
+
+    /**
+     *家长完善高级信息
+     */
+    @RequestMapping(value = "/update_parent_high_info")
+    @ResponseBody
+    JSONResult addParentHighInfo(String province,String city,String area,String phone) {
+        if( province == null || city == null || area == null || phone == null ) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        int level = currentUser.getLevel();
+        if( level < 4) {
+            level = 4;
+        }
+        iUser.setParentHighInfo(currentUser.getId(),province,city,area,phone,level);
+        return JSONResult.ok();
+    }
+
+    /**
+     *老师完善基本信息
+     */
+    @RequestMapping(value = "/update_teacher_basic_info")
+    @ResponseBody
+    JSONResult addTeacherBasicInfo(String sex, String subject,String grade,String province,String city,String area) {
+        if(sex == null || subject == null || grade == null || province == null || city == null || area == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        int level = currentUser.getLevel();
+        if( level < 3) {
+            level = 3;
+        }
+        iUser.setTeacherBasicInfo(currentUser.getId(),sex,subject,grade,province,city,area,level);
+        return JSONResult.ok();
+    }
+
+    /**
+     *结构完善基本信息
+     */
+    @RequestMapping(value = "/update_institution_basic_info")
+    @ResponseBody
+    JSONResult addInstitutionHighInfo(String subject,String grade,String province,String city,String area) {
+        if(province == null || city == null || subject == null || grade == null || area == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        int level = currentUser.getLevel();
+        if( level < 3) {
+            level = 3;
+        }
+        iUser.setInstitutionBasicInfo(currentUser.getId(),subject,grade,province,city,area,level);
         return JSONResult.ok();
     }
 
@@ -468,11 +561,8 @@ public class UserController extends BaseController{
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
-        int level = currentUser.getLevel();
-        if(level < 3) {
-            level = 3;
-        }
-        iUser.updateGrade(currentUser.getId(),Integer.parseInt(grade),level);
+
+        iUser.updateGrade(currentUser.getId(),Integer.parseInt(grade));
         return JSONResult.ok();
     }
 
@@ -487,12 +577,8 @@ public class UserController extends BaseController{
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
-        int level = currentUser.getLevel();
-        if(level < 4) {
-            level = 4;
-        }
 
-        iUser.updatePhone(currentUser.getId(),phone,level);
+        iUser.updatePhone(currentUser.getId(),phone);
         return JSONResult.ok();
     }
 
@@ -508,11 +594,7 @@ public class UserController extends BaseController{
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
 
-        int level = currentUser.getLevel();
-        if(level < 3) {
-            level = 3;
-        }
-        iUser.updateProvinceAndCity(currentUser.getId(),province,city,area,level);
+        iUser.updateProvinceAndCity(currentUser.getId(),province,city,area);
         return  JSONResult.ok();
     }
 

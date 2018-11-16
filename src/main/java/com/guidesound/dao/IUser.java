@@ -76,14 +76,14 @@ public interface IUser {
     @Update("update user set sex = #{arg1} where id = #{arg0}")
     public void updateSex(int id,int sex);
 
-    @Update("update user set grade = #{arg1},level = #{arg2} where id = #{arg0}")
-    public void updateGrade(int id,int grade,int level);
+    @Update("update user set grade = #{arg1} where id = #{arg0}")
+    public void updateGrade(int id,int grade);
 
-    @Update("update user set phone = #{arg1},level = #{arg2} where id = #{arg0}")
-    public void updatePhone(int id,String phone,int level);
+    @Update("update user set phone = #{arg1} where id = #{arg0}")
+    public void updatePhone(int id,String phone);
 
-    @Update("update user set province = #{arg1},city = #{arg2},area = #{arg3},level = #{arg4} where id = #{arg0}")
-    public void updateProvinceAndCity(int id,String province,String city,String area,int level);
+    @Update("update user set province = #{arg1},city = #{arg2},area = #{arg3} where id = #{arg0}")
+    public void updateProvinceAndCity(int id,String province,String city,String area);
 
     @Update("update user set subject = #{arg1} where id = #{arg0}")
     public void updateSubject(int id,int subject);
@@ -112,6 +112,22 @@ public interface IUser {
     public void setCompanyName(int user_id,String companyName);
 
 
+    @Update("update user set sex = #{arg1},grade = #{arg2},level = #{arg3} where id = #{arg0}")
+    public void setStudentBasicInfo(int id,String sex,String grade,int level);
+
+    @Update("update user set province = #{arg1},city = #{arg2},area = #{arg3},phone = #{arg4},level = #{arg5} where id = #{arg0}")
+    public void setStudentHighInfo(int id,String province,String city,String area,String phone,int level);
+
+    @Update("update user set sex = #{arg1},grade = #{arg2},level = #{arg3} where id = #{arg0}")
+    public void setParentBasicInfo(int id,String sex,String grade,int level);
+
+    @Update("update user set province = #{arg1},city = #{arg2},area = #{arg3},phone = #{arg4},level = #{arg5} where id = #{arg0}")
+    public void setParentHighInfo(int id,String province,String city,String area,String phone,int level);
+
+    @Update("update user set sex = #{arg1},subject = #{arg2},grade = #{arg3},province = #{arg4},city = #{arg5}, area = #{arg6},level = #{arg7} where id = #{arg0}")
+    public void setTeacherBasicInfo(int id,String sex,String subject,String grade,String province,String city,String area,int level);
+    @Update("update user set subject = #{arg1},grade = #{arg2},province = #{arg3},city = #{arg4},area = #{arg5},level = #{arg6} where id = #{arg0}")
+    public void setInstitutionBasicInfo(int id,String subject,String grade,String province,String city,String area,int level);
 
 }
 
