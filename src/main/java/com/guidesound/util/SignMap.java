@@ -90,6 +90,7 @@ public class SignMap {
     static Map<Integer,String> watch_type;
     static Map<Integer,String> user_type;
     static Map<Integer,Content> grade_type;
+    static Map<Integer,String> user_level;
 
 
     static {
@@ -188,6 +189,18 @@ public class SignMap {
         grade_type.put(403,new Content("高三",4));
         grade_type.put(499,new Content("高中",4));
 
+        user_level = new HashMap<>();
+        user_level.put(1,"游客");
+        user_level.put(1,"初级");
+        user_level.put(1,"中级");
+        user_level.put(1,"高级");
+    }
+
+    public static String getUserLevelById(int id) {
+        if(user_level.containsKey(id)) {
+            return user_level.get(id);
+        }
+        return "未知";
     }
 
     public static String getSubjectTypeById(int id) {
@@ -207,6 +220,13 @@ public class SignMap {
     public static String getWatchById(int id) {
         if(watch_type.containsKey(id)) {
             return watch_type.get(id);
+        }
+        return "未知";
+    }
+
+    public static String getUserTypeById(int id) {
+        if(user_type.containsKey(id)) {
+            return user_type.get(id);
         }
         return "未知";
     }

@@ -2,6 +2,7 @@ package com.guidesound.models;
 
 public class VideoUser {
 
+    int id;
     String name;
     int type;
     int subject;
@@ -9,6 +10,14 @@ public class VideoUser {
     int level;
     String extend;
 
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

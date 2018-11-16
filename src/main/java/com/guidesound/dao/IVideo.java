@@ -4,7 +4,7 @@ import com.guidesound.find.VideoFind;
 import com.guidesound.models.User;
 import com.guidesound.models.Video;
 import com.guidesound.models.VideoShow;
-import com.guidesound.util.VideoExamine;
+import com.guidesound.models.VideoInfo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -67,7 +67,11 @@ public interface IVideo {
 
     List<VideoShow> findVideo(VideoFind videoFind);
     int findVideoCount(VideoFind videoFind);
-    
-    List<VideoExamine> getVideoByAdminId(int admin_id);
+
+    @Select("select * from video where examine_pesron = #{arg0} and deleted = 0 and examine_status = 0")
+    List<VideoInfo> getVideoByAdminId(int admin_id);
+
+    @Select("select * from video where examine_pesron = 0 and deleted = 0 and examine_status = 0 limit 0 ,5")
+    List<VideoInfo> getExamineVideo();
 
 }

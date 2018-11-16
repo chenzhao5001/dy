@@ -2,10 +2,8 @@ package com.guidesound.dao;
 
 import com.guidesound.models.User;
 import com.guidesound.models.UserInfo;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import com.guidesound.models.VideoUser;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -128,6 +126,14 @@ public interface IUser {
     public void setTeacherBasicInfo(int id,String sex,String subject,String grade,String province,String city,String area,int level);
     @Update("update user set subject = #{arg1},grade = #{arg2},province = #{arg3},city = #{arg4},area = #{arg5},level = #{arg6} where id = #{arg0}")
     public void setInstitutionBasicInfo(int id,String subject,String grade,String province,String city,String area,int level);
+
+    @Select("<script>"
+            + "SELECT * FROM user WHERE id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    public List<VideoUser> getUserInfoByIds(@Param("iList") List<Integer> iList);
 
 }
 
