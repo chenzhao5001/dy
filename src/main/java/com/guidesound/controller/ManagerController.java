@@ -128,16 +128,27 @@ public class ManagerController {
 
     @RequestMapping(value = "/examine_video")
     @ResponseBody
-    JSONResult examineVideo(String video_id,String reason_id,String reason_content) {
+    JSONResult examineVideo(String video_id,String status,String type_list,String fail_reason,String fail_content) {
         Integer userId = getUserId();
         if ( userId == null ) {
             return JSONResult.errorMsg("缺少m_token");
         }
 
-        if(video_id == null || reason_id == null || reason_content == null) {
-            return JSONResult.errorMsg("缺少参数");
+        if ( video_id == null || status == null ) {
+            return JSONResult.errorMsg("缺少status 或 video_id");
         }
+        if(Integer.parseInt(status) == 1) {
+            if(type_list == null) {
+                return JSONResult.errorMsg("缺少type_list");
+            }
+            iVideo.setExamineSucess(Integer.parseInt(video_id),type_list);
 
+        } else {
+            if(fail_reason == null || fail_content == null) {
+                return JSONResult.errorMsg("缺少fail_reason或fail_content");
+            }
+            iVideo.setExamineFail(Integer.parseInt(video_id),fail_reason,fail_content);
+        }
         return JSONResult.ok();
     }
 

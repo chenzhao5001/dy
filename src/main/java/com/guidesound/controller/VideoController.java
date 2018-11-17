@@ -390,7 +390,8 @@ public class VideoController extends BaseController {
     }
 
     @RequestMapping(value = "/delete")
-    public @ResponseBody ServiceResponse delete(HttpServletRequest request) {
+    @ResponseBody
+    public ServiceResponse delete(HttpServletRequest request) {
         String id = request.getParameter("id");
         ServiceResponse rsp = new ServiceResponse();
         if(id == null) {
@@ -403,6 +404,20 @@ public class VideoController extends BaseController {
         rsp.msg = "OK";
         rsp.code = 200;
         return rsp;
+    }
+
+    /**
+     * 获得热门搜索列表
+     */
+    @RequestMapping(value = "/hot_list")
+    @ResponseBody
+    public JSONResult hotSearch() {
+        List<String> list = new ArrayList<>();
+        list.add("小学数学");
+        list.add("中学语文学");
+        list.add("高中英语");
+        list.add("高考数学");
+        return JSONResult.ok(list);
     }
 
 //    @RequestMapping(value = "/verify")

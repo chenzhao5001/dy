@@ -89,7 +89,7 @@ public class SignMap {
     static Map<Integer,Content> subject_type;
     static Map<Integer,String> watch_type;
     static Map<Integer,String> user_type;
-    static Map<Integer,Content> grade_type;
+    static Map<Integer,String> grade_type;
     static Map<Integer,String> user_level;
 
 
@@ -168,52 +168,28 @@ public class SignMap {
 
 
         grade_type = new HashMap<>();
-        grade_type.put(101,new Content("1-3岁",1));
-        grade_type.put(102,new Content("4-6岁",1));
-        grade_type.put(199,new Content("1-6岁",1));
+        grade_type.put(101,"1-3岁");
+        grade_type.put(102,"4-6岁");
+        grade_type.put(199,"1-6岁");
 
-        grade_type.put(201,new Content("1年级",2));
-        grade_type.put(202,new Content("2年级",2));
-        grade_type.put(203,new Content("3年级",2));
-        grade_type.put(204,new Content("4年级",2));
-        grade_type.put(205,new Content("5年级",2));
-        grade_type.put(206,new Content("6年级",2));
-        grade_type.put(299,new Content("小学",2));
+        grade_type.put(201,"1年级");
+        grade_type.put(202,"2年级");
+        grade_type.put(203,"3年级");
+        grade_type.put(204,"4年级");
+        grade_type.put(205,"5年级");
+        grade_type.put(206,"6年级");
+        grade_type.put(299,"小学");
 
 
-        grade_type.put(301,new Content("初一",3));
-        grade_type.put(302,new Content("初二",3));
-        grade_type.put(303,new Content("初三",3));
-        grade_type.put(399,new Content("初中",3));
+        grade_type.put(301,"初一");
+        grade_type.put(302,"初二");
+        grade_type.put(303,"初三");
+        grade_type.put(399,"初中");
 
-        grade_type.put(401,new Content("高一",4));
-        grade_type.put(402,new Content("高二",4));
-        grade_type.put(403,new Content("高三",4));
-        grade_type.put(499,new Content("高中",4));
-
-        grade_type.put(401,new Content("高一",4));
-        grade_type.put(402,new Content("高二",4));
-        grade_type.put(403,new Content("高三",4));
-        grade_type.put(499,new Content("高中",4));
-
-        grade_type.put(501,new Content("1-3岁",5));
-        grade_type.put(502,new Content("4-6岁",5));
-        grade_type.put(503,new Content("1年级",5));
-        grade_type.put(504,new Content("2年级",5));
-        grade_type.put(505,new Content("3年级",5));
-        grade_type.put(506,new Content("4年级",5));
-        grade_type.put(507,new Content("5年级",5));
-        grade_type.put(508,new Content("6年级",5));
-        grade_type.put(599,new Content("小初",5));
-
-        grade_type.put(601,new Content("初一",6));
-        grade_type.put(602,new Content("初二",6));
-        grade_type.put(603,new Content("初三",6));
-        grade_type.put(604,new Content("高一",6));
-        grade_type.put(605,new Content("高二",6));
-        grade_type.put(606,new Content("高三",6));
-        grade_type.put(699,new Content("初高",6));
-
+        grade_type.put(401,"高一");
+        grade_type.put(402,"高二");
+        grade_type.put(403,"高三");
+        grade_type.put(499,"高中");
 
         user_level = new HashMap<>();
         user_level.put(1,"游客");
@@ -275,9 +251,9 @@ public class SignMap {
 
 
 
-    public static Map<Integer,Content> getGradeTypeList() {
-        return grade_type;
-    }
+//    public static Map<Integer,Content> getGradeTypeList() {
+//        return grade_type;
+//    }
 
     public static Object getGradeTypeInfo() {
         ListInfo gradeInfo1 = new ListInfo();//小学前
@@ -290,6 +266,7 @@ public class SignMap {
         gradeInfo1.setId(1);
         gradeInfo1.setLevel("小学前");
         gradeInfo1.setList(new ArrayList<>());
+
         gradeInfo2.setId(2);
         gradeInfo2.setLevel("小学");
         gradeInfo2.setList(new ArrayList<>());
@@ -309,26 +286,25 @@ public class SignMap {
         gradeInfo6.setList(new ArrayList<>());
 
         for(Integer key : grade_type.keySet()) {
-            Content content = grade_type.get(key);
+            String content = grade_type.get(key);
             ListItem gradeItem = new ListItem();
+
             gradeItem.setId(key);
-            gradeItem.setGradeName(content.getName());
-            if (content.getPro_id() == 1) {
+            gradeItem.setGradeName(content);
+            if ( key / 100 ==  1 ) {
                 gradeInfo1.getList().add(gradeItem);
             }
-            if (content.getPro_id() == 2) {
+            if ( key / 100 ==  2) {
                 gradeInfo2.getList().add(gradeItem);
-            }
-            if (content.getPro_id() == 3) {
-                gradeInfo3.getList().add(gradeItem);
-            }
-            if (content.getPro_id() == 4) {
-                gradeInfo4.getList().add(gradeItem);
-            }
-            if (content.getPro_id() == 5) {
                 gradeInfo5.getList().add(gradeItem);
             }
-            if (content.getPro_id() == 6) {
+            if (key / 100 ==  3) {
+                gradeInfo3.getList().add(gradeItem);
+                gradeInfo5.getList().add(gradeItem);
+                gradeInfo6.getList().add(gradeItem);
+            }
+            if (key / 100 ==  4) {
+                gradeInfo4.getList().add(gradeItem);
                 gradeInfo6.getList().add(gradeItem);
             }
         }

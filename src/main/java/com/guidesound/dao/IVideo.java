@@ -74,4 +74,9 @@ public interface IVideo {
     @Select("select * from video where examine_pesron = 0 and deleted = 0 and examine_status = 0 limit 0 ,5")
     List<VideoInfo> getExamineVideo();
 
+    @Update("update video set examine_status = 1,type_list = #{arg1} where id = #{arg0}")
+    void setExamineSucess(int id,String type_list);
+    @Update("update video set examine_status = 2,examine_reason = #{arg1},fail_content = #{arg2} where id = #{arg0}")
+    void setExamineFail(int id,String fail_reson,String fail_content);
+
 }
