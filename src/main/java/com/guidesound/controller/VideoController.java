@@ -145,7 +145,7 @@ public class VideoController extends BaseController {
         int begin = (iPage -1)*iSize;
         int end = (iPage -1)*iSize + iSize;
         VideoFind videoFind = new VideoFind();
-        videoFind.setContent(content);
+        videoFind.setTitle(content);
         videoFind.setStatus(0);
         videoFind.setsType(1);
         videoFind.setBegin(begin);
@@ -156,7 +156,7 @@ public class VideoController extends BaseController {
         if (count_temp == 0) {
             ListResp ret = new ListResp();
             ret.setCount(count_temp);
-            ret.setList(null);
+            ret.setList(new ArrayList<>());
             return JSONResult.ok(ret);
         }
 

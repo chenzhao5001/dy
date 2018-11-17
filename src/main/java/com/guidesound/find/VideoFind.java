@@ -1,18 +1,18 @@
 package com.guidesound.find;
 
 public class VideoFind {
-    String content;
+    String title;
     int sType;
     int status;
     int begin;
     int end;
 
-    public String getContent() {
-        return content;
+    public String getTitle() {
+        return title;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setTitle(String content) {
+        this.title = content;
     }
 
     public int getsType() {
