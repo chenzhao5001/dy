@@ -3,6 +3,7 @@ package com.guidesound.interceptor;
 import com.alibaba.fastjson.JSONObject;
 import com.guidesound.Service.IUserService;
 import com.guidesound.models.User;
+import com.guidesound.models.UserInfo;
 import com.guidesound.util.TockenUtil;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -29,7 +30,7 @@ public class Common implements HandlerInterceptor {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
                     int user_id = TockenUtil.getUserIdByTocket(token);
-                    User user = userService.getUserById(user_id);
+                    UserInfo user = userService.getUserById(user_id);
                     if(user == null) {
                         response.setContentType("text/json; charset=utf-8");
                         PrintWriter out = response.getWriter();

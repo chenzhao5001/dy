@@ -2,6 +2,7 @@ package com.guidesound.resp;
 
 public class UserResp {
     private int id;
+    private int dy_id;
     private String token;
     private String unionid;
     private String phone;
@@ -27,6 +28,14 @@ public class UserResp {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getDy_id() {
+        return dy_id;
+    }
+
+    public void setDy_id(int dy_id) {
+        this.dy_id = dy_id;
     }
 
     public String getToken() {

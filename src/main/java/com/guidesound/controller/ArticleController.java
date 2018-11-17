@@ -5,6 +5,7 @@ import com.guidesound.dao.IUser;
 import com.guidesound.dto.ArticleDTO;
 import com.guidesound.models.ArticleInfo;
 import com.guidesound.models.User;
+import com.guidesound.models.UserInfo;
 import com.guidesound.resp.ListResp;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
@@ -249,7 +250,7 @@ public class ArticleController extends BaseController {
     @RequestMapping("/edit")
     public String articleEdit(HttpServletRequest request, HttpServletResponse response, ModelMap mode) {
         //种cookie
-        User user = iUser.getUser(1);
+        UserInfo user = iUser.getUser(1);
         String token = TockenUtil.makeTocken(user.getId());
         Cookie cookie = new Cookie("token",token);//创建新cookie
         cookie.setPath("/");//设置作用域

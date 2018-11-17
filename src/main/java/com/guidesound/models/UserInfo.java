@@ -2,14 +2,21 @@ package com.guidesound.models;
 
 public class UserInfo {
     private int id;
+    private String unionid;
     private String phone;
+    private String dy_id;
     private String name;
     private String head;
+    private String token;
     private int type;
     private int level;
     private int status;
     private String sign_name;
     private boolean follow;
+    private int subject;
+    private String subject_name;
+    private int teach_age;
+    private String company_name;
 
     private int funs_counts;
     private int follow_count;
@@ -30,6 +37,62 @@ public class UserInfo {
 
 
     private int create_time;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getUnionid() {
+        return unionid;
+    }
+
+    public void setUnionid(String unionid) {
+        this.unionid = unionid;
+    }
+
+    public int getTeach_age() {
+        return teach_age;
+    }
+
+    public void setTeach_age(int teach_age) {
+        this.teach_age = teach_age;
+    }
+
+    public String getCompany_name() {
+        return company_name;
+    }
+
+    public void setCompany_name(String company_name) {
+        this.company_name = company_name;
+    }
+
+    public int getSubject() {
+        return subject;
+    }
+
+    public void setSubject(int subject) {
+        this.subject = subject;
+    }
+
+    public String getSubject_name() {
+        return subject_name;
+    }
+
+    public void setSubject_name(String subject_name) {
+        this.subject_name = subject_name;
+    }
+
+    public String getDy_id() {
+        return dy_id;
+    }
+
+    public void setDy_id(String dy_id) {
+        this.dy_id = dy_id;
+    }
 
     public int getId() {
         return id;

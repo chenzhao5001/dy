@@ -32,8 +32,6 @@ import java.util.List;
 public class UserController extends BaseController{
 
     @Autowired
-    private IUserService userService;
-    @Autowired
     private IVerifyCode iVerifyCode;
     @Autowired
     private IUser iUser;
@@ -41,8 +39,6 @@ public class UserController extends BaseController{
     private IVideo iVideo;
     @Autowired
     private IArticle iArticle;
-    @Autowired
-    private IStudent iStudent;
 
     /**
      * 用户登录
@@ -61,20 +57,23 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("缺少参数");
         }
 
-        User user = userService.login(unionid,name,head);
-        String token = TockenUtil.makeTocken(user.getId());
+        List<UserInfo> userList = iUser.getUserByUnionid(unionid);
+        UserInfo user = null;
+        if(userList.isEmpty()) {
+            user = new UserInfo();
+            user.setUnionid(unionid);
+            user.setName(name);
+            user.setHead(head);
+            user.setCreate_time((int) (new Date().getTime() / 1000));
+            user.setLevel(1);
+            iUser.addUserByUnionid(user);
+//            user.setToken(TockenUtil.makeTocken(user.getId()));
+        } else {
+            user = userList.get(0);
+        }
+        user.setToken(TockenUtil.makeTocken(user.getId()));
 
-        UserResp userResp = new UserResp();
-        userResp.setId(user.getId());
-        userResp.setToken(token);
-        userResp.setPhone(user.getPhone());
-        userResp.setName(user.getName());
-        userResp.setHead(user.getHead());
-        userResp.setType(user.getType());
-        userResp.setLevel(user.getLevel());
-        userResp.setStatus(user.getStatus());
-        userResp.setSign_name(user.getSign_name());
-        userResp.setTeach_age(user.getTeach_age());
+        String token = TockenUtil.makeTocken(user.getId());
 
         int funCount = iUser.getFunsById(String.valueOf(user.getId()));
         int followCount = iUser.getFollowById(String.valueOf(user.getId()));
@@ -82,12 +81,12 @@ public class UserController extends BaseController{
         int videoCount = iVideo.getVideoByUserId(String.valueOf(user.getId()));
         int articleCount =  iArticle.getCountByUserId(String.valueOf(user.getId()));
 
-        userResp.setFuns_counts(funCount);
-        userResp.setFollow_count(followCount);
-        userResp.setPraise_count(praiseCount);
-        userResp.setVideo_count(videoCount);
-        userResp.setArticle_count(articleCount);
-        userResp.setCreate_time(user.getCreate_time());
+        user.setFuns_counts(funCount);
+        user.setFollow_count(followCount);
+        user.setPraise_count(praiseCount);
+        user.setVideo_count(videoCount);
+        user.setArticle_count(articleCount);
+        user.setCreate_time(user.getCreate_time());
 
 
         //种cookie
@@ -95,7 +94,7 @@ public class UserController extends BaseController{
         cookie.setPath("/");//设置作用域
         response.addCookie(cookie);//将cookie添加到response的cookie数组中返回给客户端
 
-        return JSONResult.ok(userResp);
+        return JSONResult.ok(user);
     }
 
     @RequestMapping(value = "/identifying_code")
@@ -133,13 +132,12 @@ public class UserController extends BaseController{
             return JSONResult.build(201,"验证码错误",null);
         }
 
-        List<User> userList = iUser.getUserByPhone(phone);
-        User user = null;
+        List<UserInfo> userList = iUser.getUserByPhone(phone);
+        UserInfo user = null;
         if(userList.isEmpty()) {
-            user = new User();
+            user = new UserInfo();
             user.setPhone(phone);
             user.setCreate_time((int) (new Date().getTime() / 1000));
-            user.setUpdate_time((int) (new Date().getTime() / 1000));
             user.setLevel(1);
             iUser.addUserByPhone(user);
 //            user.setToken(TockenUtil.makeTocken(user.getId()));
@@ -147,18 +145,6 @@ public class UserController extends BaseController{
             user = userList.get(0);
         }
         user.setToken(TockenUtil.makeTocken(user.getId()));
-        UserResp userResp = new UserResp();
-        userResp.setId(user.getId());
-        userResp.setToken(TockenUtil.makeTocken(user.getId()));
-        userResp.setUnionid(user.getUnionid());
-        userResp.setPhone(user.getPhone());
-        userResp.setName(user.getName());
-        userResp.setHead(user.getHead());
-        userResp.setType(user.getType());
-        userResp.setLevel(user.getLevel());
-        userResp.setStatus(user.getStatus());
-        userResp.setSign_name(user.getSign_name());
-        userResp.setTeach_age(user.getTeach_age());
 
         int funCount = iUser.getFunsById(String.valueOf(user.getId()));
         int followCount = iUser.getFollowById(String.valueOf(user.getId()));
@@ -166,14 +152,14 @@ public class UserController extends BaseController{
         int videoCount = iVideo.getVideoByUserId(String.valueOf(user.getId()));
         int articleCount =  iArticle.getCountByUserId(String.valueOf(user.getId()));
 
-        userResp.setFuns_counts(funCount);
-        userResp.setFollow_count(followCount);
-        userResp.setPraise_count(praiseCount);
-        userResp.setVideo_count(videoCount);
-        userResp.setArticle_count(articleCount);
-        userResp.setCreate_time(user.getCreate_time());
+        user.setFuns_counts(funCount);
+        user.setFollow_count(followCount);
+        user.setPraise_count(praiseCount);
+        user.setVideo_count(videoCount);
+        user.setArticle_count(articleCount);
+        user.setCreate_time(user.getCreate_time());
 
-        return JSONResult.ok(userResp);
+        return JSONResult.ok(user);
     }
 
     /**
@@ -186,33 +172,22 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("缺少name参数");
         }
 
-        List<User> userList = iUser.getUserByName(name);
-        User user = null;
+        List<UserInfo> userList = iUser.getUserByName(name);
+        UserInfo user = null;
         if(userList.isEmpty()) {
-            user = new User();
+            user = new UserInfo();
             user.setName(name);
             user.setCreate_time((int) (new Date().getTime() / 1000));
-            user.setUpdate_time((int) (new Date().getTime() / 1000));
-            user.setLevel(1);
+            user.setLevel(2);
+            user.setType(1);
             iUser.addUserByName(user);
+            iUser.setDyId(user.getId(),10000000 + user.getId());
+            user.setDy_id(String.valueOf(10000000 + user.getId()));
             user.setToken(TockenUtil.makeTocken(user.getId()));
         } else {
             user = userList.get(0);
         }
         user.setToken(TockenUtil.makeTocken(user.getId()));
-
-        UserResp userResp = new UserResp();
-        userResp.setId(user.getId());
-        userResp.setToken(TockenUtil.makeTocken(user.getId()));
-        userResp.setUnionid(user.getUnionid());
-        userResp.setPhone(user.getPhone());
-        userResp.setName(user.getName());
-        userResp.setHead(user.getHead());
-        userResp.setType(user.getType());
-        userResp.setLevel(user.getLevel());
-        userResp.setStatus(user.getStatus());
-        userResp.setSign_name(user.getSign_name());
-        userResp.setTeach_age(user.getTeach_age());
 
         int funCount = iUser.getFunsById(String.valueOf(user.getId()));
         int followCount = iUser.getFollowById(String.valueOf(user.getId()));
@@ -220,14 +195,14 @@ public class UserController extends BaseController{
         int videoCount = iVideo.getVideoByUserId(String.valueOf(user.getId()));
         int articleCount =  iArticle.getCountByUserId(String.valueOf(user.getId()));
 
-        userResp.setFuns_counts(funCount);
-        userResp.setFollow_count(followCount);
-        userResp.setPraise_count(praiseCount);
-        userResp.setVideo_count(videoCount);
-        userResp.setArticle_count(articleCount);
-        userResp.setCreate_time(user.getCreate_time());
+        user.setFuns_counts(funCount);
+        user.setFollow_count(followCount);
+        user.setPraise_count(praiseCount);
+        user.setVideo_count(videoCount);
+        user.setArticle_count(articleCount);
+        user.setCreate_time(user.getCreate_time());
 
-        return JSONResult.ok(userResp);
+        return JSONResult.ok(user);
     }
 
     /**
@@ -262,13 +237,28 @@ public class UserController extends BaseController{
         if(user_type == null) {
             return JSONResult.errorMsg("需要user_type");
         }
+        int iType = Integer.parseInt(user_type);
 
         if(!SignMap.getUserTypeList().containsKey(Integer.parseInt(user_type))) {
             return JSONResult.errorMsg("设置的类型不存在");
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
-        iUser.updateType(currentUser.getId(),user_type);
+        int dy_id = 0;
+        if(iType == 1 ) {
+            dy_id = 10009999 + currentUser.getId();
+        } else if (iType == 2){
+            dy_id = 20000000 + currentUser.getId();
+        } else if ( iType == 3) {
+            dy_id = 30000000 + currentUser.getId();
+        } else if ( iType == 4 ) {
+            dy_id = 40000000 + currentUser.getId();
+        }
+        int level = currentUser.getLevel();
+        if(level < 2) {
+            level = 2;
+        }
+        iUser.updateTypeInfo(currentUser.getId(),user_type,dy_id,level);
         return JSONResult.ok();
     }
 
@@ -284,6 +274,7 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("需要user_id");
         }
         UserInfo userInfo = iUser.getUserInfo(user_id);
+        userInfo.setSubject_name(SignMap.getSubjectTypeById(userInfo.getSubject()));
 
         if (userInfo == null) {
             return JSONResult.errorMsg("此用户不存在");
@@ -299,6 +290,7 @@ public class UserController extends BaseController{
         userInfo.setPraise_count(praiseCount);
         userInfo.setVideo_count(videoCount);
         userInfo.setArticle_count(articleCount);
+
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");

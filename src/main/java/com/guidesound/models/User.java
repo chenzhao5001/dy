@@ -7,6 +7,7 @@ public class User {
     private int id;
     private String token;
     private String unionid;
+    private int dy_id;
     private String phone;
     private String name;
     private String head;
@@ -41,6 +42,14 @@ public class User {
 
     public void setUnionid(String unionid) {
         this.unionid = unionid;
+    }
+
+    public int getDy_id() {
+        return dy_id;
+    }
+
+    public void setDy_id(int dy_id) {
+        this.dy_id = dy_id;
     }
 
     public String getPhone() {

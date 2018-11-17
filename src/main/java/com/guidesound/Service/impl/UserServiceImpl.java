@@ -4,7 +4,7 @@ import com.guidesound.Service.IUserService;
 import com.guidesound.dao.IUser;
 import com.guidesound.dao.IUserFollow;
 import com.guidesound.dao.IUserFuns;
-import com.guidesound.models.User;
+import com.guidesound.models.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Date;
@@ -22,22 +22,22 @@ public class UserServiceImpl implements IUserService {
     private IUserFollow iUserFollow;
 
     @Override
-    public User getUserById(int userId) {
+    public UserInfo getUserById(int userId) {
         return this.user.getUser(userId);
     }
 
     @Override
-    public void insertUser(User user) {
+    public void insertUser(UserInfo user) {
         this.user.insertUser(user);
     }
 
     @Override
-    public List<User> getUserList(User user) {
+    public List<UserInfo> getUserList(UserInfo user) {
         return null;
     }
 
     @Override
-    public User updateUser(User user) {
+    public UserInfo updateUser(UserInfo user) {
         return null;
     }
 
@@ -47,10 +47,10 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User login(String uuid,String name,String head) {
-        List<User> userList = this.user.getListByUnionid(uuid);
+    public UserInfo login(String uuid, String name, String head) {
+        List<UserInfo> userList = this.user.getListByUnionid(uuid);
         if(null == userList || userList.size() == 0 ){
-            User u_temp = new User();
+            UserInfo u_temp = new UserInfo();
             u_temp.setUnionid(uuid);
             u_temp.setName(name);
             u_temp.setHead(head);
@@ -62,7 +62,6 @@ public class UserServiceImpl implements IUserService {
             u_temp.setSex(0);
             u_temp.setTeach_age(0);
             u_temp.setCreate_time((int) (new Date().getTime() / 1000));
-            u_temp.setUpdate_time((int) (new Date().getTime() / 1000));
             this.user.insertUser(u_temp);
             return u_temp;
         }
@@ -70,7 +69,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public List<User> phoneLogin(String phone) {
+    public List<UserInfo> phoneLogin(String phone) {
         return user.getUserByPhone(phone);
     }
 

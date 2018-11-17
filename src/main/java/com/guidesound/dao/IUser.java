@@ -9,33 +9,44 @@ import java.util.List;
 
 public interface IUser {
 
-    public void insertUser(User user);
+    public void insertUser(UserInfo user);
 
-    public User getUser(int id);
+    public UserInfo getUser(int id);
 
-    public List<User> getListByUnionid(String unionid);
+    public List<UserInfo> getListByUnionid(String unionid);
 
     @Select("select * from user where phone = #{arg0}")
-    public List<User> getUserByPhone(String phone);
+    public List<UserInfo> getUserByPhone(String phone);
+
+    @Select("select * from user where unionid = #{arg0}")
+    public List<UserInfo> getUserByUnionid(String phone);
+
 
     @Select("select * from user where name = #{arg0}")
-    public List<User> getUserByName(String name);
+    public List<UserInfo> getUserByName(String name);
 
     @Update("update user set phone = #{arg1},pwd = #{arg2} ,status = 1 where id = #{arg0}")
     public void phoneRegister(int id,String phone,String pwd);
 
     @Update("update user set status = #{arg1} where id= #{arg0}")
     public void updateStatus(int id,int status);
-    @Update("update user set type = #{arg1} ,level = 2 where id= #{arg0} and level = 1")
+    @Update("update user set type = #{arg1} where id= #{arg0}")
     public void updateType(int id,String type);
+
+    @Update("update user set type = #{arg1},dy_id = #{arg2},level = #{arg3} where id= #{arg0}")
+    public void updateTypeInfo(int id,String type,int dy_id,int level);
 
     @Insert("insert into user (phone) values (#{phone})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
-    public void addUserByPhone(User user);
+    public void addUserByPhone(UserInfo user);
 
-    @Insert("insert into user (name,create_time) values (#{name},#{create_time})")
+    @Insert("insert into user (unionid,name,head) values (#{unionid},#{name},#{head})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
-    public void addUserByName(User user);
+    public void addUserByUnionid(UserInfo user);
+
+    @Insert("insert into user (name,create_time,dy_id,level,type) values (#{name},#{create_time},#{dy_id},#{level},#{type})")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
+    public void addUserByName(UserInfo user);
 
 
     @Select("select * from user where id = #{arg0}")
@@ -134,6 +145,9 @@ public interface IUser {
             + "</foreach>"
             + "</script>")
     public List<VideoUser> getUserInfoByIds(@Param("iList") List<Integer> iList);
+
+    @Update("update user set dy_id = #{arg1} where id = #{arg0}")
+    public void setDyId(int id,int dyId);
 
 }
 

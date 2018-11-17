@@ -1,22 +1,83 @@
 package com.guidesound.models;
 
+import com.guidesound.TempStruct.ShowInfoTemp;
+import com.guidesound.TempStruct.UserInfoTemp;
+import com.guidesound.TempStruct.VideoInfoTemp;
+
 public class VideoVerify {
 
-    int video_id;
-    String video_title;
-    String video_subject;
-    String video_watch_type;
-    String video_duration;
-    String video_resolution;
-    String video_pic_up_path;
-    String video_video_up_path;
+    UserInfoTemp userInfo = new UserInfoTemp();
+    VideoInfoTemp videoInfo = new VideoInfoTemp();
+    ShowInfoTemp showInfo = new ShowInfoTemp();
 
-    String user_name;
-    String user_type;
-    String user_subject;
-    String user_grade_level;
-    String user_level;
-    String user_extend;
+    public void setVideo_title(String title) {
+        videoInfo.video_title = title;
+    }
+    public void setVideo_duration(String duration) {
+        videoInfo.video_duration = duration;
+    }
+    public void setVideo_pic_up_path(String pic_path) {
+        showInfo.video_pic_up_path = pic_path;
+    }
+    public void setVideo_video_up_path(String video_path) {
+        showInfo.video_video_up_path = video_path;
+    }
+    public void setVideo_resolution(String resolution) {
+        videoInfo.video_resolution = resolution;
+    }
+    public void setVideo_subject(String subject) {
+        videoInfo.video_subject = subject;
+    }
+    public void setVideo_watch_type(String watch_type) {
+        videoInfo.video_watch_type = watch_type;
+    }
+
+
+    public void setUser_type(String type) {
+        userInfo.user_type = type;
+    }
+    public void setUser_extend(String extend) {
+        userInfo.user_extend = extend;
+    }
+    public void setUser_grade_level(String level) {
+        userInfo.user_grade_level = level;
+    }
+    public void setUser_level(String level) {
+        userInfo.user_level = level;
+    }
+    public void setUser_name(String name) {
+        userInfo.user_name = name;
+    }
+    public void setUser_subject(String subject) {
+        userInfo.user_subject = subject;
+    }
+
+
+    int video_id;
+
+    public UserInfoTemp getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfoTemp userInfo) {
+        this.userInfo = userInfo;
+    }
+
+    public VideoInfoTemp getVideoInfo() {
+        return videoInfo;
+    }
+
+    public void setVideoInfo(VideoInfoTemp videoInfo) {
+        this.videoInfo = videoInfo;
+    }
+
+    public ShowInfoTemp getShowInfo() {
+        return showInfo;
+    }
+
+    public void setShowInfo(ShowInfoTemp showInfo) {
+        this.showInfo = showInfo;
+    }
 
     public int getVideo_id() {
         return video_id;
@@ -24,109 +85,5 @@ public class VideoVerify {
 
     public void setVideo_id(int video_id) {
         this.video_id = video_id;
-    }
-
-    public String getVideo_title() {
-        return video_title;
-    }
-
-    public void setVideo_title(String video_title) {
-        this.video_title = video_title;
-    }
-
-    public String getVideo_subject() {
-        return video_subject;
-    }
-
-    public void setVideo_subject(String video_subject) {
-        this.video_subject = video_subject;
-    }
-
-    public String getVideo_watch_type() {
-        return video_watch_type;
-    }
-
-    public void setVideo_watch_type(String video_watch_type) {
-        this.video_watch_type = video_watch_type;
-    }
-
-    public String getVideo_duration() {
-        return video_duration;
-    }
-
-    public void setVideo_duration(String video_duration) {
-        this.video_duration = video_duration;
-    }
-
-    public String getVideo_resolution() {
-        return video_resolution;
-    }
-
-    public void setVideo_resolution(String video_resolution) {
-        this.video_resolution = video_resolution;
-    }
-
-    public String getVideo_pic_up_path() {
-        return video_pic_up_path;
-    }
-
-    public void setVideo_pic_up_path(String video_pic_up_path) {
-        this.video_pic_up_path = video_pic_up_path;
-    }
-
-    public String getVideo_video_up_path() {
-        return video_video_up_path;
-    }
-
-    public void setVideo_video_up_path(String video_video_up_path) {
-        this.video_video_up_path = video_video_up_path;
-    }
-
-    public String getUser_name() {
-        return user_name;
-    }
-
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
-    }
-
-    public String getUser_type() {
-        return user_type;
-    }
-
-    public void setUser_type(String user_type) {
-        this.user_type = user_type;
-    }
-
-    public String getUser_subject() {
-        return user_subject;
-    }
-
-    public void setUser_subject(String user_subject) {
-        this.user_subject = user_subject;
-    }
-
-    public String getUser_grade_level() {
-        return user_grade_level;
-    }
-
-    public void setUser_grade_level(String user_grade_level) {
-        this.user_grade_level = user_grade_level;
-    }
-
-    public String getUser_level() {
-        return user_level;
-    }
-
-    public void setUser_level(String user_level) {
-        this.user_level = user_level;
-    }
-
-    public String getUser_extend() {
-        return user_extend;
-    }
-
-    public void setUser_extend(String user_extend) {
-        this.user_extend = user_extend;
     }
 }
