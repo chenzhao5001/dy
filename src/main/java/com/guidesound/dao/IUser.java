@@ -11,7 +11,11 @@ public interface IUser {
 
     public void insertUser(UserInfo user);
 
+
     public UserInfo getUser(int id);
+
+    @Select("select * from user where id = #{arg0}")
+    public User getUserById(int id);
 
     public List<UserInfo> getListByUnionid(String unionid);
 

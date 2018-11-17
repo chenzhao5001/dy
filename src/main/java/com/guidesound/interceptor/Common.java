@@ -2,9 +2,11 @@ package com.guidesound.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.guidesound.Service.IUserService;
+import com.guidesound.dao.IUser;
 import com.guidesound.models.User;
 import com.guidesound.models.UserInfo;
 import com.guidesound.util.TockenUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,8 +20,8 @@ import java.io.PrintWriter;
 
 public class Common implements HandlerInterceptor {
 
-    @Resource
-    private IUserService userService;
+    @Autowired
+    private IUser iUser;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -30,7 +32,7 @@ public class Common implements HandlerInterceptor {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
                     int user_id = TockenUtil.getUserIdByTocket(token);
-                    UserInfo user = userService.getUserById(user_id);
+                    User user = iUser.getUserById(user_id);
                     if(user == null) {
                         response.setContentType("text/json; charset=utf-8");
                         PrintWriter out = response.getWriter();
