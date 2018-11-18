@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -161,6 +162,7 @@ public class ManagerController {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("m_token")) {
                     String token = cookie.getValue();
+                    token = URLDecoder.decode(token);
                     int user_id = TockenUtil.getUserIdByTocket(token);
                     return user_id;
                 }

@@ -12,6 +12,7 @@ public class VideoInfo {
     String pic_up_path;
     String video_up_path;
 
+
     public int getId() {
         return id;
     }

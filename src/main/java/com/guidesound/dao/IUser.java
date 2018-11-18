@@ -49,7 +49,7 @@ public interface IUser {
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     public void addUserByUnionid(UserInfo user);
 
-    @Insert("insert into user (name,create_time,dy_id,level,type) values (#{name},#{create_time},#{dy_id},#{level},#{type})")
+    @Insert("insert into user (name,create_time,level,type) values (#{name},#{create_time},#{level},#{type})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     public void addUserByName(UserInfo user);
 

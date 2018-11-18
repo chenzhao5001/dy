@@ -182,8 +182,8 @@ public class UserController extends BaseController{
             user.setType(1);
             iUser.addUserByName(user);
             iUser.setDyId(user.getId(),10000000 + user.getId());
-            user.setDy_id(String.valueOf(10000000 + user.getId()));
             user.setToken(TockenUtil.makeTocken(user.getId()));
+            user.setDy_id(String.valueOf(10000000 + user.getId()));
         } else {
             user = userList.get(0);
         }
@@ -295,11 +295,16 @@ public class UserController extends BaseController{
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
 
-        if (iUser.getIdByUserAndFunsId(Integer.parseInt(user_id),currentUser.getId()) == 0) {
+        if(currentUser == null) {
             userInfo.setFollow(false);
         } else {
-            userInfo.setFollow(true);
+            if (iUser.getIdByUserAndFunsId(Integer.parseInt(user_id),currentUser.getId()) == 0) {
+                userInfo.setFollow(false);
+            } else {
+                userInfo.setFollow(true);
+            }
         }
+
         return JSONResult.ok(userInfo);
     }
     /**
