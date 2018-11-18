@@ -274,11 +274,11 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("需要user_id");
         }
         UserInfo userInfo = iUser.getUserInfo(user_id);
-        userInfo.setSubject_name(SignMap.getSubjectTypeById(userInfo.getSubject()));
-
         if (userInfo == null) {
             return JSONResult.errorMsg("此用户不存在");
         }
+
+        userInfo.setSubject_name(SignMap.getSubjectTypeById(userInfo.getSubject()));
         int funCount = iUser.getFunsById(user_id);
         int followCount = iUser.getFollowById(user_id);
         int praiseCount = iUser.getPraiseById(user_id);

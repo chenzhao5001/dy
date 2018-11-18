@@ -151,7 +151,6 @@ public class VideoController extends BaseController {
         videoFind.setBegin(begin);
         videoFind.setEnd(end);
 
-
         int count_temp = iVideo.findVideoCount(videoFind);
         if (count_temp == 0) {
             ListResp ret = new ListResp();
