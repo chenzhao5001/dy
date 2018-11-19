@@ -43,6 +43,7 @@
             <mvc:exclude-mapping path="/edit/**"/>
             <mvc:exclude-mapping path="/article/edit"/>
             <mvc:exclude-mapping path="/type/**"/>
+            <mvc:exclude-mapping path="/back/**"/>
 
             <mvc:exclude-mapping path="/admin/**"/>
 
