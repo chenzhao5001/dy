@@ -79,4 +79,12 @@ public interface IVideo {
     @Update("update video set examine_status = 2,examine_reason = #{arg1},fail_content = #{arg2} where id = #{arg0}")
     void setExamineFail(int id,String fail_reson,String fail_content);
 
+    @Update("<script>"
+            + "update video set examine_pesron = #{arg1}  WHERE id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    void setExaminePerson(@Param("iList") List<Integer> iList,int user_id);
+
 }

@@ -113,6 +113,9 @@ public class ManagerController {
         if ( userId == null ) {
             return JSONResult.errorMsg("缺少m_token");
         }
+        if( userId  == - 1) {
+            return JSONResult.errorMsg("m_token 错误");
+        }
         List<VideoInfo> videoList = iVideo.getVideoByAdminId(userId);
         if(videoList.size() > 0) {
             return JSONResult.ok(getVideoShow(videoList));
@@ -120,6 +123,12 @@ public class ManagerController {
 
         videoList  = iVideo.getExamineVideo();
         if(videoList.size() > 0) {
+            ArrayList<Integer> list = new ArrayList<>();
+            for (VideoInfo item : videoList) {
+                list.add(item.getId());
+            }
+
+            iVideo.setExaminePerson(list,userId);
             return JSONResult.ok(getVideoShow(videoList));
         }
 
