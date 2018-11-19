@@ -87,4 +87,22 @@ public interface IVideo {
             + "</script>")
     void setExaminePerson(@Param("iList") List<Integer> iList,int user_id);
 
+    @Select("<script>"
+            + "SELECT count(*) FROM video WHERE subject IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    int getVideoNumByChannel(@Param("iList") List<String> iList);
+
+
+    @Select("<script>"
+            + "SELECT * FROM video WHERE subject IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " limit #{arg1},#{arg2}"
+            + "</script>")
+    List<VideoShow> getVideoByChannel(@Param("iList") List<String> iList,int begin,int end);
+
 }

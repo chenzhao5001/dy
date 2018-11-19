@@ -1,5 +1,8 @@
 package com.guidesound.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.*;
 
 class Content {
@@ -26,6 +29,27 @@ class Content {
 
     public void setPro_id(int pro_id) {
         this.pro_id = pro_id;
+    }
+}
+
+class Content2 {
+    String channel_info;
+    String channel_name;
+
+    public String getChannel_info() {
+        return channel_info;
+    }
+
+    public void setChannel_info(String channel_info) {
+        this.channel_info = channel_info;
+    }
+
+    public String getChannel_name() {
+        return channel_name;
+    }
+
+    public void setChannel_name(String channel_name) {
+        this.channel_name = channel_name;
     }
 }
 
@@ -91,6 +115,8 @@ public class SignMap {
     static Map<Integer,String> user_type;
     static Map<Integer,String> grade_type;
     static Map<Integer,String> user_level;
+    static List<Content2> channel;
+
 
 
     static {
@@ -196,8 +222,33 @@ public class SignMap {
         user_level.put(1,"初级");
         user_level.put(1,"中级");
         user_level.put(1,"高级");
+
+        channel = new ArrayList<>();
+        Content2 content2 = new Content2();
+        content2.setChannel_info("101,102,103");
+        content2.setChannel_name("语数外");
+        channel.add(content2);
+        content2 = new Content2();
+        content2.setChannel_info("104,105,106");
+        content2.setChannel_name("物化生");
+        channel.add(content2);
+
+        content2 = new Content2();
+        content2.setChannel_info("107,108,109");
+        content2.setChannel_name("历地政");
+        channel.add(content2);
+
+        content2 = new Content2();
+        content2.setChannel_info("107,108,109");
+        content2.setChannel_name("其他");
+        channel.add(content2);
+
+
     }
 
+    public static List<Content2> getChannelList() throws JsonProcessingException {
+        return channel;
+    }
     public static String getUserLevelById(int id) {
         if(user_level.containsKey(id)) {
             return user_level.get(id);

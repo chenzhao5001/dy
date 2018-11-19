@@ -1,5 +1,6 @@
 package com.guidesound.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
@@ -117,6 +118,16 @@ public class TypeMapController {
         Object object = mapper.readValue(str, Object.class);
 
         return JSONResult.ok(object);
+    }
+
+    @RequestMapping(value = "/channel_list")
+    @ResponseBody
+    JSONResult  getChannelList() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+//        return JSONResult.ok()
+//        User user = mapper.readValue(SignMap.getChannelList(), User.class);
+        return JSONResult.ok(SignMap.getChannelList());
+//        return SignMap.getChannelList();
     }
 
 }

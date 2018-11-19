@@ -128,6 +128,69 @@ public class VideoController extends BaseController {
         return null;
     }
 
+
+    @RequestMapping(value = "/list_by_channel")
+    public @ResponseBody
+    JSONResult selectVideoByChannel(String channel,String page, String size) {
+        if(channel == null) {
+            return JSONResult.errorMsg("缺少channel");
+        }
+
+        int iPage = (page == null ? 1:Integer.parseInt(page));
+        int iSize = (size == null ? 20:Integer.parseInt(size));
+        int begin = (iPage -1)*iSize;
+        int end = (iPage -1)*iSize + iSize;
+
+        List<String> list = Arrays.asList(channel.split(","));
+        int count_temp = iVideo.getVideoNumByChannel(list);
+        if (count_temp == 0) {
+            ListResp ret = new ListResp();
+            ret.setCount(count_temp);
+            ret.setList(new ArrayList<>());
+            return JSONResult.ok(ret);
+        }
+
+        List<VideoShow> list_temp  = iVideo.getVideoByChannel(list,begin,end);
+
+        List<Integer> idList = new ArrayList<>();
+        for(VideoShow item:list_temp) {
+            item.setWatch_type_name(SignMap.getWatchById(item.getWatch_type()));
+            item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
+            idList.add(item.getId());
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        if (currentUser != null) {
+            List<Integer> videoIds = iVideo.getCollectionVideoById(currentUser.getId());
+            if(videoIds != null) {
+                for(VideoShow item:list_temp) {
+                    if(videoIds.contains(item.getId())) {
+                        item.setFollow(true);
+                    }
+                }
+            }
+        }
+
+
+        List<User> heads = iVideo.getUserHeadByIds(idList);
+        Map<Integer,String> headMap = new HashMap<>();
+        for (User user : heads) {
+            headMap.put(user.getId(),user.getHead());
+        }
+
+        for(VideoShow item:list_temp) {
+            if(headMap.containsKey(item.getUser_id())) {
+                item.setUser_head(headMap.get(item.getUser_id()));
+            }
+        }
+
+        ListResp ret = new ListResp();
+        ret.setCount(count_temp);
+        ret.setList(list_temp);
+
+        return JSONResult.ok(ret);
+    }
     /**
      * 获取视频列表
      */
