@@ -4,6 +4,7 @@ public class VideoShow {
 
     int id;
     int user_id;
+    String user_name;
     String title;
     int subject;
     String subject_name;
@@ -12,18 +13,27 @@ public class VideoShow {
     String watch_type_name;
 
     int duration;
+    int shared_count;
 
     String content;
     String pic_up_path;
     String video_show_path;
     int play_count;
+    boolean praise;
     int praise_count;
     int chat_count;
     String user_head;
-    boolean follow;
+    boolean collection;
+    int collection_count;
     int create_time;
 
+    public boolean isPraise() {
+        return praise;
+    }
 
+    public void setPraise(boolean praise) {
+        this.praise = praise;
+    }
 
     public int getId() {
         return id;
@@ -39,6 +49,14 @@ public class VideoShow {
 
     public void setUser_id(int user_id) {
         this.user_id = user_id;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
     public String getTitle() {
@@ -129,13 +147,7 @@ public class VideoShow {
         this.user_head = user_head;
     }
 
-    public boolean isFollow() {
-        return follow;
-    }
 
-    public void setFollow(boolean follow) {
-        this.follow = follow;
-    }
 
 
     public String getSubject_name() {
@@ -162,4 +174,27 @@ public class VideoShow {
         this.watch_type_name = watch_type_name;
     }
 
+    public boolean isCollection() {
+        return collection;
+    }
+
+    public void setCollection(boolean collection) {
+        this.collection = collection;
+    }
+
+    public int getCollection_count() {
+        return collection_count;
+    }
+
+    public void setCollection_count(int collection_count) {
+        this.collection_count = collection_count;
+    }
+
+    public int getShared_count() {
+        return shared_count;
+    }
+
+    public void setShared_count(int shared_count) {
+        this.shared_count = shared_count;
+    }
 }

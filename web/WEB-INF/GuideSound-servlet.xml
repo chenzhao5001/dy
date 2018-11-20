@@ -41,6 +41,9 @@
             <mvc:exclude-mapping path="/video/set_status"/>
             <mvc:exclude-mapping path="/video/video_list"/>
             <mvc:exclude-mapping path="/video/list_by_channel"/>
+            <mvc:exclude-mapping path="/video/hot_list"/>
+            <mvc:exclude-mapping path="/video/publish_video"/>
+            <mvc:exclude-mapping path="/video/collection_video"/>
 
             <mvc:exclude-mapping path="/edit/**"/>
             <mvc:exclude-mapping path="/article/edit"/>
@@ -48,6 +51,7 @@
             <mvc:exclude-mapping path="/back/**"/>
 
             <mvc:exclude-mapping path="/admin/**"/>
+
 
 
             <bean class="com.guidesound.interceptor.Common"/>
@@ -80,7 +84,7 @@
         <property name="dataSource" ref="dataSource" />
         <!-- 自动扫描mapping.xml文件 -->
         <property name="mapperLocations" value="classpath:mapping/*.xml"></property>
-        <!--<property name="configLocation" value="classpath:mybatis-config.xml"></property>-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
     </bean>
 
     <!-- DAO接口所在包名，Spring会自动查找其下的类 -->

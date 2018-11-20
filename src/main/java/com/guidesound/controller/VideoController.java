@@ -156,7 +156,7 @@ public class VideoController extends BaseController {
         for(VideoShow item:list_temp) {
             item.setWatch_type_name(SignMap.getWatchById(item.getWatch_type()));
             item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
-            idList.add(item.getId());
+            idList.add(item.getUser_id());
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
@@ -166,12 +166,11 @@ public class VideoController extends BaseController {
             if(videoIds != null) {
                 for(VideoShow item:list_temp) {
                     if(videoIds.contains(item.getId())) {
-                        item.setFollow(true);
+                        item.setCollection(true);
                     }
                 }
             }
         }
-
 
         List<User> heads = iVideo.getUserHeadByIds(idList);
         Map<Integer,String> headMap = new HashMap<>();
@@ -233,7 +232,7 @@ public class VideoController extends BaseController {
         for(VideoShow item:list_temp) {
             item.setWatch_type_name(SignMap.getWatchById(item.getWatch_type()));
             item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
-            idList.add(item.getId());
+            idList.add(item.getUser_id());
         }
         Cookie[] cookies = request.getCookies();
         int user_id = 0;
@@ -250,21 +249,30 @@ public class VideoController extends BaseController {
             if(videoIds != null) {
                 for(VideoShow item:list_temp) {
                     if(videoIds.contains(item.getId())) {
-                        item.setFollow(true);
+                        item.setCollection(true);
+                    }
+                }
+            }
+            videoIds = iVideo.getPraiseVideoById(user_id);
+            if(videoIds != null) {
+                for(VideoShow item:list_temp) {
+                    if(videoIds.contains(item.getId())) {
+                        item.setPraise(true);
                     }
                 }
             }
         }
 
-        List<User> heads = iVideo.getUserHeadByIds(idList);
-        Map<Integer,String> headMap = new HashMap<>();
-        for (User user : heads) {
-            headMap.put(user.getId(),user.getHead());
+        List<User> userList = iVideo.getUserHeadByIds(idList);
+        Map<Integer,User> userMap = new HashMap<>();
+        for (User user : userList) {
+            userMap.put(user.getId(),user);
         }
 
         for(VideoShow item:list_temp) {
-            if(headMap.containsKey(item.getUser_id())) {
-                item.setUser_head(headMap.get(item.getUser_id()));
+            if(userMap.containsKey(item.getUser_id())) {
+                item.setUser_head(userMap.get(item.getUser_id()).getHead());
+                item.setUser_name(userMap.get(item.getUser_id()).getName());
             }
         }
 
@@ -292,22 +300,30 @@ public class VideoController extends BaseController {
 
     @RequestMapping(value = "/add_praise")
     @ResponseBody
-    public JSONResult addPraise(String video_id) {
-        if(video_id == null) {
+    public JSONResult addPraise(String video_id,String type) {
+        if(video_id == null || type == null) {
             return JSONResult.errorMsg("缺少参数");
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
         int count = iVideoPraise.getVideoPraise(Integer.parseInt(video_id),currentUser.getId());
-        if(count > 0) {
-            return JSONResult.errorMsg("此用户已经评论过该视频");
-        }
 
-        iVideoPraise.addMainPraise(Integer.parseInt(video_id));
-        iVideoPraise.addPraise(currentUser.getId(),Integer.parseInt(video_id),(int)(new Date().getTime() /1000),(int)(new Date().getTime() /1000));
+        if(type.equals("1")) {
+            if(count > 0) {
+                return JSONResult.errorMsg("此用户已经赞过该视频");
+            }
+            iVideoPraise.addMainPraise(Integer.parseInt(video_id));
+            iVideoPraise.addPraise(currentUser.getId(),Integer.parseInt(video_id),(int)(new Date().getTime() /1000),(int)(new Date().getTime() /1000));
+        } else if(type.equals("2")){
+            if(count > 0) {
+                iVideoPraise.reduceMainPraise(Integer.parseInt(video_id));
+                iVideoPraise.reducePraise(currentUser.getId(),Integer.parseInt(video_id));
+            }
+        }
         return JSONResult.ok();
     }
+
 
     @RequestMapping(value = "/chat_video")
     @ResponseBody
@@ -482,12 +498,73 @@ public class VideoController extends BaseController {
         return JSONResult.ok(list);
     }
 
-//    @RequestMapping(value = "/verify")
-//    public String verify(ModelMap model) {
-//        RepList repList = selectVideo("0","","","");
-//        model.addAttribute("video_list",repList.getList());
-//        return "verify";
-//    }
+    /**
+     * 获得热门搜索列表
+     */
+    @RequestMapping(value = "/share_video")
+    @ResponseBody
+    public JSONResult shareVideo(String video_id) {
+        if (video_id == null) {
+            return JSONResult.errorMsg("缺少video_id");
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        int time = (int) (new Date().getTime() / 1000);
+        iVideo.shareVideo(currentUser.getId(),Integer.parseInt(video_id),time);
+        iVideo.addShareCount(Integer.parseInt(video_id));
+        return JSONResult.ok();
+    }
+
+    /**
+     * 收藏视频列表
+     */
+    @RequestMapping(value = "/collection_video")
+    @ResponseBody
+    public JSONResult getMyCollectionVideo(String user_id,String page,String size) {
+        if(user_id == null) {
+            return JSONResult.errorMsg("缺少user_id");
+        }
+        int iPage = page == null ? 1:Integer.parseInt(page);
+        int iSize = size == null ? 20:Integer.parseInt(size);
+        int begin = (iPage -1)*iSize;
+        int end = (iPage -1)*iSize + iSize;
+        List<Integer> vidoe_ids = iVideo.getMyCollectionIds(Integer.parseInt(user_id));
+        ListResp ret = new ListResp();
+        if(vidoe_ids.size() == 0) {
+            ret.setCount(0);
+            ret.setList(new ArrayList<>());
+            return JSONResult.ok(ret);
+        }
+        List<VideoShow> list = iVideo.myCollection(vidoe_ids,begin,end);
+        ret.setCount(vidoe_ids.size());
+        ret.setList(list);
+        return JSONResult.ok(ret);
+    }
+
+
+    /**
+     * 发布视频列表
+     */
+    @RequestMapping(value = "/publish_video")
+    @ResponseBody
+    public JSONResult getPublishVideo(String user_id,String page,String size) {
+
+        if(user_id == null) {
+            return JSONResult.errorMsg("缺少user_id");
+        }
+        int iPage = page == null ? 1:Integer.parseInt(page);
+        int iSize = size == null ? 20:Integer.parseInt(size);
+        int begin = (iPage -1)*iSize;
+        int end = (iPage -1)*iSize + iSize;
+
+        int count = iVideo.getPublishVidoeCountByUserId(Integer.parseInt(user_id));
+        List<VideoShow> list = iVideo.getPublishVidoeByUserId(Integer.parseInt(user_id),begin,end);
+        ListResp ret = new ListResp();
+        ret.setCount(count);
+        ret.setList(list);
+        return JSONResult.ok(ret);
+    }
 }
 
 class RepList {

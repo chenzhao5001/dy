@@ -12,10 +12,15 @@ public interface IVideoPraise {
 
     @Insert("Insert into videoPraise (user_id,video_id,create_time,update_time) value (#{arg0},#{arg1},#{arg2},#{arg3})")
     void addPraise(int user_id,int video_id,int create_time,int update_time);
+    @Update("update videoPraise set deleted = 1 where user_id = #{arg0} and video_id = #{arg1}")
+    void reducePraise(int user_id,int video_id);
+
     @Update("update video set praise_count = praise_count + 1 where id = #{video_id}")
     void addMainPraise(int video_id);
+    @Update("update video set praise_count = praise_count - 1 where id = #{video_id}")
+    void reduceMainPraise(int video_id);
 
-    @Select("select count(*) from videoPraise where video_id=#{arg0} and user_id=#{arg1}")
+    @Select("select count(*) from videoPraise where video_id=#{arg0} and user_id=#{arg1} and deleted = 0")
     int getVideoPraise(int video_id,int user_id);
 
     @Select("<script>"
