@@ -198,21 +198,32 @@ public class VideoController extends BaseController {
     JSONResult selectVideo(
             HttpServletRequest request,
             String status, String content, String page, String size, String s_type,String subject,String grade_class) {
-        status = status == null ? "0":status;
-        content = content == "" ? null:content;
+        status = (status == null || status.equals("")) ? null:status;
+        String title = (content == null || content.equals("")) ? null:content;
         int iPage = page == null ? 1:Integer.parseInt(page);
         int iSize = size == null ? 20:Integer.parseInt(size);
         int sType = s_type == null ? 0:Integer.parseInt(s_type);
+        List<String> subject_list = null;
+        List<String> grade_class_list = null;
+        if(subject != null && !subject.equals("")) {
+            subject_list = Arrays.asList(subject.split(","));
+        }
+        if(grade_class != null && !grade_class.equals("")) {
+            grade_class_list = Arrays.asList(subject.split(","));
+        }
+
 
         int begin = (iPage -1)*iSize;
         int end = (iPage -1)*iSize + iSize;
         VideoFind videoFind = new VideoFind();
-        videoFind.setTitle(content);
-        videoFind.setStatus(0);
+        videoFind.setTitle(title);
+        videoFind.setStatus(null);
         videoFind.setsType(1);
         videoFind.setBegin(begin);
         videoFind.setEnd(end);
-
+        videoFind.setSubject_list(subject_list);
+        videoFind.setGrade_class_list(grade_class_list);
+        videoFind.setsType(sType);
         int count_temp = iVideo.findVideoCount(videoFind);
         if (count_temp == 0) {
             ListResp ret = new ListResp();
@@ -221,12 +232,7 @@ public class VideoController extends BaseController {
             return JSONResult.ok(ret);
         }
 
-
-
-//        List<VideoShow> list_temp  = iVideo.selectVideo(status,begin,end);
-
         List<VideoShow> list_temp  = iVideo.findVideo(videoFind);
-
 
         List<Integer> idList = new ArrayList<>();
         for(VideoShow item:list_temp) {

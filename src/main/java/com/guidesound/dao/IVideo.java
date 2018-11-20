@@ -60,10 +60,10 @@ public interface IVideo {
     @Select("select count(*) from video where user_id = #{arg0}")
     int getVideoByUserId(String usre_id);
 
-    @Select("select video_id from videoCollection where user_id = #{arg0}")
+    @Select("select video_id from videoCollection where user_id = #{arg0} and deleted = 0")
     List<Integer> getCollectionVideoById(int user_id);
 
-    @Select("select video_id from videoPraise where user_id = #{arg0}")
+    @Select("select video_id from videoPraise where user_id = #{arg0} and deleted = 0")
     List<Integer> getPraiseVideoById(int user_id);
 
     @Select("<script>"

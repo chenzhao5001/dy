@@ -1,11 +1,32 @@
 package com.guidesound.find;
 
+import java.util.List;
+
 public class VideoFind {
     String title;
     int sType;
-    int status;
+    String status;
     int begin;
     int end;
+
+    List<String> subject_list;
+    List<String> grade_class_list;
+
+    public List<String> getSubject_list() {
+        return subject_list;
+    }
+
+    public void setSubject_list(List<String> subject_list) {
+        this.subject_list = subject_list;
+    }
+
+    public List<String> getGrade_class_list() {
+        return grade_class_list;
+    }
+
+    public void setGrade_class_list(List<String> grade_class_list) {
+        this.grade_class_list = grade_class_list;
+    }
 
     public String getTitle() {
         return title;
@@ -23,11 +44,11 @@ public class VideoFind {
         this.sType = sType;
     }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

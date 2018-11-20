@@ -57,7 +57,24 @@
         <if test="title != null ">
             and  title LIKE CONCAT('%',#{title},'%')
         </if>
-        and status = #{status}
+
+        <if test="status != null ">
+            and  examine_status =  #{status}
+        </if>
+
+        <if test="subject_list != null ">
+            and  subject IN
+            <foreach collection="subject_list" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
+        <if test="grade_class_list != null ">
+            and  watch_type IN
+            <foreach collection="grade_class_list" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
         and deleted = 0
     </select>
 
@@ -70,18 +87,29 @@
         <if test="title != null ">
             and  title LIKE CONCAT('%',#{title},'%')
         </if>
-        and status = #{status}
 
-        <if test= "sType == 1 ">
-            order by praise_count
+        <if test="status != null ">
+            and  examine_status =  #{status}
         </if>
-        <if test="sType == 2 ">
-            order by play_count
+
+        <if test="subject_list != null ">
+            and  subject IN
+            <foreach collection="subject_list" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
         </if>
-        <if test="sType == 3 ">
-            order by create_time
+
+        <if test="grade_class_list != null ">
+            and  watch_type IN
+            <foreach collection="grade_class_list" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        <if test="sType != null and sType = 1">
+            ORDER BY praise_count DESC
         </if>
         limit #{begin},#{end}
+
 
     </select>
 
