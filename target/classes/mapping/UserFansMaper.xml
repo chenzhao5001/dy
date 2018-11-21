@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.guidesound.dao.IUserFuns">
+
+
+    <select id="getUserFunsNum" parameterType="int"
+            resultType="int">
+        SELECT COUNT (*)
+        FROM userFuns
+        WHERE id = #{userId}
+    </select>
+
+    <insert id="addUserFuns" parameterType="com.guidesound.models.UserFuns" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO userFuns
+        (
+        user_id,
+        funs_user_id,
+        deleted,
+        create_time,
+        update_time
+        )
+        VALUES(
+        #{user_id},
+        #{funs_user_id},
+        #{deleted},
+        #{create_time},
+        #{update_time}
+        )
+    </insert>
+
+    <delete id="deleteUserFuns">
+        DELETE FROM user WHERE userId = #{0} and funsId = #{1}
+    </delete>
+
+    <select id="getUserFunsInfo" resultType="com.guidesound.models.UserFuns">
+        SELECT *
+        FROM userFuns
+        WHERE userId = #{0} and funsId = #{1} and deleted = 0
+    </select>
+
+
+
+</mapper>
