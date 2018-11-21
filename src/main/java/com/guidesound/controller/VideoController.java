@@ -117,7 +117,7 @@ public class VideoController extends BaseController {
 
         int count_temp = iVideo.getVideoCount("0");
         int begin = (iPage -1)*iSize;
-        int end = (iPage -1)*iSize + iSize;
+        int end = iSize;
 //        if( sType == "1") {
 //            List<VideoShow> list_temp  = iVideo.selectVideo(status,begin,end);
 //        } else {
@@ -139,7 +139,7 @@ public class VideoController extends BaseController {
         int iPage = (page == null ? 1:Integer.parseInt(page));
         int iSize = (size == null ? 20:Integer.parseInt(size));
         int begin = (iPage -1)*iSize;
-        int end = (iPage -1)*iSize + iSize;
+        int end =  iSize;
 
         List<String> list = Arrays.asList(channel.split(","));
         int count_temp = iVideo.getVideoNumByChannel(list);
@@ -214,10 +214,11 @@ public class VideoController extends BaseController {
 
 
         int begin = (iPage -1)*iSize;
-        int end = (iPage -1)*iSize + iSize;
+        int end = iSize;
+
         VideoFind videoFind = new VideoFind();
         videoFind.setTitle(title);
-        videoFind.setStatus(null);
+        videoFind.setStatus(status);
         videoFind.setsType(1);
         videoFind.setBegin(begin);
         videoFind.setEnd(end);
@@ -534,7 +535,7 @@ public class VideoController extends BaseController {
         int iPage = page == null ? 1:Integer.parseInt(page);
         int iSize = size == null ? 20:Integer.parseInt(size);
         int begin = (iPage -1)*iSize;
-        int end = (iPage -1)*iSize + iSize;
+        int end = iSize;
         List<Integer> vidoe_ids = iVideo.getMyCollectionIds(Integer.parseInt(user_id));
         ListResp ret = new ListResp();
         if(vidoe_ids.size() == 0) {
@@ -562,7 +563,7 @@ public class VideoController extends BaseController {
         int iPage = page == null ? 1:Integer.parseInt(page);
         int iSize = size == null ? 20:Integer.parseInt(size);
         int begin = (iPage -1)*iSize;
-        int end = (iPage -1)*iSize + iSize;
+        int end = iSize;
 
         int count = iVideo.getPublishVidoeCountByUserId(Integer.parseInt(user_id));
         List<VideoShow> list = iVideo.getPublishVidoeByUserId(Integer.parseInt(user_id),begin,end);

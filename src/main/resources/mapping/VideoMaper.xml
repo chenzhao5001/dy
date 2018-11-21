@@ -105,8 +105,14 @@
                 #{id}
             </foreach>
         </if>
-        <if test="sType != null and sType = 1">
+        <if test="sType != null and sType == 1">
             ORDER BY praise_count DESC
+        </if>
+        <if test="sType != null and sType == 2">
+            ORDER BY play_count DESC
+        </if>
+        <if test="sType != null and sType == 3">
+            ORDER BY create_time DESC
         </if>
         limit #{begin},#{end}
 

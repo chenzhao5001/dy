@@ -63,6 +63,9 @@
     <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location" value="classpath:jdbc.properties" />
+        <!--<property name="location" value="file: ../../../config:jdbc.properties" />-->
+
+        <property name="fileEncoding" value="utf-8"/>
     </bean>
 
     <bean id="dataSource"  class="com.alibaba.druid.pool.DruidDataSource" destroy-method="close">
