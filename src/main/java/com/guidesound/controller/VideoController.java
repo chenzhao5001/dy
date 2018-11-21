@@ -7,6 +7,8 @@ import com.guidesound.find.VideoFind;
 import com.guidesound.models.*;
 import com.guidesound.resp.ListResp;
 import com.guidesound.util.*;
+//import com.qcloud.Utilities.Json.JSONObject;
+import com.qcloud.Utilities.Json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,6 +20,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -571,6 +574,19 @@ public class VideoController extends BaseController {
         ret.setCount(count);
         ret.setList(list);
         return JSONResult.ok(ret);
+    }
+
+    @RequestMapping(value = "/get_up_key")
+    @ResponseBody
+    String getUpKey(HttpServletResponse response) {
+
+        TreeMap<String, Object> config = new TreeMap<String, Object>();
+        config.put("SecretId", "AKIDkIbfU4YZXUDgttF7MPDl36vUw9E6o7GK");
+        config.put("SecretKey", "zjHchX8UbSCj9MM7ORFo8uUpwoUw9ltq");
+        config.put("durationInSeconds", 1800);
+        StorageSts storageSts = new StorageSts();
+        JSONObject credential = storageSts.getCredential(config);
+        return credential.toString();
     }
 }
 

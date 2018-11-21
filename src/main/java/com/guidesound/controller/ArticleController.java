@@ -207,8 +207,6 @@ public class ArticleController extends BaseController {
         return JSONResult.ok(listResp);
     }
 
-
-
     /**
      *获得文章详情
      */
@@ -246,7 +244,6 @@ public class ArticleController extends BaseController {
         return JSONResult.ok(listResp);
     }
 
-
     @RequestMapping("/edit")
     public String articleEdit(HttpServletRequest request, HttpServletResponse response, ModelMap mode) {
         //种cookie
@@ -254,8 +251,6 @@ public class ArticleController extends BaseController {
         String token = TockenUtil.makeTocken(user.getId());
         Cookie cookie = new Cookie("token",token);//创建新cookie
         cookie.setPath("/");//设置作用域
-
-
 
         Map info = new HashMap<String,Object>();
         info.put("user",user);
