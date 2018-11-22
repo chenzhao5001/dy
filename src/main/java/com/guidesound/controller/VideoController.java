@@ -578,7 +578,7 @@ public class VideoController extends BaseController {
 
     @RequestMapping(value = "/get_up_key")
     @ResponseBody
-    String getUpKey(HttpServletResponse response) {
+    JSONResult getUpKey(HttpServletResponse response) {
 
         TreeMap<String, Object> config = new TreeMap<String, Object>();
         config.put("SecretId", "AKIDkIbfU4YZXUDgttF7MPDl36vUw9E6o7GK");
@@ -586,7 +586,58 @@ public class VideoController extends BaseController {
         config.put("durationInSeconds", 1800);
         StorageSts storageSts = new StorageSts();
         JSONObject credential = storageSts.getCredential(config);
-        return credential.toString();
+        int code = credential.getInt("code");
+        if ( code != 0 ) {
+            return JSONResult.errorMsg(credential.getString("codeDesc"));
+        }
+
+        class RetData {
+            String tmpSecretId;
+            String tmpSecretKey;
+            String sessionToken;
+            String expiredTime;
+
+            public String getTmpSecretId() {
+                return tmpSecretId;
+            }
+
+            public void setTmpSecretId(String tmpSecretId) {
+                this.tmpSecretId = tmpSecretId;
+            }
+
+            public String getTmpSecretKey() {
+                return tmpSecretKey;
+            }
+
+            public void setTmpSecretKey(String tmpSecretKey) {
+                this.tmpSecretKey = tmpSecretKey;
+            }
+
+            public String getSessionToken() {
+                return sessionToken;
+            }
+
+            public void setSessionToken(String sessionToken) {
+                this.sessionToken = sessionToken;
+            }
+
+            public String getExpiredTime() {
+                return expiredTime;
+            }
+
+            public void setExpiredTime(String expiredTime) {
+                this.expiredTime = expiredTime;
+            }
+        }
+
+        JSONObject retObject = credential.getJSONObject("data");
+        RetData retData = new RetData();
+        retData.setTmpSecretId(retObject.getJSONObject("credentials").getString("tmpSecretId"));
+        retData.setTmpSecretKey(retObject.getJSONObject("credentials").getString("tmpSecretKey"));
+        retData.setSessionToken(retObject.getJSONObject("credentials").getString("sessionToken"));
+        retData.setExpiredTime(String.valueOf(retObject.getInt("expiredTime")));
+
+        return JSONResult.ok(retData);
     }
 }
 
