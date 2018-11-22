@@ -65,9 +65,15 @@ public class EditController {
                 .readTimeout(20, TimeUnit.SECONDS)
                 .build();
 
+        String[] strs = picture.getOriginalFilename().split("\\.");
+        String suffix = "";
+        if (strs.length > 1) {
+            suffix = strs[strs.length -1];
+        }
+
         MultipartBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("upload",strDate + ToolsFunction.getRandomString(8),fileBody)
+                .addFormDataPart("upload",strDate + ToolsFunction.getRandomString(8) + "." + suffix ,fileBody)
                 .addFormDataPart("sign","guide_sound")
                 .build();
 

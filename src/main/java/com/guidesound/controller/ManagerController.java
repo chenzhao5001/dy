@@ -138,7 +138,7 @@ public class ManagerController {
 
     @RequestMapping(value = "/examine_video")
     @ResponseBody
-    JSONResult examineVideo(String video_id,String status,String type_list,String fail_reason,String fail_content) {
+    JSONResult examineVideo(String video_id,String status,String type_list,String fail_reason,String fail_content) throws IOException, InterruptedException {
         Integer userId = getUserId();
         if ( userId == null ) {
             return JSONResult.errorMsg("缺少m_token");
@@ -151,7 +151,9 @@ public class ManagerController {
             if(type_list == null) {
                 return JSONResult.errorMsg("缺少type_list");
             }
-            iVideo.setExamineSucess(Integer.parseInt(video_id),type_list);
+            String tempUrl = iVideo.getTempVideoById(Integer.parseInt(video_id));
+            String url = ToolsFunction.changeVideo(tempUrl);
+            iVideo.setExamineSucess(Integer.parseInt(video_id),type_list,url);
 
         } else {
             if(fail_reason == null || fail_content == null) {

@@ -109,6 +109,30 @@ public class ToolsFunction {
         return true;
     }
 
+    public static String changeVideo(String source_url) throws IOException, InterruptedException {
+
+        FormBody formBody = new FormBody
+                .Builder()
+                .add("convert_url",source_url)
+                .add("sign","guide_sound")
+                .build();
+
+        Request req = new Request.Builder()
+                .url("http://139.199.123.168/fileservice/convert_video")
+                .post(formBody)
+                .build();
+        Response resp;
+        OkHttpClient client_temp = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+
+        resp = client_temp.newCall(req).execute();
+        String jsonString = resp.body().string();
+        JSONObject json = new JSONObject(jsonString);
+        String url = json.getString("data");
+        return url;
+    }
 
     /**
      *上传文件到文件服务器

@@ -64,17 +64,7 @@ public class VideoController extends BaseController {
             return JSONResult.errorMsg(err);
         }
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String tmpPath = req.getServletContext().getRealPath("")
-                + "/tmp/";
-        File filePath = new File(tmpPath);
-        if (!filePath.exists() && !filePath.isDirectory()) {
-            filePath.mkdir();
-        }
-        String savaPath = tmpPath + System.currentTimeMillis() + "_" + ToolsFunction.getRandomString(4) + ".mp4";
-        ToolsFunction.videoChange(videoDTO.getViedo_url(),savaPath);
 
-        filePath = new File(savaPath);
-        String url = ToolsFunction.upFileToServicer(filePath);
         Video video = new Video();
         User user = (User)req.getAttribute("user_info");
         video.setUser_id(user.getId());
@@ -87,12 +77,12 @@ public class VideoController extends BaseController {
         video.setPic_up_path(videoDTO.getPicture_url());
         video.setVideo_up_path(videoDTO.getViedo_url());
         video.setVideo_temp_path("");
-        video.setVideo_show_path(url);
+        video.setVideo_show_path("");
 
         video.setCreate_time((int) (new Date().getTime() / 1000));
         video.setUpdate_time((int) (new Date().getTime() / 1000));
         videoService.addVideo(video);
-        return JSONResult.ok(url);
+        return JSONResult.ok();
     }
 
     @RequestMapping(value = "/subject_list")
