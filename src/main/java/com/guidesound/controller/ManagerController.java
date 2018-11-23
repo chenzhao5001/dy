@@ -6,6 +6,7 @@ import com.guidesound.dao.IUser;
 import com.guidesound.dao.IVideo;
 import com.guidesound.models.*;
 import com.guidesound.util.*;
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.jms.*;
 import javax.rmi.CORBA.Util;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -138,7 +140,8 @@ public class ManagerController {
 
     @RequestMapping(value = "/examine_video")
     @ResponseBody
-    JSONResult examineVideo(String video_id,String status,String type_list,String fail_reason,String fail_content) throws IOException, InterruptedException {
+    JSONResult examineVideo(String video_id,String status,String type_list,String fail_reason,String fail_content) throws IOException, InterruptedException, JMSException {
+
         Integer userId = getUserId();
         if ( userId == null ) {
             return JSONResult.errorMsg("缺少m_token");
@@ -151,9 +154,33 @@ public class ManagerController {
             if(type_list == null) {
                 return JSONResult.errorMsg("缺少type_list");
             }
-            String tempUrl = iVideo.getTempVideoById(Integer.parseInt(video_id));
-            String url = ToolsFunction.changeVideo(tempUrl);
-            iVideo.setExamineSucess(Integer.parseInt(video_id),type_list,url);
+
+            MessageProducer messageProducer = null;
+            Session session = null;
+
+            String mqUrl = "tcp://139.199.112.147:61616";
+            String qName = "examine";
+            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(mqUrl);
+            try {
+                Connection connection = connectionFactory.createConnection();
+                connection.start();
+                session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+                Destination destination = session.createQueue(qName);
+                messageProducer = session.createProducer(destination);
+                if(messageProducer != null || messageProducer != null) {
+                    TextMessage textMessage = session.createTextMessage(String.valueOf(video_id));
+                    messageProducer.send(textMessage);
+                }
+                connection.close();
+                iVideo.setExamineLoading(Integer.parseInt(video_id),type_list);
+
+            } catch (JMSException e) {
+                e.printStackTrace();
+            }
+
+//            String tempUrl = iVideo.getTempVideoById(Integer.parseInt(video_id));
+//            String url = ToolsFunction.changeVideo(tempUrl);
+
 
         } else {
             if(fail_reason == null || fail_content == null) {

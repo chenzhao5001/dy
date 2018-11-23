@@ -84,8 +84,8 @@ public interface IVideo {
     @Select("select * from video where examine_pesron = 0 and deleted = 0 and examine_status = 0 limit 0 ,5")
     List<VideoInfo> getExamineVideo();
 
-    @Update("update video set examine_status = 1,type_list = #{arg1},video_show_path = #{arg2} where id = #{arg0}")
-    void setExamineSucess(int id, String type_list,String url);
+    @Update("update video set examine_status = 3,type_list = #{arg1} where id = #{arg0}")
+    void setExamineLoading(int id, String type_list);
 
     @Select("select video_up_path from video where id = #{arg0}")
     String getTempVideoById(int id);
@@ -125,7 +125,7 @@ public interface IVideo {
     @Update("update video set shared_count = shared_count + 1 where id = #{arg0}")
     void addShareCount(int video_id);
 
-    @Select("select id from videoCollection where user_id = #{arg0} and deleted = 0")
+    @Select("select id from videoCollection where user_id = #{arg0} and examine_status = 1 and deleted = 0")
     List<Integer> getMyCollectionIds(int user_id);
 
     @Select("<script>"
@@ -137,9 +137,9 @@ public interface IVideo {
             + "</script>")
     List<VideoShow> myCollection(@Param("iList") List<Integer> iList,int begin,int end);
 
-    @Select("select count(*) from video where user_id = #{arg0} and deleted = 0")
+    @Select("select count(*) from video where user_id = #{arg0} and examine_status = 1 and deleted = 0")
     int getPublishVidoeCountByUserId(int user_id);
-    @Select("select * from video where user_id = #{arg0} and deleted = 0 limit #{arg1},#{arg2}")
+    @Select("select * from video where user_id = #{arg0} and examine_status = 1 and deleted = 0 limit #{arg1},#{arg2}")
     List<VideoShow> getPublishVidoeByUserId(int user_id,int begin,int end);
 
 }
