@@ -25,7 +25,16 @@ public class VideoShow {
     String user_head;
     boolean collection;
     int collection_count;
+    boolean follow;
     int create_time;
+
+    public boolean isFollow() {
+        return follow;
+    }
+
+    public void setFollow(boolean follow) {
+        this.follow = follow;
+    }
 
     public boolean isPraise() {
         return praise;

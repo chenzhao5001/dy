@@ -180,8 +180,6 @@ public class ManagerController {
 
 //            String tempUrl = iVideo.getTempVideoById(Integer.parseInt(video_id));
 //            String url = ToolsFunction.changeVideo(tempUrl);
-
-
         } else {
             if(fail_reason == null || fail_content == null) {
                 return JSONResult.errorMsg("缺少fail_reason或fail_content");

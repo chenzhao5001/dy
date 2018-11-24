@@ -48,6 +48,10 @@ public class VideoController extends BaseController {
     private IVideoChat iVideoChat;
     @Autowired
     private IVideoCollection iVideoCollection;
+    @Autowired
+    private IUser iUser;
+
+
     /**
      * 视频上传
      */
@@ -138,44 +142,19 @@ public class VideoController extends BaseController {
         int count_temp = iVideo.getVideoNumByChannel(list);
         if (count_temp == 0) {
             ListResp ret = new ListResp();
-            ret.setCount(count_temp);
+            ret.setCount(0);
             ret.setList(new ArrayList<>());
             return JSONResult.ok(ret);
         }
-
-        List<VideoShow> list_temp  = iVideo.getVideoByChannel(list,begin,end);
-
-        List<Integer> idList = new ArrayList<>();
-        for(VideoShow item:list_temp) {
-            item.setWatch_type_name(SignMap.getWatchById(item.getWatch_type()));
-            item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
-            idList.add(item.getUser_id());
-        }
-
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
+        int user_id = 0;
         if (currentUser != null) {
-            List<Integer> videoIds = iVideo.getCollectionVideoById(currentUser.getId());
-            if(videoIds != null) {
-                for(VideoShow item:list_temp) {
-                    if(videoIds.contains(item.getId())) {
-                        item.setCollection(true);
-                    }
-                }
-            }
+            user_id = currentUser.getId();
         }
+        List<VideoShow> list_temp  = iVideo.getVideoByChannel(list,begin,end);
+        improveVideoList(user_id,list_temp);
 
-        List<User> heads = iVideo.getUserHeadByIds(idList);
-        Map<Integer,String> headMap = new HashMap<>();
-        for (User user : heads) {
-            headMap.put(user.getId(),user.getHead());
-        }
-
-        for(VideoShow item:list_temp) {
-            if(headMap.containsKey(item.getUser_id())) {
-                item.setUser_head(headMap.get(item.getUser_id()));
-            }
-        }
 
         ListResp ret = new ListResp();
         ret.setCount(count_temp);
@@ -189,7 +168,6 @@ public class VideoController extends BaseController {
     @RequestMapping(value = "/video_list")
     public @ResponseBody
     JSONResult selectVideo(
-            HttpServletRequest request,
             String status, String content, String page, String size, String s_type,String subject,String grade_class) {
         status = (status == null || status.equals("")) ? null:status;
         String title = (content == null || content.equals("")) ? null:content;
@@ -219,64 +197,21 @@ public class VideoController extends BaseController {
         videoFind.setGrade_class_list(grade_class_list);
         videoFind.setsType(sType);
         int count_temp = iVideo.findVideoCount(videoFind);
+        ListResp ret = new ListResp();
         if (count_temp == 0) {
-            ListResp ret = new ListResp();
-            ret.setCount(count_temp);
+            ret.setCount(0);
             ret.setList(new ArrayList<>());
             return JSONResult.ok(ret);
         }
 
-        List<VideoShow> list_temp  = iVideo.findVideo(videoFind);
-
-        List<Integer> idList = new ArrayList<>();
-        for(VideoShow item:list_temp) {
-            item.setWatch_type_name(SignMap.getWatchById(item.getWatch_type()));
-            item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
-            idList.add(item.getUser_id());
-        }
-        Cookie[] cookies = request.getCookies();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
         int user_id = 0;
-        if(cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    user_id = TockenUtil.getUserIdByTocket(token);
-                }
-            }
+        if (currentUser != null) {
+            user_id = currentUser.getId();
         }
-        if(user_id != 0) {
-            List<Integer> videoIds = iVideo.getCollectionVideoById(user_id);
-            if(videoIds != null) {
-                for(VideoShow item:list_temp) {
-                    if(videoIds.contains(item.getId())) {
-                        item.setCollection(true);
-                    }
-                }
-            }
-            videoIds = iVideo.getPraiseVideoById(user_id);
-            if(videoIds != null) {
-                for(VideoShow item:list_temp) {
-                    if(videoIds.contains(item.getId())) {
-                        item.setPraise(true);
-                    }
-                }
-            }
-        }
-
-        List<User> userList = iVideo.getUserHeadByIds(idList);
-        Map<Integer,User> userMap = new HashMap<>();
-        for (User user : userList) {
-            userMap.put(user.getId(),user);
-        }
-
-        for(VideoShow item:list_temp) {
-            if(userMap.containsKey(item.getUser_id())) {
-                item.setUser_head(userMap.get(item.getUser_id()).getHead());
-                item.setUser_name(userMap.get(item.getUser_id()).getName());
-            }
-        }
-
-        ListResp ret = new ListResp();
+        List<VideoShow> list_temp  = iVideo.findVideo(videoFind);
+        improveVideoList(user_id,list_temp);
         ret.setCount(count_temp);
         ret.setList(list_temp);
         return JSONResult.ok(ret);
@@ -537,6 +472,12 @@ public class VideoController extends BaseController {
             return JSONResult.ok(ret);
         }
         List<VideoShow> list = iVideo.myCollection(vidoe_ids,begin,end);
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        improveVideoList(currentUser.getId(),list);
+
+
         ret.setCount(vidoe_ids.size());
         ret.setList(list);
         return JSONResult.ok(ret);
@@ -557,10 +498,23 @@ public class VideoController extends BaseController {
         int iSize = size == null ? 20:Integer.parseInt(size);
         int begin = (iPage -1)*iSize;
         int end = iSize;
-
-        int count = iVideo.getPublishVidoeCountByUserId(Integer.parseInt(user_id));
-        List<VideoShow> list = iVideo.getPublishVidoeByUserId(Integer.parseInt(user_id),begin,end);
         ListResp ret = new ListResp();
+        int count = iVideo.getPublishVidoeCountByUserId(Integer.parseInt(user_id));
+        if(count == 0) {
+            ret.setCount(0);
+            ret.setList(new ArrayList<>());
+            return JSONResult.ok(ret);
+        }
+        List<VideoShow> list = iVideo.getPublishVidoeByUserId(Integer.parseInt(user_id),begin,end);
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        int current_user_id = 0;
+        if(currentUser != null) {
+            current_user_id = currentUser.getId();
+        }
+        improveVideoList(current_user_id,list);
+
         ret.setCount(count);
         ret.setList(list);
         return JSONResult.ok(ret);
@@ -628,6 +582,57 @@ public class VideoController extends BaseController {
         retData.setExpiredTime(String.valueOf(retObject.getInt("expiredTime")));
 
         return JSONResult.ok(retData);
+    }
+
+    void improveVideoList(int user_id,List<VideoShow> list_temp) {
+        List<Integer> idList = new ArrayList<>();
+        for(VideoShow item:list_temp) {
+            item.setWatch_type_name(SignMap.getGradeTypeByID(item.getWatch_type()));
+            item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
+            idList.add(item.getUser_id());
+        }
+
+        if(user_id != 0) {
+            List<Integer> videoIds = iVideo.getCollectionVideoById(user_id);
+            if(videoIds != null) {
+                for(VideoShow item:list_temp) {
+                    if(videoIds.contains(item.getId())) {
+                        item.setCollection(true);
+                    }
+                }
+            }
+            videoIds = iVideo.getPraiseVideoById(user_id);
+            if(videoIds != null) {
+                for(VideoShow item:list_temp) {
+                    if(videoIds.contains(item.getId())) {
+                        item.setPraise(true);
+                    }
+                }
+            }
+
+            List<Integer> userIds = iUser.getFollowUsers(user_id);
+            if(userIds != null) {
+                for(VideoShow item:list_temp) {
+                    if(userIds.contains(item.getUser_id())) {
+                        item.setFollow(true);
+                    }
+                }
+            }
+        }
+
+        if (idList != null && idList.size() > 0) {
+            List<User> userList = iVideo.getUserHeadByIds(idList);
+            Map<Integer,User> userMap = new HashMap<>();
+            for (User user : userList) {
+                userMap.put(user.getId(),user);
+            }
+            for(VideoShow item:list_temp) {
+                if(userMap.containsKey(item.getUser_id())) {
+                    item.setUser_head(userMap.get(item.getUser_id()).getHead());
+                    item.setUser_name(userMap.get(item.getUser_id()).getName());
+                }
+            }
+        }
     }
 }
 

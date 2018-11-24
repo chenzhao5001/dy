@@ -139,7 +139,7 @@ public class SignMap {
         subject_type.put(107,new Content("历史",1));
         subject_type.put(108,new Content("地理",1));
         subject_type.put(109,new Content("政治",1));
-
+        subject_type.put(199,new Content("全部",1));
 
         subject_type.put(201,new Content("钢琴",2));
         subject_type.put(202,new Content("吉他",2));
@@ -263,6 +263,12 @@ public class SignMap {
         return "未知";
     }
 
+    public static String getGradeTypeByID(int id) {
+        if(grade_type.containsKey(id)) {
+            return grade_type.get(id);
+        }
+        return "未知";
+    }
     public static String getSubjectClassifyById(int id) {
         if(subject_classify.containsKey(id)) {
             return subject_classify.get(id);

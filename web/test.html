@@ -1,20 +1,30 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!--<link rel="stylesheet" href="./test.css">-->
     <style>
-       body > div > span {
-            color: red;
+        /*@import url("./test.css");*/
+
+        p * {color:red;}
+        /*div p*/
+        /*{*/
+            /*color:red;*/
+        /*}*/
+        #test:target {
+            background-color: red;
         }
     </style>
+
 </head>
 <body>
+    <div id="test">1111</div>
+    <div>2222</div>
 
-<div>
-    <span>1111</span>
-</div>
 
+    <a href="#test"></a>
 
 </body>
 </html>

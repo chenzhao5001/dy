@@ -63,6 +63,9 @@ public interface IUser {
     @Update("update userFuns set deleted = 1,update_time = #{arg2} where user_id= #{arg1} and funs_user_id = #{arg0}")
     public void cancelFollow(int id,int user_id,int update_time);
 
+    @Select("select user_id from userFuns where funs_user_id = #{arg0} and deleted = 0")
+    public List<Integer> getFollowUsers(int user_id);
+
     @Insert("insert into userPraise (user_id,praise_user_id,create_time) values (#{arg1},#{arg0},#{arg2})")
     public void praiseUser(int id,int user_id,int create_time);
 
