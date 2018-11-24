@@ -12,6 +12,7 @@ public class UserInfo {
     private int level;
     private int status;
     private String sign_name;
+    private String background_url;
     private boolean follow;
     private int subject;
     private String subject_name;
@@ -25,6 +26,7 @@ public class UserInfo {
     private int article_count;
     private int sex;
     private int grade;
+    private String grade_name;
     private String province;
     private String city;
     private String area;
@@ -293,5 +295,21 @@ public class UserInfo {
 
     public void setBusiness_status(int business_status) {
         this.business_status = business_status;
+    }
+
+    public String getBackground_url() {
+        return background_url;
+    }
+
+    public void setBackground_url(String background_url) {
+        this.background_url = background_url;
+    }
+
+    public String getGrade_name() {
+        return grade_name;
+    }
+
+    public void setGrade_name(String grade_name) {
+        this.grade_name = grade_name;
     }
 }

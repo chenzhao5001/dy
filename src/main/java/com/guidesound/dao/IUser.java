@@ -41,11 +41,11 @@ public interface IUser {
     @Update("update user set type = #{arg1},dy_id = #{arg2},level = #{arg3} where id= #{arg0}")
     public void updateTypeInfo(int id,String type,int dy_id,int level);
 
-    @Insert("insert into user (phone) values (#{phone})")
+    @Insert("insert into user (phone,create_time) values (#{phone},#{create_time})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     public void addUserByPhone(UserInfo user);
 
-    @Insert("insert into user (unionid,name,head) values (#{unionid},#{name},#{head})")
+    @Insert("insert into user (unionid,name,head,create_time) values (#{unionid},#{name},#{head},#{create_time})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     public void addUserByUnionid(UserInfo user);
 
@@ -56,6 +56,9 @@ public interface IUser {
 
     @Select("select * from user where id = #{arg0}")
     public UserInfo getUserInfo(String id);
+
+    @Select("select count(*) from userFuns where user_id = #{arg1} and funs_user_id = #{arg0} and deleted = 0")
+    int isFollow(int id,int user_id);
 
     @Insert("insert into userFuns (user_id,funs_user_id,create_time) values (#{arg1},#{arg0},#{arg2})")
     public void followUser(int id,int user_id,int create_time);
@@ -128,6 +131,8 @@ public interface IUser {
     @Update("update user set company_name = #{arg1} where id = #{arg0}")
     public void setCompanyName(int user_id,String companyName);
 
+    @Update("update user set background_url = #{arg1} where id = #{arg0}")
+    public void setBackroundUrl(int user_id,String backroundUrl);
 
     @Update("update user set sex = #{arg1},grade = #{arg2},level = #{arg3} where id = #{arg0}")
     public void setStudentBasicInfo(int id,String sex,String grade,int level);

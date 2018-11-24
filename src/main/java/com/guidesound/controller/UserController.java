@@ -279,6 +279,7 @@ public class UserController extends BaseController{
         }
 
         userInfo.setSubject_name(SignMap.getSubjectTypeById(userInfo.getSubject()));
+        userInfo.setGrade_name(SignMap.getGradeTypeByID(userInfo.getGrade()));
         int funCount = iUser.getFunsById(user_id);
         int followCount = iUser.getFollowById(user_id);
         int praiseCount = iUser.getPraiseById(user_id);
@@ -321,9 +322,15 @@ public class UserController extends BaseController{
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
 
+        int count = iUser.isFollow(currentUser.getId(),Integer.parseInt(user_id));
+        if (count > 0) {
+            return JSONResult.errorMsg("此用户已经关注过");
+        }
+
         iUser.followUser(currentUser.getId(),
                 Integer.parseInt(user_id),
                 (int)(new Date().getTime() /1000));
+
         return JSONResult.ok();
     }
 
@@ -568,10 +575,17 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value = "/update_phone")
     @ResponseBody
-    JSONResult updatePhone(String phone) {
-        if ( phone == null ) {
-            return JSONResult.errorMsg("缺少请求参数phone");
+    JSONResult updatePhone(String phone,String verify_code) {
+        if ( phone == null || verify_code == null) {
+            return JSONResult.errorMsg("缺少请求参数");
         }
+
+        int time = (int) (new Date().getTime() / 1000) - 600;
+        int count = iVerifyCode.selectCode(phone,verify_code,time);
+        if(count <= 0) {
+            return JSONResult.build(201,"验证码错误",null);
+        }
+
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
 
@@ -739,6 +753,19 @@ public class UserController extends BaseController{
         User currentUser = (User)request.getAttribute("user_info");
         iUser.setCompanyName(currentUser.getId(),company_name);
         return JSONResult.ok();
+    }
+
+    @RequestMapping(value = "/background_url")
+    @ResponseBody
+    public JSONResult setBackground_url(String background_url) {
+        if(background_url == null) {
+            return JSONResult.errorMsg("缺少参数 background_url");
+        }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        iUser.setBackroundUrl(currentUser.getId(),background_url);
+        return JSONResult.ok();
+
     }
 }
 

@@ -125,7 +125,7 @@ public interface IVideo {
     @Update("update video set shared_count = shared_count + 1 where id = #{arg0}")
     void addShareCount(int video_id);
 
-    @Select("select id from videoCollection where user_id = #{arg0} and examine_status = 1 and deleted = 0")
+    @Select("select id from videoCollection where user_id = #{arg0} and deleted = 0")
     List<Integer> getMyCollectionIds(int user_id);
 
     @Select("<script>"

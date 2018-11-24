@@ -333,9 +333,14 @@ public class VideoController extends BaseController {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
         int count = iVideoCollection.getVideoCollection(Integer.parseInt(video_id),currentUser.getId());
+        if(count > 0) {
+            return JSONResult.errorMsg("此视频已经收藏过了 ");
+        }
         if ( count == 0) {
             iVideoCollection.addCollection(currentUser.getId(),Integer.parseInt(video_id),(int) (new Date().getTime() / 1000),0);
+            iVideoCollection.addMainCollection(Integer.parseInt(video_id));
         }
+
         return JSONResult.ok();
     }
 
@@ -351,7 +356,12 @@ public class VideoController extends BaseController {
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
-        iVideoCollection.deleteCollection(currentUser.getId(),Integer.parseInt(video_id));
+        int count = iVideoCollection.getVideoCollection(Integer.parseInt(video_id),currentUser.getId());
+        if(count > 0) {
+            iVideoCollection.deleteCollection(currentUser.getId(),Integer.parseInt(video_id));
+            iVideoCollection.deleteMainCollection(Integer.parseInt(video_id));
+        }
+
         return JSONResult.ok();
     }
 
@@ -472,13 +482,17 @@ public class VideoController extends BaseController {
             return JSONResult.ok(ret);
         }
         List<VideoShow> list = iVideo.myCollection(vidoe_ids,begin,end);
+        if(list.size() == 0) {
+            ret.setCount(0);
+            ret.setList(new ArrayList<>());
+            return JSONResult.ok(ret);
+        }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
         improveVideoList(currentUser.getId(),list);
 
-
-        ret.setCount(vidoe_ids.size());
+        ret.setCount(list.size());
         ret.setList(list);
         return JSONResult.ok(ret);
     }
