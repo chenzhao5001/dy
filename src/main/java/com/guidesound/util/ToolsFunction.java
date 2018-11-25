@@ -1,5 +1,9 @@
 package com.guidesound.util;
 
+import com.github.qcloudsms.SmsSingleSender;
+import com.github.qcloudsms.SmsSingleSenderResult;
+import com.github.qcloudsms.httpclient.HTTPException;
+import com.qcloud.Utilities.Json.JSONException;
 import okhttp3.*;
 import org.json.JSONObject;
 import org.springframework.validation.BindingResult;
@@ -201,6 +205,20 @@ public class ToolsFunction {
         return sb.toString();
     }
 
+    /**
+     *生成随机字符串
+     */
+    public static String getNumRandomString(int length){
+        String str="0123456789";
+        Random random=new Random();
+        StringBuffer sb=new StringBuffer();
+        for(int i=0;i<length;i++){
+            int number=random.nextInt(10);
+            sb.append(str.charAt(number));
+        }
+        return sb.toString();
+    }
+
     public static boolean paramCheck(BindingResult result,StringBuilder errMsg) {
         if (result.hasErrors()) {
             List<ObjectError> errors = result.getAllErrors();
@@ -278,5 +296,24 @@ public class ToolsFunction {
                    + newStr.substring(newStr.indexOf(indexStr)+indexStr.length(),newStr.length()));
         }
         return newStr.toString();
+    }
+
+    public static void sendSMS(String phone,String content) {
+
+        try {
+            SmsSingleSender ssender = new SmsSingleSender(1400162470, "412f551d35f00a8cf95ba5f63e1f8ffd");
+            SmsSingleSenderResult result = ssender.send(0, "86", phone,
+                    content, "", "");
+            System.out.println(result);
+        } catch (HTTPException e) {
+            // HTTP响应码错误
+            e.printStackTrace();
+        } catch (JSONException e) {
+            // json解析错误
+            e.printStackTrace();
+        } catch (IOException e) {
+            // 网络IO错误
+            e.printStackTrace();
+        }
     }
  }

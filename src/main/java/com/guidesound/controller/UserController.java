@@ -103,11 +103,12 @@ public class UserController extends BaseController{
         if(phone == null || !ToolsFunction.isNumeric(phone) || phone.length() != 11) {
             return JSONResult.build(201,"参数错误",null);
         }
-        ///
-        //请求调用第三方发送第三方接口，发送短信
-        ///
 
-        String code = "1234";
+//        "【导音教育】您的验证码是: 5678"
+
+        String code = ToolsFunction.getNumRandomString(6);
+        String content =  "【导音教育】您的验证码是: " + code;
+        ToolsFunction.sendSMS(phone,content);
         int time = (int) (new Date().getTime() / 1000);
         iVerifyCode.addVerifyCode(phone,code,time,time);
         return JSONResult.ok();

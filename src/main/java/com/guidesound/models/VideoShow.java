@@ -26,7 +26,16 @@ public class VideoShow {
     boolean collection;
     int collection_count;
     boolean follow;
+    int user_type;
     int create_time;
+
+    public int getUser_type() {
+        return user_type;
+    }
+
+    public void setUser_type(int user_type) {
+        this.user_type = user_type;
+    }
 
     public boolean isFollow() {
         return follow;

@@ -147,13 +147,19 @@ public class VideoController extends BaseController {
             return JSONResult.ok(ret);
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User)request.getAttribute("user_info");
-        int user_id = 0;
-        if (currentUser != null) {
-            user_id = currentUser.getId();
+        int currentUserID = 0;
+
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    currentUserID = TockenUtil.getUserIdByTocket(token);
+                }
+            }
         }
         List<VideoShow> list_temp  = iVideo.getVideoByChannel(list,begin,end);
-        improveVideoList(user_id,list_temp);
+        improveVideoList(currentUserID,list_temp);
 
 
         ListResp ret = new ListResp();
@@ -205,13 +211,19 @@ public class VideoController extends BaseController {
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User)request.getAttribute("user_info");
-        int user_id = 0;
-        if (currentUser != null) {
-            user_id = currentUser.getId();
+        int currentUserID = 0;
+
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    currentUserID = TockenUtil.getUserIdByTocket(token);
+                }
+            }
         }
         List<VideoShow> list_temp  = iVideo.findVideo(videoFind);
-        improveVideoList(user_id,list_temp);
+        improveVideoList(currentUserID,list_temp);
         ret.setCount(count_temp);
         ret.setList(list_temp);
         return JSONResult.ok(ret);
@@ -489,8 +501,18 @@ public class VideoController extends BaseController {
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User)request.getAttribute("user_info");
-        improveVideoList(currentUser.getId(),list);
+        int currentUserID = 0;
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    currentUserID = TockenUtil.getUserIdByTocket(token);
+                }
+            }
+        }
+
+        improveVideoList(currentUserID,list);
 
         ret.setCount(list.size());
         ret.setList(list);
@@ -522,12 +544,18 @@ public class VideoController extends BaseController {
         List<VideoShow> list = iVideo.getPublishVidoeByUserId(Integer.parseInt(user_id),begin,end);
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User)request.getAttribute("user_info");
-        int current_user_id = 0;
-        if(currentUser != null) {
-            current_user_id = currentUser.getId();
+        int currentUserID = 0;
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    currentUserID = TockenUtil.getUserIdByTocket(token);
+                }
+            }
         }
-        improveVideoList(current_user_id,list);
+
+        improveVideoList(currentUserID,list);
 
         ret.setCount(count);
         ret.setList(list);
@@ -644,6 +672,7 @@ public class VideoController extends BaseController {
                 if(userMap.containsKey(item.getUser_id())) {
                     item.setUser_head(userMap.get(item.getUser_id()).getHead());
                     item.setUser_name(userMap.get(item.getUser_id()).getName());
+                    item.setUser_type(userMap.get(item.getUser_id()).getType());
                 }
             }
         }
