@@ -114,8 +114,8 @@ public interface IUser {
     @Update("update user set teach_age = #{arg1} where id = #{arg0}")
     public void updateTeachAge(int id,int age);
 
-    @Update("update user set identity_auth_pic1 = #{arg1},identity_auth_pic2 = #{arg2}  where id = #{arg0}")
-    public void identityAuth(int id,String pic1,String pic2);
+    @Update("update user set identity_auth_pic1 = #{arg1},identity_auth_pic2 = #{arg2},identity_name = #{arg3},identity_num = #{arg4} where id = #{arg0}")
+    public void identityAuth(int id,String pic1,String pic2,String identity_name,String identity_num);
 
     @Update("update user set education_auth_pic1 = #{arg1},education_auth_pic2 = #{arg2}  where id = #{arg0}")
     public void educationAuth(int id,String pic1,String pic2);
@@ -146,9 +146,9 @@ public interface IUser {
     @Update("update user set province = #{arg1},city = #{arg2},area = #{arg3},phone = #{arg4},level = #{arg5} where id = #{arg0}")
     public void setParentHighInfo(int id,String province,String city,String area,String phone,int level);
 
-    @Update("update user set sex = #{arg1},subject = #{arg2},grade = #{arg3},province = #{arg4},city = #{arg5}, area = #{arg6},level = #{arg7} where id = #{arg0}")
+    @Update("update user set sex = #{arg1},subject = #{arg2},grade_level = #{arg3},province = #{arg4},city = #{arg5}, area = #{arg6},level = #{arg7} where id = #{arg0}")
     public void setTeacherBasicInfo(int id,String sex,String subject,String grade,String province,String city,String area,int level);
-    @Update("update user set subject = #{arg1},grade = #{arg2},province = #{arg3},city = #{arg4},area = #{arg5},level = #{arg6} where id = #{arg0}")
+    @Update("update user set subject = #{arg1},grade_level = #{arg2},province = #{arg3},city = #{arg4},area = #{arg5},level = #{arg6} where id = #{arg0}")
     public void setInstitutionBasicInfo(int id,String subject,String grade,String province,String city,String area,int level);
 
     @Select("<script>"

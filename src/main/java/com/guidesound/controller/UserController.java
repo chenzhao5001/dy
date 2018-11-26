@@ -281,6 +281,7 @@ public class UserController extends BaseController{
 
         userInfo.setSubject_name(SignMap.getSubjectTypeById(userInfo.getSubject()));
         userInfo.setGrade_name(SignMap.getGradeTypeByID(userInfo.getGrade()));
+        userInfo.setGrade_level_name(SignMap.getWatchById(userInfo.getGrade_level()));
         int funCount = iUser.getFunsById(user_id);
         int followCount = iUser.getFollowById(user_id);
         int praiseCount = iUser.getPraiseById(user_id);
@@ -295,18 +296,26 @@ public class UserController extends BaseController{
 
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User)request.getAttribute("user_info");
+        int currentUserID = 0;
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    currentUserID = TockenUtil.getUserIdByTocket(token);
+                }
+            }
+        }
 
-        if(currentUser == null) {
+        if(currentUserID == 0) {
             userInfo.setFollow(false);
         } else {
-            if (iUser.getIdByUserAndFunsId(Integer.parseInt(user_id),currentUser.getId()) == 0) {
+            if (iUser.getIdByUserAndFunsId(Integer.parseInt(user_id),currentUserID) == 0) {
                 userInfo.setFollow(false);
             } else {
                 userInfo.setFollow(true);
             }
         }
-
         return JSONResult.ok(userInfo);
     }
     /**
@@ -666,13 +675,13 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value = "/identity_auth")
     @ResponseBody
-    public JSONResult identityAuth(String pic1,String pic2) {
-        if( pic1 == null || pic2== null) {
+    public JSONResult identityAuth(String pic1,String pic2,String identity_name,String identity_num) {
+        if( pic1 == null || pic2== null || identity_name == null || identity_num == null) {
             return JSONResult.errorMsg("缺少参数");
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
-        iUser.identityAuth(currentUser.getId(),pic1,pic2);
+        iUser.identityAuth(currentUser.getId(),pic1,pic2,identity_name,identity_num);
         return JSONResult.ok();
     }
 

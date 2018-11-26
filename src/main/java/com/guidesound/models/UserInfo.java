@@ -27,6 +27,8 @@ public class UserInfo {
     private int sex;
     private int grade;
     private String grade_name;
+    private int grade_level;
+    private String grade_level_name;
     private String province;
     private String city;
     private String area;
@@ -311,5 +313,21 @@ public class UserInfo {
 
     public void setGrade_name(String grade_name) {
         this.grade_name = grade_name;
+    }
+
+    public int getGrade_level() {
+        return grade_level;
+    }
+
+    public void setGrade_level(int grade_level) {
+        this.grade_level = grade_level;
+    }
+
+    public String getGrade_level_name() {
+        return grade_level_name;
+    }
+
+    public void setGrade_level_name(String grade_level_name) {
+        this.grade_level_name = grade_level_name;
     }
 }
