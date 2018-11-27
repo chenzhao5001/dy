@@ -3,6 +3,7 @@ package com.guidesound.controller;
 import com.guidesound.dao.IArticle;
 import com.guidesound.dao.IUser;
 import com.guidesound.dto.ArticleDTO;
+import com.guidesound.find.ArticleFind;
 import com.guidesound.models.ArticleInfo;
 import com.guidesound.models.User;
 import com.guidesound.models.UserInfo;
@@ -11,24 +12,27 @@ import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
 import com.guidesound.util.TockenUtil;
 import com.guidesound.util.ToolsFunction;
-import org.omg.CORBA.Request;
+import com.qcloud.cos.model.PutObjectRequest;
+import com.qcloud.cos.model.PutObjectResult;
+import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/article")
@@ -48,15 +52,43 @@ public class ArticleController extends BaseController {
         }
 
         User currentUser = (User)request.getAttribute("user_info");
-        String urlContent = ToolsFunction.upTextToServicer(articleDTO.getContent());
-        articleDTO.setContent(urlContent);
+//        String urlContent = ToolsFunction.upTextToServicer(articleDTO.getContent());
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss_");//设置日期格式
+        String strDate = df.format(new Date());// new Date()为获取当前系统时间
+
+        String savePath = request.getServletContext().getRealPath("");
+        System.out.println(savePath);
+        File file = new File(savePath);
+
+        savePath = file.getParent() + "/file";
+        File filePath = new File(savePath);
+        if (!filePath.exists() && !filePath.isDirectory()) {
+            filePath.mkdir();
+        }
+
+        String randStr = ToolsFunction.getRandomString(8);
+
+        String pathFile = savePath + "/" + strDate + randStr;
+
+        FileOutputStream fos = new FileOutputStream(pathFile);
+        OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+        osw.write(articleDTO.getContent());
+        osw.flush();
+        fos.close();
+
+        File localFile = new File(pathFile);
+
+        String key = strDate + randStr;
+        PutObjectRequest putObjectRequest = new PutObjectRequest(articleBucketName, key, localFile);
+        PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
+        localFile.delete();
+        String url = "http://" + articleBucketName + ".cos." + region + ".myqcloud.com" + "/" + key;
+        articleDTO.setContent(url);
         articleDTO.setUser_id(currentUser.getId());
         articleDTO.setCreate_time((int)(new Date().getTime() / 1000));
         iArticle.add(articleDTO);
 
-//        String contextpath = request.getScheme() +"://" + request.getServerName() + ":" +request.getServerPort();
-//        contextpath += "/article/preview?article_id=";
-//        contextpath += articleDTO.getArticle_id();
         return JSONResult.ok("/article/finish");
     }
 
@@ -162,21 +194,83 @@ public class ArticleController extends BaseController {
      */
     @RequestMapping("/list")
     @ResponseBody
-    JSONResult getList(String page,String size) {
-        int iPage = page == null ?0:Integer.parseInt(page);
-        int iSize = size == null ?0:Integer.parseInt(size);
+    JSONResult getList(String page,String size,String subject,String head) {
+
+        int iPage = (page == null || page.equals(""))  ? 1:Integer.parseInt(page);
+        int iSize = (size == null || size.equals(""))  ? 20:Integer.parseInt(size);
 
         int begin = (iPage - 1)*iSize;
-        int end = (iPage - 1)*iSize + iSize;
-        int count = iArticle.count();
-        List<ArticleInfo> list = null;
+        int end = iSize;
+
+        ArticleFind articleFind = new ArticleFind();
+        articleFind.setHead(head);
+        articleFind.setSubject(subject);
+        articleFind.setBegin(begin);
+        articleFind.setEnd(end);
+
+        int count = iArticle.count(articleFind);
+        List<ArticleInfo> list = new ArrayList<>();
         if(count > 0) {
-            list = iArticle.getList(begin,end);
+            list = iArticle.getList(articleFind);
+            getExtendInfo(list);
         }
+
         ListResp listResp = new ListResp();
         listResp.setCount(count);
         listResp.setList(list);
         return JSONResult.ok(listResp);
+    }
+
+    void getExtendInfo(List<ArticleInfo> list) {
+
+        if(list.size()  < 1) {
+            return;
+        }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        int currentUserID = 0;
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    currentUserID = TockenUtil.getUserIdByTocket(token);
+                    break;
+                }
+            }
+        }
+
+        List<Integer> user_ids = new ArrayList<>();
+        for (ArticleInfo item : list) {
+            item.setContent_url(request.getScheme() +"://" + request.getServerName()  + ":"
+                    + request.getServerPort() + "/article/preview?article_id=" + item.getId());
+            if(!user_ids.contains(item.getUser_id())) {
+                user_ids.add(item.getUser_id());
+            }
+        }
+
+        if(user_ids.size() > 0) {
+            List<UserInfo> userList = iUser.getUserByIds(user_ids);
+            Map<Integer,UserInfo> userMap = new HashMap<>();
+            for (UserInfo user : userList) {
+                userMap.put(user.getId(),user);
+            }
+            for(ArticleInfo item:list) {
+                if(userMap.containsKey(item.getUser_id())) {
+                    item.setUser_head(userMap.get(item.getUser_id()).getHead());
+                    item.setUser_name(userMap.get(item.getUser_id()).getName());
+                    item.setUser_type(userMap.get(item.getUser_id()).getType());
+                    item.setUser_subject(userMap.get(item.getUser_id()).getSubject());
+                    item.setUser_subject_name(SignMap.getSubjectTypeById(userMap.get(item.getUser_id()).getSubject()));
+                    item.setUser_grade(userMap.get(item.getUser_id()).getGrade());
+                    item.setUser_grade_name(SignMap.getGradeTypeByID(userMap.get(item.getUser_id()).getGrade()));
+
+                    item.setUser_grade_level(userMap.get(item.getUser_id()).getGrade_level());
+                    item.setUser_grade_level_name(SignMap.getWatchById(userMap.get(item.getUser_id()).getGrade_level()));
+                }
+            }
+        }
+
+        return;
     }
 
     /**
@@ -264,9 +358,20 @@ public class ArticleController extends BaseController {
     }
 
     @RequestMapping("/preview")
-    public String articlePreview(String article_id, ModelMap mode) {
-        String content = iArticle.getContentById(Integer.parseInt(article_id));
-        mode.addAttribute("content", ToolsFunction.httpGet(content));
+    public String articlePreview(String article_id, ModelMap mode) throws IOException {
+        if(article_id == null) {
+            mode.addAttribute("content","文章不存在");
+            return "preview";
+        }
+        String url = iArticle.getContentById(Integer.parseInt(article_id));
+        Request request=new Request.Builder().url(url).build();
+        Call call = okHttpClient.newCall(request);
+        Response response = call.execute();
+        String content = response.body().string();
+        mode.addAttribute("content",content);
         return "preview";
     }
+
+
+
 }

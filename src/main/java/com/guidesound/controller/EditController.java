@@ -20,9 +20,17 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import com.qcloud.cos.COSClient;
+import com.qcloud.cos.ClientConfig;
+import com.qcloud.cos.auth.BasicCOSCredentials;
+import com.qcloud.cos.auth.COSCredentials;
+import com.qcloud.cos.model.PutObjectRequest;
+import com.qcloud.cos.model.PutObjectResult;
+import com.qcloud.cos.region.Region;
+
 @Controller
 @RequestMapping("/edit")
-public class EditController {
+public class EditController extends BaseController {
 
     public static final String TAG = "UploadHelper";
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
@@ -43,57 +51,36 @@ public class EditController {
             return serviceResponse;
         }
 
+
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss_");//设置日期格式
         String strDate = df.format(new Date());// new Date()为获取当前系统时间
+
         String savePath = multipartRequest.getServletContext().getRealPath("");
+        System.out.println(savePath);
         File file = new File(savePath);
-        savePath = file.getParent() + "/edit_upload";
+        savePath = file.getParent() + "/file";
         File filePath = new File(savePath);
         if (!filePath.exists() && !filePath.isDirectory()) {
             filePath.mkdir();
         }
-        String pathPic = savePath + "/" + strDate + picture.getOriginalFilename();
-//        File temp = new File(pathPic);
-        picture.transferTo(new File(pathPic));
-//        ToolsFunction.zoomImage(pathPic,pathPic,270,120);
-
-        RequestBody fileBody = RequestBody.create(MediaType.parse("image/png"), new File(pathPic));
-
-        OkHttpClient okHttpClient  = new OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .writeTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(20, TimeUnit.SECONDS)
-                .build();
-
-        String[] strs = picture.getOriginalFilename().split("\\.");
+        String fileName = picture.getOriginalFilename();
+        String[] strs = fileName.split("\\.");
+        String randStr = ToolsFunction.getRandomString(8);
         String suffix = "";
         if (strs.length > 1) {
             suffix = strs[strs.length -1];
         }
 
-        MultipartBody formBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("upload",strDate + ToolsFunction.getRandomString(8) + "." + suffix ,fileBody)
-                .addFormDataPart("sign","guide_sound")
-                .build();
+        String pathFile = savePath + "/" + strDate + randStr + "." + suffix;
+        File localFile = new File(pathFile);
+        picture.transferTo(localFile);
 
-        Request req = new Request.Builder()
-                .url("http://139.199.123.168/fileservice/upload")
-                .post(formBody)
-                .build();
-        Response resp;
-        resp = client.newCall(req).execute();
-        file.delete();
-        String jsonString = resp.body().string();
-        System.out.println(jsonString);
-        JSONObject json = new JSONObject(jsonString);
-        String url = json.getString("data");
-
+        String key = strDate + randStr + "." + suffix;
+        PutObjectRequest putObjectRequest = new PutObjectRequest(articleBucketName, key, localFile);
+        PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
+        localFile.delete();
+        String url = "http://" + articleBucketName + ".cos." + region + ".myqcloud.com" + "/" + key;
         String ret = String.format("{\"default\" : \"%s\"}",url);
-
-
-        System.out.println(ret);
-
         return ret;
     }
     @RequestMapping(value = "/browse")

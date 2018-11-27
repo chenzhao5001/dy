@@ -162,5 +162,13 @@ public interface IUser {
     @Update("update user set dy_id = #{arg1} where id = #{arg0}")
     public void setDyId(int id,int dyId);
 
+    @Select("<script>"
+            + "SELECT * FROM user WHERE id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    List<UserInfo> getUserByIds(@Param("iList") List<Integer> iList);
+
 }
 

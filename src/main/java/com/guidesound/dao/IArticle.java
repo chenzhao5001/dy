@@ -1,6 +1,7 @@
 package com.guidesound.dao;
 
 import com.guidesound.dto.ArticleDTO;
+import com.guidesound.find.ArticleFind;
 import com.guidesound.models.ArticleInfo;
 import com.guidesound.models.AtricleComment;
 import org.apache.ibatis.annotations.Insert;
@@ -56,10 +57,10 @@ public interface IArticle {
     @Update("update article set chat_count = chat_count - 1 where id = #{arg0}")
     void reduceMainComment(int article_id);
 
-    @Select("select count(*) from article where deleted = 0")
-    int count();
-    @Select("select * from article where deleted = 0 limit #{arg0},#{arg1}")
-    List<ArticleInfo> getList(int begin,int end);
+//    @Select("select count(*) from article where deleted = 0")
+    int count(ArticleFind articleFind);
+//    @Select("select * from article where deleted = 0 limit #{arg0},#{arg1}")
+    List<ArticleInfo> getList(ArticleFind articleFind);
 
     @Select("select count(*) from article where user_id = #{arg0} and deleted = 0")
     int countByUserID(int user_id);
