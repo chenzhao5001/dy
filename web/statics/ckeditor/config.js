@@ -38,5 +38,7 @@ CKEDITOR.editorConfig = function( config ) {
 
     config.extraPlugins = 'autogrow';
 
+    config.forcePasteAsPlainText = true;
+
 
 };

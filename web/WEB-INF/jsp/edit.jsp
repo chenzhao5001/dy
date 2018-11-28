@@ -526,9 +526,10 @@
         removeDialogTabs: 'link:advanced',
         toolbar: [
         { name: 'document', items: [ 'Undo', 'Redo' ] },
-        { name: 'styles', items: [ 'Format' ] },
-        { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
-        { name: 'paragraph', items: [ 'NumberedList', 'BulletedList' ] },
+//        { name: 'styles', items: [ 'Format' ] },
+//        { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Strike', '-', 'RemoveFormat' ] },
+        { name: 'basicstyles', items: [] },
+//        { name: 'paragraph', items: [ 'NumberedList', 'BulletedList' ] },
         { name: 'insert', items: [ 'EasyImageUpload' ] }
         ],
         imageStyleFormat:{
