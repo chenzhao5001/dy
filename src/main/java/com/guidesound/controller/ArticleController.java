@@ -4,6 +4,7 @@ import com.guidesound.dao.IArticle;
 import com.guidesound.dao.IUser;
 import com.guidesound.dto.ArticleDTO;
 import com.guidesound.find.ArticleFind;
+import com.guidesound.models.ArticleComment;
 import com.guidesound.models.ArticleInfo;
 import com.guidesound.models.User;
 import com.guidesound.models.UserInfo;
@@ -175,15 +176,26 @@ public class ArticleController extends BaseController {
      */
     @RequestMapping("/comment")
     @ResponseBody
-    JSONResult Comment(HttpServletRequest request,String article_id,String comment) {
-        if(article_id == null || comment == null) {
+    JSONResult Comment(String article_id,String first_user_id,
+                       String first_comment,String second_user_id,String second_comment) {
+        if(article_id == null || first_user_id == null || first_comment == null) {
             return JSONResult.errorMsg("缺少参数");
         }
-        User currentUser = (User)request.getAttribute("user_info");
-        iArticle.addComment(currentUser.getId()
-                ,Integer.parseInt(article_id)
-                ,comment
-                ,(int)(new Date().getTime() / 1000));
+
+        second_user_id = second_user_id == null ? "0" : second_user_id;
+        second_comment = second_comment == null ? "" : second_comment;
+
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        ArticleComment articleComment = new ArticleComment();
+        articleComment.setArticle_id(Integer.parseInt(article_id));
+        articleComment.setFirst_user_id(Integer.parseInt(first_user_id));
+        articleComment.setFirst_comment(first_comment);
+        articleComment.setSecond_user_id(Integer.parseInt(second_user_id));
+        articleComment.setSecond_comment(second_comment);
+        articleComment.setCreate_time((int)(new Date().getTime() / 1000));
+
+        iArticle.addComment(articleComment);
 
         iArticle.addMainComment(Integer.parseInt(article_id));
         return JSONResult.ok();
@@ -269,10 +281,8 @@ public class ArticleController extends BaseController {
                 }
             }
         }
-
         return;
     }
-
     /**
      *获得文章列表2
      */
@@ -321,16 +331,50 @@ public class ArticleController extends BaseController {
             return JSONResult.errorMsg("article_id");
         }
 
-        int iPage = page == null ?0:Integer.parseInt(page);
-        int iSize = size == null ?0:Integer.parseInt(size);
+        int iPage = (page == null || page.equals("")) ?1:Integer.parseInt(page);
+        int iSize = (size == null || size.equals("")) ? 20:Integer.parseInt(size);
         int begin = (iPage - 1)*iSize;
-        int end = (iPage - 1)*iSize + iSize;
+        int end = iSize;
 
         int count = iArticle.CommentCount(Integer.parseInt(article_id));
-        Object list = null;
-        if(count > 0) {
-            list = iArticle.getCollectList(Integer.parseInt(article_id),begin,end);
+
+        List<ArticleComment> list = iArticle.getCommentList(Integer.parseInt(article_id),begin,end);
+        if (list.size() > 0) {
+            List<Integer> user_ids = new ArrayList<>();
+            for (ArticleComment articleComment : list) {
+                if(!user_ids.contains(articleComment.getFirst_user_id())){
+                    user_ids.add(articleComment.getFirst_user_id());
+                }
+                if(!user_ids.contains(articleComment.getSecond_user_id())){
+                    user_ids.add(articleComment.getSecond_user_id());
+                }
+            }
+            List<UserInfo> user_list = iUser.getUserByIds(user_ids);
+            Map<Integer,UserInfo> usersMap = new HashMap<>();
+            for (UserInfo userInfo :user_list) {
+                usersMap.put(userInfo.getId(),userInfo);
+            }
+
+            for (ArticleComment articleComment : list) {
+                if(usersMap.get(articleComment.getFirst_user_id()) != null) {
+                    articleComment.setFirst_user_head(usersMap.get(articleComment.getFirst_user_id()).getHead());
+                    articleComment.setFirst_user_name(usersMap.get(articleComment.getFirst_user_id()).getName());
+                } else {
+                    articleComment.setFirst_user_head("");
+                    articleComment.setFirst_user_name("");
+                }
+
+                if(usersMap.get(articleComment.getSecond_user_id()) != null) {
+                    articleComment.setSecond_user_head(usersMap.get(articleComment.getSecond_user_id()).getHead());
+                    articleComment.setSecond_user_name(usersMap.get(articleComment.getSecond_user_id()).getName());
+                } else {
+                    articleComment.setSecond_user_head("");
+                    articleComment.setSecond_user_name("");
+                }
+            }
+
         }
+
 
         ListResp listResp = new ListResp();
         listResp.setCount(count);
@@ -371,7 +415,5 @@ public class ArticleController extends BaseController {
         mode.addAttribute("content",content);
         return "preview";
     }
-
-
 
 }

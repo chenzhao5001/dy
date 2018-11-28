@@ -23,9 +23,9 @@ public class ArticleInfo {
     private String content_url;
 
 
-    int collection_count;
-    int chat_count;
-    int priase_count;
+    int comment_count;
+//    int collection_count;
+//    int priase_count;
 
     int create_time;
 
@@ -157,29 +157,29 @@ public class ArticleInfo {
         this.head_pic3 = head_pic3;
     }
 
-    public int getCollection_count() {
-        return collection_count;
+//    public int getCollection_count() {
+//        return collection_count;
+//    }
+//
+//    public void setCollection_count(int collection_count) {
+//        this.collection_count = collection_count;
+//    }
+
+    public int getComment_count() {
+        return comment_count;
     }
 
-    public void setCollection_count(int collection_count) {
-        this.collection_count = collection_count;
+    public void setComment_count(int comment_count) {
+        this.comment_count = comment_count;
     }
 
-    public int getChat_count() {
-        return chat_count;
-    }
-
-    public void setChat_count(int chat_count) {
-        this.chat_count = chat_count;
-    }
-
-    public int getPriase_count() {
-        return priase_count;
-    }
-
-    public void setPriase_count(int priase_count) {
-        this.priase_count = priase_count;
-    }
+//    public int getPriase_count() {
+//        return priase_count;
+//    }
+//
+//    public void setPriase_count(int priase_count) {
+//        this.priase_count = priase_count;
+//    }
 
     public int getCreate_time() {
         return create_time;

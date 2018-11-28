@@ -3,7 +3,7 @@ package com.guidesound.dao;
 import com.guidesound.dto.ArticleDTO;
 import com.guidesound.find.ArticleFind;
 import com.guidesound.models.ArticleInfo;
-import com.guidesound.models.AtricleComment;
+import com.guidesound.models.ArticleComment;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
@@ -46,10 +46,10 @@ public interface IArticle {
     @Insert("insert into articlePraise (user_id,article_id,create_time) value (#{arg0},#{arg1},#{arg2})")
     void addPraise(int user_id,int article_id,int time);
 
-    @Insert("insert into articleChat (user_id,article_id,comment,create_time) " +
-            "value (#{arg0},#{arg1},#{arg2},#{arg3})")
-    void addComment(int user_id,int article_id,String comment,int time);
-    @Update("update article set chat_count = chat_count + 1 where id = #{arg0}")
+    @Insert("insert into articleChat (article_id,first_user_id,first_comment,second_user_id,second_comment,create_time) " +
+            "value (#{article_id},#{first_user_id},#{first_comment},#{second_user_id},#{second_comment},#{create_time})")
+    void addComment(ArticleComment articleComment);
+    @Update("update article set comment_count = comment_count + 1 where id = #{arg0}")
     void addMainComment(int article);
 
     @Update("update articleChat set deleted = 1 where user_id = #{arg0} and article_id = #{arg1}")
@@ -71,7 +71,7 @@ public interface IArticle {
     int CommentCount(int article_id);
 
     @Select("select * from articleChat where article_id = #{arg0} and deleted = 0 limit #{arg1},#{arg2}")
-    List<AtricleComment> getCollectList(int article_id,int begin,int end);
+    List<ArticleComment> getCommentList(int article_id, int begin, int end);
 
     @Select("select content from article where id = #{arg0}")
     String getContentById(int article_id);
