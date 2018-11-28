@@ -8,11 +8,14 @@ public class ArticleInfo {
     String head_pic1;
     String head_pic2;
     String head_pic3;
+    int subject;
+    String subject_name;
+    int type;
+
 
     String user_head;
     String user_name;
     int user_type;
-
 
     private int user_subject;
     private String user_subject_name;
@@ -28,6 +31,32 @@ public class ArticleInfo {
 //    int priase_count;
 
     int create_time;
+
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getSubject() {
+        return subject;
+    }
+
+    public void setSubject(int subject) {
+        this.subject = subject;
+    }
+
+    public String getSubject_name() {
+        return subject_name;
+    }
+
+    public void setSubject_name(String subject_name) {
+        this.subject_name = subject_name;
+    }
+
 
     public int getId() {
         return id;

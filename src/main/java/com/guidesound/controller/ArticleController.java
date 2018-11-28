@@ -18,6 +18,10 @@ import com.qcloud.cos.model.PutObjectResult;
 import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -53,39 +57,8 @@ public class ArticleController extends BaseController {
         }
 
         User currentUser = (User)request.getAttribute("user_info");
-//        String urlContent = ToolsFunction.upTextToServicer(articleDTO.getContent());
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss_");//设置日期格式
-        String strDate = df.format(new Date());// new Date()为获取当前系统时间
-
-        String savePath = request.getServletContext().getRealPath("");
-        System.out.println(savePath);
-        File file = new File(savePath);
-
-        savePath = file.getParent() + "/file";
-        File filePath = new File(savePath);
-        if (!filePath.exists() && !filePath.isDirectory()) {
-            filePath.mkdir();
-        }
-
-        String randStr = ToolsFunction.getRandomString(8);
-
-        String pathFile = savePath + "/" + strDate + randStr;
-
-        FileOutputStream fos = new FileOutputStream(pathFile);
-        OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
-        osw.write(articleDTO.getContent());
-        osw.flush();
-        fos.close();
-
-        File localFile = new File(pathFile);
-
-        String key = strDate + randStr;
-        PutObjectRequest putObjectRequest = new PutObjectRequest(articleBucketName, key, localFile);
-        PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
-        localFile.delete();
-        String url = "http://" + articleBucketName + ".cos." + region + ".myqcloud.com" + "/" + key;
-        articleDTO.setContent(url);
+        articleDTO.setContent(upStringToCloud(articleDTO.getContent()));
         articleDTO.setUser_id(currentUser.getId());
         articleDTO.setCreate_time((int)(new Date().getTime() / 1000));
         iArticle.add(articleDTO);
@@ -206,19 +179,22 @@ public class ArticleController extends BaseController {
      */
     @RequestMapping("/list")
     @ResponseBody
-    JSONResult getList(String page,String size,String subject,String head) {
+    JSONResult getList(String page,String size,String subject,String head,String type) {
 
         int iPage = (page == null || page.equals(""))  ? 1:Integer.parseInt(page);
         int iSize = (size == null || size.equals(""))  ? 20:Integer.parseInt(size);
 
         int begin = (iPage - 1)*iSize;
         int end = iSize;
+        subject = subject == null ? "0":subject;
+        type = type == null ? "0":type;
 
         ArticleFind articleFind = new ArticleFind();
         articleFind.setHead(head);
-        articleFind.setSubject(subject);
+        articleFind.setSubject(Integer.parseInt(subject));
         articleFind.setBegin(begin);
         articleFind.setEnd(end);
+        articleFind.setType(Integer.parseInt(type));
 
         int count = iArticle.count(articleFind);
         List<ArticleInfo> list = new ArrayList<>();
@@ -253,6 +229,7 @@ public class ArticleController extends BaseController {
 
         List<Integer> user_ids = new ArrayList<>();
         for (ArticleInfo item : list) {
+            item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
             item.setContent_url(request.getScheme() +"://" + request.getServerName()  + ":"
                     + request.getServerPort() + "/article/preview?article_id=" + item.getId());
             if(!user_ids.contains(item.getUser_id())) {
@@ -415,5 +392,95 @@ public class ArticleController extends BaseController {
         mode.addAttribute("content",content);
         return "preview";
     }
+
+    @RequestMapping("/add_ask")
+    @ResponseBody
+    JSONResult addAsk(String title,String pic1_url,String pic2_url,String pic3_url) {
+        if(title == null || title.equals("")) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        pic1_url = pic1_url == null ? "" : pic1_url;
+        pic2_url = pic2_url == null ? "" : pic2_url;
+        pic3_url = pic3_url == null ? "" : pic3_url;
+        int time = (int) (new Date().getTime() / 1000);
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+
+        iArticle.addAsk(title,currentUser.getId(),pic1_url,pic2_url,pic3_url,time);
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/add_answer")
+    @ResponseBody
+    JSONResult addAnswer(String ask_id,String answer_html) throws IOException {
+        if(ask_id == null || answer_html == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+        Document doc = Jsoup.parse(answer_html);
+        String content = "";
+        if(doc.text().length() < 100) {
+            content = doc.text();
+        } else {
+            content = doc.text().substring(0,100);
+        }
+        String url = upStringToCloud(answer_html);
+        List<String> pic_urls = new ArrayList<>();
+        Elements imgs = doc.getElementsByTag("img");
+        for (Element element : imgs) {
+            String imgSrc = element.attr("abs:src");
+            pic_urls.add(imgSrc);
+        }
+        String pic1_url = "";
+        String pic2_url = "";
+        String pic3_url = "";
+        if(pic_urls.size() > 0 && pic_urls.size() < 3) {
+            pic1_url = pic_urls.get(0);
+        } else if(pic_urls.size() >= 3) {
+            pic1_url = pic_urls.get(0);
+            pic2_url = pic_urls.get(1);
+            pic3_url = pic_urls.get(2);
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        iArticle.addAnswer(currentUser.getId(),Integer.parseInt(ask_id),
+                content,pic1_url,pic2_url,pic3_url,
+                url, (int) (new Date().getTime() / 1000));
+        return JSONResult.ok();
+    }
+
+    String upStringToCloud(String content) throws IOException {
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss_");
+        String strDate = df.format(new Date());
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        String savePath = request.getServletContext().getRealPath("");
+        File file = new File(savePath);
+
+        savePath = file.getParent() + "/file";
+        File filePath = new File(savePath);
+        if (!filePath.exists() && !filePath.isDirectory()) {
+            filePath.mkdir();
+        }
+
+        String randStr = ToolsFunction.getRandomString(8);
+
+        String pathFile = savePath + "/" + strDate + randStr;
+
+        FileOutputStream fos = new FileOutputStream(pathFile);
+        OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+        osw.write(content);
+        osw.flush();
+        fos.close();
+        File localFile = new File(pathFile);
+        String key = strDate + randStr;
+        PutObjectRequest putObjectRequest = new PutObjectRequest(articleBucketName, key, localFile);
+        PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
+        localFile.delete();
+        String url = "http://" + articleBucketName + ".cos." + region + ".myqcloud.com" + "/" + key;
+        return url;
+    }
+
 
 }

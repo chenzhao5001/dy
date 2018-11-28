@@ -3,9 +3,18 @@ package com.guidesound.find;
 public class ArticleFind {
 
     String head;
-    String subject;
+    int subject;
     int begin;
     int end;
+    int type;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public String getHead() {
         return head;
@@ -15,11 +24,11 @@ public class ArticleFind {
         this.head = head;
     }
 
-    public String getSubject() {
+    public int getSubject() {
         return subject;
     }
 
-    public void setSubject(String subject) {
+    public void setSubject(int subject) {
         this.subject = subject;
     }
 

@@ -66,6 +66,7 @@ public class UserController extends BaseController{
             user.setHead(head);
             user.setCreate_time((int) (new Date().getTime() / 1000));
             user.setLevel(1);
+            user.setBackground_url("http://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg");
             iUser.addUserByUnionid(user);
 //            user.setToken(TockenUtil.makeTocken(user.getId()));
         } else {
@@ -140,6 +141,7 @@ public class UserController extends BaseController{
             user.setPhone(phone);
             user.setCreate_time((int) (new Date().getTime() / 1000));
             user.setLevel(1);
+            user.setBackground_url("http://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg");
             iUser.addUserByPhone(user);
 //            user.setToken(TockenUtil.makeTocken(user.getId()));
         } else {
@@ -181,6 +183,7 @@ public class UserController extends BaseController{
             user.setCreate_time((int) (new Date().getTime() / 1000));
             user.setLevel(2);
             user.setType(1);
+            user.setBackground_url("http://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg");
             iUser.addUserByName(user);
             iUser.setDyId(user.getId(),10000000 + user.getId());
             user.setToken(TockenUtil.makeTocken(user.getId()));

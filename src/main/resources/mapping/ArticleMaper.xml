@@ -12,8 +12,11 @@
         <if test="head != null ">
             and  head LIKE CONCAT('%',#{head},'%')
         </if>
-        <if test="subject != null ">
-            and  subject = #{subject})
+        <if test="subject != 0 ">
+            and  subject = #{subject}
+        </if>
+        <if test="type != 0 ">
+            and  type = #{type}
         </if>
         and deleted = 0
     </select>
@@ -27,8 +30,11 @@
         <if test="head != null ">
             and  head LIKE CONCAT('%',#{head},'%')
         </if>
-        <if test="subject != null ">
-            and  subject = #{subject})
+        <if test="subject != 0 ">
+            and  subject = #{subject}
+        </if>
+        <if test="type != 0 ">
+            and  type = #{type}
         </if>
         limit #{begin},#{end}
     </select>
