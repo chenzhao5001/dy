@@ -99,12 +99,14 @@
             </foreach>
         </if>
 
+
         <if test="grade_class_list != null ">
             and  watch_type IN
             <foreach collection="grade_class_list" item="id" index="index" open="(" close=")" separator=",">
                 #{id}
             </foreach>
         </if>
+        and deleted = 0
         <if test="sType != null and sType == 1">
             ORDER BY praise_count DESC
         </if>

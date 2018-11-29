@@ -83,4 +83,14 @@ public interface IArticle {
     void addAnswer(int user_id,int ask_id,String t_abstract,
                    String pic1_url,String pic2_url,String pic3_url,
                    String content_url,int create_time);
+
+    @Update("update article set answer_count = answer_count + 1 where id = #{arg0}")
+    void addAnswerMainCount(int article_id);
+
+    @Select("select article_id from articleCollection where user_id = #{arg0} and deleted = 0")
+    List<Integer> getArticleListByUserId(int user_id);
+
+    @Select("select article_id from articlePraise where user_id = #{arg0} and deleted = 0")
+    List<Integer> getPraiseListByUserId(int user_id);
+
 }

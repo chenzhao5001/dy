@@ -4,19 +4,17 @@ public class ArticleInfo {
 
     int id;
     int user_id;
-    String head;
-    String head_pic1;
-    String head_pic2;
-    String head_pic3;
-    int subject;
-    String subject_name;
-    int type;
-
-
-    String user_head;
-    String user_name;
-    int user_type;
-
+    private String head;
+    private String head_pic1;
+    private String head_pic2;
+    private String head_pic3;
+    private int subject;
+    private String subject_name;
+    private int type;
+    private int answer_count;
+    private String user_head;
+    private String user_name;
+    private int user_type;
     private int user_subject;
     private String user_subject_name;
     private int user_grade;
@@ -25,13 +23,62 @@ public class ArticleInfo {
     private String user_grade_level_name;
     private String content_url;
 
+    private int collection_count;
+    private boolean collection;
+    private boolean follow;
+    private int comment_count;
+    private int create_time;
+    private int praise_count;
+    private boolean praise;
 
-    int comment_count;
-//    int collection_count;
-//    int priase_count;
 
-    int create_time;
+    public int getPraise_count() {
+        return praise_count;
+    }
 
+    public void setPraise_count(int praise_count) {
+        this.praise_count = praise_count;
+    }
+
+    public boolean isPraise() {
+        return praise;
+    }
+
+    public void setPraise(boolean praise) {
+        this.praise = praise;
+    }
+
+    public boolean isFollow() {
+        return follow;
+    }
+
+    public void setFollow(boolean follow) {
+        this.follow = follow;
+    }
+
+    public int getCollection_count() {
+        return collection_count;
+    }
+
+    public void setCollection_count(int collection_count) {
+        this.collection_count = collection_count;
+    }
+
+    public boolean isCollection() {
+        return collection;
+    }
+
+    public void setCollection(boolean collection) {
+        this.collection = collection;
+    }
+
+    public int getAnswer_count() {
+        return answer_count;
+    }
+
+    public void setAnswer_count(int answer_count) {
+        this.answer_count = answer_count;
+    }
 
     public int getType() {
         return type;

@@ -104,6 +104,8 @@ public class ArticleController extends BaseController {
             iArticle.addMainCollection(Integer.parseInt(article_id));
             iArticle.collect(currentUser.getId(),Integer.parseInt(article_id),
                     (int)(new Date().getTime() / 1000));
+        } else {
+            return JSONResult.errorMsg("此文章已经收藏过了");
         }
         return JSONResult.ok();
     }
@@ -140,6 +142,8 @@ public class ArticleController extends BaseController {
         if(null == iArticle.findPraise(currentUser.getId(),Integer.parseInt(article_id))) {
             iArticle.addPraise(currentUser.getId(),Integer.parseInt(article_id),(int)(new Date().getTime() /1000));
             iArticle.addMainPraise(Integer.parseInt(article_id));
+        } else {
+            return JSONResult.errorMsg("已经点过赞");
         }
         return JSONResult.ok();
     }
@@ -179,7 +183,7 @@ public class ArticleController extends BaseController {
      */
     @RequestMapping("/list")
     @ResponseBody
-    JSONResult getList(String page,String size,String subject,String head,String type) {
+    JSONResult getList(String page,String size,String subject,String head,String type,String user_id) {
 
         int iPage = (page == null || page.equals(""))  ? 1:Integer.parseInt(page);
         int iSize = (size == null || size.equals(""))  ? 20:Integer.parseInt(size);
@@ -195,6 +199,7 @@ public class ArticleController extends BaseController {
         articleFind.setBegin(begin);
         articleFind.setEnd(end);
         articleFind.setType(Integer.parseInt(type));
+        articleFind.setUser_id(user_id);
 
         int count = iArticle.count(articleFind);
         List<ArticleInfo> list = new ArrayList<>();
@@ -227,8 +232,28 @@ public class ArticleController extends BaseController {
             }
         }
 
+        List<Integer> collectList = new ArrayList<>();
+        List<Integer> followList = new ArrayList<>();
+        List<Integer> praiseList = new ArrayList<>();
+        if(currentUserID != 0) {
+            collectList = iArticle.getArticleListByUserId(currentUserID);
+            followList = iUser.getFollowUsers(currentUserID);
+            praiseList =iArticle.getPraiseListByUserId(currentUserID);
+        }
+
+
         List<Integer> user_ids = new ArrayList<>();
         for (ArticleInfo item : list) {
+            if(collectList.contains(item.getId())) {
+                item.setCollection(true);
+            }
+            if(followList.contains(item.getUser_id())) {
+                item.setFollow(true);
+            }
+            if(praiseList.contains(item.getId())) {
+                item.setPraise(true);
+            }
+
             item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
             item.setContent_url(request.getScheme() +"://" + request.getServerName()  + ":"
                     + request.getServerPort() + "/article/preview?article_id=" + item.getId());
@@ -447,6 +472,7 @@ public class ArticleController extends BaseController {
         iArticle.addAnswer(currentUser.getId(),Integer.parseInt(ask_id),
                 content,pic1_url,pic2_url,pic3_url,
                 url, (int) (new Date().getTime() / 1000));
+        iArticle.addAnswerMainCount(Integer.parseInt(ask_id));
         return JSONResult.ok();
     }
 

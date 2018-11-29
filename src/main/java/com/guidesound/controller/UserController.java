@@ -170,9 +170,9 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value = "/name_login")
     @ResponseBody
-    public JSONResult loginByName(String name) {
-        if(name == null) {
-            return JSONResult.errorMsg("缺少name参数");
+    public JSONResult loginByName(String name,String pwd) {
+        if(name == null || pwd == null || !pwd.equals("90908989")) {
+            return JSONResult.errorMsg("参数错误");
         }
 
         List<UserInfo> userList = iUser.getUserByName(name);
