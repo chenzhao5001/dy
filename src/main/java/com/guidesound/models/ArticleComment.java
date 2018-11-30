@@ -12,6 +12,24 @@ public class ArticleComment {
     String second_comment;
     String second_user_head;
     String second_user_name;
+    int praise_count;
+    boolean praise;
+
+    public boolean isPraise() {
+        return praise;
+    }
+
+    public void setPraise(boolean praise) {
+        this.praise = praise;
+    }
+
+    public int getPraise_count() {
+        return praise_count;
+    }
+
+    public void setPraise_count(int praise_count) {
+        this.praise_count = praise_count;
+    }
 
     int create_time;
 

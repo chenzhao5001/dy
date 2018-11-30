@@ -2,6 +2,7 @@ package com.guidesound.controller;
 
 
 import com.guidesound.models.User;
+import com.guidesound.util.TockenUtil;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
 import com.qcloud.cos.auth.BasicCOSCredentials;
@@ -13,7 +14,10 @@ import org.apache.logging.log4j.core.Logger;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,5 +45,21 @@ public class BaseController {
         if(log == null ) {
             log = (Logger) LogManager.getLogger();
         }
+    }
+
+    int getCurrentUserId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        int currentUserID = 0;
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    currentUserID = TockenUtil.getUserIdByTocket(token);
+                    break;
+                }
+            }
+        }
+        return currentUserID;
     }
 }

@@ -4,10 +4,7 @@ import com.guidesound.dao.IArticle;
 import com.guidesound.dao.IUser;
 import com.guidesound.dto.ArticleDTO;
 import com.guidesound.find.ArticleFind;
-import com.guidesound.models.ArticleComment;
-import com.guidesound.models.ArticleInfo;
-import com.guidesound.models.User;
-import com.guidesound.models.UserInfo;
+import com.guidesound.models.*;
 import com.guidesound.resp.ListResp;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
@@ -219,19 +216,8 @@ public class ArticleController extends BaseController {
         if(list.size()  < 1) {
             return;
         }
+        int currentUserID = getCurrentUserId();
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        int currentUserID = 0;
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    currentUserID = TockenUtil.getUserIdByTocket(token);
-                    break;
-                }
-            }
-        }
-
         List<Integer> collectList = new ArrayList<>();
         List<Integer> followList = new ArrayList<>();
         List<Integer> praiseList = new ArrayList<>();
@@ -295,10 +281,10 @@ public class ArticleController extends BaseController {
             return JSONResult.errorMsg("user_id");
         }
 
-        int iPage = page == null ?0:Integer.parseInt(page);
-        int iSize = size == null ?0:Integer.parseInt(size);
+        int iPage = page == null ? 1:Integer.parseInt(page);
+        int iSize = size == null ? 20:Integer.parseInt(size);
         int begin = (iPage - 1)*iSize;
-        int end = (iPage - 1)*iSize + 20;
+        int end = iSize;
 
         User currentUser = (User)request.getAttribute("user_info");
         int count = iArticle.countByUserID(currentUser.getId());
@@ -352,12 +338,20 @@ public class ArticleController extends BaseController {
                 }
             }
             List<UserInfo> user_list = iUser.getUserByIds(user_ids);
+            List<Integer> comment_ids = new ArrayList<>();
+            int currentUserID = getCurrentUserId();
+            if (currentUserID != 0) {
+                comment_ids = iArticle.getPraiseCommentArticle(currentUserID);
+            }
             Map<Integer,UserInfo> usersMap = new HashMap<>();
             for (UserInfo userInfo :user_list) {
                 usersMap.put(userInfo.getId(),userInfo);
             }
 
             for (ArticleComment articleComment : list) {
+                if( comment_ids.contains(articleComment.getId())) {
+                    articleComment.setPraise(true);
+                }
                 if(usersMap.get(articleComment.getFirst_user_id()) != null) {
                     articleComment.setFirst_user_head(usersMap.get(articleComment.getFirst_user_id()).getHead());
                     articleComment.setFirst_user_name(usersMap.get(articleComment.getFirst_user_id()).getName());
@@ -476,6 +470,33 @@ public class ArticleController extends BaseController {
         return JSONResult.ok();
     }
 
+    @RequestMapping("/answer_list")
+    @ResponseBody
+    JSONResult getAnswerList(String ask_id,String page,String size) {
+        if(ask_id == null) {
+            return JSONResult.errorMsg("缺少 ask_id 参数");
+        }
+
+        int iPage = page == null || page.equals("") ? 1:Integer.parseInt(page);
+        int iSize = size == null || size.equals("") ? 20:Integer.parseInt(size);
+        int begin = (iPage - 1)*iSize;
+        int end = iSize;
+
+        List<ArticleAnswer> list = iArticle.answerList(Integer.parseInt(ask_id),begin,end);
+
+        int user_id = getCurrentUserId();
+        List<Integer> answerList = new ArrayList<>();
+        if (user_id != 0) {
+            answerList = iArticle.getAnswerPraise(user_id);
+        }
+        for (ArticleAnswer item : list) {
+            if(answerList.contains(item.getId())) {
+                item.setPraise(true);
+            }
+        }
+        return JSONResult.ok(list);
+    }
+
     String upStringToCloud(String content) throws IOException {
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd_HHmmss_");
         String strDate = df.format(new Date());
@@ -508,5 +529,47 @@ public class ArticleController extends BaseController {
         return url;
     }
 
+
+
+    /**
+     * 为文章评论点赞
+     */
+    @RequestMapping("/praise_article_comment")
+    @ResponseBody
+    JSONResult praiseComment(String comment_id) {
+        if (comment_id == null) {
+            return JSONResult.errorMsg("缺少 comment_id 参数");
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+
+        if(null == iArticle.findArticcleCommentPraise(currentUser.getId(),Integer.parseInt(comment_id))) {
+            iArticle.praiseArticcleComment(currentUser.getId(),Integer.parseInt(comment_id), (int) (new Date().getTime() /1000));
+            iArticle.praiseMainArticcleComment(Integer.parseInt(comment_id));
+        } else {
+            return JSONResult.errorMsg("已经点过赞了");
+        }
+        return JSONResult.ok();
+    }
+
+    /**
+     * 为文章评论点赞
+     */
+    @RequestMapping("/praise_answer")
+    @ResponseBody
+    JSONResult praiseAnswer(String answer_id) {
+        if(answer_id == null) {
+            return JSONResult.errorMsg("缺少 answer_id 参数");
+        }
+        int user_id = getCurrentUserId();
+        if(null == iArticle.findArticleAnswerPraise(user_id,Integer.parseInt(answer_id))) {
+            iArticle.praiseArticleAnswer(user_id,Integer.parseInt(answer_id), (int) (new Date().getTime() / 1000));
+            iArticle.praiseMainArticleAnswer(Integer.parseInt(answer_id));
+        } else {
+            return JSONResult.errorMsg("已经攒过了");
+        }
+        return JSONResult.ok();
+    }
 
 }

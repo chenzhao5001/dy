@@ -2,6 +2,7 @@ package com.guidesound.dao;
 
 import com.guidesound.dto.ArticleDTO;
 import com.guidesound.find.ArticleFind;
+import com.guidesound.models.ArticleAnswer;
 import com.guidesound.models.ArticleInfo;
 import com.guidesound.models.ArticleComment;
 import org.apache.ibatis.annotations.Insert;
@@ -79,7 +80,7 @@ public interface IArticle {
     @Insert("insert into article (head,user_id,head_pic1,head_pic2,head_pic3,create_time,type) value (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},2)")
     void addAsk(String title,int user_id,String pic1,String pic2,String pic3,int create_tile);
 
-    @Insert("insert into articleAnswer (user_id,ask_id,abstract,pic1_url,pic2_url,pic3_url,content_url,create_time) value (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},#{arg6},#{arg7})")
+    @Insert("insert into articleAnswer (user_id,ask_id,abstract_info,pic1_url,pic2_url,pic3_url,content_url,create_time) value (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},#{arg6},#{arg7})")
     void addAnswer(int user_id,int ask_id,String t_abstract,
                    String pic1_url,String pic2_url,String pic3_url,
                    String content_url,int create_time);
@@ -92,5 +93,29 @@ public interface IArticle {
 
     @Select("select article_id from articlePraise where user_id = #{arg0} and deleted = 0")
     List<Integer> getPraiseListByUserId(int user_id);
+
+    @Select("select id from articleChatPraise where user_id = #{arg0} and comment_id = #{arg1} and deleted = 0")
+    Integer findArticcleCommentPraise(int user_id,int article_id);
+
+    @Insert("insert into articleChatPraise (user_id,comment_id,create_time) value (#{arg0},#{arg1},#{arg2})")
+    void praiseArticcleComment(int user_id,int commment_id,int create_time);
+    @Update("update articleChat set praise_count = praise_count + 1 where id = #{arg0}")
+    void praiseMainArticcleComment(int commment_id);
+
+    @Select("select comment_id from articleChatPraise where user_id = #{arg0} and deleted = 0")
+    List<Integer> getPraiseCommentArticle(int user_id);
+
+    @Select("select id from articleAnswerPraise where user_id = #{arg0} and answer_id = #{arg1} and deleted = 0")
+    Integer findArticleAnswerPraise(int user_id,int article_id);
+    @Insert("insert into articleAnswerPraise (user_id,answer_id,create_time) value (#{arg0},#{arg1},#{arg2})")
+    void praiseArticleAnswer(int user_id,int answer_id,int create_time);
+    @Update("update articleAnswer set praise_count = praise_count + 1 where id = #{arg0}")
+    void praiseMainArticleAnswer(int answer_id);
+
+    @Select("select * from articleAnswer where ask_id = #{arg0} limit #{arg1},#{arg2}")
+    List<ArticleAnswer> answerList(int ask_id,int begin,int end);
+
+    @Select("select answer_id from articleAnswerPraise where user_id = #{arg0} and deleted = 0")
+    List<Integer> getAnswerPraise(int user_id);
 
 }
