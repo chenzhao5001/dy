@@ -78,6 +78,9 @@ public class VideoController extends BaseController {
         video.setContent(videoDTO.getContent());
         video.setDuration(Integer.parseInt(videoDTO.getDuration()));
 
+        video.setResolution_w(Integer.parseInt(videoDTO.getResolution_w()));
+        video.setResolution_h(Integer.parseInt(videoDTO.getResolution_h()));
+
         video.setPic_up_path(videoDTO.getPicture_url());
         video.setVideo_up_path(videoDTO.getViedo_url());
         video.setVideo_temp_path("");

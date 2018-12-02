@@ -228,9 +228,9 @@ public class ManagerController {
                 videoVerify.setVideo_duration(item.getDuration() + "秒");
                 videoVerify.setVideo_pic_up_path(item.getPic_up_path());
                 videoVerify.setVideo_video_up_path(item.getVideo_up_path());
-                videoVerify.setVideo_resolution(item.getResolution());
+                videoVerify.setVideo_resolution(item.getResolution_w() + " X " + item.getResolution_h() );
                 videoVerify.setVideo_subject(SignMap.getSubjectTypeById(item.getSubject()));
-                videoVerify.setVideo_watch_type(SignMap.getWatchById(item.getWatch_type()));
+                videoVerify.setVideo_watch_type(SignMap.getGradeTypeByID(item.getWatch_type()));
 
                 VideoUser videoUser = mUser.get(item.getUser_id());
                 if(videoUser != null) {

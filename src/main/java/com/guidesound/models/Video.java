@@ -12,8 +12,28 @@ public class Video {
     String video_up_path;
     String video_temp_path;
     String video_show_path;
+
+    int  resolution_w;
+    int  resolution_h;
     int create_time;
     int update_time;
+
+
+    public int getResolution_w() {
+        return resolution_w;
+    }
+
+    public void setResolution_w(int resolution_w) {
+        this.resolution_w = resolution_w;
+    }
+
+    public int getResolution_h() {
+        return resolution_h;
+    }
+
+    public void setResolution_h(int resolution_h) {
+        this.resolution_h = resolution_h;
+    }
 
     public int getId() {
         return id;

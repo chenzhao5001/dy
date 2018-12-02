@@ -13,7 +13,25 @@ public class VideoShow {
     String watch_type_name;
 
     int duration;
+    int resolution_w;
+    int resolution_h;
     int shared_count;
+
+    public int getResolution_w() {
+        return resolution_w;
+    }
+
+    public void setResolution_w(int resolution_w) {
+        this.resolution_w = resolution_w;
+    }
+
+    public int getResolution_h() {
+        return resolution_h;
+    }
+
+    public void setResolution_h(int resolution_h) {
+        this.resolution_h = resolution_h;
+    }
 
     String content;
     String pic_up_path;

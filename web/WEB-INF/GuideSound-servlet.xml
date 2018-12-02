@@ -49,6 +49,8 @@
             <mvc:exclude-mapping path="/article/answer_list"/>
             <mvc:exclude-mapping path="/article/comment_list"/>
             <mvc:exclude-mapping path="/article/list"/>
+            <mvc:exclude-mapping path="/article/article_channel"/>
+            <mvc:exclude-mapping path="/article/channel_article"/>
 
             <mvc:exclude-mapping path="/edit/**"/>
             <mvc:exclude-mapping path="/article/edit"/>

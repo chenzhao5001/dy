@@ -117,6 +117,8 @@ public class SignMap {
     static Map<Integer,String> user_level;
     static List<Content2> channel;
 
+    static List<Content2> article_channel;
+
 
 
     static {
@@ -243,6 +245,37 @@ public class SignMap {
         content2.setChannel_name("其他");
         channel.add(content2);
 
+        article_channel = new ArrayList<>();
+        content2 = new Content2();
+        content2.setChannel_info("1");
+        content2.setChannel_name("推荐");
+        article_channel.add(content2);
+
+        content2 = new Content2();
+        content2.setChannel_info("2");
+        content2.setChannel_name("问答");
+        article_channel.add(content2);
+
+
+        content2 = new Content2();
+        content2.setChannel_info("101");
+        content2.setChannel_name("语文");
+        article_channel.add(content2);
+
+        content2 = new Content2();
+        content2.setChannel_info("102");
+        content2.setChannel_name("数学");
+        article_channel.add(content2);
+
+        content2 = new Content2();
+        content2.setChannel_info("103");
+        content2.setChannel_name("英语");
+        article_channel.add(content2);
+
+        content2 = new Content2();
+        content2.setChannel_info("104");
+        content2.setChannel_name("物理");
+        article_channel.add(content2);
 
     }
 
@@ -453,7 +486,9 @@ public class SignMap {
         list.add(info5);
         list.add(info6);
         return list;
-
     }
 
+    static public List<Content2> getArticleChannel() {
+        return article_channel;
+    }
 }

@@ -16,6 +16,9 @@
         video_up_path,
         video_temp_path,
         video_show_path,
+        duration,
+        resolution_w,
+        resolution_h,
         create_time,
         update_time
         )
@@ -29,6 +32,11 @@
         #{video_up_path},
         #{video_temp_path},
         #{video_show_path},
+
+        #{duration},
+        #{resolution_w},
+        #{resolution_h},
+
         #{create_time},
         #{update_time}
         )

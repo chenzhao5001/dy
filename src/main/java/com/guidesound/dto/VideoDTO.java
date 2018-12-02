@@ -19,6 +19,29 @@ public class VideoDTO {
     @NotNull(message = "duration:不能为空;")
     String duration;
 
+    @NotNull(message = "resolution_w:不能为空;")
+    String resolution_w;
+
+    @NotNull(message = "resolution_h:不能为空;")
+    String resolution_h;
+
+
+    public String getResolution_w() {
+        return resolution_w;
+    }
+
+    public void setResolution_w(String resolution_w) {
+        this.resolution_w = resolution_w;
+    }
+
+    public String getResolution_h() {
+        return resolution_h;
+    }
+
+    public void setResolution_h(String resolution_h) {
+        this.resolution_h = resolution_h;
+    }
+
     public String getTitle() {
         return title;
     }

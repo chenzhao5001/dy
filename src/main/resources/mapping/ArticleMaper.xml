@@ -43,6 +43,7 @@
             and  user_id = #{user_id}
         </if>
         and deleted = 0
+        ORDER BY create_time DESC
         limit #{begin},#{end}
     </select>
 

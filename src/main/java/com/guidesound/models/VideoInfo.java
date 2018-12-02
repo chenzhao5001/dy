@@ -8,7 +8,8 @@ public class VideoInfo {
     int subject;
     int  watch_type;
     int duration;
-    String resolution;
+    int resolution_w;
+    int resolution_h;
     String pic_up_path;
     String video_up_path;
 
@@ -60,12 +61,20 @@ public class VideoInfo {
         this.duration = duration;
     }
 
-    public String getResolution() {
-        return resolution;
+    public int getResolution_w() {
+        return resolution_w;
     }
 
-    public void setResolution(String resolution) {
-        this.resolution = resolution;
+    public void setResolution_w(int resolution_w) {
+        this.resolution_w = resolution_w;
+    }
+
+    public int getResolution_h() {
+        return resolution_h;
+    }
+
+    public void setResolution_h(int resolution_h) {
+        this.resolution_h = resolution_h;
     }
 
     public String getPic_up_path() {

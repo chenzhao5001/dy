@@ -47,4 +47,22 @@ public class CourseController {
 
         return JSONResult.ok();
     }
+
+    @RequestMapping("/up_show_pic")
+    @ResponseBody
+    public JSONResult upUserShowPic(String user_id,String pic) {
+        if(user_id == null || pic == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/up_introduction")
+    @ResponseBody
+    public JSONResult upUserIntroduction(String user_id,String introduction) {
+        if(user_id == null || introduction == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+        return JSONResult.ok();
+    }
 }

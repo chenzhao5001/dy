@@ -10,6 +10,7 @@ import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
 import com.guidesound.util.TockenUtil;
 import com.guidesound.util.ToolsFunction;
+import com.qcloud.Common.Sign;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
 import okhttp3.Call;
@@ -571,5 +572,43 @@ public class ArticleController extends BaseController {
         }
         return JSONResult.ok();
     }
+
+
+    /**
+     * 获取文章频道列表
+     */
+    @RequestMapping("/article_channel")
+    @ResponseBody
+    JSONResult articleChannel() {
+        return JSONResult.ok(SignMap.getArticleChannel());
+    }
+    /**
+     * 获取频道文章
+     */
+    @RequestMapping("/channel_article")
+    @ResponseBody
+    JSONResult channelArticle(String channel_id,String user_guid) {
+
+        if(channel_id == null || user_guid == null) {
+            return JSONResult.errorMsg("缺少 channel_id 或 user_guid 参数");
+        }
+
+        JSONResult ret = null;
+        if(channel_id.equals("1")) {
+            ret =  getList("1","20",null,null,null,null);
+        }
+        else if(channel_id.equals("2")) {
+            ret =  getList("1","20",null,null,"2",null);
+        }
+        else {
+            ret =  getList("1","20",channel_id,null,null,null);
+        }
+
+        return ret;
+    }
+
+
+
+
 
 }
