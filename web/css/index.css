@@ -66,16 +66,17 @@
     width: 100%;
     /*padding: 0 200px;*/
     clear: both;
-    /*overflow: hidden;*/
+    overflow: hidden;
     text-align: center;
     margin-bottom:20px;
 }
 .slideCon{
+    /*margin-top: -10px;*/
     display: block;
 }
 .slideCon span {
     display: block;
-    margin-bottom: 12px;
+    /*margin-bottom: 12px;*/
     color: #767676;
     font-size: 20px;
 }
@@ -98,13 +99,13 @@
 }
 .TDcode {
     float: right;
-    margin-right: 10%;
+    margin-right: 8%;
 
 }
 .TDcode span {
     display: block;
     color: #767676;
-     font-size: 20px;
+    font-size: 20px;
 }
 .img {
     width: 230px;
@@ -139,42 +140,45 @@
         min-width: 1300px;
         padding-bottom: 0;
     }
+    .idBlock {
+        display: block;
+    }
     .carousel {
-    width: 620px;
-    height: 500px;
+        width: 620px;
+        height: 500px;
     }
     .logoContainer {
-    padding: 0 58px;
-    display: inline;
-    float: left;
+        padding: 0 58px;
+        display: inline;
+        float: left;
     }
     .title {
-    padding: 30px 0 20px 0;
-    font-size: 34px;
-    font-weight: bold;
-    text-align: center;
+        padding: 26px 0 40px 0;
+        font-size: 34px;
+        font-weight: bold;
+        text-align: center;
     }
     .slideCon {
-    float:left;
-    margin-left: 13%;
+        float:left;
+        margin-left: 13%;
     }
-.btns {
-    padding:10px 56px 10px 12px;
-    line-height: 32px;
-    display: inline-block;
-    float: right;
- }
+    .btns {
+        padding:10px 56px 10px 12px;
+        line-height: 32px;
+        display: inline-block;
+        float: right;
+    }
     .box{
         /*margin-top: 400px;*/
-        width: 40%;
-        height: 490px;
+        width: 50%;
+        height: 558px;
         margin-left: -20px;
         position: relative;
     }
 
     .list{
-        width: 700px;
-        height: 500px;
+        width: 790px;
+        height: 558px;
         overflow: hidden;
         position: absolute;
         left: 0;
@@ -184,8 +188,8 @@
 
     .btn{
         position: absolute;
-        top: 40%;
-        margin-top: -80px;
+        top: 50%;
+        margin-top: -50px;
         width: 50px;
         height: 50px;
         line-height: 100px;
@@ -212,8 +216,8 @@
     .p5 a>img,
     .p6 a>img,
     .p7 a>img{
-        width: 227px;
-        height: 470px;
+        width: 260px;
+        height: 560px;
         border:none;
         float: left;
     }
@@ -251,7 +255,7 @@
         position: absolute;
         width: 1200px;
         height: 30px;
-        bottom: -20px;
+        bottom: 0;
         left: 50.5%;
         margin-left: -630px;
         text-align: center;
@@ -274,13 +278,11 @@
         background: red;
     }
     .prev {
-        width: 52px;
         background: url("../static/indexSpr.png");
         background-position: -60px -4px;
     }
     .next{
         right: 0;
-        margin-right:34px;
         background: url("../static/indexSpr.png");
         background-position: -62px -56px;
     }
@@ -298,18 +300,18 @@
     height: 256px;
     }*/
     body {
-    margin: 0;
-    padding: 0;
-    font-size: 10px;
+        margin: 0;
+        padding: 0;
+        font-size: 10px;
     }
     /**/
     .logoContainer {
-    display: block;
-    width: 100%;
-    text-align: center;
+        display: block;
+        width: 100%;
+        text-align: center;
     }
     .logo {
-    width: 12rem;
+        width: 12rem;
     }
     .topBar{
         margin-top:15px;
@@ -333,11 +335,11 @@
     }*/
     .btns {
         display: none;
-     }
+    }
     .TDcode {
         float: none;
         text-align: center;
-        margin-right: 0;
+        margin-right: 38px;
     }
     .TDcode .img{
         margin: 0 auto;
@@ -345,15 +347,25 @@
     .isShow{
         display: block;
     }
+    .isBlock {
+        display: none;
+    }
     .homeMain span{
         font-size:1rem;
         color:#767676;
     }
+    .footer {
+        padding: 20px;
 
+    }
+    .ip {
+        display: inline-block;
+        font-size: 10px;
+    }
     /*轮播样式*/
 
 
 
-   
+
 }
 
