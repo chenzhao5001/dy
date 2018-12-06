@@ -9,6 +9,7 @@ public class VideoVerify {
     UserInfoTemp userInfo = new UserInfoTemp();
     VideoInfoTemp videoInfo = new VideoInfoTemp();
     ShowInfoTemp showInfo = new ShowInfoTemp();
+    int video_id;
 
     public void setVideo_title(String title) {
         videoInfo.video_title = title;
@@ -51,9 +52,6 @@ public class VideoVerify {
     public void setUser_subject(String subject) {
         userInfo.user_subject = subject;
     }
-
-
-    int video_id;
 
     public UserInfoTemp getUserInfo() {
         return userInfo;

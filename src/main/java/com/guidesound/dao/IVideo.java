@@ -54,10 +54,10 @@ public interface IVideo {
     @Update("update video set video_show_path = #{arg1} where id = #{arg0}")
     void setVideoShowPath(int id, String path);
 
-    @Select("select count(*) from video where examine_status = #{arg0}")
+    @Select("select count(*) from video where examine_status = #{arg0} and deleted = 0")
     int getVideoCount(String status);
 
-    @Select("select count(*) from video where user_id = #{arg0}")
+    @Select("select count(*) from video where user_id = #{arg0} and examine_status = 1 and deleted = 0")
     int getVideoByUserId(String usre_id);
 
     @Select("select video_id from videoCollection where user_id = #{arg0} and deleted = 0")
@@ -141,7 +141,12 @@ public interface IVideo {
 
     @Select("select count(*) from video where user_id = #{arg0} and examine_status = 1 and deleted = 0")
     int getPublishVidoeCountByUserId(int user_id);
+    @Select("select count(*) from video where user_id = #{arg0} and (examine_status = 1 or examine_status = 0) and deleted = 0")
+    int getPublishVidoeCountByUserId_2(int user_id);
     @Select("select * from video where user_id = #{arg0} and examine_status = 1 and deleted = 0 limit #{arg1},#{arg2}")
     List<VideoShow> getPublishVidoeByUserId(int user_id,int begin,int end);
+
+    @Select("select * from video where user_id = #{arg0} and (examine_status = 1 or examine_status = 0) and deleted = 0 limit #{arg1},#{arg2}")
+    List<VideoShow> getPublishVidoeByUserId_2(int user_id,int begin,int end);
 
 }

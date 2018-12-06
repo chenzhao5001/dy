@@ -5,10 +5,8 @@ import com.guidesound.find.ArticleFind;
 import com.guidesound.models.ArticleAnswer;
 import com.guidesound.models.ArticleInfo;
 import com.guidesound.models.ArticleComment;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import com.guidesound.models.VideoInfo;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -71,7 +69,7 @@ public interface IArticle {
     @Select("select count(*) from articleChat where article_id = #{arg0} and deleted = 0")
     int CommentCount(int article_id);
 
-    @Select("select * from articleChat where article_id = #{arg0} and deleted = 0 limit #{arg1},#{arg2}")
+    @Select("select * from articleChat where article_id = #{arg0} and deleted = 0 order by create_time desc limit #{arg1},#{arg2}")
     List<ArticleComment> getCommentList(int article_id, int begin, int end);
 
     @Select("select content from article where id = #{arg0}")
@@ -118,4 +116,23 @@ public interface IArticle {
     @Select("select answer_id from articleAnswerPraise where user_id = #{arg0} and deleted = 0")
     List<Integer> getAnswerPraise(int user_id);
 
+    @Select("select * from article where examine_person = #{arg0} and deleted = 0 and examine_status = 0")
+    List<ArticleInfo> getArticleByAdminId(int admin_id);
+
+    @Select("select * from article where examine_person = 0 and deleted = 0 and examine_status = 0 limit 0 ,5")
+    List<ArticleInfo> getExamineArticle();
+
+    @Update("update article set examine_status = 1,type_list = #{arg1} where id = #{arg0}")
+    void setExamineSuccess(int id, String type_list);
+
+    @Update("update article set examine_status = 2,examine_reason = #{arg1},fail_content = #{arg2} where id = #{arg0}")
+    void setExamineFail(int id, String fail_reson, String fail_content);
+
+    @Update("<script>"
+            + "update article set examine_person = #{arg1}  WHERE id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    void setExaminePerson(@Param("iList") List<Integer> iList, int user_id);
 }

@@ -1,11 +1,13 @@
 package com.guidesound.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.guidesound.dao.IArticle;
 import com.guidesound.dao.IInUser;
 import com.guidesound.dao.IUser;
 import com.guidesound.dao.IVideo;
 import com.guidesound.models.*;
 import com.guidesound.util.*;
+import com.qcloud.Common.Sign;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,6 +39,8 @@ public class ManagerController {
     private IVideo iVideo;
     @Autowired
     private IUser iUser;
+    @Autowired
+    private IArticle iArticle;
     @RequestMapping(value = "/login")
     @ResponseBody
     JSONResult logIn(HttpServletRequest request, HttpServletResponse response) {
@@ -124,7 +128,7 @@ public class ManagerController {
         }
 
         videoList  = iVideo.getExamineVideo();
-        if(videoList.size() > 0) {
+        if(videoList != null && videoList.size() > 0) {
             ArrayList<Integer> list = new ArrayList<>();
             for (VideoInfo item : videoList) {
                 list.add(item.getId());
@@ -207,6 +211,52 @@ public class ManagerController {
         return null;
     }
 
+    List<ArticleVerify> getArticleShow(List<ArticleInfo> articleList) {
+        if (articleList.size() > 0) {
+            List<Integer> userIds = new ArrayList<>();
+            for (ArticleInfo item : articleList) {
+                userIds.add(item.getUser_id());
+            }
+            List<VideoUser> userList = iUser.getUserInfoByIds(userIds);
+            Map<Integer,VideoUser> mUser = new Hashtable<>();
+            for(VideoUser item : userList) {
+                mUser.put(item.getId(),item);
+            }
+            List<ArticleVerify> articleVerifies = new ArrayList<>();
+            for (ArticleInfo item: articleList) {
+                ArticleVerify articleVerify = new ArticleVerify();
+                articleVerify.setArticle_id(item.getId());
+                articleVerify.setArticleAid(item.getId());
+                articleVerify.setArticleGrade_class(SignMap.getWatchById(item.getGrade_class()));
+                articleVerify.setArticleLength(0);
+                articleVerify.setArticleSubject(SignMap.getSubjectTypeById(item.getSubject()));
+                articleVerify.setArticleTitle(item.getHead());
+                articleVerify.setArticleXy("");
+
+                articleVerify.setShowContent("http://daoyinjiaoyu.com/article/preview?article_id=" + item.getId());
+                articleVerify.setShowTitle_pic1(item.getHead_pic1());
+                articleVerify.setShowTitle_pic2(item.getHead_pic2());
+                articleVerify.setShowTitle_pic3(item.getHead_pic3());
+
+
+                VideoUser videoUser = mUser.get(item.getUser_id());
+                if(videoUser != null) {
+                    articleVerify.setUser_uid(String.valueOf(videoUser.getDy_id()));
+                    articleVerify.setUser_type(SignMap.getUserTypeById(videoUser.getType()));
+                    articleVerify.setUser_extend("");
+                    articleVerify.setUser_grade_level(SignMap.getWatchById(videoUser.getGrade_level()));
+                    articleVerify.setUser_level(SignMap.getUserLevelById(videoUser.getLevel()));
+                    articleVerify.setUser_name(videoUser.getName());
+                    articleVerify.setUser_subject(SignMap.getSubjectTypeById(videoUser.getSubject()));
+                }
+
+                articleVerifies.add(articleVerify);
+            }
+            return articleVerifies;
+        }
+        return null;
+    }
+
     List<VideoVerify> getVideoShow(List<VideoInfo> videoList ) {
         if(videoList.size() > 0) {
             List<Integer> userIds = new ArrayList<>();
@@ -247,4 +297,99 @@ public class ManagerController {
         }
         return null;
     }
+
+    @RequestMapping(value = "/article_fail_reason_list")
+    @ResponseBody
+    JSONResult articleFailReasonList() {
+
+        class Item {
+            int id;
+            String reason;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getReason() {
+                return reason;
+            }
+
+            public void setReason(String reason) {
+                this.reason = reason;
+            }
+        }
+
+        Map<Integer,String> reason = VideoExamine.getReason();
+        List<Item> list = new ArrayList<>();
+        for (Map.Entry<Integer, String> entry : reason.entrySet()) {
+            Item item = new Item();
+            item.setId(entry.getKey());
+            item.setReason(entry.getValue());
+            list.add(item);
+        }
+        return JSONResult.ok(list);
+    }
+
+
+    @RequestMapping(value = "/current_article_list")
+    @ResponseBody
+    JSONResult currentAtricleList(HttpServletRequest request, HttpServletResponse response) {
+        Integer userId = getUserId();
+        if ( userId == null ) {
+            return JSONResult.errorMsg("缺少m_token");
+        }
+        if( userId  == - 1) {
+            return JSONResult.errorMsg("m_token 错误");
+        }
+
+        List<ArticleInfo> articleList = iArticle.getArticleByAdminId(userId);
+        if(articleList.size() > 0) {
+            return JSONResult.ok(getArticleShow(articleList));
+        }
+        articleList  = iArticle.getExamineArticle();
+        if(articleList.size() > 0) {
+            ArrayList<Integer> list = new ArrayList<>();
+            for (ArticleInfo item : articleList) {
+                list.add(item.getId());
+            }
+            iArticle.setExaminePerson(list,userId);
+            return JSONResult.ok(getArticleShow(articleList));
+        }
+        return JSONResult.ok(new ArrayList<>());
+    }
+
+    @RequestMapping(value = "/examine_article")
+    @ResponseBody
+    JSONResult examineArticle(String article_id,String status,String type_list,String fail_reason,String fail_content) throws IOException, InterruptedException, JMSException {
+
+        Integer userId = getUserId();
+        if ( userId == null ) {
+            return JSONResult.errorMsg("缺少m_token");
+        }
+
+        if ( article_id == null || status == null ) {
+            return JSONResult.errorMsg("缺少status 或 article_id");
+        }
+
+        if(Integer.parseInt(status) == 1) {
+            if(type_list == null) {
+                return JSONResult.errorMsg("缺少type_list");
+            }
+            iArticle.setExamineSuccess(Integer.parseInt(article_id),type_list);
+
+        } else {
+            if(fail_reason == null || fail_content == null) {
+                return JSONResult.errorMsg("缺少fail_reason或fail_content");
+            }
+            iArticle.setExamineFail(Integer.parseInt(article_id),fail_reason,fail_content);
+        }
+        return JSONResult.ok();
+    }
+
 }
+
+

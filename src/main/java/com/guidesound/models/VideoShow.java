@@ -11,11 +11,20 @@ public class VideoShow {
 
     int watch_type;
     String watch_type_name;
+    int examine_status;
 
     int duration;
     int resolution_w;
     int resolution_h;
     int shared_count;
+
+    public int getExamine_status() {
+        return examine_status;
+    }
+
+    public void setExamine_status(int examine_status) {
+        this.examine_status = examine_status;
+    }
 
     public int getResolution_w() {
         return resolution_w;
@@ -36,6 +45,7 @@ public class VideoShow {
     String content;
     String pic_up_path;
     String video_show_path;
+    String video_up_path;
     int play_count;
     boolean praise;
     int praise_count;
@@ -46,6 +56,14 @@ public class VideoShow {
     boolean follow;
     int user_type;
     int create_time;
+
+    public String getVideo_up_path() {
+        return video_up_path;
+    }
+
+    public void setVideo_up_path(String video_up_path) {
+        this.video_up_path = video_up_path;
+    }
 
     public int getUser_type() {
         return user_type;

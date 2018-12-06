@@ -530,21 +530,9 @@ public class VideoController extends BaseController {
     @ResponseBody
     public JSONResult getPublishVideo(String user_id,String page,String size) {
 
-        if(user_id == null) {
-            return JSONResult.errorMsg("缺少user_id");
+        if(user_id == null ) {
+            return JSONResult.errorMsg("缺少user_id 获 state");
         }
-        int iPage = page == null ? 1:Integer.parseInt(page);
-        int iSize = size == null ? 20:Integer.parseInt(size);
-        int begin = (iPage -1)*iSize;
-        int end = iSize;
-        ListResp ret = new ListResp();
-        int count = iVideo.getPublishVidoeCountByUserId(Integer.parseInt(user_id));
-        if(count == 0) {
-            ret.setCount(0);
-            ret.setList(new ArrayList<>());
-            return JSONResult.ok(ret);
-        }
-        List<VideoShow> list = iVideo.getPublishVidoeByUserId(Integer.parseInt(user_id),begin,end);
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         int currentUserID = 0;
@@ -556,6 +544,30 @@ public class VideoController extends BaseController {
                     currentUserID = TockenUtil.getUserIdByTocket(token);
                 }
             }
+        }
+
+        boolean flag = currentUserID == Integer.parseInt(user_id);
+        int iPage = page == null ? 1:Integer.parseInt(page);
+        int iSize = size == null ? 20:Integer.parseInt(size);
+        int begin = (iPage -1)*iSize;
+        int end = iSize;
+        ListResp ret = new ListResp();
+        int count = 0;
+        if(flag) {
+            count = iVideo.getPublishVidoeCountByUserId_2(Integer.parseInt(user_id));
+        } else {
+            count = iVideo.getPublishVidoeCountByUserId(Integer.parseInt(user_id));
+        }
+        if(count == 0) {
+            ret.setCount(0);
+            ret.setList(new ArrayList<>());
+            return JSONResult.ok(ret);
+        }
+        List<VideoShow> list = null;
+        if(flag) {
+            list = iVideo.getPublishVidoeByUserId_2(Integer.parseInt(user_id),begin,end);
+        } else {
+            list = iVideo.getPublishVidoeByUserId(Integer.parseInt(user_id),begin,end);
         }
 
         improveVideoList(currentUserID,list);

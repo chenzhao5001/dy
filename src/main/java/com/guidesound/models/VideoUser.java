@@ -8,8 +8,17 @@ public class VideoUser {
     int subject;
     int grade_level;
     int level;
+    int dy_id;
     String extend;
 
+
+    public int getDy_id() {
+        return dy_id;
+    }
+
+    public void setDy_id(int dy_id) {
+        this.dy_id = dy_id;
+    }
 
     public int getId() {
         return id;

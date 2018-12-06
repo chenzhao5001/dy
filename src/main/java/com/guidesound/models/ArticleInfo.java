@@ -10,6 +10,7 @@ public class ArticleInfo {
     private String head_pic3;
     private int subject;
     private String subject_name;
+    private int grade_class;
     private int type;
     private int answer_count;
     private String user_head;
@@ -31,6 +32,13 @@ public class ArticleInfo {
     private int praise_count;
     private boolean praise;
 
+    public int getGrade_class() {
+        return grade_class;
+    }
+
+    public void setGrade_class(int grade_class) {
+        this.grade_class = grade_class;
+    }
 
     public int getPraise_count() {
         return praise_count;

@@ -37,6 +37,9 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.guidesound.util.ToolsFunction.URLDecoderString;
+import static com.guidesound.util.ToolsFunction.getURLEncoderString;
+
 @Controller
 @RequestMapping("/article")
 public class ArticleController extends BaseController {
@@ -160,6 +163,8 @@ public class ArticleController extends BaseController {
         second_user_id = second_user_id == null ? "0" : second_user_id;
         second_comment = second_comment == null ? "" : second_comment;
 
+        first_comment = getURLEncoderString(first_comment);
+        second_comment = getURLEncoderString(second_comment);
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         ArticleComment articleComment = new ArticleComment();
@@ -331,6 +336,8 @@ public class ArticleController extends BaseController {
         if (list.size() > 0) {
             List<Integer> user_ids = new ArrayList<>();
             for (ArticleComment articleComment : list) {
+                articleComment.setFirst_comment(URLDecoderString(articleComment.getFirst_comment()));
+                articleComment.setSecond_comment(URLDecoderString(articleComment.getSecond_comment()));
                 if(!user_ids.contains(articleComment.getFirst_user_id())){
                     user_ids.add(articleComment.getFirst_user_id());
                 }
