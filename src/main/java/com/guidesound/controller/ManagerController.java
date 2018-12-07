@@ -22,7 +22,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import java.io.*;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -176,7 +176,7 @@ public class ManagerController {
                     messageProducer.send(textMessage);
                 }
                 connection.close();
-                iVideo.setExamineLoading(Integer.parseInt(video_id),type_list);
+//                iVideo.setExamineLoading(Integer.parseInt(video_id),type_list);
 
             } catch (JMSException e) {
                 e.printStackTrace();
@@ -388,6 +388,45 @@ public class ManagerController {
             iArticle.setExamineFail(Integer.parseInt(article_id),fail_reason,fail_content);
         }
         return JSONResult.ok();
+    }
+
+    @RequestMapping(value = "/code_loading")
+    public String codeLoading() {
+        return "code_loading";
+    }
+
+    @RequestMapping(value = "/loading")
+    @ResponseBody
+    JSONResult Loading() throws InterruptedException {
+//        String temp = exec("cd /home/ubuntu/mysoft/apache-tomcat-9.0.13/webapps/public && git pull");
+        String temp = exec("cd ../webapps/public/ && git pull");
+
+        return JSONResult.ok(temp);
+    }
+    public static String exec(String command) throws InterruptedException {
+        String returnString = "";
+        Process pro = null;
+        Runtime runTime = Runtime.getRuntime();
+        if (runTime == null) {
+            System.err.println("Create runtime false!");
+        }
+        try {
+            pro = runTime.exec(command);
+            int r = pro.waitFor();
+            BufferedReader input = new BufferedReader(new InputStreamReader(pro.getInputStream()));
+            PrintWriter output = new PrintWriter(new OutputStreamWriter(pro.getOutputStream()));
+            String line;
+            while ((line = input.readLine()) != null) {
+                returnString = returnString + line + "\n";
+            }
+            input.close();
+            output.close();
+            pro.destroy();
+        } catch (IOException ex) {
+            System.out.println(ex);
+            return ex.toString();
+        }
+        return returnString;
     }
 
 }

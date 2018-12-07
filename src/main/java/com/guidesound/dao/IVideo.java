@@ -149,4 +149,7 @@ public interface IVideo {
     @Select("select * from video where user_id = #{arg0} and (examine_status = 1 or examine_status = 0) and deleted = 0 limit #{arg1},#{arg2}")
     List<VideoShow> getPublishVidoeByUserId_2(int user_id,int begin,int end);
 
+    @Select("select * from video where type_list like '%1%' and examine_status = 1 and deleted = 0 order by create_time desc")
+    List<VideoShow> getRecommendVideo();
+
 }

@@ -227,6 +227,10 @@ public class SignMap {
 
         channel = new ArrayList<>();
         Content2 content2 = new Content2();
+//        content2.setChannel_info("1");
+//        content2.setChannel_name("推荐");
+//        channel.add(content2);
+//        content2 = new Content2();
         content2.setChannel_info("101,102,103");
         content2.setChannel_name("语数外");
         channel.add(content2);
@@ -276,7 +280,6 @@ public class SignMap {
         content2.setChannel_info("104");
         content2.setChannel_name("物理");
         article_channel.add(content2);
-
     }
 
     public static List<Content2> getChannelList() throws JsonProcessingException {

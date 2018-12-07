@@ -85,6 +85,7 @@ public class VideoController extends BaseController {
         video.setVideo_up_path(videoDTO.getViedo_url());
         video.setVideo_temp_path("");
         video.setVideo_show_path("");
+        video.setPic_cut_path(videoDTO.getPic_cut_url());
 
         video.setCreate_time((int) (new Date().getTime() / 1000));
         video.setUpdate_time((int) (new Date().getTime() / 1000));
@@ -131,24 +132,15 @@ public class VideoController extends BaseController {
 
     @RequestMapping(value = "/list_by_channel")
     public @ResponseBody
-    JSONResult selectVideoByChannel(String channel,String page, String size) {
-        if(channel == null) {
-            return JSONResult.errorMsg("缺少channel");
+    JSONResult selectVideoByChannel(String channel,String user_guid,String page, String size) {
+        if(channel == null || user_guid == null) {
+            return JSONResult.errorMsg("缺少channel 或 user_guid");
         }
-
         int iPage = (page == null ? 1:Integer.parseInt(page));
         int iSize = (size == null ? 20:Integer.parseInt(size));
         int begin = (iPage -1)*iSize;
         int end =  iSize;
 
-        List<String> list = Arrays.asList(channel.split(","));
-        int count_temp = iVideo.getVideoNumByChannel(list);
-        if (count_temp == 0) {
-            ListResp ret = new ListResp();
-            ret.setCount(0);
-            ret.setList(new ArrayList<>());
-            return JSONResult.ok(ret);
-        }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         int currentUserID = 0;
 
@@ -161,13 +153,52 @@ public class VideoController extends BaseController {
                 }
             }
         }
-        List<VideoShow> list_temp  = iVideo.getVideoByChannel(list,begin,end);
-        improveVideoList(currentUserID,list_temp);
+
+        List<VideoShow> video_list = new ArrayList<>();
+        if(channel.equals("1")) {
+            List<VideoShow> all_list = iVideo.getRecommendVideo();
+            for (int i = 0; i < all_list.size(); i++) {
+                if(video_list.size() == 0) {
+                    video_list.add(all_list.get(0));
+                } else {
+                    for(int j = i; j < all_list.size(); j++) {
+                        if(all_list.get(j).getUser_id() != video_list.get(i-1).getUser_id()) {
+                            video_list.add(all_list.get(j));
+                            if(j != i) {
+                                Collections.swap(all_list,i,j);
+                            }
+                            break;
+                        }
+                        if(j == all_list.size() -1) {
+                            video_list.add(all_list.get(i));
+                        }
+                    }
+
+                }
+//                if(video_list.size() == 20) {
+//                    break;
+//                }
+            }
+        } else {
+            List<String> list = Arrays.asList(channel.split(","));
+            int count_temp = iVideo.getVideoNumByChannel(list);
+            if (count_temp == 0) {
+                ListResp ret = new ListResp();
+                ret.setCount(0);
+                ret.setList(new ArrayList<>());
+                return JSONResult.ok(ret);
+            }
+
+            video_list = iVideo.getVideoByChannel(list,begin,end);
+        }
+
+
+        improveVideoList(currentUserID,video_list);
 
 
         ListResp ret = new ListResp();
-        ret.setCount(count_temp);
-        ret.setList(list_temp);
+        ret.setCount(video_list.size());
+        ret.setList(video_list);
 
         return JSONResult.ok(ret);
     }

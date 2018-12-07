@@ -6,6 +6,7 @@
 .home {
     /*width: 1920px;*/
     width: 100%;
+    height: 100%;
     /*height: 100%;*/
     background: #F9FAFB;
     overflow: hidden;
@@ -47,8 +48,8 @@
 .img3a {
     width: 140px;
     position: absolute;
-    top:22px;
-    left: -2px;
+
+    left: -2px;  top:22px;
     display: none;
 }
 .btn1:hover .img1a {
@@ -153,7 +154,7 @@
         float: left;
     }
     .title {
-        padding: 26px 0 40px 0;
+        padding: 34px 0 40px 0;
         font-size: 34px;
         font-weight: bold;
         text-align: center;
@@ -292,6 +293,7 @@
     .ip {
         display: inline-block;
         font-size: 12px;
+        color: #666;
     }
 }
 /*!*移动端样式*!*/
@@ -365,6 +367,7 @@
     .ip {
         display: inline-block;
         font-size: 10px;
+        color: #666;
     }
     /*轮播样式*/
 

@@ -107,11 +107,11 @@ public class UserController extends BaseController{
 
 //        "【导音教育】您的验证码是: 5678"
 
-        String code = ToolsFunction.getNumRandomString(6);
-        String content =  "【北京导音教育科技有限公司】您的验证码是: " + code;
-        ToolsFunction.sendSMS(phone,content);
+//        String code = ToolsFunction.getNumRandomString(6);
+//        String content =  "【北京导音教育科技有限公司】您的验证码是: " + code;
+//        ToolsFunction.sendSMS(phone,content);
         int time = (int) (new Date().getTime() / 1000);
-        iVerifyCode.addVerifyCode(phone,code,time,time);
+        iVerifyCode.addVerifyCode(phone,"1234",time,time);
         return JSONResult.ok();
     }
 

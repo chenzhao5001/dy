@@ -25,6 +25,16 @@ public class VideoDTO {
     @NotNull(message = "resolution_h:不能为空;")
     String resolution_h;
 
+    @NotNull(message = "pic_cut_url:不能为空;")
+    String pic_cut_url;
+
+    public String getPic_cut_url() {
+        return pic_cut_url;
+    }
+
+    public void setPic_cut_url(String pic_cut_url) {
+        this.pic_cut_url = pic_cut_url;
+    }
 
     public String getResolution_w() {
         return resolution_w;

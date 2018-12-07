@@ -46,6 +46,7 @@ public class VideoShow {
     String pic_up_path;
     String video_show_path;
     String video_up_path;
+    String pic_cut_path;
     int play_count;
     boolean praise;
     int praise_count;
@@ -56,6 +57,14 @@ public class VideoShow {
     boolean follow;
     int user_type;
     int create_time;
+
+    public String getPic_cut_path() {
+        return pic_cut_path;
+    }
+
+    public void setPic_cut_path(String pic_cut_path) {
+        this.pic_cut_path = pic_cut_path;
+    }
 
     public String getVideo_up_path() {
         return video_up_path;

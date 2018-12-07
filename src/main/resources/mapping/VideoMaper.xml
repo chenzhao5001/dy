@@ -14,7 +14,7 @@
         content,
         pic_up_path,
         video_up_path,
-        video_temp_path,
+        pic_cut_path,
         video_show_path,
         duration,
         resolution_w,
@@ -30,7 +30,7 @@
         #{content},
         #{pic_up_path},
         #{video_up_path},
-        #{video_temp_path},
+        #{pic_cut_path},
         #{video_show_path},
 
         #{duration},
