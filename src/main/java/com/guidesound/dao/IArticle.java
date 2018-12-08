@@ -2,10 +2,7 @@ package com.guidesound.dao;
 
 import com.guidesound.dto.ArticleDTO;
 import com.guidesound.find.ArticleFind;
-import com.guidesound.models.ArticleAnswer;
-import com.guidesound.models.ArticleInfo;
-import com.guidesound.models.ArticleComment;
-import com.guidesound.models.VideoInfo;
+import com.guidesound.models.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -51,6 +48,14 @@ public interface IArticle {
     @Update("update article set comment_count = comment_count + 1 where id = #{arg0}")
     void addMainComment(int article);
 
+    @Insert("insert into answerChat (answer_id,first_user_id,first_comment,second_user_id,second_comment,create_time) " +
+            "value (#{answer_id},#{first_user_id},#{first_comment},#{second_user_id},#{second_comment},#{create_time})")
+    void addAnswerComment(AnswerComment answerComment);
+    @Update("update articleAnswer set comment_count = comment_count + 1 where id = #{arg0}")
+    void addMainAnswerComment(int article);
+
+
+
     @Update("update articleChat set deleted = 1 where user_id = #{arg0} and article_id = #{arg1}")
     void deleteComment(int user_id,int article_id);
     @Update("update article set chat_count = chat_count - 1 where id = #{arg0}")
@@ -69,8 +74,15 @@ public interface IArticle {
     @Select("select count(*) from articleChat where article_id = #{arg0} and deleted = 0")
     int CommentCount(int article_id);
 
+    @Select("select count(*) from answerChat where answer_id = #{arg0} and deleted = 0")
+    int AnswerCommentCount(int article_id);
+
+
     @Select("select * from articleChat where article_id = #{arg0} and deleted = 0 order by create_time desc limit #{arg1},#{arg2}")
     List<ArticleComment> getCommentList(int article_id, int begin, int end);
+
+    @Select("select * from answerChat where answer_id = #{arg0} and deleted = 0 order by create_time desc limit #{arg1},#{arg2}")
+    List<AnswerComment> getAnswerCommentList(int answer_id, int begin, int end);
 
     @Select("select content from article where id = #{arg0}")
     String getContentById(int article_id);
@@ -109,6 +121,16 @@ public interface IArticle {
     void praiseArticleAnswer(int user_id,int answer_id,int create_time);
     @Update("update articleAnswer set praise_count = praise_count + 1 where id = #{arg0}")
     void praiseMainArticleAnswer(int answer_id);
+
+
+    @Select("select id from answerChatPraise where user_id = #{arg0} and answer_chat_id = #{arg1} and deleted = 0")
+    Integer findAnswerChatPraise(int user_id,int article_id);
+    @Insert("insert into answerChatPraise (user_id,answer_chat_id,create_time) value (#{arg0},#{arg1},#{arg2})")
+    void praiseAnswerChat(int user_id,int answer_chat_id,int create_time);
+    @Update("update answerChat set praise_count = praise_count + 1 where id = #{arg0}")
+    void praiseMainAnswerChat(int answer_chat_id);
+
+
 
     @Select("select * from articleAnswer where ask_id = #{arg0} limit #{arg1},#{arg2}")
     List<ArticleAnswer> answerList(int ask_id,int begin,int end);

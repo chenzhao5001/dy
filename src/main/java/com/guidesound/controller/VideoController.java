@@ -678,7 +678,8 @@ public class VideoController extends BaseController {
             item.setWatch_type_name(SignMap.getGradeTypeByID(item.getWatch_type()));
             item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
             String video_temp = item.getVideo_show_path().replace("cos.ap-beijing","file");
-            String pic_temp = item.getPic_up_path().replace("cos.ap-beijing","file");
+//            String pic_temp = item.getPic_up_path().replace("cos.ap-beijing","file");
+            String pic_temp = item.getPic_up_path().replace("cos.ap-beijing","image");
             item.setVideo_show_path(video_temp);
             item.setPic_up_path(pic_temp);
             idList.add(item.getUser_id());

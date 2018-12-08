@@ -52,6 +52,9 @@ public class VideoVerify {
     public void setUser_subject(String subject) {
         userInfo.user_subject = subject;
     }
+    public void setUser_uid(String uid) {
+        userInfo.setUser_uid(uid);
+    }
 
     public UserInfoTemp getUserInfo() {
         return userInfo;
@@ -83,5 +86,7 @@ public class VideoVerify {
 
     public void setVideo_id(int video_id) {
         this.video_id = video_id;
+        videoInfo.setVideo_id(video_id);
+
     }
 }

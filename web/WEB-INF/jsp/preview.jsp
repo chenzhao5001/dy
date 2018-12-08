@@ -8,19 +8,21 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        /** {*/
-            /*margin: 0;*/
-            /*padding: 0;*/
-            /*box-sizing: border-box;*/
-        /*}*/
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         /*div {*/
             /*width: 100%;*/
         /*}*/
 
+        body {
+            margin: 0;
+        }
         figure {
             /*position: relative;*/
-            margin: 10px 10px;
             text-align: center;
 
         }
@@ -30,6 +32,7 @@
         }
 
         p {
+            text-align: justify;
             font-size: 18px;
         }
 

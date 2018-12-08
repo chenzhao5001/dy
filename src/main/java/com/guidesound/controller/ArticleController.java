@@ -614,8 +614,117 @@ public class ArticleController extends BaseController {
         return ret;
     }
 
+    @RequestMapping("/comment_answer")
+    @ResponseBody
+    JSONResult commentAnswer(String answer_id,String first_user_id,
+                             String first_comment,String second_user_id,String second_comment) {
+        if(answer_id == null || first_user_id == null || first_comment == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        second_user_id = second_user_id == null ? "0" : second_user_id;
+        second_comment = second_comment == null ? "" : second_comment;
+
+        first_comment = getURLEncoderString(first_comment);
+        second_comment = getURLEncoderString(second_comment);
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        AnswerComment answerComment = new AnswerComment();
+        answerComment.setAnswer_id(Integer.parseInt(answer_id));
+        answerComment.setFirst_user_id(Integer.parseInt(first_user_id));
+        answerComment.setFirst_comment(first_comment);
+        answerComment.setSecond_user_id(Integer.parseInt(second_user_id));
+        answerComment.setSecond_comment(second_comment);
+        answerComment.setCreate_time((int)(new Date().getTime() / 1000));
+
+        iArticle.addAnswerComment(answerComment);
+        iArticle.addMainAnswerComment(Integer.parseInt(answer_id));
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/praise_answer_comment")
+    @ResponseBody
+    JSONResult commentAnswerPraise(String answer_comment_id) {
+        if(answer_comment_id == null) {
+            return JSONResult.errorMsg("缺少 answer_comment_id 参数");
+        }
+        int user_id = getCurrentUserId();
+        if(null == iArticle.findAnswerChatPraise(user_id,Integer.parseInt(answer_comment_id))) {
+            iArticle.praiseAnswerChat(user_id,Integer.parseInt(answer_comment_id), (int) (new Date().getTime() / 1000));
+            iArticle.praiseMainAnswerChat(Integer.parseInt(answer_comment_id));
+        } else {
+            return JSONResult.errorMsg("已经攒过了");
+        }
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/answer_comment_list")
+    @ResponseBody
+    JSONResult answerCommentList(String answer_id,String page,String size) {
+        if (answer_id == null) {
+            return JSONResult.errorMsg("answer_id");
+        }
+
+        int iPage = (page == null || page.equals("")) ?1:Integer.parseInt(page);
+        int iSize = (size == null || size.equals("")) ? 20:Integer.parseInt(size);
+        int begin = (iPage - 1)*iSize;
+        int end = iSize;
+
+        int count = iArticle.AnswerCommentCount(Integer.parseInt(answer_id));
+
+        List<AnswerComment> list = iArticle.getAnswerCommentList(Integer.parseInt(answer_id),begin,end);
+        if (list.size() > 0) {
+            List<Integer> user_ids = new ArrayList<>();
+            for (AnswerComment answerComment : list) {
+                answerComment.setFirst_comment(URLDecoderString(answerComment.getFirst_comment()));
+                answerComment.setSecond_comment(URLDecoderString(answerComment.getSecond_comment()));
+                if(!user_ids.contains(answerComment.getFirst_user_id())){
+                    user_ids.add(answerComment.getFirst_user_id());
+                }
+                if(!user_ids.contains(answerComment.getSecond_user_id())){
+                    user_ids.add(answerComment.getSecond_user_id());
+                }
+            }
+            List<UserInfo> user_list = iUser.getUserByIds(user_ids);
+            List<Integer> comment_ids = new ArrayList<>();
+            int currentUserID = getCurrentUserId();
+            if (currentUserID != 0) {
+                comment_ids = iArticle.getPraiseCommentArticle(currentUserID);
+            }
+            Map<Integer,UserInfo> usersMap = new HashMap<>();
+            for (UserInfo userInfo :user_list) {
+                usersMap.put(userInfo.getId(),userInfo);
+            }
+
+            for (AnswerComment answerComment : list) {
+                if( comment_ids.contains(answerComment.getId())) {
+                    answerComment.setPraise(true);
+                }
+
+                if(usersMap.get(answerComment.getFirst_user_id()) != null) {
+                    answerComment.setFirst_user_head(usersMap.get(answerComment.getFirst_user_id()).getHead());
+                    answerComment.setFirst_user_name(usersMap.get(answerComment.getFirst_user_id()).getName());
+                } else {
+                    answerComment.setFirst_user_head("");
+                    answerComment.setFirst_user_name("");
+                }
+
+                if(usersMap.get(answerComment.getSecond_user_id()) != null) {
+                    answerComment.setSecond_user_head(usersMap.get(answerComment.getSecond_user_id()).getHead());
+                    answerComment.setSecond_user_name(usersMap.get(answerComment.getSecond_user_id()).getName());
+                } else {
+                    answerComment.setSecond_user_head("");
+                    answerComment.setSecond_user_name("");
+                }
+            }
+
+        }
 
 
-
+        ListResp listResp = new ListResp();
+        listResp.setCount(count);
+        listResp.setList(list);
+        return JSONResult.ok(listResp);
+    }
 
 }

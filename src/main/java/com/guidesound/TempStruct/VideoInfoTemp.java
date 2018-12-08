@@ -1,11 +1,20 @@
 package com.guidesound.TempStruct;
 
 public class VideoInfoTemp {
+    public int video_id;
     public String video_title;
     public String video_subject;
     public String video_watch_type;
     public String video_duration;
     public String video_resolution;
+
+    public int getVideo_id() {
+        return video_id;
+    }
+
+    public void setVideo_id(int video_id) {
+        this.video_id = video_id;
+    }
 
     public String getVideo_title() {
         return video_title;

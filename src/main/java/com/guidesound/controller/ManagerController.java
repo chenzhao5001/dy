@@ -290,6 +290,7 @@ public class ManagerController {
                     videoVerify.setUser_level(SignMap.getUserLevelById(videoUser.getLevel()));
                     videoVerify.setUser_name(videoUser.getName());
                     videoVerify.setUser_subject(SignMap.getSubjectTypeById(videoUser.getSubject()));
+                    videoVerify.setUser_uid(String.valueOf(videoUser.getDy_id()));
                 }
                 videoVerifies.add(videoVerify);
             }
