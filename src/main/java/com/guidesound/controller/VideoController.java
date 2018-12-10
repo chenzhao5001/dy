@@ -728,6 +728,16 @@ public class VideoController extends BaseController {
             }
         }
     }
+
+    float getRecUser() {
+        int time = (int) (new Date().getTime() / 1000) - 3600*24*5;
+        int activeCount = iUser.getActiveUserByTime(time);
+        int upVideoCount = iVideo.getVideoCountByTime(time);
+        if(upVideoCount != 0) {
+            return (float) (upVideoCount*1.0 / upVideoCount);
+        }
+        return 0;
+    }
 }
 
 class RepList {

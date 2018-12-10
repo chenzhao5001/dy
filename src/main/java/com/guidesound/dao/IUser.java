@@ -179,5 +179,11 @@ public interface IUser {
     @Select("select * from user where id = #{arg0}")
     IntroductionInfo getIntroductionInfo(int user_id);
 
+    @Insert("insert into userActive  (user_guid,create_time) values (#{arg0},#{arg1})")
+    void setActive(String user_guid,int time);
+
+    @Select("select count(*) from userActive where create_time > #{arg0}")
+    int getActiveUserByTime(int time);
+
 }
 

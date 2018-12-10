@@ -780,6 +780,16 @@ public class UserController extends BaseController{
         return JSONResult.ok();
 
     }
+
+    @RequestMapping(value = "/user_active")
+    @ResponseBody
+    JSONResult userActive(String user_guid) {
+        if(user_guid == null) {
+            return JSONResult.errorMsg("缺少user_guid");
+        }
+        iUser.setActive(user_guid, (int) (new Date().getTime() / 1000));
+        return JSONResult.ok();
+    }
 }
 
 

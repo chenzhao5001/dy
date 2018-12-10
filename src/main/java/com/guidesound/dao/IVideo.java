@@ -152,4 +152,9 @@ public interface IVideo {
     @Select("select * from video where type_list like '%1%' and examine_status = 1 and deleted = 0 order by create_time desc")
     List<VideoShow> getRecommendVideo();
 
+//    @Select("")
+//    int foo();
+    @Select("select count(*) from video where create_time > #{arg0}")
+    int getVideoCountByTime(int time);
+
 }
