@@ -141,12 +141,12 @@ public interface IVideo {
 
     @Select("select count(*) from video where user_id = #{arg0} and examine_status = 1 and deleted = 0")
     int getPublishVidoeCountByUserId(int user_id);
-    @Select("select count(*) from video where user_id = #{arg0} and (examine_status = 1 or examine_status = 0) and deleted = 0")
+    @Select("select count(*) from video where user_id = #{arg0} and (examine_status = 1 or examine_status = 0 or examine_status = 3) and deleted = 0")
     int getPublishVidoeCountByUserId_2(int user_id);
     @Select("select * from video where user_id = #{arg0} and examine_status = 1 and deleted = 0 limit #{arg1},#{arg2}")
     List<VideoShow> getPublishVidoeByUserId(int user_id,int begin,int end);
 
-    @Select("select * from video where user_id = #{arg0} and (examine_status = 1 or examine_status = 0) and deleted = 0 limit #{arg1},#{arg2}")
+    @Select("select * from video where user_id = #{arg0} and (examine_status = 1 or examine_status = 0 or examine_status = 3) and deleted = 0 limit #{arg1},#{arg2}")
     List<VideoShow> getPublishVidoeByUserId_2(int user_id,int begin,int end);
 
     @Select("select * from video where type_list like '%1%' and examine_status = 1 and deleted = 0 order by create_time desc")
@@ -156,5 +156,13 @@ public interface IVideo {
 //    int foo();
     @Select("select count(*) from video where create_time > #{arg0}")
     int getVideoCountByTime(int time);
+
+    @Select("select push_vidoes from userVideoPush where user_guid = #{arg0}")
+    String getPushVideoByUserGuid(String user_guid);
+
+    @Insert("insert into userVideoPush (user_guid,push_vidoes) values (#{arg0},#{arg1})")
+    void insertPushVideo(String user_guid,String videos);
+    @Update("update userVideoPush set push_vidoes = #{arg1} where user_guid = #{arg0}")
+    void updatePushVidoe(String user_guid,String videos);
 
 }

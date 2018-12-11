@@ -176,7 +176,7 @@ public class ManagerController {
                     messageProducer.send(textMessage);
                 }
                 connection.close();
-//                iVideo.setExamineLoading(Integer.parseInt(video_id),type_list);
+                iVideo.setExamineLoading(Integer.parseInt(video_id),type_list);
 
             } catch (JMSException e) {
                 e.printStackTrace();

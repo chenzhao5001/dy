@@ -7,8 +7,8 @@ import com.guidesound.find.VideoFind;
 import com.guidesound.models.*;
 import com.guidesound.resp.ListResp;
 import com.guidesound.util.*;
-//import com.qcloud.Utilities.Json.JSONObject;
 import com.qcloud.Utilities.Json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -141,44 +139,22 @@ public class VideoController extends BaseController {
         int begin = (iPage -1)*iSize;
         int end =  iSize;
 
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        int currentUserID = 0;
-
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    currentUserID = TockenUtil.getUserIdByTocket(token);
-                }
-            }
+        String videoTemp = iVideo.getPushVideoByUserGuid(user_guid);
+        boolean insertFlag = false;
+        if(videoTemp == null) {
+            videoTemp = "";
+            insertFlag = true;
+        }
+        ArrayList<String> arrVidoe = new ArrayList<>();
+        if(!videoTemp.equals("")) {
+            arrVidoe =  new ArrayList<String>(Arrays.asList(videoTemp.split(",")));
         }
 
         List<VideoShow> video_list = new ArrayList<>();
-        if(channel.equals("1")) {
+        if (channel.equals("1")) {
             List<VideoShow> all_list = iVideo.getRecommendVideo();
-            for (int i = 0; i < all_list.size(); i++) {
-                if(video_list.size() == 0) {
-                    video_list.add(all_list.get(0));
-                } else {
-                    for(int j = i; j < all_list.size(); j++) {
-                        if(all_list.get(j).getUser_id() != video_list.get(i-1).getUser_id()) {
-                            video_list.add(all_list.get(j));
-                            if(j != i) {
-                                Collections.swap(all_list,i,j);
-                            }
-                            break;
-                        }
-                        if(j == all_list.size() -1) {
-                            video_list.add(all_list.get(i));
-                        }
-                    }
+            video_list = getRecVideo(all_list,user_guid);
 
-                }
-//                if(video_list.size() == 20) {
-//                    break;
-//                }
-            }
         } else {
             List<String> list = Arrays.asList(channel.split(","));
             int count_temp = iVideo.getVideoNumByChannel(list);
@@ -192,16 +168,72 @@ public class VideoController extends BaseController {
             video_list = iVideo.getVideoByChannel(list,begin,end);
         }
 
-
-        improveVideoList(currentUserID,video_list);
-
-
+        improveVideoList(video_list);
         ListResp ret = new ListResp();
         ret.setCount(video_list.size());
         ret.setList(video_list);
 
         return JSONResult.ok(ret);
     }
+
+    List<VideoShow> getRecVideo(List<VideoShow> all_list,String user_guid) {
+        List<VideoShow> video_list = new ArrayList<>();
+
+        String videoTemp = iVideo.getPushVideoByUserGuid(user_guid);
+        boolean insertFlag = false;
+        if(videoTemp == null) {
+            videoTemp = "";
+            insertFlag = true;
+        }
+        ArrayList<String> arrVidoe = new ArrayList<>();
+        if(!videoTemp.equals("")) {
+            arrVidoe =  new ArrayList<String>(Arrays.asList(videoTemp.split(",")));
+        }
+
+        for (int i = 0; i < all_list.size(); i++) {
+            if (video_list.size() == 20) {
+                break;
+            }
+            for (int j = i; j < all_list.size(); j++) {
+                if (video_list.size() == 20) {
+                    break;
+                }
+                int temp = all_list.get(j).getId();
+                if (arrVidoe.contains(String.valueOf(temp))) {
+                    continue;
+                }
+                if (video_list.size() == 0) {
+                    video_list.add(all_list.get(j));
+                    arrVidoe.add(String.valueOf(all_list.get(j).getId()));
+                    continue;
+                }
+                if (all_list.get(j).getUser_id() != video_list.get(video_list.size() -1).getUser_id()) {
+                    video_list.add(all_list.get(j));
+                    arrVidoe.add(String.valueOf(all_list.get(j).getId()));
+                    i++;
+                    if (j != i) {
+                        Collections.swap(all_list, i, j);
+                    }
+                    continue;
+                }
+                if (j == all_list.size() - 1) {
+                    video_list.add(all_list.get(i));
+                    arrVidoe.add(String.valueOf(all_list.get(j).getId()));
+                }
+            }
+        }
+
+        String strVideos= StringUtils.join(arrVidoe, ",");
+        strVideos += ",";
+        if(insertFlag == true) {
+            iVideo.insertPushVideo(user_guid,strVideos);
+        } else {
+            iVideo.updatePushVidoe(user_guid,strVideos);
+        }
+
+        return video_list;
+    }
+
     /**
      * 获取视频列表
      */
@@ -243,21 +275,8 @@ public class VideoController extends BaseController {
             ret.setList(new ArrayList<>());
             return JSONResult.ok(ret);
         }
-
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        int currentUserID = 0;
-
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    currentUserID = TockenUtil.getUserIdByTocket(token);
-                }
-            }
-        }
         List<VideoShow> list_temp  = iVideo.findVideo(videoFind);
-        improveVideoList(currentUserID,list_temp);
+        improveVideoList(list_temp);
         ret.setCount(count_temp);
         ret.setList(list_temp);
         return JSONResult.ok(ret);
@@ -534,19 +553,7 @@ public class VideoController extends BaseController {
             return JSONResult.ok(ret);
         }
 
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        int currentUserID = 0;
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    currentUserID = TockenUtil.getUserIdByTocket(token);
-                }
-            }
-        }
-
-        improveVideoList(currentUserID,list);
+        improveVideoList(list);
 
         ret.setCount(list.size());
         ret.setList(list);
@@ -566,17 +573,7 @@ public class VideoController extends BaseController {
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        int currentUserID = 0;
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    currentUserID = TockenUtil.getUserIdByTocket(token);
-                }
-            }
-        }
-
+        int currentUserID = getCurrentUserId();
         boolean flag = currentUserID == Integer.parseInt(user_id);
         int iPage = page == null ? 1:Integer.parseInt(page);
         int iSize = size == null ? 20:Integer.parseInt(size);
@@ -601,8 +598,7 @@ public class VideoController extends BaseController {
             list = iVideo.getPublishVidoeByUserId(Integer.parseInt(user_id),begin,end);
         }
 
-        improveVideoList(currentUserID,list);
-
+        improveVideoList(list);
         ret.setCount(count);
         ret.setList(list);
         return JSONResult.ok(ret);
@@ -672,7 +668,9 @@ public class VideoController extends BaseController {
         return JSONResult.ok(retData);
     }
 
-    void improveVideoList(int user_id,List<VideoShow> list_temp) {
+    void improveVideoList(List<VideoShow> list_temp) {
+
+        int user_id = getCurrentUserId();
         List<Integer> idList = new ArrayList<>();
         for(VideoShow item:list_temp) {
             item.setWatch_type_name(SignMap.getGradeTypeByID(item.getWatch_type()));
@@ -682,6 +680,9 @@ public class VideoController extends BaseController {
             String pic_temp = item.getPic_up_path().replace("cos.ap-beijing","image");
             item.setVideo_show_path(video_temp);
             item.setPic_up_path(pic_temp);
+            if(item.getExamine_status() == 3) {
+                item.setExamine_status(0);
+            }
             idList.add(item.getUser_id());
         }
 
