@@ -45,6 +45,7 @@
             <mvc:exclude-mapping path="/video/hot_list"/>
             <mvc:exclude-mapping path="/video/publish_video"/>
             <mvc:exclude-mapping path="/video/collection_video"/>
+            <mvc:exclude-mapping path="/video/video_play_finish"/>
 
             <mvc:exclude-mapping path="/article/answer_list"/>
             <mvc:exclude-mapping path="/article/comment_list"/>

@@ -1,10 +1,7 @@
 package com.guidesound.dao;
 
 import com.guidesound.find.VideoFind;
-import com.guidesound.models.User;
-import com.guidesound.models.Video;
-import com.guidesound.models.VideoShow;
-import com.guidesound.models.VideoInfo;
+import com.guidesound.models.*;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -116,9 +113,9 @@ public interface IVideo {
             + "#{item}"
             + "</foreach>"
             + " and examine_status = 1"
-            + " limit #{arg1},#{arg2}"
+            + " and type_list like '%1%'"
             + "</script>")
-    List<VideoShow> getVideoByChannel(@Param("iList") List<String> iList, int begin, int end);
+    List<VideoShow> getVideoByChannel(@Param("iList") List<String> iList);
 
     @Insert("insert into videoShare (user_id,video_id,created_time) values (#{arg0},#{arg1},#{arg2})")
     void shareVideo(int user_id, int video_id, int created_time);
@@ -160,9 +157,28 @@ public interface IVideo {
     @Select("select push_vidoes from userVideoPush where user_guid = #{arg0}")
     String getPushVideoByUserGuid(String user_guid);
 
+    @Select("select finish_videos from userPlayFinish where user_guid = #{arg0}")
+    String getFinishVideoByUserGuid(String user_guid);
+
     @Insert("insert into userVideoPush (user_guid,push_vidoes) values (#{arg0},#{arg1})")
     void insertPushVideo(String user_guid,String videos);
     @Update("update userVideoPush set push_vidoes = #{arg1} where user_guid = #{arg0}")
     void updatePushVidoe(String user_guid,String videos);
 
+    @Select("<script>"
+            + "update video set rec_count = rec_count +1  WHERE id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    void addRecommend(@Param("iList") List<Integer> iList);
+
+    @Select("select * from userPlayFinish where user_guid = #{arg0}")
+    List<UserPlayFinish> getUserPlayInfo(String user_guid);
+
+    @Update("update userPlayFinish set finish_videos = #{arg1} where id = #{arg0}")
+    void upPlayFinish(int id,String videos);
+
+    @Insert("insert into userPlayFinish (user_guid,finish_videos,create_time) values (#{arg0},#{arg1},#{arg2})")
+    void createPlayFinish(String user_guid,String finish_videos,int create_time);
 }

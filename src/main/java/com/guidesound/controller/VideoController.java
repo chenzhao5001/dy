@@ -139,41 +139,59 @@ public class VideoController extends BaseController {
         int begin = (iPage -1)*iSize;
         int end =  iSize;
 
-        String videoTemp = iVideo.getPushVideoByUserGuid(user_guid);
-        boolean insertFlag = false;
+        String videoTemp = iVideo.getFinishVideoByUserGuid(user_guid);
         if(videoTemp == null) {
             videoTemp = "";
-            insertFlag = true;
         }
-        ArrayList<String> arrVidoe = new ArrayList<>();
-        if(!videoTemp.equals("")) {
-            arrVidoe =  new ArrayList<String>(Arrays.asList(videoTemp.split(",")));
-        }
-
         List<VideoShow> video_list = new ArrayList<>();
+        List<VideoShow> all_list = new ArrayList<>();
+        Collections.shuffle(video_list);
         if (channel.equals("1")) {
-            List<VideoShow> all_list = iVideo.getRecommendVideo();
-            video_list = getRecVideo(all_list,user_guid);
-
+            all_list = iVideo.getRecommendVideo();
+            Collections.shuffle(all_list);
+            video_list = getRecVideos(all_list,user_guid);
         } else {
             List<String> list = Arrays.asList(channel.split(","));
-            int count_temp = iVideo.getVideoNumByChannel(list);
-            if (count_temp == 0) {
-                ListResp ret = new ListResp();
-                ret.setCount(0);
-                ret.setList(new ArrayList<>());
-                return JSONResult.ok(ret);
-            }
-
-            video_list = iVideo.getVideoByChannel(list,begin,end);
+            all_list = iVideo.getVideoByChannel(list);
+            Collections.shuffle(all_list);
+            video_list = getRecVideos(all_list,user_guid);
         }
 
         improveVideoList(video_list);
+        List<Integer> videoIDs = new ArrayList<>();
+        for(VideoShow item : video_list) {
+            videoIDs.add(item.getId());
+        }
+        if(videoIDs.size() > 0) {
+            iVideo.addRecommend(videoIDs);
+        }
         ListResp ret = new ListResp();
         ret.setCount(video_list.size());
         ret.setList(video_list);
 
         return JSONResult.ok(ret);
+    }
+
+    List<VideoShow> getRecVideos(List<VideoShow> all_list,String user_guid) {
+        if(all_list.size() < 1) {
+            return new ArrayList<>();
+        }
+        List<VideoShow> video_list = new ArrayList<>();
+        String videoTemp = iVideo.getFinishVideoByUserGuid(user_guid);
+        ArrayList<String> arrVidoe = new ArrayList<>();
+        if(!videoTemp.equals("")) {
+            arrVidoe =  new ArrayList<String>(Arrays.asList(videoTemp.split(",")));
+        }
+        List<VideoShow> retList = new ArrayList<>();
+        for (VideoShow item : all_list) {
+            if(!arrVidoe.contains(item.getId())) {
+                retList.add(item);
+                if(retList.size() >= 20) {
+                    break;
+                }
+            }
+        }
+        return retList;
     }
 
     List<VideoShow> getRecVideo(List<VideoShow> all_list,String user_guid) {
@@ -666,6 +684,34 @@ public class VideoController extends BaseController {
         retData.setExpiredTime(String.valueOf(retObject.getInt("expiredTime")));
 
         return JSONResult.ok(retData);
+    }
+
+    @RequestMapping(value = "/video_play_finish")
+    @ResponseBody
+    JSONResult videoPlayFinish(String user_guid,String video_id) {
+        if(user_guid == null || video_id == null) {
+            return JSONResult.errorMsg("缺少 user_guid 或 video_id");
+        }
+        List<UserPlayFinish> list = iVideo.getUserPlayInfo(user_guid);
+        if(list.size() > 0) {
+            UserPlayFinish userPlayFinish = list.get(0);
+            String videos = userPlayFinish.getFinish_videos();
+            ArrayList<String> arrVidoe = new ArrayList<>();
+            if(!videos.equals("")) {
+                arrVidoe =  new ArrayList<String>(Arrays.asList(videos.split(",")));
+                if(!arrVidoe.contains(video_id)) {
+                    arrVidoe.add(video_id);
+                }
+            } else {
+                arrVidoe.add(video_id);
+            }
+            String strVideos = StringUtils.join(arrVidoe, ",");
+            iVideo.upPlayFinish(userPlayFinish.getId(),strVideos);
+
+        } else {
+            iVideo.createPlayFinish(user_guid,video_id, (int) (new Date().getTime()/1000));
+        }
+        return JSONResult.ok();
     }
 
     void improveVideoList(List<VideoShow> list_temp) {
