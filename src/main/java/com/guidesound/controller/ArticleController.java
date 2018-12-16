@@ -425,6 +425,22 @@ public class ArticleController extends BaseController {
         return "preview";
     }
 
+    @RequestMapping("/answer_preview")
+    public String answerPreview(String answer_id, ModelMap mode) throws IOException {
+        if(answer_id == null) {
+            mode.addAttribute("content","答案不存在");
+            return "preview";
+        }
+        String url = iArticle.getAnswerContentById(Integer.parseInt(answer_id));
+
+        Request request=new Request.Builder().url(url).build();
+        Call call = okHttpClient.newCall(request);
+        Response response = call.execute();
+        String content = response.body().string();
+        mode.addAttribute("content",content);
+        return "preview";
+    }
+
     @RequestMapping("/add_ask")
     @ResponseBody
     JSONResult addAsk(String title,String pic1_url,String pic2_url,String pic3_url) {
@@ -483,6 +499,22 @@ public class ArticleController extends BaseController {
         return JSONResult.ok();
     }
 
+    @RequestMapping("collection_answer")
+    @ResponseBody
+    JSONResult collectionAnswer(String answer_id) {
+        if(answer_id == null) {
+            return JSONResult.errorMsg("缺少 answer_id 参数");
+        }
+
+        int user_id = getCurrentUserId();
+        int count = iArticle.getAnswerCollection(user_id,Integer.parseInt(answer_id));
+        if(count > 0) {
+            return JSONResult.errorMsg("答案已经搜藏");
+        }
+        iArticle.collectAnswer(user_id,Integer.parseInt(answer_id), (int) (new Date().getTime()/1000));
+        return JSONResult.ok();
+
+    }
     @RequestMapping("/answer_list")
     @ResponseBody
     JSONResult getAnswerList(String ask_id,String page,String size) {
@@ -503,12 +535,26 @@ public class ArticleController extends BaseController {
         getAnswerExtendInfo(list);
         int user_id = getCurrentUserId();
         List<Integer> answerList = new ArrayList<>();
+        List<Integer> collectionList = new ArrayList<>();
+        List<Integer> followList = new ArrayList<>();
         if (user_id != 0) {
             answerList = iArticle.getAnswerPraise(user_id);
+            collectionList = iArticle.getUserCollection(user_id);
+            followList = iUser.getFollowUsers(user_id);
         }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         for (ArticleAnswer item : list) {
+            item.setContent_url(request.getScheme() +"://" + request.getServerName()  + ":"
+                    + request.getServerPort() + "/article/answer_preview?answer_id=" + item.getId());
             if(answerList.contains(item.getId())) {
                 item.setPraise(true);
+            }
+            if(collectionList.contains(item.getId())) {
+                item.setCollection(true);
+            }
+            if(followList.contains(item.getId())) {
+                item.setFollow(true);
             }
         }
 

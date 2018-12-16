@@ -87,6 +87,9 @@ public interface IArticle {
     @Select("select content from article where id = #{arg0}")
     String getContentById(int article_id);
 
+    @Select("select content_url from articleAnswer where id = #{arg0}")
+    String getAnswerContentById(int answer_id);
+
     @Insert("insert into article (head,user_id,head_pic1,head_pic2,head_pic3,create_time,type) value (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},2)")
     void addAsk(String title,int user_id,String pic1,String pic2,String pic3,int create_tile);
 
@@ -140,6 +143,9 @@ public interface IArticle {
     @Select("select answer_id from articleAnswerPraise where user_id = #{arg0} and deleted = 0")
     List<Integer> getAnswerPraise(int user_id);
 
+    @Select("select answer_id from articleAnswerCollection where user_id = #{arg0} and deleted = 0")
+    List<Integer> getUserCollection(int user_id);
+
     @Select("select * from article where examine_person = #{arg0} and deleted = 0 and examine_status = 0")
     List<ArticleInfo> getArticleByAdminId(int admin_id);
 
@@ -159,4 +165,9 @@ public interface IArticle {
             + "</foreach>"
             + "</script>")
     void setExaminePerson(@Param("iList") List<Integer> iList, int user_id);
+
+    @Select("select count(*) from articleAnswerCollection where user_id = #{arg0} and answer_id = #{arg1}")
+    int getAnswerCollection(int user_id,int answer_id);
+    @Update("insert into articleAnswerCollection (user_id,answer_id,create_time) value (#{arg0},#{arg1},#{arg2})")
+    void collectAnswer(int user_id,int answer_id,int create_time);
 }

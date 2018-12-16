@@ -12,6 +12,8 @@ public class ArticleAnswer {
     String content_url;
     int praise_count;
     boolean praise;
+    boolean collection;
+    boolean follow;
 
     private String user_head;
     private String user_name;
@@ -19,7 +21,23 @@ public class ArticleAnswer {
     private String user_grade_level_name;
     private int comment_count;
 
+    public boolean isFollow() {
+        return follow;
+    }
+
+    public void setFollow(boolean follow) {
+        this.follow = follow;
+    }
+
     int create_time;
+
+    public boolean isCollection() {
+        return collection;
+    }
+
+    public void setCollection(boolean collection) {
+        this.collection = collection;
+    }
 
     public String getUser_head() {
         return user_head;

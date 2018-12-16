@@ -7,11 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b7c7c742-9c4d-41b3-a82e-f22b8938a7fb" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/dto/ArticleDTO.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/dto/ArticleDTO.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/models/ArticleAnswer.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/models/ArticleAnswer.java" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
@@ -31,21 +28,9 @@
       <file leaf-file-name="IArticle.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3200">
-              <caret line="133" column="28" lean-forward="false" selection-start-line="133" selection-start-column="28" selection-end-line="133" selection-end-column="28" />
+            <state relative-caret-position="123">
+              <caret line="143" column="18" lean-forward="false" selection-start-line="143" selection-start-column="18" selection-end-line="143" selection-end-column="18" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="VideoController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11475">
-              <caret line="486" column="31" lean-forward="false" selection-start-line="486" selection-start-column="31" selection-end-line="486" selection-end-column="31" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -73,8 +58,18 @@
       <file leaf-file-name="ArticleController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="513" column="0" lean-forward="true" selection-start-line="513" selection-start-column="0" selection-end-line="513" selection-end-column="0" />
+            <state relative-caret-position="200">
+              <caret line="549" column="49" lean-forward="false" selection-start-line="549" selection-start-column="49" selection-end-line="549" selection-end-column="49" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BaseController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/BaseController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1050">
+              <caret line="60" column="8" lean-forward="false" selection-start-line="60" selection-start-column="8" selection-end-line="60" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -83,8 +78,8 @@
       <file leaf-file-name="IUser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IUser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="16" column="20" lean-forward="false" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
+            <state relative-caret-position="112">
+              <caret line="78" column="22" lean-forward="false" selection-start-line="78" selection-start-column="18" selection-end-line="78" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -113,27 +108,17 @@
       <file leaf-file-name="ArticleAnswer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/ArticleAnswer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="50">
+            <state relative-caret-position="25">
               <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
               <folding>
-                <element signature="e#479#480#0" expanded="true" />
-                <element signature="e#511#512#0" expanded="true" />
-                <element signature="e#561#562#0" expanded="true" />
-                <element signature="e#603#604#0" expanded="true" />
-                <element signature="e#639#640#0" expanded="true" />
-                <element signature="e#671#672#0" expanded="true" />
-                <element signature="e#721#722#0" expanded="true" />
-                <element signature="e#763#764#0" expanded="true" />
-                <element signature="e#796#797#0" expanded="true" />
-                <element signature="e#828#829#0" expanded="true" />
-                <element signature="e#875#876#0" expanded="true" />
-                <element signature="e#917#918#0" expanded="true" />
-                <element signature="e#965#966#0" expanded="true" />
-                <element signature="e#1009#1010#0" expanded="true" />
-                <element signature="e#1186#1187#0" expanded="true" />
-                <element signature="e#1222#1223#0" expanded="true" />
-                <element signature="e#1277#1278#0" expanded="true" />
-                <element signature="e#1327#1328#0" expanded="true" />
+                <element signature="e#498#499#0" expanded="true" />
+                <element signature="e#527#528#0" expanded="true" />
+                <element signature="e#572#573#0" expanded="true" />
+                <element signature="e#608#609#0" expanded="true" />
+                <element signature="e#667#668#0" expanded="true" />
+                <element signature="e#700#701#0" expanded="true" />
+                <element signature="e#753#754#0" expanded="true" />
+                <element signature="e#797#798#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -164,7 +149,6 @@
       <find>idList</find>
       <find>getUserInfoByIds</find>
       <find>subject</find>
-      <find>request</find>
       <find>abstract</find>
       <find>resolution_x</find>
       <find>article_channel</find>
@@ -189,6 +173,9 @@
       <find>comment</find>
       <find>/comment</find>
       <find>improveVideoList</find>
+      <find>foll</find>
+      <find>preview</find>
+      <find>request</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -241,10 +228,10 @@
         <option value="$PROJECT_DIR$/web/WEB-INF/GuideSound-servlet.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IVideo.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dto/ArticleDTO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/ArticleAnswer.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/ArticleAnswer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" />
       </list>
     </option>
   </component>
@@ -345,6 +332,15 @@
               <item name="guidesound" type="462c0819:PsiDirectoryNode" />
               <item name="controller" type="462c0819:PsiDirectoryNode" />
               <item name="VideoController.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </path>
+            <path>
+              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
+              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="guidesound" type="462c0819:PsiDirectoryNode" />
+              <item name="dao" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
@@ -624,12 +620,12 @@
       <workItem from="1544428225230" duration="2000" />
       <workItem from="1544429335292" duration="3000" />
       <workItem from="1544429528740" duration="44201000" />
-      <workItem from="1544927426018" duration="55000" />
+      <workItem from="1544927426018" duration="4062000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="206744000" />
+    <option name="totallyTimeSpent" value="210751000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -642,6 +638,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -655,8 +652,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2911184" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35032895" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -664,7 +662,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46710527" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2632375" sideWeight="0.48867315" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2632375" sideWeight="0.48867315" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="JRebel" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2730711" sideWeight="0.51132685" order="2" side_tool="true" content_ui="tabs" />
@@ -674,7 +672,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -913,14 +910,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/BaseController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="49" column="8" lean-forward="false" selection-start-line="49" selection-start-column="8" selection-end-line="49" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/jre/lib/deploy.jar!/com/sun/deploy/util/StringUtils.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -1019,14 +1008,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3200">
-          <caret line="133" column="28" lean-forward="false" selection-start-line="133" selection-start-column="28" selection-end-line="133" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="11475">
@@ -1053,14 +1034,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IUser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="16" column="20" lean-forward="false" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/ToolsFunction.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7450">
@@ -1077,33 +1050,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/ArticleAnswer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding>
-            <element signature="e#479#480#0" expanded="true" />
-            <element signature="e#511#512#0" expanded="true" />
-            <element signature="e#561#562#0" expanded="true" />
-            <element signature="e#603#604#0" expanded="true" />
-            <element signature="e#639#640#0" expanded="true" />
-            <element signature="e#671#672#0" expanded="true" />
-            <element signature="e#721#722#0" expanded="true" />
-            <element signature="e#763#764#0" expanded="true" />
-            <element signature="e#796#797#0" expanded="true" />
-            <element signature="e#828#829#0" expanded="true" />
-            <element signature="e#875#876#0" expanded="true" />
-            <element signature="e#917#918#0" expanded="true" />
-            <element signature="e#965#966#0" expanded="true" />
-            <element signature="e#1009#1010#0" expanded="true" />
-            <element signature="e#1186#1187#0" expanded="true" />
-            <element signature="e#1222#1223#0" expanded="true" />
-            <element signature="e#1277#1278#0" expanded="true" />
-            <element signature="e#1327#1328#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/ArticleInfo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="725">
@@ -1112,10 +1058,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/BaseController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1050">
+          <caret line="60" column="8" lean-forward="false" selection-start-line="60" selection-start-column="8" selection-end-line="60" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/ArticleAnswer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <folding>
+            <element signature="e#498#499#0" expanded="true" />
+            <element signature="e#527#528#0" expanded="true" />
+            <element signature="e#572#573#0" expanded="true" />
+            <element signature="e#608#609#0" expanded="true" />
+            <element signature="e#667#668#0" expanded="true" />
+            <element signature="e#700#701#0" expanded="true" />
+            <element signature="e#753#754#0" expanded="true" />
+            <element signature="e#797#798#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="143" column="18" lean-forward="false" selection-start-line="143" selection-start-column="18" selection-end-line="143" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IUser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="112">
+          <caret line="78" column="22" lean-forward="false" selection-start-line="78" selection-start-column="18" selection-end-line="78" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="513" column="0" lean-forward="true" selection-start-line="513" selection-start-column="0" selection-end-line="513" selection-end-column="0" />
+        <state relative-caret-position="200">
+          <caret line="549" column="49" lean-forward="false" selection-start-line="549" selection-start-column="49" selection-end-line="549" selection-end-column="49" />
           <folding />
         </state>
       </provider>
