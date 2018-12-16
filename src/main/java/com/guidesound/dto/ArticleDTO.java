@@ -7,12 +7,9 @@ public class ArticleDTO {
     @NotNull(message = "head:不能为空;")
     String head;
 
-    @NotNull(message = "head_pic1:不能为空;")
-    String head_pic1;
-    @NotNull(message = "head_pic2:不能为空;")
-    String head_pic2;
-    @NotNull(message = "head_pic3:不能为空;")
-    String head_pic3;
+    public String head_pic1;
+    public String head_pic2;
+    public String head_pic3;
     @NotNull(message = "content:不能为空;")
     String content;
 

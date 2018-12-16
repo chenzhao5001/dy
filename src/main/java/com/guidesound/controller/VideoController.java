@@ -179,7 +179,7 @@ public class VideoController extends BaseController {
         List<VideoShow> video_list = new ArrayList<>();
         String videoTemp = iVideo.getFinishVideoByUserGuid(user_guid);
         ArrayList<String> arrVidoe = new ArrayList<>();
-        if(!videoTemp.equals("")) {
+        if(videoTemp != null && !videoTemp.equals("")) {
             arrVidoe =  new ArrayList<String>(Arrays.asList(videoTemp.split(",")));
         }
         List<VideoShow> retList = new ArrayList<>();

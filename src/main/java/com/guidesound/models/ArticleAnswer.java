@@ -12,7 +12,54 @@ public class ArticleAnswer {
     String content_url;
     int praise_count;
     boolean praise;
+
+    private String user_head;
+    private String user_name;
+    private int user_type;
+    private String user_grade_level_name;
+    private int comment_count;
+
     int create_time;
+
+    public String getUser_head() {
+        return user_head;
+    }
+
+    public void setUser_head(String user_head) {
+        this.user_head = user_head;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public int getUser_type() {
+        return user_type;
+    }
+
+    public void setUser_type(int user_type) {
+        this.user_type = user_type;
+    }
+
+    public String getUser_grade_level_name() {
+        return user_grade_level_name;
+    }
+
+    public void setUser_grade_level_name(String user_grade_level_name) {
+        this.user_grade_level_name = user_grade_level_name;
+    }
+
+    public int getComment_count() {
+        return comment_count;
+    }
+
+    public void setComment_count(int comment_count) {
+        this.comment_count = comment_count;
+    }
 
     public int getId() {
         return id;

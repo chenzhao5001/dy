@@ -131,6 +131,8 @@ public interface IArticle {
     void praiseMainAnswerChat(int answer_chat_id);
 
 
+    @Select("select count(*) from articleAnswer where ask_id = #{arg0}")
+    int answerCount(int ask_id);
 
     @Select("select * from articleAnswer where ask_id = #{arg0} limit #{arg1},#{arg2}")
     List<ArticleAnswer> answerList(int ask_id,int begin,int end);

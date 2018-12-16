@@ -57,6 +57,10 @@ public class ArticleController extends BaseController {
             return JSONResult.errorMsg(msg.toString());
         }
 
+        articleDTO.head_pic1 = articleDTO.head_pic1 == null ? "":articleDTO.head_pic1;
+        articleDTO.head_pic2 = articleDTO.head_pic2 == null ? "":articleDTO.head_pic2;
+        articleDTO.head_pic3 = articleDTO.head_pic3 == null ? "":articleDTO.head_pic3;
+
         User currentUser = (User)request.getAttribute("user_info");
 
         articleDTO.setContent(upStringToCloud(articleDTO.getContent()));
@@ -176,9 +180,10 @@ public class ArticleController extends BaseController {
         articleComment.setCreate_time((int)(new Date().getTime() / 1000));
 
         iArticle.addComment(articleComment);
-
         iArticle.addMainComment(Integer.parseInt(article_id));
-        return JSONResult.ok();
+        articleComment.setFirst_comment(URLDecoderString(first_comment));
+        articleComment.setSecond_comment(URLDecoderString(second_comment));
+        return JSONResult.ok(articleComment);
     }
 
     /**
@@ -490,8 +495,12 @@ public class ArticleController extends BaseController {
         int begin = (iPage - 1)*iSize;
         int end = iSize;
 
-        List<ArticleAnswer> list = iArticle.answerList(Integer.parseInt(ask_id),begin,end);
-
+        int count = iArticle.answerCount(Integer.parseInt(ask_id));
+        List<ArticleAnswer> list  = new ArrayList<>();
+        if(count > 0) {
+            list = iArticle.answerList(Integer.parseInt(ask_id),begin,end);
+        }
+        getAnswerExtendInfo(list);
         int user_id = getCurrentUserId();
         List<Integer> answerList = new ArrayList<>();
         if (user_id != 0) {
@@ -502,7 +511,41 @@ public class ArticleController extends BaseController {
                 item.setPraise(true);
             }
         }
-        return JSONResult.ok(list);
+
+        ListResp listResp = new ListResp();
+        listResp.setCount(count);
+        listResp.setList(list);
+
+        return JSONResult.ok(listResp);
+    }
+
+    void getAnswerExtendInfo(List<ArticleAnswer> list) {
+        if(list.size()  < 1) {
+            return;
+        }
+
+        List<Integer> user_ids = new ArrayList<>();
+        for (ArticleAnswer item : list) {
+            if(!user_ids.contains(item.getUser_id())) {
+                user_ids.add(item.getUser_id());
+            }
+        }
+        if(user_ids.size() > 0) {
+            List<UserInfo> userList = iUser.getUserByIds(user_ids);
+            Map<Integer,UserInfo> userMap = new HashMap<>();
+            for (UserInfo user : userList) {
+                userMap.put(user.getId(),user);
+            }
+            for(ArticleAnswer item:list) {
+                if(userMap.containsKey(item.getUser_id())) {
+                    item.setUser_head(userMap.get(item.getUser_id()).getHead());
+                    item.setUser_name(userMap.get(item.getUser_id()).getName());
+                    item.setUser_type(userMap.get(item.getUser_id()).getType());
+                    item.setUser_grade_level_name(SignMap.getWatchById(userMap.get(item.getUser_id()).getGrade_level()));
+                }
+            }
+        }
+        return;
     }
 
     String upStringToCloud(String content) throws IOException {
