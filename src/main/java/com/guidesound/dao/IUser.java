@@ -185,5 +185,8 @@ public interface IUser {
     @Select("select count(*) from userActive where create_time > #{arg0}")
     int getActiveUserByTime(int time);
 
+    @Update("update user set pwd = #{arg1} where phone = #{arg0}")
+    void setUserPwd(String phone,String pwd);
+
 }
 

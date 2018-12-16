@@ -44,12 +44,14 @@ public interface IArticle {
 
     @Insert("insert into articleChat (article_id,first_user_id,first_comment,second_user_id,second_comment,create_time) " +
             "value (#{article_id},#{first_user_id},#{first_comment},#{second_user_id},#{second_comment},#{create_time})")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     void addComment(ArticleComment articleComment);
     @Update("update article set comment_count = comment_count + 1 where id = #{arg0}")
     void addMainComment(int article);
 
     @Insert("insert into answerChat (answer_id,first_user_id,first_comment,second_user_id,second_comment,create_time) " +
             "value (#{answer_id},#{first_user_id},#{first_comment},#{second_user_id},#{second_comment},#{create_time})")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     void addAnswerComment(AnswerComment answerComment);
     @Update("update articleAnswer set comment_count = comment_count + 1 where id = #{arg0}")
     void addMainAnswerComment(int article);
@@ -137,7 +139,7 @@ public interface IArticle {
     @Select("select count(*) from articleAnswer where ask_id = #{arg0}")
     int answerCount(int ask_id);
 
-    @Select("select * from articleAnswer where ask_id = #{arg0} limit #{arg1},#{arg2}")
+    @Select("select * from articleAnswer where ask_id = #{arg0} order by create_time desc limit #{arg1},#{arg2}")
     List<ArticleAnswer> answerList(int ask_id,int begin,int end);
 
     @Select("select answer_id from articleAnswerPraise where user_id = #{arg0} and deleted = 0")

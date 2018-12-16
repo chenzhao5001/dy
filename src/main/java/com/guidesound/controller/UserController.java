@@ -57,12 +57,14 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("缺少参数");
         }
 
+        name = ToolsFunction.getURLEncoderString(name);
+
         List<UserInfo> userList = iUser.getUserByUnionid(unionid);
         UserInfo user = null;
         if(userList.isEmpty()) {
             user = new UserInfo();
             user.setUnionid(unionid);
-            user.setName(name);
+            user.setName(ToolsFunction.getURLEncoderString(name));
             user.setHead(head);
             user.setCreate_time((int) (new Date().getTime() / 1000));
             user.setLevel(1);
@@ -107,11 +109,11 @@ public class UserController extends BaseController{
 
 //        "【导音教育】您的验证码是: 5678"
 
-//        String code = ToolsFunction.getNumRandomString(6);
-//        String content =  "【北京导音教育科技有限公司】您的验证码是: " + code;
-//        ToolsFunction.sendSMS(phone,content);
+        String code = ToolsFunction.getNumRandomString(6);
+        String content =  "【北京导音教育科技有限公司】您的验证码是: " + code;
+        ToolsFunction.sendSMS(phone,content);
         int time = (int) (new Date().getTime() / 1000);
-        iVerifyCode.addVerifyCode(phone,"1234",time,time);
+        iVerifyCode.addVerifyCode(phone,code,time,time);
         return JSONResult.ok();
     }
 
@@ -165,6 +167,22 @@ public class UserController extends BaseController{
         return JSONResult.ok(user);
     }
 
+    /**
+     *设置登录密码
+     */
+    @RequestMapping(value = "/set_pwd")
+    @ResponseBody
+    JSONResult setUserPwd(String phone,String pwd,String code) {
+        if(phone == null || pwd == null|| code == null) {
+            return  JSONResult.errorMsg("缺少参数");
+        }
+        if(pwd == "") {
+            return  JSONResult.errorMsg("密码不能为空");
+        }
+
+        iUser.setUserPwd(phone,pwd);
+        return JSONResult.ok();
+    }
     /**
      *昵称登录
      */
