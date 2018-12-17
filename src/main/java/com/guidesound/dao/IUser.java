@@ -27,6 +27,9 @@ public interface IUser {
     @Select("select * from user where unionid = #{arg0}")
     public List<UserInfo> getUserByUnionid(String phone);
 
+    @Select("select * from user where phone = #{arg0} and pwd = #{arg1}")
+    public List<UserInfo> getUserByPhoneAndPwd(String phone,String pwd);
+
 
     @Select("select * from user where name = #{arg0}")
     public List<UserInfo> getUserByName(String name);
@@ -185,8 +188,11 @@ public interface IUser {
     @Select("select count(*) from userActive where create_time > #{arg0}")
     int getActiveUserByTime(int time);
 
-    @Update("update user set pwd = #{arg1} where phone = #{arg0}")
+    @Update("update user set pwd = #{arg1},pwd_state = 1 where phone = #{arg0}")
     void setUserPwd(String phone,String pwd);
+
+    @Select("select pwd from user where id = #{arg0}")
+    String getPwd(int user_id);
 
 }
 

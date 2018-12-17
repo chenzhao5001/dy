@@ -57,14 +57,15 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("缺少参数");
         }
 
-        name = ToolsFunction.getURLEncoderString(name);
+//        name = ToolsFunction.getURLEncoderString(name);
 
         List<UserInfo> userList = iUser.getUserByUnionid(unionid);
         UserInfo user = null;
         if(userList.isEmpty()) {
             user = new UserInfo();
             user.setUnionid(unionid);
-            user.setName(ToolsFunction.getURLEncoderString(name));
+//            user.setName(ToolsFunction.getURLEncoderString(name));
+            user.setName(name);
             user.setHead(head);
             user.setCreate_time((int) (new Date().getTime() / 1000));
             user.setLevel(1);
@@ -107,10 +108,8 @@ public class UserController extends BaseController{
             return JSONResult.build(201,"参数错误",null);
         }
 
-//        "【导音教育】您的验证码是: 5678"
-
         String code = ToolsFunction.getNumRandomString(6);
-        String content =  "【北京导音教育科技有限公司】您的验证码是: " + code;
+        String content =  "【北京导音教育科技有限公司】您的短信验证码是：" + code + "，此验证码10分钟内有效";
         ToolsFunction.sendSMS(phone,content);
         int time = (int) (new Date().getTime() / 1000);
         iVerifyCode.addVerifyCode(phone,code,time,time);
@@ -167,6 +166,37 @@ public class UserController extends BaseController{
         return JSONResult.ok(user);
     }
 
+    @RequestMapping(value = "/phone_pwd_login")
+    @ResponseBody
+    JSONResult phonePwdLogin(HttpServletResponse response,String phone,String pwd) {
+        if (phone == null || pwd == null || pwd.equals("")) {
+            return JSONResult.errorMsg("缺少phone 或 pwd");
+        }
+        List<UserInfo> userList = iUser.getUserByPhoneAndPwd(phone,pwd);
+        if(userList.isEmpty()) {
+            return JSONResult.errorMsg("账号密码错误");
+        }
+
+        UserInfo user = userList.get(0);
+        user.setToken(TockenUtil.makeTocken(user.getId()));
+        int funCount = iUser.getFunsById(String.valueOf(user.getId()));
+        int followCount = iUser.getFollowById(String.valueOf(user.getId()));
+        int praiseCount = iUser.getPraiseById(String.valueOf(user.getId()));
+        int videoCount = iVideo.getVideoByUserId(String.valueOf(user.getId()));
+        int articleCount =  iArticle.getCountByUserId(String.valueOf(user.getId()));
+        user.setFuns_counts(funCount);
+        user.setFollow_count(followCount);
+        user.setPraise_count(praiseCount);
+        user.setVideo_count(videoCount);
+        user.setArticle_count(articleCount);
+        user.setCreate_time(user.getCreate_time());
+
+        //种cookie
+        Cookie cookie = new Cookie("token",TockenUtil.makeTocken(user.getId()));//创建新cookie
+        cookie.setPath("/");//设置作用域
+        response.addCookie(cookie);//将cookie添加到response的cookie数组中返回给客户端
+        return JSONResult.ok(user);
+    }
     /**
      *设置登录密码
      */
@@ -178,6 +208,12 @@ public class UserController extends BaseController{
         }
         if(pwd == "") {
             return  JSONResult.errorMsg("密码不能为空");
+        }
+
+        int time = (int) (new Date().getTime() / 1000) - 600;
+        int count = iVerifyCode.selectCode(phone,code,time);
+        if(count <= 0) {
+            return JSONResult.build(201,"验证码错误",null);
         }
 
         iUser.setUserPwd(phone,pwd);
@@ -807,6 +843,17 @@ public class UserController extends BaseController{
         }
         iUser.setActive(user_guid, (int) (new Date().getTime() / 1000));
         return JSONResult.ok();
+    }
+
+    @RequestMapping(value = "/pwd_state")
+    @ResponseBody
+    public JSONResult getPwdState() {
+        int user_id = getCurrentUserId();
+        String pwd = iUser.getPwd(user_id);
+        if(pwd.equals("")) {
+            return JSONResult.ok(false);
+        }
+        return JSONResult.ok(true);
     }
 }
 

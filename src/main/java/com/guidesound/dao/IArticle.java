@@ -126,6 +126,8 @@ public interface IArticle {
     void praiseArticleAnswer(int user_id,int answer_id,int create_time);
     @Update("update articleAnswer set praise_count = praise_count + 1 where id = #{arg0}")
     void praiseMainArticleAnswer(int answer_id);
+    @Select("select answer_chat_id from answerChatPraise where user_id = #{arg0} and deleted = 0")
+    List<Integer> getPraiseAnswerCommentByUserId(int user_id);
 
 
     @Select("select id from answerChatPraise where user_id = #{arg0} and answer_chat_id = #{arg1} and deleted = 0")
@@ -168,8 +170,11 @@ public interface IArticle {
             + "</script>")
     void setExaminePerson(@Param("iList") List<Integer> iList, int user_id);
 
-    @Select("select count(*) from articleAnswerCollection where user_id = #{arg0} and answer_id = #{arg1}")
+    @Select("select count(*) from articleAnswerCollection where user_id = #{arg0} and answer_id = #{arg1} and deleted = 0")
     int getAnswerCollection(int user_id,int answer_id);
-    @Update("insert into articleAnswerCollection (user_id,answer_id,create_time) value (#{arg0},#{arg1},#{arg2})")
+    @Insert("insert into articleAnswerCollection (user_id,answer_id,create_time) value (#{arg0},#{arg1},#{arg2})")
     void collectAnswer(int user_id,int answer_id,int create_time);
+
+    @Update("update articleAnswerCollection set deleted = 1 where user_id = #{arg0} and answer_id = #{arg1}")
+    void cancelCollectAnswer(int user_id,int answer_id);
 }

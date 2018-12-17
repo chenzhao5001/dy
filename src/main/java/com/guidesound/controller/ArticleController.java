@@ -68,7 +68,7 @@ public class ArticleController extends BaseController {
         articleDTO.setCreate_time((int)(new Date().getTime() / 1000));
         iArticle.add(articleDTO);
 
-        return JSONResult.ok("/article/finish");
+        return JSONResult.ok();
     }
 
     @RequestMapping("/finish")
@@ -501,17 +501,21 @@ public class ArticleController extends BaseController {
 
     @RequestMapping("collection_answer")
     @ResponseBody
-    JSONResult collectionAnswer(String answer_id) {
-        if(answer_id == null) {
-            return JSONResult.errorMsg("缺少 answer_id 参数");
+    JSONResult collectionAnswer(String answer_id,String type) {
+        if(answer_id == null || type == null) {
+            return JSONResult.errorMsg("缺少 answer_id 或 type 参数");
         }
 
         int user_id = getCurrentUserId();
-        int count = iArticle.getAnswerCollection(user_id,Integer.parseInt(answer_id));
-        if(count > 0) {
-            return JSONResult.errorMsg("答案已经搜藏");
+        if(type.equals("1")) {
+            int count = iArticle.getAnswerCollection(user_id,Integer.parseInt(answer_id));
+            if(count > 0) {
+                return JSONResult.errorMsg("答案已经搜藏");
+            }
+            iArticle.collectAnswer(user_id,Integer.parseInt(answer_id), (int) (new Date().getTime()/1000));
+        } else {
+            iArticle.cancelCollectAnswer(user_id,Integer.parseInt(answer_id));
         }
-        iArticle.collectAnswer(user_id,Integer.parseInt(answer_id), (int) (new Date().getTime()/1000));
         return JSONResult.ok();
 
     }
@@ -553,7 +557,7 @@ public class ArticleController extends BaseController {
             if(collectionList.contains(item.getId())) {
                 item.setCollection(true);
             }
-            if(followList.contains(item.getId())) {
+            if(followList.contains(item.getUser_id())) {
                 item.setFollow(true);
             }
         }
@@ -728,7 +732,7 @@ public class ArticleController extends BaseController {
 
         iArticle.addAnswerComment(answerComment);
         iArticle.addMainAnswerComment(Integer.parseInt(answer_id));
-        return JSONResult.ok();
+        return JSONResult.ok(answerComment);
     }
 
     @RequestMapping("/praise_answer_comment")
@@ -778,7 +782,7 @@ public class ArticleController extends BaseController {
             List<Integer> comment_ids = new ArrayList<>();
             int currentUserID = getCurrentUserId();
             if (currentUserID != 0) {
-                comment_ids = iArticle.getPraiseCommentArticle(currentUserID);
+                comment_ids = iArticle.getPraiseAnswerCommentByUserId(currentUserID);
             }
             Map<Integer,UserInfo> usersMap = new HashMap<>();
             for (UserInfo userInfo :user_list) {
@@ -786,6 +790,9 @@ public class ArticleController extends BaseController {
             }
 
             for (AnswerComment answerComment : list) {
+
+                answerComment.setFirst_comment(ToolsFunction.URLDecoderString(answerComment.getFirst_comment()));
+                answerComment.setSecond_comment(ToolsFunction.URLDecoderString(answerComment.getSecond_comment()));
                 if( comment_ids.contains(answerComment.getId())) {
                     answerComment.setPraise(true);
                 }

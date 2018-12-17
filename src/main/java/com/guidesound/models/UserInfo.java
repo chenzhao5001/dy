@@ -38,7 +38,15 @@ public class UserInfo {
     private int qualification_status;
     private int juridical_status;
     private int business_status;
+    int pwd_state;
 
+
+    public int getPwd_state() {
+        return pwd_state;
+    }
+    public void setPwd_state(int pwd_state) {
+        this.pwd_state = pwd_state;
+    }
 
     private int create_time;
 
