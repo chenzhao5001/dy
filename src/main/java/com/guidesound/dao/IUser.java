@@ -53,6 +53,9 @@ public interface IUser {
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     public void addUserByUnionid(UserInfo user);
 
+    @Update("update user set im_id = #{arg1}, im_sig = #{arg2} where id = #{arg0}")
+    void setImInfo(int user_id,String im_id,String im_sig);
+
     @Insert("insert into user (name,create_time,level,type) values (#{name},#{create_time},#{level},#{type})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     public void addUserByName(UserInfo user);

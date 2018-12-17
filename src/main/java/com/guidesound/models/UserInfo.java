@@ -38,8 +38,26 @@ public class UserInfo {
     private int qualification_status;
     private int juridical_status;
     private int business_status;
-    int pwd_state;
+    private String im_id;
+    private String im_sig;
+    private int pwd_state;
 
+
+    public String getIm_id() {
+        return im_id;
+    }
+
+    public void setIm_id(String im_id) {
+        this.im_id = im_id;
+    }
+
+    public String getIm_sig() {
+        return im_sig;
+    }
+
+    public void setIm_sig(String im_sig) {
+        this.im_sig = im_sig;
+    }
 
     public int getPwd_state() {
         return pwd_state;

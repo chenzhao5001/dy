@@ -21,6 +21,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -48,8 +49,7 @@ public class UserController extends BaseController{
 
     @RequestMapping(value = "/login")
     @ResponseBody
-    public JSONResult login(HttpServletRequest request, HttpServletResponse response) {
-
+    public JSONResult login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String unionid = request.getParameter("unionid");
         String name = request.getParameter("name");
         String head = request.getParameter("head");
@@ -71,7 +71,11 @@ public class UserController extends BaseController{
             user.setLevel(1);
             user.setBackground_url("http://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg");
             iUser.addUserByUnionid(user);
-//            user.setToken(TockenUtil.makeTocken(user.getId()));
+            String im_id = ToolsFunction.getRandomString(10);
+            String im_sig = TlsSigTest.getUrlSig(String.valueOf(im_id));
+            iUser.setImInfo(user.getId(),im_id,im_sig);
+            user.setIm_id(im_id);
+            user.setIm_sig(im_sig);
         } else {
             user = userList.get(0);
         }

@@ -732,6 +732,8 @@ public class ArticleController extends BaseController {
 
         iArticle.addAnswerComment(answerComment);
         iArticle.addMainAnswerComment(Integer.parseInt(answer_id));
+        answerComment.setFirst_comment(URLDecoderString(first_comment));
+        answerComment.setSecond_comment(URLDecoderString(second_comment));
         return JSONResult.ok(answerComment);
     }
 

@@ -37,6 +37,8 @@
             <mvc:exclude-mapping path="/user/phone_login"/>
             <mvc:exclude-mapping path="/user/name_login"/>
             <mvc:exclude-mapping path="/user/info"/>
+            <mvc:exclude-mapping path="/user/phone_pwd_login"/>
+
             <mvc:exclude-mapping path="/video/verify_list"/>
             <mvc:exclude-mapping path="/video/verify"/>
             <mvc:exclude-mapping path="/video/set_status"/>
