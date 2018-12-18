@@ -2,30 +2,34 @@ package com.guidesound.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.guidesound.dao.IUser;
+import com.guidesound.models.User;
+import com.guidesound.models.UserInfo;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
 import com.guidesound.util.StorageSts;
 import com.guidesound.util.ToolsFunction;
 import com.qcloud.Utilities.Json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * 用户控制器
  */
 @Controller
 @RequestMapping("/type")
-public class TypeMapController {
+public class TypeMapController extends BaseController {
 
+    @Autowired
+    private IUser iUser;
     @RequestMapping(value = "/watch_type_list")
     @ResponseBody
     public JSONResult getWatchType() {
@@ -131,6 +135,20 @@ public class TypeMapController {
 //        User user = mapper.readValue(SignMap.getChannelList(), User.class);
         return JSONResult.ok(SignMap.getChannelList());
 //        return SignMap.getChannelList();
+    }
+
+
+    @RequestMapping(value = "/user_grade_list")
+    @ResponseBody
+    JSONResult  getUserGradeList(HttpServletRequest request) {
+        Map m = new HashMap();
+        if(getCurrentUserId() == 0) {
+            return JSONResult.ok(m);
+        }
+
+        UserInfo userInfo = iUser.getUser(getCurrentUserId());
+        int level = userInfo.getGrade_level();
+        return JSONResult.ok(SignMap.getGradeByClass(level));
     }
 
 }

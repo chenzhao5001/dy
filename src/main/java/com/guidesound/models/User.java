@@ -19,6 +19,15 @@ public class User {
     private int teach_age;
     private int create_time;
     private int update_time;
+    private int grade_level;
+
+    public int getGrade_level() {
+        return grade_level;
+    }
+
+    public void setGrade_level(int grade_level) {
+        this.grade_level = grade_level;
+    }
 
     public String getToken() {
         return token;

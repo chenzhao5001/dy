@@ -185,20 +185,20 @@ public class SignMap {
         watch_type.put(2,"小学");
         watch_type.put(3,"初中");
         watch_type.put(4,"高中");
-        watch_type.put(5,"小初");
+//        watch_type.put(5,"小初");
         watch_type.put(6,"初高");
 
         user_type = new HashMap<>();
         user_type.put(1,"教师");
         user_type.put(2,"家长");
         user_type.put(3,"学生");
-        user_type.put(4,"机构");
+        user_type.put(4,"达人");
+        user_type.put(5,"商家");
 
 
         grade_type = new HashMap<>();
-        grade_type.put(101,"1-3岁");
-        grade_type.put(102,"4-6岁");
-        grade_type.put(199,"1-6岁");
+        grade_type.put(101,"入园前");
+        grade_type.put(102,"幼儿园");
 
         grade_type.put(201,"1年级");
         grade_type.put(202,"2年级");
@@ -221,9 +221,9 @@ public class SignMap {
 
         user_level = new HashMap<>();
         user_level.put(1,"游客");
-        user_level.put(1,"初级");
-        user_level.put(1,"中级");
-        user_level.put(1,"高级");
+        user_level.put(2,"初级");
+        user_level.put(3,"中级");
+        user_level.put(4,"高级");
 
         channel = new ArrayList<>();
         Content2 content2 = new Content2();
@@ -299,6 +299,41 @@ public class SignMap {
         return "未知";
     }
 
+    public static Map<Integer,String> getGradeByClass(int type) {
+        Map<Integer,String> m = new TreeMap<>();
+        if(type == 1) {
+            m.put(101,"入园前");
+            m.put(102,"幼儿园");
+        } else if(type == 2){
+            m.put(201,"1年级");
+            m.put(202,"2年级");
+            m.put(203,"3年级");
+            m.put(204,"4年级");
+            m.put(205,"5年级");
+            m.put(206,"6年级");
+            m.put(299,"小学");
+        } else if (type == 3) {
+            m.put(301,"初一");
+            m.put(302,"初二");
+            m.put(303,"初三");
+            m.put(399,"初中");
+        } else if(type == 4){
+            m.put(401,"高一");
+            m.put(402,"高二");
+            m.put(403,"高三");
+            m.put(499,"高中");
+        } else if(type == 6){
+            m.put(301,"初一");
+            m.put(302,"初二");
+            m.put(303,"初三");
+            m.put(399,"初中");
+            m.put(401,"高一");
+            m.put(402,"高二");
+            m.put(403,"高三");
+            m.put(499,"高中");
+        }
+        return m;
+    }
     public static String getGradeTypeByID(int id) {
         if(grade_type.containsKey(id)) {
             return grade_type.get(id);
