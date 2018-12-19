@@ -142,12 +142,13 @@ public class UserController extends BaseController{
         List<UserInfo> userList = iUser.getUserByPhone(phone);
         UserInfo user = null;
         if(userList.isEmpty()) {
-            user = new UserInfo();
-            user.setPhone(phone);
-            user.setCreate_time((int) (new Date().getTime() / 1000));
-            user.setLevel(1);
-            user.setBackground_url("http://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg");
-            iUser.addUserByPhone(user);
+            return JSONResult.errorMsg("账号未注册");
+//            user = new UserInfo();
+//            user.setPhone(phone);
+//            user.setCreate_time((int) (new Date().getTime() / 1000));
+//            user.setLevel(1);
+//            user.setBackground_url("http://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg");
+//            iUser.addUserByPhone(user);
 //            user.setToken(TockenUtil.makeTocken(user.getId()));
         } else {
             user = userList.get(0);

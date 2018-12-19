@@ -83,7 +83,7 @@ body.cke_editable > .cke_widget_wrapper_easyimage-side {
 	/* Add border so when caption is focused, blue border does not cause flickering. */
 	border: 1px solid #f7f7f7;
 	color: #333;
-    padding: .8em;
+	padding: .8em;
 }
 
 .cke_widget_wrapper:hover .easyimage .cke_widget_editable {
@@ -124,4 +124,31 @@ the initial render, otherwise it would start transitioning from opacity 1 to 0.x
 
 .cke_widget_wrapper_easyimage.cke_widget_wrapper_uploading figure img {
 	opacity: 0.75;
+}
+#article {
+	background: #fff;
+	height: 420px;
+	padding: 5px;
+	margin-top: 5px;
+	font-size: 18px;
+	overflow-y: scroll;
+}
+#article::-webkit-scrollbar {
+	display: none;
+}
+#article figure,
+#article figcaption {
+	text-align: center;
+	font-size: 15px;
+}
+#article img {
+	margin: 0 auto;
+	width: 260px;
+}
+
+#article p {
+	text-align: left;
+	font-size: 15px;
+	margin-top: 5px;
+	text-indent: 2em;
 }

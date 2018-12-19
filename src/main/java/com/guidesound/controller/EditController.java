@@ -1,9 +1,16 @@
 package com.guidesound.controller;
 
+import com.guidesound.dao.IArticle;
+import com.guidesound.dao.IUser;
+import com.guidesound.dao.IVideo;
+import com.guidesound.models.*;
+import com.guidesound.util.JSONResult;
 import com.guidesound.util.ServiceResponse;
 import com.guidesound.util.ToolsFunction;
+import com.qcloud.cos.model.DeleteObjectRequest;
 import okhttp3.*;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,9 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import com.qcloud.cos.COSClient;
@@ -35,6 +40,13 @@ public class EditController extends BaseController {
     public static final String TAG = "UploadHelper";
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
     private final OkHttpClient client = new OkHttpClient();
+
+    @Autowired
+    IVideo iVideo;
+    @Autowired
+    IArticle iArticle;
+    @Autowired
+    IUser iUser;
 
     @RequestMapping(value = "/upload")
     @ResponseBody
@@ -96,6 +108,98 @@ public class EditController extends BaseController {
         return "content";
     }
 
+    void deleteObject(String url) {
+        ArrayList<String> arr = new ArrayList<String>();
+        arr.add("pic-1257964795");
+        arr.add("pic-article-1257964795");
+        arr.add("video-1257964795");
+        arr.add("video-temp-1257964795");
+
+        int index1 = url.indexOf("//") + 2;
+        int index2 = url.indexOf(".");
+        int index3 = url.lastIndexOf("/") + 1;
+        if(index1 < 0 || index2 < 0 || index3 < 0) {
+            return;
+        }
+
+        String bucket = url.substring(index1,index2);
+        if(!arr.contains(bucket))
+            return;
+        String key = url.substring(index3);
+        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket,key);
+        cosClient.deleteObject(deleteObjectRequest);
+    }
+    @RequestMapping(value = "/delete_user")
+    @ResponseBody
+    JSONResult deleteUser() {
+        ArrayList<String> arr = new ArrayList<String>();
+        arr.add("pic-1257964795");
+        arr.add("pic-article-1257964795");
+        arr.add("video-1257964795");
+        arr.add("video-temp-1257964795");
+        int user_id = getCurrentUserId();
+        if(user_id == 0) {
+            return JSONResult.ok();
+        }
+        List<Video> videos = iVideo.getVideoList(user_id);
+        for (Video video : videos) {
+            deleteObject(video.getPic_up_path());
+            deleteObject(video.getVideo_up_path());
+            deleteObject(video.getVideo_show_path());
+        }
+        iVideo.deleteVideoByUser(user_id);
+        List<ArticleInfo> articleInfos = iArticle.getListById(user_id,0,10000);
+        for(ArticleInfo item : articleInfos) {
+            deleteObject(item.getHead_pic1());
+            deleteObject(item.getHead_pic1());
+            deleteObject(item.getHead_pic1());
+        }
+        iArticle.deleteArticleByUser(user_id);
+        List<ArticleAnswer> answerList = iArticle.getAnswerByUser(user_id);
+        for(ArticleAnswer item : answerList) {
+            deleteObject(item.getPic1_url());
+            deleteObject(item.getPic2_url());
+            deleteObject(item.getPic3_url());
+        }
+        iArticle.deleteAnswerByUser(user_id);
+        UserInfo userInfo = iUser.getUser(user_id);
+        if(userInfo != null) {
+            deleteObject(userInfo.getHead());
+        }
+        iUser.deleteUser(user_id);
+        return JSONResult.ok();
+
+    }
+
+    @RequestMapping(value = "/temp")
+    @ResponseBody
+    JSONResult fooTemp() {
+        ArrayList<String> arr = new ArrayList<String>();
+        arr.add("pic-1257964795");
+        arr.add("pic-article-1257964795");
+        arr.add("video-1257964795");
+        arr.add("video-temp-1257964795");
+        List<UserInfo> list = iVideo.FooTemp3();
+        for(UserInfo item : list) {
+            String temp1 = item.getHead();
+            int index1 = temp1.indexOf("//") + 2;
+            int index2 = temp1.indexOf(".");
+            int index3 = temp1.lastIndexOf("/") + 1;
+            if(index1 < 0 || index2 < 0 || index3 < 0) {
+                continue;
+            }
+            String bucket = temp1.substring(index1,index2);
+            if(!arr.contains(bucket))
+                continue;
+            String key = temp1.substring(index3);
+            DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket,key);
+            cosClient.deleteObject(deleteObjectRequest);
+        }
+
+        return JSONResult.ok(list);
+    }
+//DELETE FROM video WHERE user_id in (SELECT id FROM user where (dy_id div 10000000) != 1)
+//DELETE  FROM article WHERE user_id in (SELECT id FROM user where (dy_id div 10000000) != 1)
     public void foo() {
         Map<String,String> m = new Hashtable<>();
     }

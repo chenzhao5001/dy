@@ -141,6 +141,9 @@ public interface IArticle {
     @Select("select count(*) from articleAnswer where ask_id = #{arg0}")
     int answerCount(int ask_id);
 
+    @Select("select * from articleAnswer where user_id = #{arg0}")
+    List<ArticleAnswer>  getAnswerByUser(int user_id);
+
     @Select("select * from articleAnswer where ask_id = #{arg0} order by create_time desc limit #{arg1},#{arg2}")
     List<ArticleAnswer> answerList(int ask_id,int begin,int end);
 
@@ -177,4 +180,10 @@ public interface IArticle {
 
     @Update("update articleAnswerCollection set deleted = 1 where user_id = #{arg0} and answer_id = #{arg1}")
     void cancelCollectAnswer(int user_id,int answer_id);
+
+    @Delete("delete from article where user_id = #{arg0}")
+    void deleteArticleByUser(int user);
+
+    @Delete("delete from articleAnswer where user_id = #{arg0}")
+    void deleteAnswerByUser(int user);
 }

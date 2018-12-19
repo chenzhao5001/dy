@@ -197,5 +197,8 @@ public interface IUser {
     @Select("select pwd from user where id = #{arg0}")
     String getPwd(int user_id);
 
+    @Delete("delete from user where id = #{arg0}")
+    void deleteUser(int user);
+
 }
 

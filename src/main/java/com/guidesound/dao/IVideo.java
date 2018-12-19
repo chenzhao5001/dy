@@ -2,10 +2,7 @@ package com.guidesound.dao;
 
 import com.guidesound.find.VideoFind;
 import com.guidesound.models.*;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 import java.util.Map;
@@ -181,4 +178,21 @@ public interface IVideo {
 
     @Insert("insert into userPlayFinish (user_guid,finish_videos,create_time) values (#{arg0},#{arg1},#{arg2})")
     void createPlayFinish(String user_guid,String finish_videos,int create_time);
+
+    @Select("SELECT * FROM video where user_id in (SELECT id from user WHERE dy_id div 10000 > 1000)")
+    List<VideoShow> FooTemp();
+
+    @Select("SELECT *  FROM article WHERE user_id in (SELECT id FROM user where (dy_id div 10000000) != 1)")
+    List<Article> FooTemp2();
+
+    @Select("SELECT * from user WHERE dy_id div 10000 > 1000")
+    List<UserInfo> FooTemp3();
+
+    @Select("SELECT * FROM articleAnswer where user_id in (9,219,225,149)")
+    List<ArticleAnswer> FooTemp4();
+
+    @Delete("delete from video where user_id = #{arg0}")
+    void deleteVideoByUser(int user);
+
+
 }

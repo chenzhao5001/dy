@@ -2,6 +2,7 @@ package com.guidesound.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.guidesound.dao.ICourse;
 import com.guidesound.dao.IUser;
 import com.guidesound.models.User;
 import com.guidesound.models.UserInfo;
@@ -30,6 +31,9 @@ public class TypeMapController extends BaseController {
 
     @Autowired
     private IUser iUser;
+    @Autowired
+    ICourse iCourse;
+    Boolean flag = false;
     @RequestMapping(value = "/watch_type_list")
     @ResponseBody
     public JSONResult getWatchType() {
@@ -85,6 +89,10 @@ public class TypeMapController extends BaseController {
     @RequestMapping(value = "/subject_classify_list")
     @ResponseBody
     public JSONResult getSubjectClassifyList() {
+        if(flag == false) {
+            flag = true;
+            SignMap.Init(iCourse.getSubject());
+        }
         return JSONResult.ok(SignMap.getSubjectClassifyList());
     }
 
@@ -94,6 +102,10 @@ public class TypeMapController extends BaseController {
     @RequestMapping(value = "/subject_type_list")
     @ResponseBody
     public JSONResult getSubjectTypeList() {
+        if(flag == false) {
+            flag = true;
+            SignMap.Init(iCourse.getSubject());
+        }
         return JSONResult.ok(SignMap.getSubjectTypeInfo());
     }
 
@@ -141,14 +153,44 @@ public class TypeMapController extends BaseController {
     @RequestMapping(value = "/user_grade_list")
     @ResponseBody
     JSONResult  getUserGradeList(HttpServletRequest request) {
-        Map m = new HashMap();
+
         if(getCurrentUserId() == 0) {
-            return JSONResult.ok(m);
+            return JSONResult.ok(new ArrayList<>());
         }
 
         UserInfo userInfo = iUser.getUser(getCurrentUserId());
         int level = userInfo.getGrade_level();
-        return JSONResult.ok(SignMap.getGradeByClass(level));
+
+        Map<Integer,String> m_temp = SignMap.getGradeByClass(level);
+        class Grade{
+            int id;
+            String grade;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getGrade() {
+                return grade;
+            }
+
+            public void setGrade(String grade) {
+                this.grade = grade;
+            }
+        }
+        List<Grade> r_list = new ArrayList<>();
+        for(Integer key:m_temp.keySet()) {
+            Grade grade = new Grade();
+            grade.setId(key);
+            grade.setGrade(m_temp.get(key));
+            r_list.add(grade);
+
+        }
+        return JSONResult.ok(r_list);
     }
 
 }

@@ -2,6 +2,9 @@ package com.guidesound.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.guidesound.dao.ICourse;
+import com.guidesound.models.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
@@ -116,68 +119,72 @@ public class SignMap {
     static Map<Integer,String> grade_type;
     static Map<Integer,String> user_level;
     static List<Content2> channel;
-
     static List<Content2> article_channel;
 
+    static boolean flag = false;
+    public static void Init(List<Subject> subjectList) {
+        if ( flag == false) {
+            flag = true;
+            subject_classify = new TreeMap<>();
+            subject_type = new HashMap<>();
+            for(Subject subject : subjectList) {
+                if(!subject_classify.containsKey(subject.getLevel_1())) {
+                    subject_classify.put(subject.getLevel_1(),subject.getLevel_1_name());
+                }
+                subject_type.put(subject.getLevel_2(),new Content(subject.getLevel_2_name(),subject.getLevel_1()));
+            }
+        }
 
-
+    }
     static {
-        subject_classify = new HashMap<>();
 
-        subject_classify.put(1,"文化课");
-        subject_classify.put(2,"音乐");
-        subject_classify.put(3,"美术");
-        subject_classify.put(4,"舞蹈");
-        subject_classify.put(5,"武术");
-        subject_classify.put(6,"其他");
-
-        subject_type = new HashMap<>();
-        subject_type.put(101,new Content("语文",1));
-        subject_type.put(102,new Content("数学",1));
-        subject_type.put(103,new Content("英语",1));
-        subject_type.put(104,new Content("物理",1));
-        subject_type.put(105,new Content("化学",1));
-        subject_type.put(106,new Content("生物",1));
-        subject_type.put(107,new Content("历史",1));
-        subject_type.put(108,new Content("地理",1));
-        subject_type.put(109,new Content("政治",1));
-        subject_type.put(199,new Content("全部",1));
-
-        subject_type.put(201,new Content("钢琴",2));
-        subject_type.put(202,new Content("吉他",2));
-        subject_type.put(203,new Content("古筝",2));
-        subject_type.put(204,new Content("架子鼓",2));
-        subject_type.put(205,new Content("尤克里里",2));
-        subject_type.put(299,new Content("全部",2));
-
-        subject_type.put(301,new Content("素描",3));
-        subject_type.put(302,new Content("油画",3));
-        subject_type.put(303,new Content("水粉",3));
-        subject_type.put(304,new Content("漫画",3));
-        subject_type.put(305,new Content("水彩",3));
-        subject_type.put(306,new Content("速写",3));
-        subject_type.put(307,new Content("少儿美术",3));
-        subject_type.put(399,new Content("全部",3));
-
-        subject_type.put(401,new Content("芭蕾",4));
-        subject_type.put(402,new Content("民族",4));
-        subject_type.put(403,new Content("古典",4));
-        subject_type.put(404,new Content("爵士",4));
-        subject_type.put(405,new Content("拉丁",4));
-        subject_type.put(406,new Content("街舞",4));
-        subject_type.put(499,new Content("全部",4));
-
-        subject_type.put(501,new Content("跆拳道",5));
-        subject_type.put(502,new Content("武术",5));
-        subject_type.put(503,new Content("散打",5));
-        subject_type.put(504,new Content("柔道",5));
-        subject_type.put(599,new Content("全部",5));
-
-        subject_type.put(601,new Content("奥数",6));
-        subject_type.put(602,new Content("国学",6));
-        subject_type.put(603,new Content("智力开发",6));
-        subject_type.put(604,new Content("速算",6));
-        subject_type.put(699,new Content("全部",6));
+//        subject_type = new TreeMap<>();
+//        subject_type.put(101,new Content("语文",1));
+//        subject_type.put(102,new Content("数学",1));
+//        subject_type.put(103,new Content("英语",1));
+//        subject_type.put(104,new Content("物理",1));
+//        subject_type.put(105,new Content("化学",1));
+//        subject_type.put(106,new Content("生物",1));
+//        subject_type.put(107,new Content("历史",1));
+//        subject_type.put(108,new Content("地理",1));
+//        subject_type.put(109,new Content("政治",1));
+//        subject_type.put(199,new Content("全部",1));
+//
+//        subject_type.put(201,new Content("钢琴",2));
+//        subject_type.put(202,new Content("吉他",2));
+//        subject_type.put(203,new Content("古筝",2));
+//        subject_type.put(204,new Content("架子鼓",2));
+//        subject_type.put(205,new Content("尤克里里",2));
+//        subject_type.put(299,new Content("全部",2));
+//
+//        subject_type.put(301,new Content("素描",3));
+//        subject_type.put(302,new Content("油画",3));
+//        subject_type.put(303,new Content("水粉",3));
+//        subject_type.put(304,new Content("漫画",3));
+//        subject_type.put(305,new Content("水彩",3));
+//        subject_type.put(306,new Content("速写",3));
+//        subject_type.put(307,new Content("少儿美术",3));
+//        subject_type.put(399,new Content("全部",3));
+//
+//        subject_type.put(401,new Content("芭蕾",4));
+//        subject_type.put(402,new Content("民族",4));
+//        subject_type.put(403,new Content("古典",4));
+//        subject_type.put(404,new Content("爵士",4));
+//        subject_type.put(405,new Content("拉丁",4));
+//        subject_type.put(406,new Content("街舞",4));
+//        subject_type.put(499,new Content("全部",4));
+//
+//        subject_type.put(501,new Content("跆拳道",5));
+//        subject_type.put(502,new Content("武术",5));
+//        subject_type.put(503,new Content("散打",5));
+//        subject_type.put(504,new Content("柔道",5));
+//        subject_type.put(599,new Content("全部",5));
+//
+//        subject_type.put(601,new Content("奥数",6));
+//        subject_type.put(602,new Content("国学",6));
+//        subject_type.put(603,new Content("智力开发",6));
+//        subject_type.put(604,new Content("速算",6));
+//        subject_type.put(699,new Content("全部",6));
 
 
         watch_type = new TreeMap<>();

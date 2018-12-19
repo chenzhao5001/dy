@@ -2,6 +2,8 @@ package com.guidesound.controller;
 
 
 import com.guidesound.models.User;
+import com.guidesound.util.JSONResult;
+import com.guidesound.util.SignMap;
 import com.guidesound.util.TockenUtil;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
@@ -23,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 
 //@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class BaseController {
-
     static String articleBucketName;
     static String videoBucketName;
     static String region;
@@ -62,4 +63,5 @@ public class BaseController {
         }
         return currentUserID;
     }
+
 }

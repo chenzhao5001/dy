@@ -14,10 +14,6 @@
             box-sizing: border-box;
         }
 
-        /*div {*/
-            /*width: 100%;*/
-        /*}*/
-
         body {
             margin: 0;
         }
