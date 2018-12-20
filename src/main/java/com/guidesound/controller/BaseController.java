@@ -1,6 +1,7 @@
 package com.guidesound.controller;
 
 
+import com.guidesound.dao.ICourse;
 import com.guidesound.models.User;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
@@ -13,6 +14,7 @@ import com.qcloud.cos.region.Region;
 import okhttp3.OkHttpClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,9 +43,16 @@ public class BaseController {
     }
 
     static Logger log;
+    @Autowired
+    ICourse iCourse;
+
+    BaseController() {
+
+    }
     @ModelAttribute
     public void common(HttpServletRequest request, HttpServletResponse response) {
         if(log == null ) {
+            SignMap.Init(iCourse.getSubject());
             log = (Logger) LogManager.getLogger();
         }
     }

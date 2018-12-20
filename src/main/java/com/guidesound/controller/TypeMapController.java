@@ -89,10 +89,6 @@ public class TypeMapController extends BaseController {
     @RequestMapping(value = "/subject_classify_list")
     @ResponseBody
     public JSONResult getSubjectClassifyList() {
-        if(flag == false) {
-            flag = true;
-            SignMap.Init(iCourse.getSubject());
-        }
         return JSONResult.ok(SignMap.getSubjectClassifyList());
     }
 
@@ -102,10 +98,6 @@ public class TypeMapController extends BaseController {
     @RequestMapping(value = "/subject_type_list")
     @ResponseBody
     public JSONResult getSubjectTypeList() {
-        if(flag == false) {
-            flag = true;
-            SignMap.Init(iCourse.getSubject());
-        }
         return JSONResult.ok(SignMap.getSubjectTypeInfo());
     }
 

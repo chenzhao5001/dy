@@ -1,5 +1,6 @@
 package com.guidesound.controller;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.guidesound.Service.IUserService;
 import com.guidesound.dao.*;
 import com.guidesound.dto.StudentInfoDTO;
@@ -8,6 +9,7 @@ import com.guidesound.models.User;
 import com.guidesound.models.UserInfo;
 import com.guidesound.resp.UserResp;
 import com.guidesound.util.*;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -51,17 +53,49 @@ public class UserController extends BaseController{
     @ResponseBody
     public JSONResult login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String unionid = request.getParameter("unionid");
-        String name = request.getParameter("name");
-        String head = request.getParameter("head");
-        if (unionid == null || name == null || head == null) {
+        String name = request.getParameter("name") == null? "" : request.getParameter("name");
+        String head = request.getParameter("head") == null? "" : request.getParameter("head");
+        String type = request.getParameter("type");
+        if (unionid == null || type == null) {
             return JSONResult.errorMsg("缺少参数");
         }
+        if(type.equals("2")) {
+            String AppId = "wxc203972c94033e0a";
+            String AppSecret = "4e34dc827b33e078f8a6ab1732eb9d99";
+            String url = "https://api.weixin.qq.com/sns/oauth2/access_token?" +
+                    "appid="+ AppId +
+                    "&secret=" + AppSecret +
+                    "&code=" + unionid +
+                    "&grant_type=authorization_code";
 
-//        name = ToolsFunction.getURLEncoderString(name);
+            String r_Info =  ToolsFunction.httpGet(url);
+            if(r_Info == null) {
+                return JSONResult.errorMsg("unionid 错误。");
+            }
+            JSONObject jObject1=new JSONObject(r_Info);
+            if(!jObject1.has("access_token")) {
+                return JSONResult.errorMsg(jObject1.getString("errmsg"));
+            }
+            String access_token = jObject1.getString("access_token");
+            String openid = jObject1.getString("openid");
+            String infoUrl = "https://api.weixin.qq.com/sns/userinfo?" +
+                    "access_token=" + access_token +
+                    "&openid=" + openid;
+            String user_info =  ToolsFunction.httpGet(infoUrl);
+            if(user_info == null) {
+                return JSONResult.errorMsg("unionid 错误。。");
+            }
+            jObject1=new JSONObject(user_info);
+            name = jObject1.getString("nickname");
+            head = jObject1.getString("headimgurl");
+        }
 
         List<UserInfo> userList = iUser.getUserByUnionid(unionid);
         UserInfo user = null;
         if(userList.isEmpty()) {
+            if(!type.equals("1")) {
+                return JSONResult.errorMsg("非微信 QQ 登录无法创建用户");
+            }
             user = new UserInfo();
             user.setUnionid(unionid);
 //            user.setName(ToolsFunction.getURLEncoderString(name));

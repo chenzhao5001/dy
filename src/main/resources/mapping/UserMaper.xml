@@ -60,9 +60,9 @@
         #{id}
     </update>
 
-    <delete id="deleteUser" parameterType="int">
-        DELETE FROM user WHERE id = #{id}
-    </delete>
+    <!--<delete id="deleteUser" parameterType="int">-->
+        <!--DELETE FROM user WHERE id = #{id}-->
+    <!--</delete>-->
 
     <select id="getListByUnionid" resultType="com.guidesound.models.User" parameterType="string">
         select * from user where unionid = #{unionid}

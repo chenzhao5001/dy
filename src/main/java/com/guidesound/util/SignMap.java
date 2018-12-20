@@ -122,6 +122,7 @@ public class SignMap {
     static List<Content2> article_channel;
 
     static boolean flag = false;
+
     public static void Init(List<Subject> subjectList) {
         if ( flag == false) {
             flag = true;

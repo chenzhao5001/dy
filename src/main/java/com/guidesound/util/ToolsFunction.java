@@ -234,28 +234,16 @@ public class ToolsFunction {
     }
 
 
-    static public String content;
-    public static String httpGet(String url) {
+
+    public static String httpGet(String url) throws IOException {
         OkHttpClient okHttpClient = new OkHttpClient();
         Request.Builder builder = new Request.Builder();
         Request request = builder.get().url(url).build();
 
         Call call = okHttpClient.newCall(request);
-        final String reps;
-
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-                content =  response.body().string();
-
-            }
-        });
-        return content;
+        String content;
+        Response response = call.execute();
+        return response.body().string();
     }
 
     public static void zoomImage(String src,String dest,int w,int h) throws Exception {
