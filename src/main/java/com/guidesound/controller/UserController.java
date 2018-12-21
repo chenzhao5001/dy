@@ -56,7 +56,8 @@ public class UserController extends BaseController{
         String name = request.getParameter("name") == null? "" : request.getParameter("name");
         String head = request.getParameter("head") == null? "" : request.getParameter("head");
         String type = request.getParameter("type");
-        if (unionid == null || type == null) {
+        String platform = request.getParameter("platform");
+        if (unionid == null || type == null || platform == null) {
             return JSONResult.errorMsg("缺少参数");
         }
         if(type.equals("2")) {
