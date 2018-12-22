@@ -1,0 +1,14 @@
+iframe{
+    height: 156px;
+    width: 210px;
+}
+iframe body{
+   margin: 0;
+}
+iframe .title,iframe .info{
+    display: none;
+}
+iframe img{
+  margin-top: 0;
+  width: 156px;
+}

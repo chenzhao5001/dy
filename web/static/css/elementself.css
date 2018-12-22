@@ -1,0 +1,31 @@
+
+
+/* 更改elementui全局loading样式 */
+input:-webkit-autofill{
+    -webkit-box-shadow: 0 0 0 1000px #fff inset;-webkit-text-fill-color: #333}
+    
+    .el-loading-spinner .el-loading-text{
+     color:#00b80c !important;
+ }   
+ .el-loading-spinner .path{
+stroke: #00b80c  !important;
+ }
+
+ /* 更改发布文章页面input输入框颜色及边框 */
+ .editpaper .el-radio-group .el-radio .el-radio__inner {
+color: #000 !important;
+ }
+ .editpaper .bottom .el-input__inner{
+    height: 30px !important;
+  line-height: 30px !important;
+ }
+ .editpaper  .bottom    .el-select
+   .el-input--suffix {
+       height: 30px !important;
+  line-height: 30px !important;
+  color: #000;
+  }
+  .editpaper  .bottom    .el-select .el-input__icon{
+      line-height: 30px;
+  }
+ 

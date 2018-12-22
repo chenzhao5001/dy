@@ -60,7 +60,8 @@ public class UserController extends BaseController{
         if (unionid == null || type == null || platform == null) {
             return JSONResult.errorMsg("缺少参数");
         }
-        if(type.equals("2")) {
+
+        if(type.equals("2") && platform.equals("1")) {
             String AppId = "wxc203972c94033e0a";
             String AppSecret = "4e34dc827b33e078f8a6ab1732eb9d99";
             String url = "https://api.weixin.qq.com/sns/oauth2/access_token?" +
@@ -82,6 +83,7 @@ public class UserController extends BaseController{
             String infoUrl = "https://api.weixin.qq.com/sns/userinfo?" +
                     "access_token=" + access_token +
                     "&openid=" + openid;
+            unionid = openid;
             String user_info =  ToolsFunction.httpGet(infoUrl);
             if(user_info == null) {
                 return JSONResult.errorMsg("unionid 错误。。");
@@ -89,13 +91,42 @@ public class UserController extends BaseController{
             jObject1=new JSONObject(user_info);
             name = jObject1.getString("nickname");
             head = jObject1.getString("headimgurl");
+        } else if(type.equals("2") && platform.equals("2")){
+            String redirect_uri = request.getParameter("redirect_uri");
+            if(redirect_uri == null) {
+                return JSONResult.errorMsg("缺少参数");
+            }
+            String AppId = "1107951357";
+            String AppSecret = "6iSKLCV9LyyUvGkr";
+
+            String tokenUrl = "https://graph.qq.com/oauth2.0/token";
+            tokenUrl += "?grant_type=authorization_code";
+            tokenUrl += "&client_id=" + AppId;
+            tokenUrl += "&client_secret=" + AppSecret;
+            tokenUrl += "&code="+unionid;
+            tokenUrl += "&redirect_uri="+redirect_uri;
+            String token_Info =  ToolsFunction.httpGet(tokenUrl);
+            int begin = token_Info.indexOf("=");
+            int end = token_Info.indexOf("&");
+            String my_token = token_Info.substring(begin+1,end);
+            String me_url = "https://graph.qq.com/oauth2.0/me?access_token" + my_token;
+            String open_info =  ToolsFunction.httpGet(me_url);
+            JSONObject jObject1=new JSONObject(open_info);
+            if(!jObject1.has("openid")) {
+                return JSONResult.errorMsg("qq接入为获取openid");
+            }
+            unionid = jObject1.getString("openid");
+        } else {
+            if(!type.equals("1")) {
+                return JSONResult.errorMsg("type或platform参数错误");
+            }
         }
 
         List<UserInfo> userList = iUser.getUserByUnionid(unionid);
         UserInfo user = null;
         if(userList.isEmpty()) {
             if(!type.equals("1")) {
-                return JSONResult.errorMsg("非微信 QQ 登录无法创建用户");
+                return JSONResult.errorMsg("非移动端无法创建用户");
             }
             user = new UserInfo();
             user.setUnionid(unionid);
@@ -106,7 +137,7 @@ public class UserController extends BaseController{
             user.setLevel(1);
             user.setBackground_url("http://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg");
             iUser.addUserByUnionid(user);
-            String im_id = ToolsFunction.getRandomString(10);
+            String im_id = String.valueOf(user.getId());
             String im_sig = TlsSigTest.getUrlSig(String.valueOf(im_id));
             iUser.setImInfo(user.getId(),im_id,im_sig);
             user.setIm_id(im_id);
@@ -115,7 +146,6 @@ public class UserController extends BaseController{
             user = userList.get(0);
         }
         user.setToken(TockenUtil.makeTocken(user.getId()));
-
         String token = TockenUtil.makeTocken(user.getId());
 
         int funCount = iUser.getFunsById(String.valueOf(user.getId()));
