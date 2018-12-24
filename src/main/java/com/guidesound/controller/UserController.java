@@ -83,7 +83,6 @@ public class UserController extends BaseController{
             String infoUrl = "https://api.weixin.qq.com/sns/userinfo?" +
                     "access_token=" + access_token +
                     "&openid=" + openid;
-            unionid = openid;
             String user_info =  ToolsFunction.httpGet(infoUrl);
             if(user_info == null) {
                 return JSONResult.errorMsg("unionid 错误。。");
@@ -91,13 +90,14 @@ public class UserController extends BaseController{
             jObject1=new JSONObject(user_info);
             name = jObject1.getString("nickname");
             head = jObject1.getString("headimgurl");
+            unionid = jObject1.getString("unionid");
         } else if(type.equals("2") && platform.equals("2")){
             String redirect_uri = request.getParameter("redirect_uri");
             if(redirect_uri == null) {
                 return JSONResult.errorMsg("缺少参数");
             }
-            String AppId = "1107951357";
-            String AppSecret = "6iSKLCV9LyyUvGkr";
+            String AppId = "101529235";
+            String AppSecret = "36562416c9d94018faa504bc2679854c";
 
             String tokenUrl = "https://graph.qq.com/oauth2.0/token";
             tokenUrl += "?grant_type=authorization_code";
@@ -106,16 +106,37 @@ public class UserController extends BaseController{
             tokenUrl += "&code="+unionid;
             tokenUrl += "&redirect_uri="+redirect_uri;
             String token_Info =  ToolsFunction.httpGet(tokenUrl);
-            int begin = token_Info.indexOf("=");
-            int end = token_Info.indexOf("&");
-            String my_token = token_Info.substring(begin+1,end);
-            String me_url = "https://graph.qq.com/oauth2.0/me?access_token" + my_token;
+            int begin = token_Info.indexOf("(");
+            int end = token_Info.indexOf(")");
+            //登录失败
+            if(begin != -1 && end != -1) {
+                token_Info = token_Info.substring(begin+1,end);
+                JSONObject jObject1=new JSONObject(token_Info);
+                if(jObject1.has("error_description")) {
+                    return JSONResult.errorMsg(jObject1.getString("error_description"));
+                }
+            }
+            begin = token_Info.indexOf("=");
+            end = token_Info.indexOf("&");
+            String my_token  = token_Info.substring(begin+1,end);
+            String me_url = "https://graph.qq.com/oauth2.0/me?access_token=" + my_token;
             String open_info =  ToolsFunction.httpGet(me_url);
-            JSONObject jObject1=new JSONObject(open_info);
-            if(!jObject1.has("openid")) {
+            begin = open_info.indexOf("(");
+            end = open_info.indexOf(")");
+            open_info = open_info.substring(begin+1,end);
+            JSONObject jObject=new JSONObject(open_info);
+            if(!jObject.has("openid")) {
                 return JSONResult.errorMsg("qq接入为获取openid");
             }
-            unionid = jObject1.getString("openid");
+            unionid = jObject.getString("openid");
+            String user_url = "https://graph.qq.com/user/get_user_info?access_token="+ my_token
+                    + "&oauth_consumer_key=" + AppId
+                    + "&openid=" + unionid;
+            String usr_info = ToolsFunction.httpGet(user_url);
+            jObject=new JSONObject(usr_info);
+            head = jObject.getString("figureurl_qq_2");
+            name = jObject.getString("nickname");
+
         } else {
             if(!type.equals("1")) {
                 return JSONResult.errorMsg("type或platform参数错误");

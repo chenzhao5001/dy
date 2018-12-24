@@ -65,7 +65,7 @@
             <mvc:exclude-mapping path="/back/**"/>
 
             <mvc:exclude-mapping path="/admin/**"/>
-
+            <mvc:exclude-mapping path="/home/**"/>
 
 
             <bean class="com.guidesound.interceptor.Common"/>
