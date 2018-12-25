@@ -134,10 +134,19 @@ public class TypeMapController extends BaseController {
     @RequestMapping(value = "/channel_list")
     @ResponseBody
     JSONResult  getChannelList() throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-//        return JSONResult.ok()
-//        User user = mapper.readValue(SignMap.getChannelList(), User.class);
-        return JSONResult.ok(SignMap.getChannelList());
+        int user_id = getCurrentUserId();
+        if(user_id == 0) {
+            return JSONResult.ok(SignMap.getChannelList(1));
+        }
+        int channel_stage = iUser.getChannelStage(user_id);
+        if(channel_stage == 101) {
+            return JSONResult.ok(SignMap.getChannelList(101));
+        } else if(channel_stage == 102){
+            return JSONResult.ok(SignMap.getChannelList(101));
+        } else {
+            return JSONResult.ok(SignMap.getChannelList(channel_stage/100));
+        }
+
 //        return SignMap.getChannelList();
     }
 

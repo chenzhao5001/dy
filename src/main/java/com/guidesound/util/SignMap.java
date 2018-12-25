@@ -537,4 +537,124 @@ public class SignMap {
     static public List<Content2> getArticleChannel() {
         return article_channel;
     }
+    static public List<Content2> getChannelList(int grade_stage) {
+        List<Content2> list = new ArrayList<>();
+        Content2 content2 = null;
+        if(grade_stage == 101) {
+            content2 = new Content2();
+            content2.setChannel_info("801");
+            content2.setChannel_name("育儿");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("0");
+            content2.setChannel_name("其他");
+            list.add(content2);
+
+        } else if(grade_stage == 102){
+            content2 = new Content2();
+            content2.setChannel_info("101,102,103,104,105,106,107,108,109");
+            content2.setChannel_name("学知识");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504");
+            content2.setChannel_name("兴趣爱好");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("0");
+            content2.setChannel_name("其他");
+            list.add(content2);
+        } else if(grade_stage == 2){
+            content2 = new Content2();
+            content2.setChannel_info("101");
+            content2.setChannel_name("数学");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("102");
+            content2.setChannel_name("语文");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("103");
+            content2.setChannel_name("英语");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504");
+            content2.setChannel_name("兴趣爱好");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("0");
+            content2.setChannel_name("其他");
+            list.add(content2);
+
+        } else if(grade_stage == 3){
+            content2 = new Content2();
+            content2.setChannel_info("101");
+            content2.setChannel_name("数学");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("102");
+            content2.setChannel_name("语文");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("103");
+            content2.setChannel_name("英语");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("104");
+            content2.setChannel_name("物理");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("105");
+            content2.setChannel_name("化学");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("0");
+            content2.setChannel_name("其他");
+            list.add(content2);
+
+        } else if(grade_stage == 4){
+            content2 = new Content2();
+            content2.setChannel_info("101");
+            content2.setChannel_name("数学");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("102");
+            content2.setChannel_name("语文");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("103");
+            content2.setChannel_name("英语");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("104");
+            content2.setChannel_name("物理");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("105");
+            content2.setChannel_name("化学");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("0");
+            content2.setChannel_name("其他 ");
+            list.add(content2);
+        } else {
+            content2 = new Content2();
+            content2.setChannel_info("101");
+            content2.setChannel_name("数学");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("102");
+            content2.setChannel_name("语文");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("103");
+            content2.setChannel_name("英语");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("0");
+            content2.setChannel_name("其他 ");
+            list.add(content2);
+        }
+        return list;
+    }
+
 }

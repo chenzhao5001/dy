@@ -946,6 +946,26 @@ public class UserController extends BaseController{
         }
         return JSONResult.ok(true);
     }
+
+    @RequestMapping(value = "/set_channel_stage")
+    @ResponseBody
+    JSONResult setChannelGradeStage(String stage) {
+        if(stage == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+        int user_id = getCurrentUserId();
+        iUser.setUserGradeStage(user_id,Integer.parseInt(stage));
+        return JSONResult.ok();
+    }
+
+    @RequestMapping(value = "/update_imsig")
+    @ResponseBody
+    JSONResult updateImSig() throws IOException {
+        int user_id = getCurrentUserId();
+        String im_sig = TlsSigTest.getUrlSig(String.valueOf(user_id));
+        iUser.setImInfo(user_id,String.valueOf(user_id),im_sig);
+        return JSONResult.ok(im_sig);
+    }
 }
 
 

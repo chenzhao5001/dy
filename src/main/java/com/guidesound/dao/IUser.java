@@ -200,5 +200,10 @@ public interface IUser {
     @Delete("delete from user where id = #{arg0}")
     void deleteUser(int user);
 
+    @Update("update user set channel_stage = #{arg1} where id = #{arg0}")
+    void setUserGradeStage(int user_id,int grade_stage);
+
+    @Select("select channel_stage from user where id = #{arg0}")
+    int getChannelStage(int user_id);
 }
 
