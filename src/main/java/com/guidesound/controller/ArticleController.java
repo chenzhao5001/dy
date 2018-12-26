@@ -394,19 +394,19 @@ public class ArticleController extends BaseController {
     @RequestMapping("/edit")
     public String articleEdit(HttpServletRequest request, HttpServletResponse response, ModelMap mode) {
         //种cookie
-        UserInfo user = iUser.getUser(1);
-        String token = TockenUtil.makeTocken(user.getId());
-        Cookie cookie = new Cookie("token",token);//创建新cookie
-        cookie.setPath("/");//设置作用域
+//        UserInfo user = iUser.getUser(1);
+//        String token = TockenUtil.makeTocken(user.getId());
+//        Cookie cookie = new Cookie("token",token);//创建新cookie
+//        cookie.setPath("/");//设置作用域
 
-        Map info = new HashMap<String,Object>();
-        info.put("user",user);
-        info.put("subject", SignMap.getSubjectClassifyList());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        info.put("created_time", sdf.format(new Date(Long.valueOf(user.getCreate_time()+"000"))));
-
-        mode.addAllAttributes(info);
-        response.addCookie(cookie);//将cookie添加到response的cookie数组中返回给客户端
+//        Map info = new HashMap<String,Object>();
+//        info.put("user",user);
+//        info.put("subject", SignMap.getSubjectClassifyList());
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        info.put("created_time", sdf.format(new Date(Long.valueOf(user.getCreate_time()+"000"))));
+//
+//        mode.addAllAttributes(info);
+//        response.addCookie(cookie);//将cookie添加到response的cookie数组中返回给客户端
         return "edit";
     }
 

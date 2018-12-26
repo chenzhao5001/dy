@@ -521,6 +521,8 @@
         <div class="hideImg" style="display: none"></div>
         <script>
         CKEDITOR.replace( 'editor1', {
+            height:800,
+            autoGrow_minHeight : 800,
         extraPlugins: ['easyimage','autogrow'],
         removePlugins: 'image',
         removeDialogTabs: 'link:advanced',

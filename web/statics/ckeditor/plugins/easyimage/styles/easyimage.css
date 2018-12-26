@@ -152,3 +152,14 @@ the initial render, otherwise it would start transitioning from opacity 1 to 0.x
 	margin-top: 5px;
 	text-indent: 2em;
 }
+
+#cke_editor1 {
+	height: 100%;
+}
+#cke_1_contents {
+	height: 100%;
+}
+
+#cke_editor1 .cke_inner{
+	height: 100%;
+}
