@@ -136,6 +136,16 @@ public class UserController extends BaseController{
             jObject=new JSONObject(usr_info);
             head = jObject.getString("figureurl_qq_2");
             name = jObject.getString("nickname");
+            String unionIdUrl = "https://graph.qq.com/oauth2.0/me?access_token=" + my_token + "&unionid=1";
+            String union_info = ToolsFunction.httpGet(unionIdUrl);
+            begin = union_info.indexOf("(");
+            end = union_info.indexOf(")");
+            union_info = union_info.substring(begin+1,end);
+            jObject=new JSONObject(union_info);
+            if(!jObject.has("unionid")) {
+                return JSONResult.errorMsg("qq接入为获取unionid失败");
+            }
+            unionid = jObject.getString("");
 
         } else {
             if(!type.equals("1")) {
@@ -315,8 +325,8 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value = "/name_login")
     @ResponseBody
-    public JSONResult loginByName(String name,String pwd) {
-        if(name == null || pwd == null || !pwd.equals("90908989")) {
+    public JSONResult loginByName(HttpServletRequest request, HttpServletResponse response,String name,String pwd) throws IOException {
+        if(name == null || pwd == null || !pwd.equals("adminchenzhao111")) {
             return JSONResult.errorMsg("参数错误");
         }
 
@@ -350,6 +360,17 @@ public class UserController extends BaseController{
         user.setVideo_count(videoCount);
         user.setArticle_count(articleCount);
         user.setCreate_time(user.getCreate_time());
+
+        String im_id = String.valueOf(user.getId());
+        String im_sig = TlsSigTest.getUrlSig(String.valueOf(im_id));
+        iUser.setImInfo(user.getId(),im_id,im_sig);
+        user.setIm_id(im_id);
+        user.setIm_sig(im_sig);
+
+        //种cookie
+        Cookie cookie = new Cookie("token",TockenUtil.makeTocken(user.getId()));//创建新cookie
+        cookie.setPath("/");//设置作用域
+        response.addCookie(cookie);//将cookie添加到response的cookie数组中返回给客户端
 
         return JSONResult.ok(user);
     }

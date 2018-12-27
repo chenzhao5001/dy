@@ -253,7 +253,7 @@ public class ArticleController extends BaseController {
 
             item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
             item.setContent_url(request.getScheme() +"://" + request.getServerName()  + ":"
-                    + request.getServerPort() + "/article/preview?article_id=" + item.getId());
+                    + request.getServerPort() + "/guidesound/article/preview?article_id=" + item.getId());
             if(!user_ids.contains(item.getUser_id())) {
                 user_ids.add(item.getUser_id());
             }
@@ -550,7 +550,7 @@ public class ArticleController extends BaseController {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         for (ArticleAnswer item : list) {
             item.setContent_url(request.getScheme() +"://" + request.getServerName()  + ":"
-                    + request.getServerPort() + "/article/answer_preview?answer_id=" + item.getId());
+                    + request.getServerPort() + "/guidesound/article/answer_preview?answer_id=" + item.getId());
             if(answerList.contains(item.getId())) {
                 item.setPraise(true);
             }
