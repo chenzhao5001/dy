@@ -186,4 +186,17 @@ public interface IArticle {
 
     @Delete("delete from articleAnswer where user_id = #{arg0}")
     void deleteAnswerByUser(int user);
+
+    @Select("select count(*) from articleCollection where user_id = #{arg0} and deleted = 0")
+    int getCollectCountByUserid(int user_id);
+    @Select("select article_id from articleCollection where user_id = #{arg0} and deleted = 0 limit #{arg1},#{arg2}")
+    List<Integer> getCollectIdsByUserid(int user_id,int begin,int end);
+
+    @Select("<script>"
+            + "select * from  article WHERE id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    List<ArticleInfo> getArticleByid(@Param("iList") List<Integer> iList);
 }

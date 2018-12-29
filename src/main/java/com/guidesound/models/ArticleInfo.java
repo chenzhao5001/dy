@@ -11,6 +11,7 @@ public class ArticleInfo {
     private int subject;
     private String subject_name;
     private int grade_class;
+    private int grade;
     private int type;
     private int answer_count;
     private String user_head;
@@ -31,6 +32,23 @@ public class ArticleInfo {
     private int create_time;
     private int praise_count;
     private boolean praise;
+    private int examine_status;
+
+    public int getExamine_status() {
+        return examine_status;
+    }
+
+    public void setExamine_status(int examine_status) {
+        this.examine_status = examine_status;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
 
     public int getGrade_class() {
         return grade_class;

@@ -31,7 +31,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
-public class ManagerController {
+public class ManagerController extends BaseController {
 
     @Autowired
     private IInUser iInUser;
@@ -227,13 +227,13 @@ public class ManagerController {
                 ArticleVerify articleVerify = new ArticleVerify();
                 articleVerify.setArticle_id(item.getId());
                 articleVerify.setArticleAid(item.getId());
-                articleVerify.setArticleGrade_class(SignMap.getWatchById(item.getGrade_class()));
+                articleVerify.setArticleGrade_class(SignMap.getGradeTypeByID(item.getGrade()));
                 articleVerify.setArticleLength(0);
                 articleVerify.setArticleSubject(SignMap.getSubjectTypeById(item.getSubject()));
                 articleVerify.setArticleTitle(item.getHead());
                 articleVerify.setArticleXy("");
 
-                articleVerify.setShowContent("http://daoyinjiaoyu.com/article/preview?article_id=" + item.getId());
+                articleVerify.setShowContent("https://daoyinjiaoyu.com/guidesound/article/preview?article_id=" + item.getId());
                 articleVerify.setShowTitle_pic1(item.getHead_pic1());
                 articleVerify.setShowTitle_pic2(item.getHead_pic2());
                 articleVerify.setShowTitle_pic3(item.getHead_pic3());

@@ -71,7 +71,9 @@ public class VideoController extends BaseController {
         User user = (User)req.getAttribute("user_info");
         video.setUser_id(user.getId());
         video.setTitle(videoDTO.getTitle());
-        video.setSubject(Integer.parseInt(videoDTO.getSubject()));
+
+        User currentUser = (User)req.getAttribute("user_info");
+        video.setSubject(currentUser.getSubject());
         video.setWatch_type(Integer.parseInt(videoDTO.getWatch_type()));
         video.setContent(videoDTO.getContent());
         video.setDuration(Integer.parseInt(videoDTO.getDuration()));

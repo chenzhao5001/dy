@@ -21,6 +21,13 @@
         <if test="user_id != null ">
             and  user_id = #{user_id}
         </if>
+        <if test="ower_flag == true ">
+            and  (examine_status = 1 or examine_status = 0)
+        </if>
+        <if test="ower_flag == false ">
+            and  examine_status = 1
+        </if>
+
         and deleted = 0
     </select>
 
@@ -41,6 +48,12 @@
         </if>
         <if test="user_id != null ">
             and  user_id = #{user_id}
+        </if>
+        <if test="ower_flag == true ">
+            and  (examine_status = 1 or examine_status = 0)
+        </if>
+        <if test="ower_flag == false ">
+            and  examine_status = 1
         </if>
         and deleted = 0
         ORDER BY create_time DESC

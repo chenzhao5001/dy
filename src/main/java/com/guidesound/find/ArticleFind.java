@@ -8,6 +8,15 @@ public class ArticleFind {
     int end;
     int type;
     String user_id;
+    boolean ower_flag;
+
+    public boolean isOwer_flag() {
+        return ower_flag;
+    }
+
+    public void setOwer_flag(boolean ower_flag) {
+        this.ower_flag = ower_flag;
+    }
 
     public String getUser_id() {
         return user_id;

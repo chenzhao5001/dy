@@ -20,6 +20,15 @@ public class User {
     private int create_time;
     private int update_time;
     private int grade_level;
+    private int subject;
+
+    public int getSubject() {
+        return subject;
+    }
+
+    public void setSubject(int subject) {
+        this.subject = subject;
+    }
 
     public int getGrade_level() {
         return grade_level;

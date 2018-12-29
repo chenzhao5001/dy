@@ -145,7 +145,7 @@ public class UserController extends BaseController{
             if(!jObject.has("unionid")) {
                 return JSONResult.errorMsg("qq接入为获取unionid失败");
             }
-            unionid = jObject.getString("");
+            unionid = jObject.getString("unionid");
 
         } else {
             if(!type.equals("1")) {
@@ -416,7 +416,7 @@ public class UserController extends BaseController{
         User currentUser = (User)request.getAttribute("user_info");
         int dy_id = 0;
         if(iType == 1 ) {
-            dy_id = 10009999 + currentUser.getId();
+            dy_id = 10010000 + currentUser.getId();
         } else if (iType == 2){
             dy_id = 20000000 + currentUser.getId();
         } else if ( iType == 3) {

@@ -41,7 +41,24 @@ public class UserInfo {
     private String im_id;
     private String im_sig;
     private int pwd_state;
+    private int channel_stage;
+    public String im_appid = "1400158534";
 
+    public String getIm_appid() {
+        return im_appid;
+    }
+
+    public void setIm_appid(String im_appid) {
+        this.im_appid = im_appid;
+    }
+
+    public int getChannel_stage() {
+        return channel_stage;
+    }
+
+    public void setChannel_stage(int channel_stage) {
+        this.channel_stage = channel_stage;
+    }
 
     public String getIm_id() {
         return im_id;

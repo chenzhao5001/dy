@@ -6,10 +6,7 @@ import com.guidesound.dto.ArticleDTO;
 import com.guidesound.find.ArticleFind;
 import com.guidesound.models.*;
 import com.guidesound.resp.ListResp;
-import com.guidesound.util.JSONResult;
-import com.guidesound.util.SignMap;
-import com.guidesound.util.TockenUtil;
-import com.guidesound.util.ToolsFunction;
+import com.guidesound.util.*;
 import com.qcloud.Common.Sign;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
@@ -60,9 +57,8 @@ public class ArticleController extends BaseController {
         articleDTO.head_pic1 = articleDTO.head_pic1 == null ? "":articleDTO.head_pic1;
         articleDTO.head_pic2 = articleDTO.head_pic2 == null ? "":articleDTO.head_pic2;
         articleDTO.head_pic3 = articleDTO.head_pic3 == null ? "":articleDTO.head_pic3;
-
         User currentUser = (User)request.getAttribute("user_info");
-
+        articleDTO.setSubject(String.valueOf(currentUser.getSubject()));
         articleDTO.setContent(upStringToCloud(articleDTO.getContent()));
         articleDTO.setUser_id(currentUser.getId());
         articleDTO.setCreate_time((int)(new Date().getTime() / 1000));
@@ -113,6 +109,30 @@ public class ArticleController extends BaseController {
             return JSONResult.errorMsg("此文章已经收藏过了");
         }
         return JSONResult.ok();
+    }
+    @RequestMapping("/collect_list")
+    @ResponseBody
+    JSONResult getCollectByUserId(String page,String size) {
+
+        int iPage = (page == null || page.equals(""))  ? 1:Integer.parseInt(page);
+        int iSize = (size == null || size.equals(""))  ? 20:Integer.parseInt(size);
+        int begin = (iPage - 1)*iSize;
+        int end = iSize;
+        int count = iArticle.getCollectCountByUserid(getCurrentUserId());
+        List<ArticleInfo> list = new ArrayList<>();
+        if(count > 0) {
+            List<Integer> ids = iArticle.getCollectIdsByUserid(getCurrentUserId(),begin,end);
+            if(ids.size() > 0) {
+                list = iArticle.getArticleByid(ids);
+                getExtendInfo(list);
+            }
+        }
+
+        ListResp listResp = new ListResp();
+        listResp.setCount(count);
+        listResp.setList(list);
+
+        return JSONResult.ok(listResp);
     }
 
     /**
@@ -208,6 +228,9 @@ public class ArticleController extends BaseController {
         articleFind.setEnd(end);
         articleFind.setType(Integer.parseInt(type));
         articleFind.setUser_id(user_id);
+        if(user_id != null && getCurrentUserId() == Integer.parseInt(user_id)) {
+            articleFind.setOwer_flag(true);
+        }
 
         int count = iArticle.count(articleFind);
         List<ArticleInfo> list = new ArrayList<>();
@@ -680,7 +703,22 @@ public class ArticleController extends BaseController {
     @RequestMapping("/article_channel")
     @ResponseBody
     JSONResult articleChannel() {
-        return JSONResult.ok(SignMap.getArticleChannel());
+
+        int user_id = getCurrentUserId();
+        if(user_id == 0) {
+            return JSONResult.ok(SignMap.getChannelList(1,true));
+        }
+        int channel_stage = iUser.getChannelStage(user_id);
+        int temp = 0;
+
+        if(channel_stage == 101) {
+            temp = 101;
+        } else if(channel_stage == 102){
+            temp = 102;
+        } else {
+            temp = channel_stage/100;
+        }
+        return JSONResult.ok(SignMap.getChannelList(temp,true));
     }
     /**
      * 获取频道文章

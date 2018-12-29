@@ -56,6 +56,27 @@ class Content2 {
     }
 }
 
+class Content3 {
+    int id;
+    String info;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+}
+
 class ListItem implements Comparable<ListItem> {
     int id;
     String gradeName;
@@ -117,6 +138,7 @@ public class SignMap {
     static Map<Integer,String> watch_type;
     static Map<Integer,String> user_type;
     static Map<Integer,String> grade_type;
+    static Map<Integer,String> grade_type2;
     static Map<Integer,String> user_level;
     static List<Content2> channel;
     static List<Content2> article_channel;
@@ -226,6 +248,23 @@ public class SignMap {
         grade_type.put(402,"高二");
         grade_type.put(403,"高三");
         grade_type.put(499,"高中");
+
+        grade_type2 = new TreeMap<>();
+        grade_type2.put(101,"入园前");
+        grade_type2.put(102,"幼儿园");
+        grade_type2.put(201,"1年级");
+        grade_type2.put(202,"2年级");
+        grade_type2.put(203,"3年级");
+        grade_type2.put(204,"4年级");
+        grade_type2.put(205,"5年级");
+        grade_type2.put(206,"6年级");
+        grade_type2.put(301,"初一");
+        grade_type2.put(302,"初二");
+        grade_type2.put(303,"初三");
+        grade_type2.put(401,"高一");
+        grade_type2.put(402,"高二");
+        grade_type2.put(403,"高三");
+
 
         user_level = new HashMap<>();
         user_level.put(1,"游客");
@@ -385,6 +424,17 @@ public class SignMap {
         return user_type;
     }
 
+    public static Object getGradeTypeInfo2() {
+        List<Content3> list = new ArrayList<>();
+        for (Integer id: grade_type2.keySet()) {
+            String info = grade_type2.get(id);
+            Content3 temp = new Content3();
+            temp.id = id;
+            temp.info = info;
+            list.add(temp);
+        }
+        return list;
+    }
 
 
 //    public static Map<Integer,Content> getGradeTypeList() {
@@ -470,6 +520,8 @@ public class SignMap {
         ListInfo info4 = new ListInfo();//舞蹈
         ListInfo info5 = new ListInfo();//武术
         ListInfo info6 = new ListInfo();//其他
+        ListInfo info7 = new ListInfo();//其他
+        ListInfo info8 = new ListInfo();//其他
 
         info1.setId(1);
         info1.setLevel("文化课");
@@ -487,8 +539,14 @@ public class SignMap {
         info5.setLevel("武术");
         info5.setList(new ArrayList<>());
         info6.setId(6);
-        info6.setLevel("其他");
+        info6.setLevel("思维训练");
         info6.setList(new ArrayList<>());
+        info7.setId(7);
+        info7.setLevel("中华文化");
+        info7.setList(new ArrayList<>());
+        info8.setId(8);
+        info8.setLevel("家长课");
+        info8.setList(new ArrayList<>());
 
         for(Integer key : subject_type.keySet()) {
             Content content = subject_type.get(key);
@@ -514,6 +572,12 @@ public class SignMap {
                 case 6:
                     info6.getList().add(item);
                     break;
+                case 7:
+                    info7.getList().add(item);
+                    break;
+                case 8:
+                    info8.getList().add(item);
+                    break;
             }
         }
 
@@ -537,9 +601,19 @@ public class SignMap {
     static public List<Content2> getArticleChannel() {
         return article_channel;
     }
-    static public List<Content2> getChannelList(int grade_stage) {
+    static public List<Content2> getChannelList(int grade_stage,boolean type) {
         List<Content2> list = new ArrayList<>();
         Content2 content2 = null;
+        if(flag == true) {
+            content2 = new Content2();
+            content2.setChannel_info("1");
+            content2.setChannel_name("推荐");
+            list.add(content2);
+            content2 = new Content2();
+            content2.setChannel_info("2");
+            content2.setChannel_name("问答");
+            list.add(content2);
+        }
         if(grade_stage == 101) {
             content2 = new Content2();
             content2.setChannel_info("801");

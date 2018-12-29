@@ -68,6 +68,12 @@ public class TypeMapController extends BaseController {
         return JSONResult.ok(list);
     }
 
+    @RequestMapping(value = "/grade_type_list2")
+    @ResponseBody
+    public JSONResult getGradeType2() {
+        return JSONResult.ok(SignMap.getGradeTypeInfo2());
+    }
+
     @RequestMapping(value = "/grade_type_list")
     @ResponseBody
     public JSONResult getGradeType() {
@@ -136,15 +142,15 @@ public class TypeMapController extends BaseController {
     JSONResult  getChannelList() throws JsonProcessingException {
         int user_id = getCurrentUserId();
         if(user_id == 0) {
-            return JSONResult.ok(SignMap.getChannelList(1));
+            return JSONResult.ok(SignMap.getChannelList(1,false));
         }
         int channel_stage = iUser.getChannelStage(user_id);
         if(channel_stage == 101) {
-            return JSONResult.ok(SignMap.getChannelList(101));
+            return JSONResult.ok(SignMap.getChannelList(101,false));
         } else if(channel_stage == 102){
-            return JSONResult.ok(SignMap.getChannelList(101));
+            return JSONResult.ok(SignMap.getChannelList(102,false));
         } else {
-            return JSONResult.ok(SignMap.getChannelList(channel_stage/100));
+            return JSONResult.ok(SignMap.getChannelList(channel_stage/100,false));
         }
 
 //        return SignMap.getChannelList();
