@@ -92,6 +92,7 @@ public class EditController extends BaseController {
         PutObjectResult putObjectResult = cosClient.putObject(putObjectRequest);
         localFile.delete();
         String url = "https://" + articleBucketName + ".cos." + region + ".myqcloud.com" + "/" + key;
+        url = url.replace("cos.ap-beijing","image");
         String ret = String.format("{\"default\" : \"%s\"}",url);
         return ret;
     }
