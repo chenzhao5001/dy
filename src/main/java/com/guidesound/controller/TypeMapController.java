@@ -167,8 +167,12 @@ public class TypeMapController extends BaseController {
 
         UserInfo userInfo = iUser.getUser(getCurrentUserId());
         int level = userInfo.getGrade_level();
-
-        Map<Integer,String> m_temp = SignMap.getGradeByClass(level);
+        boolean role_flag = false;
+        //教师 达人
+        if(userInfo.getType() == 1 || userInfo.getType() == 4) {
+            role_flag = true;
+        }
+        Map<Integer,String> m_temp = SignMap.getGradeByClass(level,role_flag);
         class Grade{
             int id;
             String grade;

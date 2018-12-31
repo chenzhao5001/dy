@@ -344,11 +344,14 @@ public class SignMap {
         return "未知";
     }
 
-    public static Map<Integer,String> getGradeByClass(int type) {
+    public static Map<Integer,String> getGradeByClass(int type,boolean role_flag) {
         Map<Integer,String> m = new TreeMap<>();
         if(type == 1) {
             m.put(101,"入园前");
             m.put(102,"幼儿园");
+            if(role_flag == true) {
+                m.put(199,"学龄前");
+            }
         } else if(type == 2){
             m.put(201,"一年级");
             m.put(202,"二年级");
@@ -356,14 +359,23 @@ public class SignMap {
             m.put(204,"四年级");
             m.put(205,"五年级");
             m.put(206,"六年级");
+            if(role_flag == true) {
+                m.put(299, "小学");
+            }
         } else if (type == 3) {
             m.put(301,"初一");
             m.put(302,"初二");
             m.put(303,"初三");
+            if(role_flag == true) {
+                m.put(399, "初中");
+            }
         } else if(type == 4){
             m.put(401,"高一");
             m.put(402,"高二");
             m.put(403,"高三");
+            if(role_flag == true) {
+                m.put(499, "高中");
+            }
         } else if(type == 5){
             m.put(301,"初一");
             m.put(302,"初二");
@@ -371,6 +383,9 @@ public class SignMap {
             m.put(401,"高一");
             m.put(402,"高二");
             m.put(403,"高三");
+            if(role_flag == true) {
+                m.put(498, "初高");
+            }
         }
         return m;
     }
@@ -519,7 +534,7 @@ public class SignMap {
         info4.setLevel("舞蹈");
         info4.setList(new ArrayList<>());
         info5.setId(5);
-        info5.setLevel("武术");
+        info5.setLevel("体育");
         info5.setList(new ArrayList<>());
         info6.setId(6);
         info6.setLevel("思维训练");
@@ -591,7 +606,7 @@ public class SignMap {
     static public List<Content2> getChannelList(int grade_stage,boolean type) {
         List<Content2> list = new ArrayList<>();
         Content2 content2 = null;
-        if(flag == true) {
+        if(type == true) {
             content2 = new Content2();
             content2.setChannel_info("1");
             content2.setChannel_name("推荐");
