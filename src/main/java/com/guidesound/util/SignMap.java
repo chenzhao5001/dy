@@ -642,11 +642,11 @@ public class SignMap {
         } else if(grade_stage == 2){
             content2 = new Content2();
             content2.setChannel_info("101");
-            content2.setChannel_name("数学");
+            content2.setChannel_name("语文");
             list.add(content2);
             content2 = new Content2();
             content2.setChannel_info("102");
-            content2.setChannel_name("语文");
+            content2.setChannel_name("数学");
             list.add(content2);
             content2 = new Content2();
             content2.setChannel_info("103");
@@ -664,11 +664,11 @@ public class SignMap {
         } else if(grade_stage == 3){
             content2 = new Content2();
             content2.setChannel_info("101");
-            content2.setChannel_name("数学");
+            content2.setChannel_name("语文");
             list.add(content2);
             content2 = new Content2();
             content2.setChannel_info("102");
-            content2.setChannel_name("语文");
+            content2.setChannel_name("数学");
             list.add(content2);
             content2 = new Content2();
             content2.setChannel_info("103");
@@ -690,11 +690,11 @@ public class SignMap {
         } else if(grade_stage == 4){
             content2 = new Content2();
             content2.setChannel_info("101");
-            content2.setChannel_name("数学");
+            content2.setChannel_name("语文");
             list.add(content2);
             content2 = new Content2();
             content2.setChannel_info("102");
-            content2.setChannel_name("语文");
+            content2.setChannel_name("数学");
             list.add(content2);
             content2 = new Content2();
             content2.setChannel_info("103");
@@ -715,11 +715,11 @@ public class SignMap {
         } else {
             content2 = new Content2();
             content2.setChannel_info("101");
-            content2.setChannel_name("数学");
+            content2.setChannel_name("语文");
             list.add(content2);
             content2 = new Content2();
             content2.setChannel_info("102");
-            content2.setChannel_name("语文");
+            content2.setChannel_name("数学");
             list.add(content2);
             content2 = new Content2();
             content2.setChannel_info("103");
