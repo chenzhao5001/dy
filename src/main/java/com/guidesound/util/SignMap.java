@@ -141,7 +141,7 @@ public class SignMap {
 //    static Map<Integer,String> grade_type2;
     static Map<Integer,String> user_level;
     static List<Content2> channel;
-    static List<Content2> article_channel;
+//    static List<Content2> article_channel;
 
     static boolean flag = false;
 
@@ -160,55 +160,6 @@ public class SignMap {
 
     }
     static {
-
-//        subject_type = new TreeMap<>();
-//        subject_type.put(101,new Content("语文",1));
-//        subject_type.put(102,new Content("数学",1));
-//        subject_type.put(103,new Content("英语",1));
-//        subject_type.put(104,new Content("物理",1));
-//        subject_type.put(105,new Content("化学",1));
-//        subject_type.put(106,new Content("生物",1));
-//        subject_type.put(107,new Content("历史",1));
-//        subject_type.put(108,new Content("地理",1));
-//        subject_type.put(109,new Content("政治",1));
-//        subject_type.put(199,new Content("全部",1));
-//
-//        subject_type.put(201,new Content("钢琴",2));
-//        subject_type.put(202,new Content("吉他",2));
-//        subject_type.put(203,new Content("古筝",2));
-//        subject_type.put(204,new Content("架子鼓",2));
-//        subject_type.put(205,new Content("尤克里里",2));
-//        subject_type.put(299,new Content("全部",2));
-//
-//        subject_type.put(301,new Content("素描",3));
-//        subject_type.put(302,new Content("油画",3));
-//        subject_type.put(303,new Content("水粉",3));
-//        subject_type.put(304,new Content("漫画",3));
-//        subject_type.put(305,new Content("水彩",3));
-//        subject_type.put(306,new Content("速写",3));
-//        subject_type.put(307,new Content("少儿美术",3));
-//        subject_type.put(399,new Content("全部",3));
-//
-//        subject_type.put(401,new Content("芭蕾",4));
-//        subject_type.put(402,new Content("民族",4));
-//        subject_type.put(403,new Content("古典",4));
-//        subject_type.put(404,new Content("爵士",4));
-//        subject_type.put(405,new Content("拉丁",4));
-//        subject_type.put(406,new Content("街舞",4));
-//        subject_type.put(499,new Content("全部",4));
-//
-//        subject_type.put(501,new Content("跆拳道",5));
-//        subject_type.put(502,new Content("武术",5));
-//        subject_type.put(503,new Content("散打",5));
-//        subject_type.put(504,new Content("柔道",5));
-//        subject_type.put(599,new Content("全部",5));
-//
-//        subject_type.put(601,new Content("奥数",6));
-//        subject_type.put(602,new Content("国学",6));
-//        subject_type.put(603,new Content("智力开发",6));
-//        subject_type.put(604,new Content("速算",6));
-//        subject_type.put(699,new Content("全部",6));
-
 
         watch_type = new TreeMap<>();
         watch_type.put(1,"小学前");
@@ -247,23 +198,6 @@ public class SignMap {
         grade_type.put(403,"高三");
 
 
-//        grade_type2 = new TreeMap<>();
-//        grade_type2.put(101,"入园前");
-//        grade_type2.put(102,"幼儿园");
-//        grade_type2.put(201,"1年级");
-//        grade_type2.put(202,"2年级");
-//        grade_type2.put(203,"3年级");
-//        grade_type2.put(204,"4年级");
-//        grade_type2.put(205,"5年级");
-//        grade_type2.put(206,"6年级");
-//        grade_type2.put(301,"初一");
-//        grade_type2.put(302,"初二");
-//        grade_type2.put(303,"初三");
-//        grade_type2.put(401,"高一");
-//        grade_type2.put(402,"高二");
-//        grade_type2.put(403,"高三");
-
-
         user_level = new HashMap<>();
         user_level.put(1,"游客");
         user_level.put(2,"初级");
@@ -272,10 +206,6 @@ public class SignMap {
 
         channel = new ArrayList<>();
         Content2 content2 = new Content2();
-//        content2.setChannel_info("1");
-//        content2.setChannel_name("推荐");
-//        channel.add(content2);
-//        content2 = new Content2();
         content2.setChannel_info("101,102,103");
         content2.setChannel_name("语数外");
         channel.add(content2);
@@ -294,37 +224,37 @@ public class SignMap {
         content2.setChannel_name("其他");
         channel.add(content2);
 
-        article_channel = new ArrayList<>();
-        content2 = new Content2();
-        content2.setChannel_info("1");
-        content2.setChannel_name("推荐");
-        article_channel.add(content2);
-
-        content2 = new Content2();
-        content2.setChannel_info("2");
-        content2.setChannel_name("问答");
-        article_channel.add(content2);
-
-
-        content2 = new Content2();
-        content2.setChannel_info("101");
-        content2.setChannel_name("语文");
-        article_channel.add(content2);
-
-        content2 = new Content2();
-        content2.setChannel_info("102");
-        content2.setChannel_name("数学");
-        article_channel.add(content2);
-
-        content2 = new Content2();
-        content2.setChannel_info("103");
-        content2.setChannel_name("英语");
-        article_channel.add(content2);
-
-        content2 = new Content2();
-        content2.setChannel_info("104");
-        content2.setChannel_name("物理");
-        article_channel.add(content2);
+//        article_channel = new ArrayList<>();
+//        content2 = new Content2();
+//        content2.setChannel_info("1");
+//        content2.setChannel_name("推荐");
+//        article_channel.add(content2);
+//
+//        content2 = new Content2();
+//        content2.setChannel_info("2");
+//        content2.setChannel_name("问答");
+//        article_channel.add(content2);
+//
+//
+//        content2 = new Content2();
+//        content2.setChannel_info("101");
+//        content2.setChannel_name("语文");
+//        article_channel.add(content2);
+//
+//        content2 = new Content2();
+//        content2.setChannel_info("102");
+//        content2.setChannel_name("数学");
+//        article_channel.add(content2);
+//
+//        content2 = new Content2();
+//        content2.setChannel_info("103");
+//        content2.setChannel_name("英语");
+//        article_channel.add(content2);
+//
+//        content2 = new Content2();
+//        content2.setChannel_info("104");
+//        content2.setChannel_name("物理");
+//        article_channel.add(content2);
     }
 
     public static List<Content2> getChannelList() throws JsonProcessingException {
@@ -600,9 +530,9 @@ public class SignMap {
         return list;
     }
 
-    static public List<Content2> getArticleChannel() {
-        return article_channel;
-    }
+//    static public List<Content2> getArticleChannel() {
+//        return article_channel;
+//    }
     static public List<Content2> getChannelList(int grade_stage,boolean type) {
         List<Content2> list = new ArrayList<>();
         Content2 content2 = null;
@@ -616,13 +546,14 @@ public class SignMap {
             content2.setChannel_name("问答");
             list.add(content2);
         }
+
         if(grade_stage == 101) {
             content2 = new Content2();
             content2.setChannel_info("801");
             content2.setChannel_name("育儿");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("0");
+            content2.setChannel_info("101,102,103,104,105,106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,802,803");
             content2.setChannel_name("其他");
             list.add(content2);
 
@@ -636,7 +567,7 @@ public class SignMap {
             content2.setChannel_name("兴趣爱好");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("0");
+            content2.setChannel_info("601,602,701,702,801,802,803");
             content2.setChannel_name("其他");
             list.add(content2);
         } else if(grade_stage == 2){
@@ -657,7 +588,7 @@ public class SignMap {
             content2.setChannel_name("兴趣爱好");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("0");
+            content2.setChannel_info("104,105,106,107,108,109,601,602,701,702,801,802,803");
             content2.setChannel_name("其他");
             list.add(content2);
 
@@ -683,7 +614,7 @@ public class SignMap {
             content2.setChannel_name("化学");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("0");
+            content2.setChannel_info("106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803");
             content2.setChannel_name("其他");
             list.add(content2);
 
@@ -709,7 +640,7 @@ public class SignMap {
             content2.setChannel_name("化学");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("0");
+            content2.setChannel_info("106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803");
             content2.setChannel_name("其他 ");
             list.add(content2);
         } else {
@@ -726,8 +657,8 @@ public class SignMap {
             content2.setChannel_name("英语");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("0");
-            content2.setChannel_name("其他 ");
+            content2.setChannel_info("104,105,106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803");
+            content2.setChannel_name("其他");
             list.add(content2);
         }
         return list;

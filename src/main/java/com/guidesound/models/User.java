@@ -21,6 +21,15 @@ public class User {
     private int update_time;
     private int grade_level;
     private int subject;
+    private int channel_stage;
+
+    public int getChannel_stage() {
+        return channel_stage;
+    }
+
+    public void setChannel_stage(int channel_stage) {
+        this.channel_stage = channel_stage;
+    }
 
     public int getSubject() {
         return subject;

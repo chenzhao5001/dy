@@ -57,6 +57,11 @@ public class BaseController {
         }
     }
 
+//    User getCurrentUser() {
+//        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+//        return (User)req.getAttribute("user_info");
+//    }
+
     int getCurrentUserId() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         int currentUserID = 0;
