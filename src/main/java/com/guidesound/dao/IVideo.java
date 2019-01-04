@@ -146,8 +146,15 @@ public interface IVideo {
     @Select("select * from video where user_id = #{arg0} and (examine_status = 1 or examine_status = 0 or examine_status = 3) and deleted = 0 limit #{arg1},#{arg2}")
     List<VideoShow> getPublishVidoeByUserId_2(int user_id,int begin,int end);
 
-    @Select("select * from video where type_list like '%1%' and examine_status = 1 and deleted = 0 order by create_time desc")
-    List<VideoShow> getRecommendVideo();
+    @Select("<script>"
+            + "SELECT * FROM video WHERE 1 = 1"
+            + "<when test=' arg1 != 0 '>"
+            + "AND (watch_type = #{arg0} or watch_type = #{arg1} or watch_type = #{arg2}) "
+            + "</when>"
+            + " and examine_status = 1"
+            + " and type_list like '%1%'"
+            + "</script>")
+    List<VideoShow> getRecommendVideo(int grade,int other_grade1,int other_grade2);
 
 //    @Select("")
 //    int foo();

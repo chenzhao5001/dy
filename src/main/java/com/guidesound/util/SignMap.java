@@ -310,10 +310,13 @@ public class SignMap {
             m.put(301,"初一");
             m.put(302,"初二");
             m.put(303,"初三");
+            m.put(399,"初三");
             m.put(401,"高一");
             m.put(402,"高二");
             m.put(403,"高三");
             if(role_flag == true) {
+                m.put(399, "初中");
+                m.put(499, "高中");
                 m.put(498, "初高");
             }
         }
@@ -322,6 +325,21 @@ public class SignMap {
     public static String getGradeTypeByID(int id) {
         if(grade_type.containsKey(id)) {
             return grade_type.get(id);
+        }
+        if(id == 199) {
+            return "入园前";
+        }
+        if(id == 299) {
+            return "小学";
+        }
+        if(id == 399) {
+            return "初中";
+        }
+        if (id == 499) {
+            return "高中";
+        }
+        if (id == 498) {
+            return "初高";
         }
         return "未知";
     }

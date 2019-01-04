@@ -147,28 +147,28 @@ public class VideoController extends BaseController {
         }
         List<VideoShow> video_list = new ArrayList<>();
         List<VideoShow> all_list = new ArrayList<>();
+        int grade = 0;
+        int user_id = getCurrentUserId();
+        if(user_id != 0) {
+            UserInfo userInfo = iUser.getUser(user_id);
+            grade = userInfo.getChannel_stage();
+        }
+
+        int other_grade1 = -1;
+        int other_grade2 = -1;
+        if(grade != 0) {
+            other_grade1 = grade/100 *100 + 99;
+            if(other_grade1 == 399 || other_grade1 == 499) {
+                other_grade2 = 498;
+            }
+        }
         Collections.shuffle(video_list);
         if (channel.equals("1")) {
-            all_list = iVideo.getRecommendVideo();
+            all_list = iVideo.getRecommendVideo(grade,other_grade1,other_grade2);
             Collections.shuffle(all_list);
             video_list = getRecVideos(all_list,user_guid);
         } else {
-            int grade = 0;
-            int user_id = getCurrentUserId();
-            if(user_id != 0) {
-                UserInfo userInfo = iUser.getUser(user_id);
-                grade = userInfo.getChannel_stage();
-            }
-
             List<String> list = Arrays.asList(channel.split(","));
-            int other_grade1 = 0;
-            int other_grade2 = 0;
-            if(grade != 0) {
-                other_grade1 = grade/100 *100 + 99;
-                if(other_grade1 == 399 || other_grade1 == 499) {
-                    other_grade2 = 498;
-                }
-            }
             all_list = iVideo.getVideoByChannel(list,grade,other_grade1,other_grade2);
             Collections.shuffle(all_list);
             video_list = getRecVideos(all_list,user_guid);
