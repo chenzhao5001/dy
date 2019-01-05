@@ -156,8 +156,15 @@ public interface IArticle {
     @Select("select * from article where examine_person = #{arg0} and deleted = 0 and examine_status = 0")
     List<ArticleInfo> getArticleByAdminId(int admin_id);
 
+    @Select("select * from articleAnswer where examine_person = #{arg0} and deleted = 0 and examine_status = 0")
+    List<ArticleAnswer> getAnswerByAdminId(int admin_id);
+
     @Select("select * from article where examine_person = 0 and deleted = 0 and examine_status = 0 limit 0 ,5")
     List<ArticleInfo> getExamineArticle();
+
+    @Select("select * from articleAnswer where examine_person = 0 and deleted = 0 and examine_status = 0 limit 0 ,5")
+    List<ArticleAnswer> getExamineAnswer();
+
 
     @Update("update article set examine_status = 1,type_list = #{arg1} where id = #{arg0}")
     void setExamineSuccess(int id, String type_list);
@@ -172,6 +179,14 @@ public interface IArticle {
             + "</foreach>"
             + "</script>")
     void setExaminePerson(@Param("iList") List<Integer> iList, int user_id);
+
+    @Update("<script>"
+            + "update articleAnswer set examine_person = #{arg1}  WHERE id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    void setAnswerExaminePerson(@Param("iList") List<Integer> iList, int user_id);
 
     @Select("select count(*) from articleAnswerCollection where user_id = #{arg0} and answer_id = #{arg1} and deleted = 0")
     int getAnswerCollection(int user_id,int answer_id);

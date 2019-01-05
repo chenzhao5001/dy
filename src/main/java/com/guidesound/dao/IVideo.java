@@ -148,7 +148,7 @@ public interface IVideo {
 
     @Select("<script>"
             + "SELECT * FROM video WHERE 1 = 1"
-            + "<when test=' arg1 != 0 '>"
+            + "<when test=' arg0 != 0 '>"
             + "AND (watch_type = #{arg0} or watch_type = #{arg1} or watch_type = #{arg2}) "
             + "</when>"
             + " and examine_status = 1"

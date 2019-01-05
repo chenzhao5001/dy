@@ -162,12 +162,11 @@ public class SignMap {
     static {
 
         watch_type = new TreeMap<>();
-        watch_type.put(1,"小学前");
+        watch_type.put(1,"学龄前");
         watch_type.put(2,"小学");
         watch_type.put(3,"初中");
         watch_type.put(4,"高中");
-//        watch_type.put(5,"小初");
-        watch_type.put(6,"初高");
+        watch_type.put(5,"初高");
 
         user_type = new HashMap<>();
         user_type.put(1,"教师");

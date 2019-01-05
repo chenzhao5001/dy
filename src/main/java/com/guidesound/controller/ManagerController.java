@@ -211,6 +211,49 @@ public class ManagerController extends BaseController {
         return null;
     }
 
+    List<ArticleVerify> getArticleShowByAnswers(List<ArticleAnswer> answerList) {
+        if (answerList.size() > 0) {
+            List<Integer> userIds = new ArrayList<>();
+            for (ArticleAnswer item : answerList) {
+                userIds.add(item.getUser_id());
+            }
+            List<VideoUser> userList = iUser.getUserInfoByIds(userIds);
+            Map<Integer,VideoUser> mUser = new Hashtable<>();
+            for(VideoUser item : userList) {
+                mUser.put(item.getId(),item);
+            }
+            List<ArticleVerify> articleVerifies = new ArrayList<>();
+            for (ArticleAnswer item: answerList) {
+                ArticleVerify articleVerify = new ArticleVerify();
+                articleVerify.setArticle_id(item.getId());
+                articleVerify.setArticleAid(item.getId());
+                articleVerify.setArticleGrade_class(SignMap.getGradeTypeByID(0));
+                articleVerify.setArticleLength(0);
+                articleVerify.setArticleSubject(SignMap.getSubjectTypeById(0));
+                articleVerify.setArticleTitle(item.getAbstract_info());
+                articleVerify.setArticleXy("");
+
+                articleVerify.setShowContent("https://daoyinjiaoyu.com/guidesound/article/answer_preview?answer_id=" + item.getId());
+                articleVerify.setShowTitle_pic1(item.getPic1_url());
+                articleVerify.setShowTitle_pic2(item.getPic2_url());
+                articleVerify.setShowTitle_pic3(item.getPic3_url());
+
+                VideoUser videoUser = mUser.get(item.getUser_id());
+                if(videoUser != null) {
+                    articleVerify.setUser_uid(String.valueOf(videoUser.getDy_id()));
+                    articleVerify.setUser_type(SignMap.getUserTypeById(videoUser.getType()));
+                    articleVerify.setUser_extend("");
+                    articleVerify.setUser_grade_level(SignMap.getWatchById(videoUser.getGrade_level()));
+                    articleVerify.setUser_level(SignMap.getUserLevelById(videoUser.getLevel()));
+                    articleVerify.setUser_name(videoUser.getName());
+                    articleVerify.setUser_subject(SignMap.getSubjectTypeById(videoUser.getSubject()));
+                }
+                articleVerifies.add(articleVerify);
+            }
+            return articleVerifies;
+        }
+        return null;
+    }
     List<ArticleVerify> getArticleShow(List<ArticleInfo> articleList) {
         if (articleList.size() > 0) {
             List<Integer> userIds = new ArrayList<>();
@@ -351,6 +394,11 @@ public class ManagerController extends BaseController {
         if(articleList.size() > 0) {
             return JSONResult.ok(getArticleShow(articleList));
         }
+
+        List<ArticleAnswer> answerList = iArticle.getAnswerByAdminId(userId);
+        if (answerList.size() > 0) {
+            return JSONResult.ok(getArticleShowByAnswers(answerList));
+        }
         articleList  = iArticle.getExamineArticle();
         if(articleList.size() > 0) {
             ArrayList<Integer> list = new ArrayList<>();
@@ -360,6 +408,16 @@ public class ManagerController extends BaseController {
             iArticle.setExaminePerson(list,userId);
             return JSONResult.ok(getArticleShow(articleList));
         }
+        answerList = iArticle.getExamineAnswer();
+        if (answerList.size() > 0) {
+            ArrayList<Integer> list = new ArrayList<>();
+            for (ArticleAnswer item : answerList) {
+                list.add(item.getId());
+            }
+            iArticle.setAnswerExaminePerson(list,userId);
+            return JSONResult.ok(getArticleShowByAnswers(answerList));
+        }
+        
         return JSONResult.ok(new ArrayList<>());
     }
 
