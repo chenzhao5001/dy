@@ -138,13 +138,13 @@ public interface IArticle {
     void praiseMainAnswerChat(int answer_chat_id);
 
 
-    @Select("select count(*) from articleAnswer where ask_id = #{arg0}")
+    @Select("select count(*) from articleAnswer where ask_id = #{arg0} and examine_status = 1")
     int answerCount(int ask_id);
 
-    @Select("select * from articleAnswer where user_id = #{arg0}")
+    @Select("select * from articleAnswer where user_id = #{arg0} and examine_status = 1")
     List<ArticleAnswer>  getAnswerByUser(int user_id);
 
-    @Select("select * from articleAnswer where ask_id = #{arg0} order by create_time desc limit #{arg1},#{arg2}")
+    @Select("select * from articleAnswer where ask_id = #{arg0} and examine_status = 1 order by create_time desc limit #{arg1},#{arg2}")
     List<ArticleAnswer> answerList(int ask_id,int begin,int end);
 
     @Select("select answer_id from articleAnswerPraise where user_id = #{arg0} and deleted = 0")

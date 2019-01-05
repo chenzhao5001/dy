@@ -7,11 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b7c7c742-9c4d-41b3-a82e-f22b8938a7fb" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IVideo.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IVideo.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -49,11 +46,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ManagerController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ManagerController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="350">
-              <caret line="419" column="8" lean-forward="true" selection-start-line="419" selection-start-column="8" selection-end-line="419" selection-end-column="8" />
+            <state relative-caret-position="275">
+              <caret line="416" column="43" lean-forward="false" selection-start-line="416" selection-start-column="21" selection-end-line="416" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -72,18 +69,18 @@
       <file leaf-file-name="ArticleController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="63">
-              <caret line="451" column="48" lean-forward="false" selection-start-line="451" selection-start-column="39" selection-end-line="451" selection-end-column="48" />
+            <state relative-caret-position="501">
+              <caret line="587" column="40" lean-forward="true" selection-start-line="587" selection-start-column="40" selection-end-line="587" selection-end-column="40" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IArticle.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="IArticle.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="165" column="24" lean-forward="false" selection-start-line="165" selection-start-column="24" selection-end-line="165" selection-end-column="24" />
+            <state relative-caret-position="62">
+              <caret line="147" column="34" lean-forward="false" selection-start-line="147" selection-start-column="24" selection-end-line="147" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -141,8 +138,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>subject_classify_list</find>
-      <find>Init</find>
       <find>subject_classify</find>
       <find>request.getServerPort()</find>
       <find>getAttribute</find>
@@ -171,6 +166,8 @@
       <find>grade_type</find>
       <find>498</find>
       <find>preview</find>
+      <find>articleAnswer</find>
+      <find>answerList</find>
     </findStrings>
     <dirStrings>
       <dir>E:\work\guide_sound\src\main\java</dir>
@@ -241,8 +238,8 @@
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IVideo.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" />
       </list>
     </option>
   </component>
@@ -639,12 +636,12 @@
       <workItem from="1545405256670" duration="4182000" />
       <workItem from="1545475375117" duration="109356000" />
       <workItem from="1546430633249" duration="9143000" />
-      <workItem from="1546528321237" duration="13425000" />
+      <workItem from="1546528321237" duration="13698000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="425389000" />
+    <option name="totallyTimeSpent" value="425662000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1091,26 +1088,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="416" column="43" lean-forward="false" selection-start-line="416" selection-start-column="21" selection-end-line="416" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="451" column="48" lean-forward="false" selection-start-line="451" selection-start-column="39" selection-end-line="451" selection-end-column="48" />
+        <state relative-caret-position="501">
+          <caret line="587" column="40" lean-forward="true" selection-start-line="587" selection-start-column="40" selection-end-line="587" selection-end-column="40" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="165" column="24" lean-forward="false" selection-start-line="165" selection-start-column="24" selection-end-line="165" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="419" column="8" lean-forward="true" selection-start-line="419" selection-start-column="8" selection-end-line="419" selection-end-column="8" />
+        <state relative-caret-position="62">
+          <caret line="147" column="34" lean-forward="false" selection-start-line="147" selection-start-column="24" selection-end-line="147" selection-end-column="34" />
           <folding />
         </state>
       </provider>

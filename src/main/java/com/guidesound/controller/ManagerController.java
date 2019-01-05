@@ -417,7 +417,6 @@ public class ManagerController extends BaseController {
             iArticle.setAnswerExaminePerson(list,userId);
             return JSONResult.ok(getArticleShowByAnswers(answerList));
         }
-        
         return JSONResult.ok(new ArrayList<>());
     }
 
