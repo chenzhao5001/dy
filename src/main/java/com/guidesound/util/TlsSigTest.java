@@ -6,8 +6,11 @@ import org.junit.Assert;
 import com.tls.tls_sigature.*;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
-
 public class TlsSigTest {
 
     private static String  privStr =  "-----BEGIN PRIVATE KEY-----\n" +
@@ -19,7 +22,16 @@ public class TlsSigTest {
             "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEbTKxPi2hxY2oA7kkXqL05/6xymgr\n" +
             "5iW9uTmUIbhe6JukCuxA9+9sasCJim2DsFDcRnfxlv5kQmKA+AvaLH3S+g==\n" +
             "-----END PUBLIC KEY-----";
-    private static String importUrl = "https://console.tim.qq.com/v4/im_open_login_svc/account_import?usersig=eJw1j11vgjAUhv8Lty5SCpWyZBcGMcGxmSn7yG6aYgucbdCu1vmx7L-rGrx9npO85-n1ymI95lqDYNyy0Ajv1kPejcPyoMFIxmsrzQUHhBCM0NWCkL2FGpzjooMettZwq8xwsIXmYh6y5zRPJcUfryf-PhCqw6v3NjHqB1XF8uttnuglfVqUsxZWB1X7U8imXYX3qmyzojE0R-moycPZN6j18WW3ECJu4jSp-YKQx2p-dx0Tn8xl-D8aIRQQSsJokBY66QIigiaTGNOB881G7XrL7FFL1-13BnijU2M_&apn=1&identifier=administrator&sdkappid=1400158534&contenttype=json";
+
+    static String user_control = "control";
+    static String user_message = "message";
+
+    static String control_usersig = "eJxlj11PgzAYhe-5FaS3GimFTjDZRZnDbXGLfLipN4SVDipQCBTDNPvvU1wiie-t8*Sc834pqqqC8DG4iSmtOiEjeawZUO9UAMH1H6xrnkSxjIwm*QdZX-OGRfFBsmaAOsYYQTh2eMKE5Ad*MWglZFMVI6FN8mho*U0wIdSxhQ1zrPB0gOu5N1vO89h9X5F0tkHh9krjATJLuptse*GXZKkRzddX7nO2ePFfCXecYvNW7h-ce68-eqSd7HcWDZ0gsBfrgthdln0mmHa5ZT6l0*moUvKSXV4yb3UELWiP6AdrWl6JQUDfe3VkwJ8Dykk5A545XPA_";
+    static String message_usersig = "eJxlj1FPgzAUhd-5FQ2vM1IKTcHEB4JsSnA6xyLbS9NAITdmgLQyNuN-d*ISSbyv35dzzv00EEJmmqyvRZ43H7Xm*thKE90gE5tXf7BtoeBCc6cr-kE5tNBJLkotuxHalFKC8dSBQtYaSrgYe6mUqOREUMUbH1t*E1yMbepRx50qUI3wMdqED1Eyw5Cn70PJNi8eTe7TDk4WEbvUz*qBET-CeayerWXYBhAFnnt3YGKbhjPmqPn6dWvF-ZO3yrLqGJP5ovEPwWLZ*7uKqNtJpYa9vLzkMptgz2UT2stOQVOPAjnvtYmDf840voxvRdJcHw__";
+
+
+    private static String importUrl = "https://console.tim.qq.com/v4/im_open_login_svc/account_import?usersig="  +  control_usersig + "&apn=1&identifier=" + user_control + "&sdkappid=1400158534&contenttype=json";
+    private static String controlUrl = "https://console.tim.qq.com/v4/openim/sendmsg?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=99999999&contenttype=json";
     public static String getUrlSig(String im_id) throws IOException {
         tls_sigature.GenTLSSignatureResult result = tls_sigature.GenTLSSignatureEx(1400158534, im_id, privStr);
 
@@ -45,6 +57,49 @@ public class TlsSigTest {
         return result.urlSig;
     }
 
+    public static String PushMessage(String user_id,String info) throws IOException {
+        String rand = ToolsFunction.getNumRandomString(10);
+        String controlUrl = "https://console.tim.qq.com/v4/openim/sendmsg?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + rand + "&contenttype=json";
+
+        JSONObject Info = new JSONObject();
+        Info.put("Text",info);
+        JSONObject msgContent = new JSONObject();
+        msgContent.put("MsgContent",Info);
+
+        JSONObject cell = new JSONObject();
+        cell.put("MsgType","TIMTextElem");
+        cell.put("MsgContent",msgContent);
+        List<JSONObject> arr = new ArrayList<>();
+        arr.add(cell);
+
+        JSONObject jsonSend = new JSONObject();
+        jsonSend.put("SyncOtherMachine", 2);
+        jsonSend.put("To_Account", user_id);
+        jsonSend.put("MsgLifeTime", 60);
+        jsonSend.put("MsgRandom", 1234);
+        jsonSend.put("MsgTimeStamp", new Date().getTime() / 1000);
+        jsonSend.put("MsgBody",arr);
+        String send = jsonSend.toString();
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, send);
+        Request req = new Request.Builder()
+                .url(controlUrl)
+                .post(body)
+                .build();
+        Response resp;
+        OkHttpClient client_temp = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+        resp = client_temp.newCall(req).execute();
+        String jsonString = resp.body().string();
+        JSONObject ret = new JSONObject(jsonString);
+        int code = ret.getInt("ErrorCode");
+        if(code != 0 ) {
+            return ret.toString();
+        }
+        return "";
+    }
     public static void genAndVerify() {
         try {
             // generate signature

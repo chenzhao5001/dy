@@ -1,5 +1,6 @@
 package com.guidesound.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.guidesound.dao.IArticle;
 import com.guidesound.dao.IInUser;
@@ -8,6 +9,7 @@ import com.guidesound.dao.IVideo;
 import com.guidesound.models.*;
 import com.guidesound.util.*;
 import com.qcloud.Common.Sign;
+import javafx.util.Pair;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -485,6 +487,83 @@ public class ManagerController extends BaseController {
             return ex.toString();
         }
         return returnString;
+    }
+
+    @RequestMapping(value = "/up_video")
+    @ResponseBody
+    public JSONResult upVideo(String video_id) {
+
+        Integer userId = getUserId();
+        if ( userId == null ) {
+            return JSONResult.errorMsg("缺少m_token");
+        }
+        if(video_id == null) {
+            return JSONResult.errorMsg("缺少video_id");
+        }
+        iVideo.UpVideo(Integer.parseInt(video_id));
+        return JSONResult.ok();
+    }
+
+    @RequestMapping(value = "/down_video")
+    @ResponseBody
+    public JSONResult downVideo(String video_id) {
+        Integer userId = getUserId();
+        if ( userId == null ) {
+            return JSONResult.errorMsg("缺少m_token");
+        }
+        if(video_id == null) {
+            return JSONResult.errorMsg("缺少video_id");
+        }
+        iVideo.downVideo(Integer.parseInt(video_id));
+        return JSONResult.ok();
+    }
+
+    @RequestMapping(value = "/pools_list")
+    @ResponseBody
+    public JSONResult getPoolsList() {
+        class Item {
+            int id;
+            String  info;
+            public int getId() {
+                return id;
+            }
+
+            public Item setId(int id) {
+                this.id = id;
+                return this;
+            }
+
+            public String getInfo() {
+                return info;
+            }
+
+            public Item setInfo(String info) {
+                this.info = info;
+                return this;
+            }
+        }
+        List<Item> list = new ArrayList<>();
+        list.add(new Item().setId(101).setInfo("入园前"));
+        list.add(new Item().setId(102).setInfo("幼儿园"));
+        list.add(new Item().setId(199).setInfo("学龄前"));
+        list.add(new Item().setId(201).setInfo("一年级"));
+        list.add(new Item().setId(202).setInfo("二年级"));
+        list.add(new Item().setId(203).setInfo("三年级"));
+        list.add(new Item().setId(204).setInfo("四年级"));
+        list.add(new Item().setId(205).setInfo("五年级"));
+        list.add(new Item().setId(206).setInfo("六年级"));
+        list.add(new Item().setId(299).setInfo("小学"));
+
+        list.add(new Item().setId(301).setInfo("初一"));
+        list.add(new Item().setId(302).setInfo("初二"));
+        list.add(new Item().setId(303).setInfo("初三"));
+        list.add(new Item().setId(399).setInfo("初中"));
+
+        list.add(new Item().setId(401).setInfo("高一"));
+        list.add(new Item().setId(402).setInfo("高二"));
+        list.add(new Item().setId(403).setInfo("高三"));
+        list.add(new Item().setId(499).setInfo("高中"));
+        return JSONResult.ok(list);
     }
 
 }
