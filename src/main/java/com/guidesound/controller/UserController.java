@@ -6,6 +6,7 @@ import com.guidesound.dao.*;
 import com.guidesound.dto.StudentInfoDTO;
 import com.guidesound.models.Student;
 import com.guidesound.models.User;
+import com.guidesound.models.UserFriend;
 import com.guidesound.models.UserInfo;
 import com.guidesound.resp.UserResp;
 import com.guidesound.util.*;
@@ -24,9 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 用户控制器
@@ -1012,7 +1011,21 @@ public class UserController extends BaseController{
         if(ids.isEmpty()) {
             return JSONResult.ok(new ArrayList<>());
         }
+        List<UserFriend> friendList = iUser.newFriendByFollow(user_id);
+        Map<Integer,String> m_state = new HashMap<>();
+        for (UserFriend item : friendList) {
+            if(item.getState() == 1) {
+                m_state.put(item.getAdd_user_id(),"已发送加好友通知");
+            } else if(item.getState() == 2) {
+                m_state.put(item.getAdd_user_id(),"已加为好友");
+            }
+        }
         List<UserInfo> users = iUser.getUserByIds(ids);
+        for (UserInfo info : users) {
+            if(m_state.containsKey(info.getId())) {
+                info.setFriend_state(m_state.get(info.getId()));
+            }
+        }
         return JSONResult.ok(users);
     }
 
