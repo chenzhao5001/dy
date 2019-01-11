@@ -62,13 +62,14 @@ public class TlsSigTest {
         String controlUrl = "https://console.tim.qq.com/v4/openim/sendmsg?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + rand + "&contenttype=json";
 
         JSONObject Info = new JSONObject();
-        Info.put("Text",info);
-        JSONObject msgContent = new JSONObject();
-        msgContent.put("MsgContent",Info);
+        Info.put("Data",info);
+//        Info.put("Desc",info);
+//        Info.put("Ext",info);
+//        Info.put("Sound",info);
 
         JSONObject cell = new JSONObject();
-        cell.put("MsgType","TIMTextElem");
-        cell.put("MsgContent",msgContent);
+        cell.put("MsgType","TIMCustomElem");
+        cell.put("MsgContent",Info);
         List<JSONObject> arr = new ArrayList<>();
         arr.add(cell);
 

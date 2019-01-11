@@ -117,6 +117,9 @@ public interface IArticle {
     @Update("update articleChat set praise_count = praise_count + 1 where id = #{arg0}")
     void praiseMainArticcleComment(int commment_id);
 
+    @Select("select first_user_id from articleChat where id = #{arg0}")
+    String getUserIdByCommentId(int id);
+
     @Select("select comment_id from articleChatPraise where user_id = #{arg0} and deleted = 0")
     List<Integer> getPraiseCommentArticle(int user_id);
 

@@ -664,7 +664,7 @@ public class ArticleController extends BaseController {
      */
     @RequestMapping("/praise_article_comment")
     @ResponseBody
-    JSONResult praiseComment(String comment_id) {
+    JSONResult praiseComment(String comment_id) throws IOException {
         if (comment_id == null) {
             return JSONResult.errorMsg("缺少 comment_id 参数");
         }
@@ -673,6 +673,8 @@ public class ArticleController extends BaseController {
         User currentUser = (User)request.getAttribute("user_info");
 
         if(null == iArticle.findArticcleCommentPraise(currentUser.getId(),Integer.parseInt(comment_id))) {
+            String first_user_id = iArticle.getUserIdByCommentId(Integer.valueOf(comment_id));
+            TlsSigTest.PushMessage(first_user_id,"8");
             iArticle.praiseArticcleComment(currentUser.getId(),Integer.parseInt(comment_id), (int) (new Date().getTime() /1000));
             iArticle.praiseMainArticcleComment(Integer.parseInt(comment_id));
         } else {

@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -493,7 +494,7 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value = "/follow")
     @ResponseBody
-    public JSONResult addFuns(String user_id) {
+    public JSONResult addFuns(String user_id) throws IOException {
         if(user_id == null) {
             return JSONResult.errorMsg("参数缺少user_id");
         }
@@ -506,6 +507,7 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("此用户已经关注过");
         }
 
+        TlsSigTest.PushMessage(user_id,"9");
         iUser.followUser(currentUser.getId(),
                 Integer.parseInt(user_id),
                 (int)(new Date().getTime() /1000));
@@ -518,7 +520,7 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value = "/cancel_follow")
     @ResponseBody
-    public  JSONResult deleteFollow(String user_id) {
+    public  JSONResult deleteFollow(String user_id) throws IOException {
         if(user_id == null) {
             return JSONResult.errorMsg("参数缺少user_id");
         }
@@ -526,6 +528,7 @@ public class UserController extends BaseController{
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
 
+        TlsSigTest.PushMessage(user_id,"10");
         iUser.cancelFollow(currentUser.getId(),Integer.parseInt(user_id),(int)(new Date().getTime() /1000));
         return JSONResult.ok();
     }
@@ -986,6 +989,64 @@ public class UserController extends BaseController{
         String im_sig = TlsSigTest.getUrlSig(String.valueOf(user_id));
         iUser.setImInfo(user_id,String.valueOf(user_id),im_sig);
         return JSONResult.ok(im_sig);
+    }
+
+    @RequestMapping(value = "/follow_me_users")
+    @ResponseBody
+    JSONResult getFollowMe() {
+        int user_id = getCurrentUserId();
+        List<Integer> ids = iUser.getFollowMe(user_id);
+        if(ids.isEmpty()) {
+            return JSONResult.ok(new ArrayList<>());
+        }
+        List<UserInfo> users = iUser.getUserByIds(ids);
+
+        return JSONResult.ok(users);
+    }
+
+    @RequestMapping(value = "/me_follow_users")
+    @ResponseBody
+    JSONResult getMeFollow() {
+        int user_id = getCurrentUserId();
+        List<Integer> ids = iUser.getMeFollow(user_id);
+        if(ids.isEmpty()) {
+            return JSONResult.ok(new ArrayList<>());
+        }
+        List<UserInfo> users = iUser.getUserByIds(ids);
+        return JSONResult.ok(users);
+    }
+
+    @RequestMapping(value = "/users_by_ids")
+    @ResponseBody
+    JSONResult usersByIds(String user_ids) {
+        if(user_ids == null) {
+            return JSONResult.errorMsg("缺少参数user_ids");
+        }
+        String[] lists =  user_ids.split(",");
+        List<Integer> lis = new ArrayList<>();
+        for (String item:
+                lists) {
+            lis.add(Integer.valueOf(item));
+        }
+        List<UserInfo> users = iUser.getUserByIds(lis);
+        return JSONResult.ok(users);
+    }
+
+    @RequestMapping(value = "/info_by_number")
+    @ResponseBody
+    JSONResult getInfoByNumber(String number) {
+        if(number == null) {
+            return JSONResult.errorMsg("缺少number");
+        }
+        List<UserInfo> list = iUser.getUserByPhone(number);
+        if(list.size() > 0) {
+            return JSONResult.ok(list.get(0));
+        }
+        list =  iUser.getInfoByDyid(number);
+        if(list.size() > 0) {
+            return JSONResult.ok(list.get(0));
+        }
+        return JSONResult.ok(null);
     }
 }
 

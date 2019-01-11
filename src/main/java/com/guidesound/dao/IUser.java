@@ -2,6 +2,7 @@ package com.guidesound.dao;
 
 import com.guidesound.find.IntroductionInfo;
 import com.guidesound.models.User;
+import com.guidesound.models.UserFriend;
 import com.guidesound.models.UserInfo;
 import com.guidesound.models.VideoUser;
 import org.apache.ibatis.annotations.*;
@@ -23,6 +24,9 @@ public interface IUser {
 
     @Select("select * from user where phone = #{arg0}")
     public List<UserInfo> getUserByPhone(String phone);
+    @Select("select * from user where dy_id = #{arg0}")
+    List<UserInfo> getInfoByDyid(String dy_id);
+
 
     @Select("select * from user where unionid = #{arg0}")
     public List<UserInfo> getUserByUnionid(String phone);
@@ -205,5 +209,20 @@ public interface IUser {
 
     @Select("select channel_stage from user where id = #{arg0}")
     int getChannelStage(int user_id);
+
+    @Select("select user_id from userFuns where funs_user_id = #{arg0}")
+    public List<Integer> getMeFollow(int user_id);
+    @Select("select funs_user_id from userFuns where user_id = #{arg0}")
+    public List<Integer> getFollowMe(int user_id);
+
+    @Insert("insert into user_friend (user_id,add_user_id,type,state) values (#{arg0},#{arg1},#{arg2},1)")
+    public void addFriend(int user_id,int add_user_id,int type);
+
+    @Update("update user_friend set state = 2 where user_id = #{arg0} and add_user_id = #{arg1}")
+    public void updateFriendState(int user_id,int add_user_id);
+
+    @Select("select * from user_friend where user_id = #{arg0}")
+    public List<UserFriend> newFriend(int user_id);
+
 }
 
