@@ -158,13 +158,15 @@ public class ArticleController extends BaseController {
 
     @RequestMapping("/praise")
     @ResponseBody
-    JSONResult praise(HttpServletRequest request,String article_id) {
+    JSONResult praise(HttpServletRequest request,String article_id) throws IOException {
         if (article_id == null) {
             JSONResult.errorMsg("缺少参数 article_id");
         }
 
         User currentUser = (User)request.getAttribute("user_info");
         if(null == iArticle.findPraise(currentUser.getId(),Integer.parseInt(article_id))) {
+            ArticleInfo articleInfo = iArticle.getArticle(Integer.parseInt(article_id));
+            TlsSigTest.PushMessage(String.valueOf(articleInfo.getUser_id()),"2");
             iArticle.addPraise(currentUser.getId(),Integer.parseInt(article_id),(int)(new Date().getTime() /1000));
             iArticle.addMainPraise(Integer.parseInt(article_id));
         } else {
@@ -179,10 +181,12 @@ public class ArticleController extends BaseController {
     @RequestMapping("/comment")
     @ResponseBody
     JSONResult Comment(String article_id,String first_user_id,
-                       String first_comment,String second_user_id,String second_comment) {
+                       String first_comment,String second_user_id,String second_comment) throws IOException {
         if(article_id == null || first_user_id == null || first_comment == null) {
             return JSONResult.errorMsg("缺少参数");
         }
+
+        TlsSigTest.PushMessage(String.valueOf(first_user_id),"4");
 
         second_user_id = second_user_id == null ? "0" : second_user_id;
         second_comment = second_comment == null ? "" : second_comment;

@@ -1,15 +1,11 @@
 package com.guidesound.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.guidesound.dao.IArticle;
 import com.guidesound.dao.IInUser;
 import com.guidesound.dao.IUser;
 import com.guidesound.dao.IVideo;
 import com.guidesound.models.*;
 import com.guidesound.util.*;
-import com.qcloud.Common.Sign;
-import javafx.util.Pair;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +15,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.jms.*;
-import javax.rmi.CORBA.Util;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -214,4 +214,6 @@ public interface IArticle {
             + "</foreach>"
             + "</script>")
     List<ArticleInfo> getArticleByid(@Param("iList") List<Integer> iList);
+    @Select("select * from article where id = #{arg0}")
+    ArticleInfo getArticle(int id);
 }

@@ -335,7 +335,7 @@ public class VideoController extends BaseController {
 
     @RequestMapping(value = "/add_praise")
     @ResponseBody
-    public JSONResult addPraise(String video_id,String type) {
+    public JSONResult addPraise(String video_id,String type) throws IOException {
         if(video_id == null || type == null) {
             return JSONResult.errorMsg("缺少参数");
         }
@@ -348,6 +348,8 @@ public class VideoController extends BaseController {
             if(count > 0) {
                 return JSONResult.errorMsg("此用户已经赞过该视频");
             }
+            Video video = iVideo.getVideo(Integer.parseInt(video_id));
+            TlsSigTest.PushMessage(String.valueOf(video.getUser_id()),"1");
             iVideoPraise.addMainPraise(Integer.parseInt(video_id));
             iVideoPraise.addPraise(currentUser.getId(),Integer.parseInt(video_id),(int)(new Date().getTime() /1000),(int)(new Date().getTime() /1000));
         } else if(type.equals("2")){
@@ -362,7 +364,7 @@ public class VideoController extends BaseController {
 
     @RequestMapping(value = "/chat_video")
     @ResponseBody
-    public JSONResult chatVideo(String video_id,String content) {
+    public JSONResult chatVideo(String video_id,String content) throws IOException {
 
         if(video_id == null || content == null) {
             return JSONResult.errorMsg("缺少参数");
@@ -372,6 +374,8 @@ public class VideoController extends BaseController {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
+        Video video = iVideo.getVideo(Integer.parseInt(video_id));
+        TlsSigTest.PushMessage(String.valueOf(video.getUser_id()),"3");
 
         iVideoChat.chatMainVideo(Integer.parseInt(video_id));
         iVideoChat.chatVideo(currentUser.getId()
