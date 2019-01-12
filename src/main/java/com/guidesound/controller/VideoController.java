@@ -792,6 +792,11 @@ public class VideoController extends BaseController {
                     item.setUser_head(userMap.get(item.getUser_id()).getHead());
                     item.setUser_name(userMap.get(item.getUser_id()).getName());
                     item.setUser_type(userMap.get(item.getUser_id()).getType());
+                    item.setUser_type_name(SignMap.getUserTypeById(userMap.get(item.getUser_id()).getType()));
+                    item.setUser_subject(SignMap.getSubjectTypeById(userMap.get(item.getUser_id()).getSubject()));
+                    item.setUser_grade(SignMap.getWatchById(userMap.get(item.getUser_id()).getGrade_level()));
+                    item.setUser_level(SignMap.getUserLevelById(userMap.get(item.getUser_id()).getLevel()));
+
                 }
             }
         }

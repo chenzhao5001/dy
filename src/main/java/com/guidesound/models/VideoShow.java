@@ -56,7 +56,88 @@ public class VideoShow {
     int collection_count;
     boolean follow;
     int user_type;
+    String user_type_name;
+    String user_subject;
+    String user_grade;
+    String user_level;
+    int out_relay;
+    int inner_relay;
+    int group;
+    int video_state;
+    String pools;
     int create_time;
+
+    public String getPools() {
+        return pools;
+    }
+
+    public void setPools(String pools) {
+        this.pools = pools;
+    }
+
+    public int getGroup() {
+        return group;
+    }
+
+    public void setGroup(int group) {
+        this.group = group;
+    }
+
+    public int getVideo_state() {
+        return video_state;
+    }
+
+    public void setVideo_state(int video_state) {
+        this.video_state = video_state;
+    }
+
+    public int getOut_relay() {
+        return out_relay;
+    }
+
+    public void setOut_relay(int out_relay) {
+        this.out_relay = out_relay;
+    }
+
+    public int getInner_relay() {
+        return inner_relay;
+    }
+
+    public void setInner_relay(int inner_relay) {
+        this.inner_relay = inner_relay;
+    }
+
+    public String getUser_subject() {
+        return user_subject;
+    }
+
+    public void setUser_subject(String user_subject) {
+        this.user_subject = user_subject;
+    }
+
+    public String getUser_grade() {
+        return user_grade;
+    }
+
+    public void setUser_grade(String user_grade) {
+        this.user_grade = user_grade;
+    }
+
+    public String getUser_level() {
+        return user_level;
+    }
+
+    public void setUser_level(String user_level) {
+        this.user_level = user_level;
+    }
+
+    public String getUser_type_name() {
+        return user_type_name;
+    }
+
+    public void setUser_type_name(String user_type_name) {
+        this.user_type_name = user_type_name;
+    }
 
     public String getPic_cut_path() {
         return pic_cut_path;
