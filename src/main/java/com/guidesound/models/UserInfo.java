@@ -43,7 +43,7 @@ public class UserInfo {
     private int pwd_state;
     private int channel_stage;
     public String im_appid = "1400158534";
-    public String friend_state = "加好友";
+    public String friend_state = "0";
 
     public String getFriend_state() {
         return friend_state;

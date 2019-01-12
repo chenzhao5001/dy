@@ -74,16 +74,19 @@ public class MessageController extends BaseController {
     @ResponseBody
     JSONResult newFriendList() {
         int user_id = getCurrentUserId();
-        List<UserFriend> friendList =  iUser.newFriend(user_id);
+        List<UserFriend> friendList =  iUser.newFriendByPhone(user_id);
         List<Integer> list = new ArrayList<>();
         Map<Integer,String> m_state = new HashMap<>();
         for (UserFriend item : friendList) {
             list.add(item.getAdd_user_id());
             if(item.getState() == 1) {
-                m_state.put(item.getAdd_user_id(),"已发送加好友通知");
+                m_state.put(item.getAdd_user_id(),"1");
             } else if(item.getState() == 2) {
-                m_state.put(item.getAdd_user_id(),"已加为好友");
+                m_state.put(item.getAdd_user_id(),"2");
             }
+        }
+        if(list.size() == 0) {
+            return JSONResult.ok(new ArrayList<>());
         }
 
         List<UserInfo> user_list = iUser.getUserByIds(list);

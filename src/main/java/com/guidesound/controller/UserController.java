@@ -999,7 +999,21 @@ public class UserController extends BaseController{
             return JSONResult.ok(new ArrayList<>());
         }
         List<UserInfo> users = iUser.getUserByIds(ids);
+        List<UserFriend> friendList = iUser.newFriend(user_id);
+        Map<Integer,String> m_state = new HashMap<>();
+        for (UserFriend item : friendList) {
+            if(item.getState() == 1) {
+                m_state.put(item.getAdd_user_id(),"1");
+            } else if(item.getState() == 2) {
+                m_state.put(item.getAdd_user_id(),"2");
+            }
+        }
 
+        for (UserInfo info : users) {
+            if(m_state.containsKey(info.getId())) {
+                info.setFriend_state(m_state.get(info.getId()));
+            }
+        }
         return JSONResult.ok(users);
     }
 
@@ -1011,13 +1025,13 @@ public class UserController extends BaseController{
         if(ids.isEmpty()) {
             return JSONResult.ok(new ArrayList<>());
         }
-        List<UserFriend> friendList = iUser.newFriendByFollow(user_id);
+        List<UserFriend> friendList = iUser.newFriendOther(user_id);
         Map<Integer,String> m_state = new HashMap<>();
         for (UserFriend item : friendList) {
             if(item.getState() == 1) {
-                m_state.put(item.getAdd_user_id(),"已发送加好友通知");
+                m_state.put(item.getAdd_user_id(),"1");
             } else if(item.getState() == 2) {
-                m_state.put(item.getAdd_user_id(),"已加为好友");
+                m_state.put(item.getAdd_user_id(),"2");
             }
         }
         List<UserInfo> users = iUser.getUserByIds(ids);
@@ -1055,9 +1069,11 @@ public class UserController extends BaseController{
         if(list.size() > 0) {
             return JSONResult.ok(list.get(0));
         }
-        list =  iUser.getInfoByDyid(number);
-        if(list.size() > 0) {
-            return JSONResult.ok(list.get(0));
+        if(ToolsFunction.isNumeric(number) && number.equals("0")) {
+            list = iUser.getInfoByDyid(number);
+            if(list.size() > 0) {
+                return JSONResult.ok(list.get(0));
+            }
         }
         return JSONResult.ok(null);
     }

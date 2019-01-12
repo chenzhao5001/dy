@@ -224,8 +224,12 @@ public interface IUser {
     @Select("select * from user_friend where user_id = #{arg0} and type = 1")
     public List<UserFriend> newFriend(int user_id);
 
+    @Select("select * from user_friend where add_user_id = #{arg0} and type = 1")
+    public List<UserFriend> newFriendOther(int user_id);
+
+
     @Select("select * from user_friend where user_id = #{arg0} and type = 2")
-    public List<UserFriend> newFriendByFollow(int user_id);
+    public List<UserFriend> newFriendByPhone(int user_id);
 
 }
 
