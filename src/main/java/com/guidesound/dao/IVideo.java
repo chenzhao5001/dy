@@ -209,4 +209,32 @@ public interface IVideo {
     @Update("update video set deleted = 0 where user_id = #{arg0}")
     void downVideo(int usre_id);
 
+    @Insert("insert into videoChat (video_id,first_user_id,first_comment,second_user_id,second_comment,create_time) " +
+            "value (#{video_id},#{first_user_id},#{first_comment},#{second_user_id},#{second_comment},#{create_time})")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
+    void addComment(VideoComment videoComment);
+
+    @Update("update video set comment_count = comment_count + 1 where id = #{arg0}")
+    void addMainComment(int video_id);
+
+    @Select("select count(*) from videoChat where video_id = #{arg0} and deleted = 0")
+    int CommentCount(int article_id);
+
+    @Select("select * from videoChat where video_id = #{arg0} and deleted = 0 order by create_time desc limit #{arg1},#{arg2}")
+    List<VideoComment> getCommentList(int video_id, int begin, int end);
+
+    @Select("select comment_id from videoChatPraise where user_id = #{arg0} and deleted = 0")
+    List<Integer> getPraiseComment(int user_id);
+
+    @Select("select id from videoChatPraise where user_id = #{arg0} and comment_id = #{arg1} and deleted = 0")
+    Integer findVideoCommentPraise(int user_id,int article_id);
+
+    @Select("select first_user_id from videoChat where id = #{arg0}")
+    String getUserIdByCommentId(int id);
+
+    @Insert("insert into videoChatPraise (user_id,comment_id,create_time) value (#{arg0},#{arg1},#{arg2})")
+    void praiseVideoComment(int user_id,int commment_id,int create_time);
+
+    @Update("update videoChat set praise_count = praise_count + 1 where id = #{arg0}")
+    void praiseMainVideoComment(int commment_id);
 }

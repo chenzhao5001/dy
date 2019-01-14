@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.guidesound.util.ToolsFunction.URLDecoderString;
+import static com.guidesound.util.ToolsFunction.getURLEncoderString;
+
 
 /**
  * 视频控制器
@@ -811,6 +814,138 @@ public class VideoController extends BaseController {
         }
         return 0;
     }
+
+    /**
+     * 评论视频
+     */
+    @RequestMapping("/comment")
+    @ResponseBody
+    JSONResult Comment(String video_id,String first_user_id,
+                       String first_comment,String second_user_id,String second_comment) throws IOException {
+        if(video_id == null || first_user_id == null || first_comment == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        TlsSigTest.PushMessage(String.valueOf(first_user_id),"3");
+        second_user_id = second_user_id == null ? "0" : second_user_id;
+        second_comment = second_comment == null ? "" : second_comment;
+
+        first_comment = getURLEncoderString(first_comment);
+        second_comment = getURLEncoderString(second_comment);
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        VideoComment videoComment = new VideoComment();
+        videoComment.setVideo_id(Integer.parseInt(video_id));
+        videoComment.setFirst_user_id(Integer.parseInt(first_user_id));
+        videoComment.setFirst_comment(first_comment);
+        videoComment.setSecond_user_id(Integer.parseInt(second_user_id));
+        videoComment.setSecond_comment(second_comment);
+        videoComment.setCreate_time((int)(new Date().getTime() / 1000));
+
+        iVideo.addComment(videoComment);
+        iVideo.addMainComment(Integer.parseInt(video_id));
+        videoComment.setFirst_comment(URLDecoderString(first_comment));
+        videoComment.setSecond_comment(URLDecoderString(second_comment));
+        return JSONResult.ok(videoComment);
+    }
+
+    /**
+     *获得评论列表
+     */
+    @RequestMapping("/comment_list")
+    @ResponseBody
+    JSONResult getCommentList(String video_id,String page,String size) {
+
+        if (video_id == null) {
+            return JSONResult.errorMsg("缺少 video_id");
+        }
+
+        int iPage = (page == null || page.equals("")) ?1:Integer.parseInt(page);
+        int iSize = (size == null || size.equals("")) ? 20:Integer.parseInt(size);
+        int begin = (iPage - 1)*iSize;
+        int end = iSize;
+
+        int count = iVideo.CommentCount(Integer.parseInt(video_id));
+
+        List<VideoComment> list = iVideo.getCommentList(Integer.parseInt(video_id),begin,end);
+        if (list.size() > 0) {
+            List<Integer> user_ids = new ArrayList<>();
+            for (VideoComment videoComment : list) {
+                videoComment.setFirst_comment(URLDecoderString(videoComment.getFirst_comment()));
+                videoComment.setSecond_comment(URLDecoderString(videoComment.getSecond_comment()));
+                if(!user_ids.contains(videoComment.getFirst_user_id())){
+                    user_ids.add(videoComment.getFirst_user_id());
+                }
+                if(!user_ids.contains(videoComment.getSecond_user_id())){
+                    user_ids.add(videoComment.getSecond_user_id());
+                }
+            }
+
+            List<UserInfo> user_list = iUser.getUserByIds(user_ids);
+            List<Integer> comment_ids = new ArrayList<>();
+            int currentUserID = getCurrentUserId();
+            if (currentUserID != 0) {
+                comment_ids = iVideo.getPraiseComment(currentUserID);
+            }
+            Map<Integer,UserInfo> usersMap = new HashMap<>();
+            for (UserInfo userInfo :user_list) {
+                usersMap.put(userInfo.getId(),userInfo);
+            }
+
+            for (VideoComment videoComment : list) {
+                if( comment_ids.contains(videoComment.getId())) {
+                    videoComment.setPraise(true);
+                }
+                if(usersMap.get(videoComment.getFirst_user_id()) != null) {
+                    videoComment.setFirst_user_head(usersMap.get(videoComment.getFirst_user_id()).getHead());
+                    videoComment.setFirst_user_name(usersMap.get(videoComment.getFirst_user_id()).getName());
+                } else {
+                    videoComment.setFirst_user_head("");
+                    videoComment.setFirst_user_name("");
+                }
+
+                if(usersMap.get(videoComment.getSecond_user_id()) != null) {
+                    videoComment.setSecond_user_head(usersMap.get(videoComment.getSecond_user_id()).getHead());
+                    videoComment.setSecond_user_name(usersMap.get(videoComment.getSecond_user_id()).getName());
+                } else {
+                    videoComment.setSecond_user_head("");
+                    videoComment.setSecond_user_name("");
+                }
+            }
+
+        }
+
+
+        ListResp listResp = new ListResp();
+        listResp.setCount(count);
+        listResp.setList(list);
+        return JSONResult.ok(listResp);
+    }
+
+    /**
+     * 为评论点赞
+     */
+    @RequestMapping("/praise_comment")
+    @ResponseBody
+    JSONResult praiseComment(String comment_id) throws IOException {
+        if (comment_id == null) {
+            return JSONResult.errorMsg("缺少 comment_id 参数");
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+
+        if(null == iVideo.findVideoCommentPraise(currentUser.getId(),Integer.parseInt(comment_id))) {
+            String first_user_id = iVideo.getUserIdByCommentId(Integer.valueOf(comment_id));
+            TlsSigTest.PushMessage(first_user_id,"7");
+            iVideo.praiseVideoComment(currentUser.getId(),Integer.parseInt(comment_id), (int) (new Date().getTime() /1000));
+            iVideo.praiseMainVideoComment(Integer.parseInt(comment_id));
+        } else {
+            return JSONResult.errorMsg("已经点过赞了");
+        }
+        return JSONResult.ok();
+    }
+
 }
 
 class RepList {

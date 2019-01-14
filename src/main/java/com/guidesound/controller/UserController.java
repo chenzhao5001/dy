@@ -1029,9 +1029,9 @@ public class UserController extends BaseController{
         Map<Integer,String> m_state = new HashMap<>();
         for (UserFriend item : friendList) {
             if(item.getState() == 1) {
-                m_state.put(item.getAdd_user_id(),"1");
+                m_state.put(item.getUser_id(),"1");
             } else if(item.getState() == 2) {
-                m_state.put(item.getAdd_user_id(),"2");
+                m_state.put(item.getUser_id(),"2");
             }
         }
         List<UserInfo> users = iUser.getUserByIds(ids);
@@ -1069,7 +1069,7 @@ public class UserController extends BaseController{
         if(list.size() > 0) {
             return JSONResult.ok(list.get(0));
         }
-        if(ToolsFunction.isNumeric(number) && number.equals("0")) {
+        if(ToolsFunction.isNumeric(number) && !number.equals("0")) {
             list = iUser.getInfoByDyid(number);
             if(list.size() > 0) {
                 return JSONResult.ok(list.get(0));
