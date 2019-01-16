@@ -14,11 +14,21 @@ public class Video {
     String video_show_path;
     String pic_cut_path;
 
+    String pools;
+
     int  resolution_w;
     int  resolution_h;
     int create_time;
     int update_time;
 
+
+    public String getPools() {
+        return pools;
+    }
+
+    public void setPools(String pools) {
+        this.pools = pools;
+    }
 
     public String getPic_cut_path() {
         return pic_cut_path;

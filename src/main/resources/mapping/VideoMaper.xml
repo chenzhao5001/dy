@@ -70,6 +70,14 @@
             and  examine_status =  #{status}
         </if>
 
+        <if test="video_id != null ">
+            and  id =  #{video_id}
+        </if>
+
+        <if test="user_id != null ">
+            and  user_id =  #{user_id}
+        </if>
+
         <if test="subject_list != null ">
             and  subject IN
             <foreach collection="subject_list" item="id" index="index" open="(" close=")" separator=",">
@@ -83,6 +91,14 @@
                 #{id}
             </foreach>
         </if>
+
+        <if test="user_ids != null ">
+            and  user_id IN
+            <foreach collection="user_ids" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
         and deleted = 0
     </select>
 
@@ -100,6 +116,15 @@
             and  examine_status =  #{status}
         </if>
 
+        <if test="video_id != null ">
+            and  id =  #{video_id}
+        </if>
+
+        <if test="user_id != null ">
+            and  user_id =  #{user_id}
+        </if>
+
+
         <if test="subject_list != null ">
             and  subject IN
             <foreach collection="subject_list" item="id" index="index" open="(" close=")" separator=",">
@@ -114,6 +139,14 @@
                 #{id}
             </foreach>
         </if>
+
+        <if test="user_ids != null ">
+            and  user_id IN
+            <foreach collection="user_ids" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
         and deleted = 0
         <if test="sType != null and sType == 1">
             ORDER BY praise_count DESC

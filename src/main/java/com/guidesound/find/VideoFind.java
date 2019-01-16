@@ -8,9 +8,36 @@ public class VideoFind {
     String status;
     int begin;
     int end;
+    String user_id;
+    String video_id;
 
     List<String> subject_list;
     List<String> grade_class_list;
+    List<Integer> user_ids;
+
+    public List<Integer> getUser_ids() {
+        return user_ids;
+    }
+
+    public void setUser_ids(List<Integer> user_ids) {
+        this.user_ids = user_ids;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getVideo_id() {
+        return video_id;
+    }
+
+    public void setVideo_id(String video_id) {
+        this.video_id = video_id;
+    }
 
     public List<String> getSubject_list() {
         return subject_list;

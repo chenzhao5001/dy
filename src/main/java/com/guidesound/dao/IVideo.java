@@ -237,4 +237,7 @@ public interface IVideo {
 
     @Update("update videoChat set praise_count = praise_count + 1 where id = #{arg0}")
     void praiseMainVideoComment(int commment_id);
+
+    @Update("update video set pools = #{arg1} where id = #{arg0}")
+    void setPoolByVideoId(String video_id,String pools);
 }

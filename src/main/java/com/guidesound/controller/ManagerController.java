@@ -6,7 +6,9 @@ import com.guidesound.dao.IUser;
 import com.guidesound.dao.IVideo;
 import com.guidesound.models.*;
 import com.guidesound.util.*;
+import com.guidesound.TempStruct.ItemInfo;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,10 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -516,51 +515,75 @@ public class ManagerController extends BaseController {
     @RequestMapping(value = "/pools_list")
     @ResponseBody
     public JSONResult getPoolsList() {
-        class Item {
-            int id;
-            String  info;
-            public int getId() {
-                return id;
-            }
 
-            public Item setId(int id) {
-                this.id = id;
-                return this;
-            }
+        List<ItemInfo> list = new ArrayList<>();
+        list.add(new ItemInfo().setId(101).setInfo("入园前"));
+        list.add(new ItemInfo().setId(102).setInfo("幼儿园"));
+        list.add(new ItemInfo().setId(199).setInfo("学龄前"));
+        list.add(new ItemInfo().setId(201).setInfo("一年级"));
+        list.add(new ItemInfo().setId(202).setInfo("二年级"));
+        list.add(new ItemInfo().setId(203).setInfo("三年级"));
+        list.add(new ItemInfo().setId(204).setInfo("四年级"));
+        list.add(new ItemInfo().setId(205).setInfo("五年级"));
+        list.add(new ItemInfo().setId(206).setInfo("六年级"));
+        list.add(new ItemInfo().setId(299).setInfo("小学"));
 
-            public String getInfo() {
-                return info;
-            }
+        list.add(new ItemInfo().setId(301).setInfo("初一"));
+        list.add(new ItemInfo().setId(302).setInfo("初二"));
+        list.add(new ItemInfo().setId(303).setInfo("初三"));
+        list.add(new ItemInfo().setId(399).setInfo("初中"));
 
-            public Item setInfo(String info) {
-                this.info = info;
-                return this;
-            }
-        }
-        List<Item> list = new ArrayList<>();
-        list.add(new Item().setId(101).setInfo("入园前"));
-        list.add(new Item().setId(102).setInfo("幼儿园"));
-        list.add(new Item().setId(199).setInfo("学龄前"));
-        list.add(new Item().setId(201).setInfo("一年级"));
-        list.add(new Item().setId(202).setInfo("二年级"));
-        list.add(new Item().setId(203).setInfo("三年级"));
-        list.add(new Item().setId(204).setInfo("四年级"));
-        list.add(new Item().setId(205).setInfo("五年级"));
-        list.add(new Item().setId(206).setInfo("六年级"));
-        list.add(new Item().setId(299).setInfo("小学"));
+        list.add(new ItemInfo().setId(401).setInfo("高一"));
+        list.add(new ItemInfo().setId(402).setInfo("高二"));
+        list.add(new ItemInfo().setId(403).setInfo("高三"));
+        list.add(new ItemInfo().setId(499).setInfo("高中"));
 
-        list.add(new Item().setId(301).setInfo("初一"));
-        list.add(new Item().setId(302).setInfo("初二"));
-        list.add(new Item().setId(303).setInfo("初三"));
-        list.add(new Item().setId(399).setInfo("初中"));
-
-        list.add(new Item().setId(401).setInfo("高一"));
-        list.add(new Item().setId(402).setInfo("高二"));
-        list.add(new Item().setId(403).setInfo("高三"));
-        list.add(new Item().setId(499).setInfo("高中"));
+        list.add(new ItemInfo().setId(999).setInfo("公共池"));
         return JSONResult.ok(list);
     }
 
+
+    @RequestMapping(value = "/top_sort_list")
+    @ResponseBody
+    public JSONResult getTooList() {
+        List<ItemInfo> list = new ArrayList<>();
+        list.add(new ItemInfo().setId(101).setInfo("点赞"));
+        list.add(new ItemInfo().setId(102).setInfo("评论"));
+        list.add(new ItemInfo().setId(103).setInfo("外转"));
+        list.add(new ItemInfo().setId(104).setInfo("内转"));
+        list.add(new ItemInfo().setId(105).setInfo("收藏"));
+        list.add(new ItemInfo().setId(106).setInfo("完播"));
+        list.add(new ItemInfo().setId(107).setInfo("推荐"));
+        list.add(new ItemInfo().setId(108).setInfo("组数"));
+        return JSONResult.ok(list);
+    }
+
+    @RequestMapping(value = "/add_pool")
+    @ResponseBody
+    JSONResult addPool(String video_id,String pool_id) {
+        if(video_id == null || pool_id == null) {
+            return JSONResult.errorMsg("缺少video_id 或 pool_id");
+        }
+        Video video = iVideo.getVideo(Integer.parseInt(video_id));
+        if(video == null) {
+            return JSONResult.errorMsg("视频不存在");
+        }
+
+        String pools = video.getPools();
+        List<String> lists = new ArrayList<>(Arrays.asList(pools.split(",")));
+        if(!lists.contains(pool_id)) {
+            lists.add(pool_id);
+        }
+        String temp = StringUtils.join(lists, ",");
+        iVideo.setPoolByVideoId(video_id,temp);
+        return JSONResult.ok();
+    }
+
+    @RequestMapping(value = "/remove_pool")
+    @ResponseBody
+    JSONResult removePool(String video_id,String pools) {
+        return null;
+    }
 }
 
 

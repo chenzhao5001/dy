@@ -278,7 +278,16 @@ public class VideoController extends BaseController {
     @RequestMapping(value = "/video_list")
     public @ResponseBody
     JSONResult selectVideo(
-            String status, String content, String page, String size, String s_type,String subject,String grade_class) {
+            String status,
+            String content,
+            String page,
+            String size,
+            String s_type,
+            String subject,
+            String grade_class,
+            String video_id,
+            String user_id,
+            String user_name) {
         status = (status == null || status.equals("")) ? null:status;
         String title = (content == null || content.equals("")) ? null:content;
         int iPage = page == null ? 1:Integer.parseInt(page);
@@ -290,10 +299,19 @@ public class VideoController extends BaseController {
             subject_list = Arrays.asList(subject.split(","));
         }
         if(grade_class != null && !grade_class.equals("")) {
-            grade_class_list = Arrays.asList(subject.split(","));
+            grade_class_list = Arrays.asList(grade_class.split(","));
         }
+        ListResp ret = new ListResp();
 
-
+        List<Integer> user_ids = null;
+        if(user_name != null) {
+            user_ids = iUser.getUserIdsByName(user_name);
+            if(user_ids.size() < 1) {
+                ret.setCount(0);
+                ret.setList(new ArrayList<>());
+                return JSONResult.ok(ret);
+            }
+        }
         int begin = (iPage -1)*iSize;
         int end = iSize;
 
@@ -306,8 +324,10 @@ public class VideoController extends BaseController {
         videoFind.setSubject_list(subject_list);
         videoFind.setGrade_class_list(grade_class_list);
         videoFind.setsType(sType);
+        videoFind.setUser_id(user_id);
+        videoFind.setVideo_id(video_id);
+        videoFind.setUser_ids(user_ids);
         int count_temp = iVideo.findVideoCount(videoFind);
-        ListResp ret = new ListResp();
         if (count_temp == 0) {
             ret.setCount(0);
             ret.setList(new ArrayList<>());
