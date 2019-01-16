@@ -214,7 +214,7 @@ public interface IVideo {
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     void addComment(VideoComment videoComment);
 
-    @Update("update video set comment_count = comment_count + 1 where id = #{arg0}")
+    @Update("update video set chat_count = chat_count + 1 where id = #{arg0}")
     void addMainComment(int video_id);
 
     @Select("select count(*) from videoChat where video_id = #{arg0} and deleted = 0")

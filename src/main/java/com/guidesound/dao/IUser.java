@@ -1,10 +1,7 @@
 package com.guidesound.dao;
 
 import com.guidesound.find.IntroductionInfo;
-import com.guidesound.models.User;
-import com.guidesound.models.UserFriend;
-import com.guidesound.models.UserInfo;
-import com.guidesound.models.VideoUser;
+import com.guidesound.models.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -230,6 +227,21 @@ public interface IUser {
 
     @Select("select * from user_friend where user_id = #{arg0} and type = 2")
     public List<UserFriend> newFriendByPhone(int user_id);
+
+    @Insert("insert into user_action (" +
+            "from_user_id," +
+            "to_user_id," +
+            "type," +
+            "content_id," +
+            "create_time) values " +
+            "(#{from_user_id}," +
+            "#{to_user_id}," +
+            "#{type}," +
+            "#{content_id}," +
+            "#{create_time})")
+    public void addUserAction(UserAction userAction);
+    @Select("select * from user_action where to_user_id = #{arg0}")
+    public List<UserAction> getUserAction(int user_id);
 
 }
 

@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.guidesound.Service.IUserService;
 import com.guidesound.dao.*;
 import com.guidesound.dto.StudentInfoDTO;
-import com.guidesound.models.Student;
-import com.guidesound.models.User;
-import com.guidesound.models.UserFriend;
-import com.guidesound.models.UserInfo;
+import com.guidesound.models.*;
 import com.guidesound.resp.UserResp;
 import com.guidesound.util.*;
 import org.json.JSONObject;
@@ -1076,6 +1073,16 @@ public class UserController extends BaseController{
             }
         }
         return JSONResult.ok(null);
+    }
+    /**
+     *评论与赞接口
+     */
+    @RequestMapping("/action")
+    @ResponseBody
+    JSONResult getUserAction(){
+        int user_id = getCurrentUserId();
+        List<UserAction> actionList  = iUser.getUserAction(user_id);
+        return JSONResult.ok(actionList);
     }
 }
 

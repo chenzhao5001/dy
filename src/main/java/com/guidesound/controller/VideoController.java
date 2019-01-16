@@ -355,6 +355,17 @@ public class VideoController extends BaseController {
             TlsSigTest.PushMessage(String.valueOf(video.getUser_id()),"1");
             iVideoPraise.addMainPraise(Integer.parseInt(video_id));
             iVideoPraise.addPraise(currentUser.getId(),Integer.parseInt(video_id),(int)(new Date().getTime() /1000),(int)(new Date().getTime() /1000));
+
+            UserAction userAction = new UserAction();
+            userAction.setFrom_user_id(currentUser.getId());
+            userAction.setTo_user_id(video.getUser_id());
+            userAction.setType(102);
+            userAction.setContent_id(Integer.parseInt(video_id));
+            userAction.setCreate_time((int) (new Date().getTime() /1000));
+            iUser.addUserAction(userAction);
+
+
+
         } else if(type.equals("2")){
             if(count > 0) {
                 iVideoPraise.reduceMainPraise(Integer.parseInt(video_id));
@@ -842,6 +853,21 @@ public class VideoController extends BaseController {
         videoComment.setSecond_comment(second_comment);
         videoComment.setCreate_time((int)(new Date().getTime() / 1000));
 
+
+        UserAction userAction = new UserAction();
+        userAction.setFrom_user_id(Integer.parseInt(first_user_id));
+        if(Integer.parseInt(second_user_id) == 0) {
+            Video video = iVideo.getVideo(Integer.parseInt(video_id));
+            userAction.setTo_user_id(video.getId());
+        } else {
+            userAction.setTo_user_id(Integer.parseInt(second_user_id));
+        }
+        userAction.setType(101);
+        userAction.setContent_id(Integer.parseInt(video_id));
+        userAction.setCreate_time((int) (new Date().getTime() /1000));
+        iUser.addUserAction(userAction);
+
+
         iVideo.addComment(videoComment);
         iVideo.addMainComment(Integer.parseInt(video_id));
         videoComment.setFirst_comment(URLDecoderString(first_comment));
@@ -931,13 +957,21 @@ public class VideoController extends BaseController {
         if (comment_id == null) {
             return JSONResult.errorMsg("缺少 comment_id 参数");
         }
-
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
 
         if(null == iVideo.findVideoCommentPraise(currentUser.getId(),Integer.parseInt(comment_id))) {
             String first_user_id = iVideo.getUserIdByCommentId(Integer.valueOf(comment_id));
             TlsSigTest.PushMessage(first_user_id,"7");
+
+            UserAction userAction = new UserAction();
+            userAction.setFrom_user_id(Integer.parseInt(first_user_id));
+            userAction.setTo_user_id(currentUser.getId());
+            userAction.setType(103);
+            userAction.setContent_id(Integer.parseInt(comment_id));
+            userAction.setCreate_time((int) (new Date().getTime() /1000));
+            iUser.addUserAction(userAction);
+
             iVideo.praiseVideoComment(currentUser.getId(),Integer.parseInt(comment_id), (int) (new Date().getTime() /1000));
             iVideo.praiseMainVideoComment(Integer.parseInt(comment_id));
         } else {
@@ -945,7 +979,6 @@ public class VideoController extends BaseController {
         }
         return JSONResult.ok();
     }
-
 }
 
 class RepList {
