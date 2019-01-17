@@ -5,6 +5,7 @@ import com.guidesound.Service.IUserService;
 import com.guidesound.dao.*;
 import com.guidesound.dto.StudentInfoDTO;
 import com.guidesound.models.*;
+import com.guidesound.resp.ListResp;
 import com.guidesound.resp.UserResp;
 import com.guidesound.util.*;
 import org.json.JSONObject;
@@ -996,7 +997,7 @@ public class UserController extends BaseController{
             return JSONResult.ok(new ArrayList<>());
         }
         List<UserInfo> users = iUser.getUserByIds(ids);
-        List<UserFriend> friendList = iUser.newFriend(user_id);
+        List<UserFriend> friendList = iUser.newFriendOther(user_id);
         Map<Integer,String> m_state = new HashMap<>();
         for (UserFriend item : friendList) {
             if(item.getState() == 1) {
@@ -1022,13 +1023,13 @@ public class UserController extends BaseController{
         if(ids.isEmpty()) {
             return JSONResult.ok(new ArrayList<>());
         }
-        List<UserFriend> friendList = iUser.newFriendOther(user_id);
+        List<UserFriend> friendList = iUser.newFriend(user_id);
         Map<Integer,String> m_state = new HashMap<>();
         for (UserFriend item : friendList) {
             if(item.getState() == 1) {
-                m_state.put(item.getUser_id(),"1");
+                m_state.put(item.getAdd_user_id(),"1");
             } else if(item.getState() == 2) {
-                m_state.put(item.getUser_id(),"2");
+                m_state.put(item.getAdd_user_id(),"2");
             }
         }
         List<UserInfo> users = iUser.getUserByIds(ids);
@@ -1079,10 +1080,22 @@ public class UserController extends BaseController{
      */
     @RequestMapping("/action")
     @ResponseBody
-    JSONResult getUserAction(){
-        int user_id = getCurrentUserId();
-        List<UserAction> actionList  = iUser.getUserAction(user_id);
+    JSONResult getUserAction(String page,String size){
+        int iPage = page == null ? 1:Integer.parseInt(page);
+        int iSize = size == null ? 20:Integer.parseInt(size);
+        int begin = (iPage -1)*iSize;
+        int end = iSize;
 
+        int user_id = getCurrentUserId();
+
+        int count = iUser.getUserActionCount(user_id);
+        List<UserAction> actionList  = iUser.getUserAction(user_id,begin,end);
+        ListResp ret = new ListResp();
+        if(actionList.size() < 1 ) {
+            ret.setCount(0);
+            ret.setList(new ArrayList<>());
+            return JSONResult.ok(ret);
+        }
         List<Integer> user_list = new ArrayList<>();
         for(UserAction item : actionList) {
             if(!user_list.contains(item.getFrom_user_id())) {
@@ -1095,10 +1108,11 @@ public class UserController extends BaseController{
 
         List<UserInfo> info_lists = iUser.getUserByIds(user_list);
         HashMap<Integer,String> nameMap = new HashMap<>();
+        HashMap<Integer,String> headMap = new HashMap<>();
         for(UserInfo item : info_lists) {
             nameMap.put(item.getId(),item.getName());
+            headMap.put(item.getId(),item.getHead());
         }
-
         for(UserAction action : actionList) {
             if(nameMap.get(action.getTo_user_id()) != null) {
                 action.setTo_user_name(nameMap.get(action.getTo_user_id()));
@@ -1106,7 +1120,17 @@ public class UserController extends BaseController{
             if(nameMap.get(action.getFrom_user_id()) != null) {
                 action.setFrom_user_name(nameMap.get(action.getFrom_user_id()));
             }
+
+            if(headMap.get(action.getTo_user_id()) != null) {
+                action.setTo_user_head(headMap.get(action.getTo_user_id()));
+            }
+            if(headMap.get(action.getFrom_user_id()) != null) {
+                action.setFrom_user_head(headMap.get(action.getFrom_user_id()));
+            }
+
         }
-        return JSONResult.ok(actionList);
+        ret.setCount(count);
+        ret.setList(actionList);
+        return JSONResult.ok(ret);
     }
 }

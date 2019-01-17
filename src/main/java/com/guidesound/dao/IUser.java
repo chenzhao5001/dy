@@ -211,9 +211,9 @@ public interface IUser {
     @Select("select channel_stage from user where id = #{arg0}")
     int getChannelStage(int user_id);
 
-    @Select("select user_id from userFuns where funs_user_id = #{arg0}")
+    @Select("select user_id from userFuns where funs_user_id = #{arg0} and deleted = 0")
     public List<Integer> getMeFollow(int user_id);
-    @Select("select funs_user_id from userFuns where user_id = #{arg0}")
+    @Select("select funs_user_id from userFuns where user_id = #{arg0} and deleted = 0")
     public List<Integer> getFollowMe(int user_id);
 
     @Insert("insert into user_friend (user_id,add_user_id,type,state) values (#{arg0},#{arg1},#{arg2},1)")
@@ -229,7 +229,7 @@ public interface IUser {
     public List<UserFriend> newFriendOther(int user_id);
 
 
-    @Select("select * from user_friend where user_id = #{arg0} and type = 2")
+    @Select("select * from user_friend where add_user_id = #{arg0} and type = 2")
     public List<UserFriend> newFriendByPhone(int user_id);
 
     @Insert("insert into user_action (" +
@@ -237,15 +237,24 @@ public interface IUser {
             "to_user_id," +
             "type," +
             "content_id," +
+            "content_url," +
+            "first_comment," +
+            "second_comment," +
             "create_time) values " +
             "(#{from_user_id}," +
             "#{to_user_id}," +
             "#{type}," +
             "#{content_id}," +
+            "#{content_url}," +
+            "#{first_comment}," +
+            "#{second_comment}," +
             "#{create_time})")
     public void addUserAction(UserAction userAction);
-    @Select("select * from user_action where to_user_id = #{arg0}")
-    public List<UserAction> getUserAction(int user_id);
+
+    @Select("select count(*) from user_action where to_user_id = #{arg0}")
+    int getUserActionCount(int user_id);
+    @Select("select * from user_action where to_user_id = #{arg0} limit #{arg1},#{arg2}")
+    public List<UserAction> getUserAction(int user_id,int begin,int end);
 
 }
 
