@@ -169,6 +169,16 @@ public class ArticleController extends BaseController {
             TlsSigTest.PushMessage(String.valueOf(articleInfo.getUser_id()),"2");
             iArticle.addPraise(currentUser.getId(),Integer.parseInt(article_id),(int)(new Date().getTime() /1000));
             iArticle.addMainPraise(Integer.parseInt(article_id));
+
+            UserAction userAction = new UserAction();
+            userAction.setFrom_user_id(currentUser.getId());
+            userAction.setTo_user_id(articleInfo.getUser_id());
+            userAction.setType(202);
+            userAction.setContent_id(Integer.parseInt(article_id));
+            userAction.setCreate_time((int) (new Date().getTime() /1000));
+            iUser.addUserAction(userAction);
+
+
         } else {
             return JSONResult.errorMsg("已经点过赞");
         }
@@ -207,6 +217,26 @@ public class ArticleController extends BaseController {
         iArticle.addMainComment(Integer.parseInt(article_id));
         articleComment.setFirst_comment(URLDecoderString(first_comment));
         articleComment.setSecond_comment(URLDecoderString(second_comment));
+
+        //评论文章
+        UserAction userAction = new UserAction();
+        userAction.setFrom_user_id(Integer.parseInt(first_user_id));
+        ArticleInfo articleInfo = iArticle.getArticle(Integer.parseInt(article_id));
+        if(Integer.parseInt(second_user_id) == 0) {
+            userAction.setTo_user_id(articleInfo.getId());
+        } else {
+            userAction.setTo_user_id(Integer.parseInt(second_user_id));
+        }
+        userAction.setType(201);
+        userAction.setContent_id(Integer.parseInt(article_id));
+        userAction.setCreate_time((int) (new Date().getTime() /1000));
+
+        userAction.setContent_url(articleInfo.getHead_pic1());
+        userAction.setFirst_comment(first_comment);
+        userAction.setSecond_comment(second_comment);
+
+        iUser.addUserAction(userAction);
+
         return JSONResult.ok(articleComment);
     }
 
@@ -677,6 +707,15 @@ public class ArticleController extends BaseController {
             TlsSigTest.PushMessage(first_user_id,"8");
             iArticle.praiseArticcleComment(currentUser.getId(),Integer.parseInt(comment_id), (int) (new Date().getTime() /1000));
             iArticle.praiseMainArticcleComment(Integer.parseInt(comment_id));
+
+            UserAction userAction = new UserAction();
+            userAction.setFrom_user_id(Integer.parseInt(first_user_id));
+            userAction.setTo_user_id(currentUser.getId());
+            userAction.setType(203);
+            userAction.setContent_id(Integer.parseInt(comment_id));
+            userAction.setCreate_time((int) (new Date().getTime() /1000));
+            iUser.addUserAction(userAction);
+
         } else {
             return JSONResult.errorMsg("已经点过赞了");
         }

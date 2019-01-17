@@ -3,10 +3,55 @@ package com.guidesound.models;
 public class UserAction {
     int id;
     int from_user_id;
+    String from_user_name;
     int to_user_id;
+    String to_user_name;
     int type;
     int content_id;
+    String content_url;
+    String first_comment;
+    String second_comment;
     int create_time;
+
+    public String getFirst_comment() {
+        return first_comment;
+    }
+
+    public void setFirst_comment(String first_comment) {
+        this.first_comment = first_comment;
+    }
+
+    public String getSecond_comment() {
+        return second_comment;
+    }
+
+    public void setSecond_comment(String second_comment) {
+        this.second_comment = second_comment;
+    }
+
+    public String getContent_url() {
+        return content_url;
+    }
+
+    public void setContent_url(String content_url) {
+        this.content_url = content_url;
+    }
+
+    public String getFrom_user_name() {
+        return from_user_name;
+    }
+
+    public void setFrom_user_name(String from_user_name) {
+        this.from_user_name = from_user_name;
+    }
+
+    public String getTo_user_name() {
+        return to_user_name;
+    }
+
+    public void setTo_user_name(String to_user_name) {
+        this.to_user_name = to_user_name;
+    }
 
     public int getId() {
         return id;

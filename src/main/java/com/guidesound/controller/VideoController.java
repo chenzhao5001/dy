@@ -382,9 +382,8 @@ public class VideoController extends BaseController {
             userAction.setType(102);
             userAction.setContent_id(Integer.parseInt(video_id));
             userAction.setCreate_time((int) (new Date().getTime() /1000));
+
             iUser.addUserAction(userAction);
-
-
 
         } else if(type.equals("2")){
             if(count > 0) {
@@ -876,8 +875,8 @@ public class VideoController extends BaseController {
 
         UserAction userAction = new UserAction();
         userAction.setFrom_user_id(Integer.parseInt(first_user_id));
+        Video video = iVideo.getVideo(Integer.parseInt(video_id));
         if(Integer.parseInt(second_user_id) == 0) {
-            Video video = iVideo.getVideo(Integer.parseInt(video_id));
             userAction.setTo_user_id(video.getId());
         } else {
             userAction.setTo_user_id(Integer.parseInt(second_user_id));
@@ -885,6 +884,9 @@ public class VideoController extends BaseController {
         userAction.setType(101);
         userAction.setContent_id(Integer.parseInt(video_id));
         userAction.setCreate_time((int) (new Date().getTime() /1000));
+        userAction.setContent_url(video.getPic_up_path());
+        userAction.setFirst_comment(first_comment);
+        userAction.setSecond_comment(second_comment);
         iUser.addUserAction(userAction);
 
 

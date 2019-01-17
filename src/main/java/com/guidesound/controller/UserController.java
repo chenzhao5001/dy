@@ -1082,8 +1082,31 @@ public class UserController extends BaseController{
     JSONResult getUserAction(){
         int user_id = getCurrentUserId();
         List<UserAction> actionList  = iUser.getUserAction(user_id);
+
+        List<Integer> user_list = new ArrayList<>();
+        for(UserAction item : actionList) {
+            if(!user_list.contains(item.getFrom_user_id())) {
+                user_list.add(item.getFrom_user_id());
+            }
+            if(!user_list.contains(item.getTo_user_id())) {
+                user_list.add(item.getTo_user_id());
+            }
+        }
+
+        List<UserInfo> info_lists = iUser.getUserByIds(user_list);
+        HashMap<Integer,String> nameMap = new HashMap<>();
+        for(UserInfo item : info_lists) {
+            nameMap.put(item.getId(),item.getName());
+        }
+
+        for(UserAction action : actionList) {
+            if(nameMap.get(action.getTo_user_id()) != null) {
+                action.setTo_user_name(nameMap.get(action.getTo_user_id()));
+            }
+            if(nameMap.get(action.getFrom_user_id()) != null) {
+                action.setFrom_user_name(nameMap.get(action.getFrom_user_id()));
+            }
+        }
         return JSONResult.ok(actionList);
     }
 }
-
-
