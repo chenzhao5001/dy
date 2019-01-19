@@ -863,11 +863,12 @@ public class VideoController extends BaseController {
         int to_user_id = 0;
         if(second_user_id.equals("0")) {
             to_user_id = video.getUser_id();
+            TlsSigTest.PushMessage(String.valueOf(to_user_id),"3");
         } else {
             to_user_id = Integer.parseInt(second_user_id);
+            TlsSigTest.PushMessage(String.valueOf(to_user_id),"5");
         }
 
-        TlsSigTest.PushMessage(String.valueOf(to_user_id),"3");
 
         first_comment = getURLEncoderString(first_comment);
         second_comment = getURLEncoderString(second_comment);
@@ -886,10 +887,12 @@ public class VideoController extends BaseController {
         userAction.setFrom_user_id(Integer.parseInt(first_user_id));
         if(Integer.parseInt(second_user_id) == 0) {
             userAction.setTo_user_id(video.getUser_id());
+            userAction.setType(101);
         } else {
             userAction.setTo_user_id(Integer.parseInt(second_user_id));
+            userAction.setType(104);
         }
-        userAction.setType(101);
+
         userAction.setContent_id(Integer.parseInt(video_id));
         userAction.setCreate_time((int) (new Date().getTime() /1000));
         userAction.setContent_url(video.getPic_up_path());

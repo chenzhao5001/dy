@@ -78,12 +78,12 @@ public class MessageController extends BaseController {
         Map<Integer,String> m_state = new HashMap<>();
         Map<Integer,Integer> m_time = new HashMap<>();
         for (UserFriend item : friendList) {
-            m_time.put(item.getAdd_user_id(),item.getCreate_time());
-            list.add(item.getAdd_user_id());
+            m_time.put(item.getUser_id(),item.getCreate_time());
+            list.add(item.getUser_id());
             if(item.getState() == 1) {
-                m_state.put(item.getAdd_user_id(),"1");
+                m_state.put(item.getUser_id(),"1");
             } else if(item.getState() == 2) {
-                m_state.put(item.getAdd_user_id(),"2");
+                m_state.put(item.getUser_id(),"2");
             }
         }
         if(list.size() == 0) {
