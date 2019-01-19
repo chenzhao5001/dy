@@ -5,6 +5,15 @@ public class UserFriend {
     int add_user_id;
     int type;
     int state;
+    int create_time;
+
+    public int getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(int create_time) {
+        this.create_time = create_time;
+    }
 
     public int getUser_id() {
         return user_id;

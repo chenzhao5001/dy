@@ -13,7 +13,16 @@ public class UserAction {
     String content_url;
     String first_comment;
     String second_comment;
+    int flag;
     int create_time;
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
 
     public String getFrom_user_head() {
         return from_user_head;

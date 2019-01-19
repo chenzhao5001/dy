@@ -216,11 +216,11 @@ public interface IUser {
     @Select("select funs_user_id from userFuns where user_id = #{arg0} and deleted = 0")
     public List<Integer> getFollowMe(int user_id);
 
-    @Insert("insert into user_friend (user_id,add_user_id,type,state) values (#{arg0},#{arg1},#{arg2},1)")
-    public void addFriend(int user_id,int add_user_id,int type);
+    @Insert("insert into user_friend (user_id,add_user_id,type,state,create_time) values (#{arg0},#{arg1},#{arg2},1,#{arg3})")
+    public void addFriend(int user_id,int add_user_id,int type,int time);
 
-    @Update("update user_friend set state = 2 where user_id = #{arg0} and add_user_id = #{arg1}")
-    public void updateFriendState(int user_id,int add_user_id);
+    @Update("update user_friend set state = 2,create_time = #{arg2} where user_id = #{arg0} and add_user_id = #{arg1}")
+    public void updateFriendState(int user_id,int add_user_id,int time);
 
     @Select("select * from user_friend where user_id = #{arg0} and type = 1")
     public List<UserFriend> newFriend(int user_id);
@@ -240,6 +240,7 @@ public interface IUser {
             "content_url," +
             "first_comment," +
             "second_comment," +
+            "flag," +
             "create_time) values " +
             "(#{from_user_id}," +
             "#{to_user_id}," +
@@ -248,6 +249,7 @@ public interface IUser {
             "#{content_url}," +
             "#{first_comment}," +
             "#{second_comment}," +
+            "#{flag}," +
             "#{create_time})")
     public void addUserAction(UserAction userAction);
 
@@ -255,6 +257,9 @@ public interface IUser {
     int getUserActionCount(int user_id);
     @Select("select * from user_action where to_user_id = #{arg0} limit #{arg1},#{arg2}")
     public List<UserAction> getUserAction(int user_id,int begin,int end);
+
+    @Delete("delete from user_action where to_user_id = #{arg0} and flag = #{arg1}")
+    public void deleteAction(int user_id,int flag);
 
 }
 

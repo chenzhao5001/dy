@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Controller
@@ -44,7 +41,8 @@ public class MessageController extends BaseController {
             return JSONResult.errorMsg("缺少 add_user_id 或 type");
         }
         int current_user_id = getCurrentUserId();
-        iUser.addFriend(current_user_id,Integer.parseInt(add_user_id),Integer.parseInt(type));
+        int time = (int) (new Date().getTime()/1000);
+        iUser.addFriend(current_user_id,Integer.parseInt(add_user_id),Integer.parseInt(type),time);
         if(type.equals("1")) {
             TlsSigTest.PushMessage(add_user_id,"11");
         } else {
@@ -61,7 +59,8 @@ public class MessageController extends BaseController {
         }
 
         int current_user_id = getCurrentUserId();
-        iUser.updateFriendState(current_user_id,Integer.parseInt(add_user_id));
+        int time = (int) (new Date().getTime()/1000);
+        iUser.updateFriendState(current_user_id,Integer.parseInt(add_user_id),time);
         if(type.equals("1")) {
             TlsSigTest.PushMessage(add_user_id,"12");
         } else {
@@ -77,7 +76,9 @@ public class MessageController extends BaseController {
         List<UserFriend> friendList =  iUser.newFriendByPhone(user_id);
         List<Integer> list = new ArrayList<>();
         Map<Integer,String> m_state = new HashMap<>();
+        Map<Integer,Integer> m_time = new HashMap<>();
         for (UserFriend item : friendList) {
+            m_time.put(item.getAdd_user_id(),item.getCreate_time());
             list.add(item.getAdd_user_id());
             if(item.getState() == 1) {
                 m_state.put(item.getAdd_user_id(),"1");
@@ -91,6 +92,9 @@ public class MessageController extends BaseController {
 
         List<UserInfo> user_list = iUser.getUserByIds(list);
         for (UserInfo info : user_list) {
+            if(m_time.containsKey(info.getId())) {
+                info.setCreate_time(m_time.get(info.getId()));
+            }
             if(m_state.containsKey(info.getId())) {
                 info.setFriend_state(m_state.get(info.getId()));
             }

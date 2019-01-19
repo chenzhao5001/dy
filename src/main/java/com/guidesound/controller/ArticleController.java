@@ -175,6 +175,7 @@ public class ArticleController extends BaseController {
             userAction.setTo_user_id(articleInfo.getUser_id());
             userAction.setType(202);
             userAction.setContent_id(Integer.parseInt(article_id));
+            userAction.setFlag(2);
             userAction.setCreate_time((int) (new Date().getTime() /1000));
             iUser.addUserAction(userAction);
 
@@ -196,10 +197,17 @@ public class ArticleController extends BaseController {
             return JSONResult.errorMsg("缺少参数");
         }
 
-        TlsSigTest.PushMessage(String.valueOf(first_user_id),"4");
-
         second_user_id = second_user_id == null ? "0" : second_user_id;
         second_comment = second_comment == null ? "" : second_comment;
+
+        ArticleInfo articleInfo = iArticle.getArticle(Integer.parseInt(article_id));
+        int to_user_id = 0;
+        if(second_user_id.equals("0")) {
+            to_user_id = articleInfo.getUser_id();
+        } else {
+            to_user_id = Integer.parseInt(second_user_id);
+        }
+        TlsSigTest.PushMessage(String.valueOf(to_user_id),"4");
 
         first_comment = getURLEncoderString(first_comment);
         second_comment = getURLEncoderString(second_comment);
@@ -221,14 +229,14 @@ public class ArticleController extends BaseController {
         //评论文章
         UserAction userAction = new UserAction();
         userAction.setFrom_user_id(Integer.parseInt(first_user_id));
-        ArticleInfo articleInfo = iArticle.getArticle(Integer.parseInt(article_id));
         if(Integer.parseInt(second_user_id) == 0) {
-            userAction.setTo_user_id(articleInfo.getId());
+            userAction.setTo_user_id(articleInfo.getUser_id());
         } else {
             userAction.setTo_user_id(Integer.parseInt(second_user_id));
         }
         userAction.setType(201);
         userAction.setContent_id(Integer.parseInt(article_id));
+        userAction.setFlag(1);
         userAction.setCreate_time((int) (new Date().getTime() /1000));
 
         userAction.setContent_url(articleInfo.getHead_pic1());
@@ -713,6 +721,7 @@ public class ArticleController extends BaseController {
             userAction.setTo_user_id(currentUser.getId());
             userAction.setType(203);
             userAction.setContent_id(Integer.parseInt(comment_id));
+            userAction.setFlag(2);
             userAction.setCreate_time((int) (new Date().getTime() /1000));
             iUser.addUserAction(userAction);
 

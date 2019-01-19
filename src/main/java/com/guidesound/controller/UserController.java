@@ -1133,4 +1133,18 @@ public class UserController extends BaseController{
         ret.setList(actionList);
         return JSONResult.ok(ret);
     }
+
+    /**
+     *删除评论与赞接口
+     */
+    @RequestMapping("/delete_action")
+    @ResponseBody
+    JSONResult getUserAction(String flag) {
+        if(flag == null) {
+            return JSONResult.errorMsg("缺少flag");
+        }
+        int user_id = getCurrentUserId();
+        iUser.deleteAction(user_id,Integer.parseInt(flag));
+        return JSONResult.ok();
+    }
 }

@@ -381,6 +381,7 @@ public class VideoController extends BaseController {
             userAction.setTo_user_id(video.getUser_id());
             userAction.setType(102);
             userAction.setContent_id(Integer.parseInt(video_id));
+            userAction.setFlag(2);
             userAction.setCreate_time((int) (new Date().getTime() /1000));
 
             iUser.addUserAction(userAction);
@@ -856,9 +857,17 @@ public class VideoController extends BaseController {
             return JSONResult.errorMsg("缺少参数");
         }
 
-        TlsSigTest.PushMessage(String.valueOf(first_user_id),"3");
+        Video video = iVideo.getVideo(Integer.parseInt(video_id));
         second_user_id = second_user_id == null ? "0" : second_user_id;
         second_comment = second_comment == null ? "" : second_comment;
+        int to_user_id = 0;
+        if(second_user_id.equals("0")) {
+            to_user_id = video.getUser_id();
+        } else {
+            to_user_id = Integer.parseInt(second_user_id);
+        }
+
+        TlsSigTest.PushMessage(String.valueOf(to_user_id),"3");
 
         first_comment = getURLEncoderString(first_comment);
         second_comment = getURLEncoderString(second_comment);
@@ -875,9 +884,8 @@ public class VideoController extends BaseController {
 
         UserAction userAction = new UserAction();
         userAction.setFrom_user_id(Integer.parseInt(first_user_id));
-        Video video = iVideo.getVideo(Integer.parseInt(video_id));
         if(Integer.parseInt(second_user_id) == 0) {
-            userAction.setTo_user_id(video.getId());
+            userAction.setTo_user_id(video.getUser_id());
         } else {
             userAction.setTo_user_id(Integer.parseInt(second_user_id));
         }
@@ -887,8 +895,8 @@ public class VideoController extends BaseController {
         userAction.setContent_url(video.getPic_up_path());
         userAction.setFirst_comment(first_comment);
         userAction.setSecond_comment(second_comment);
+        userAction.setFlag(1);
         iUser.addUserAction(userAction);
-
 
         iVideo.addComment(videoComment);
         iVideo.addMainComment(Integer.parseInt(video_id));
@@ -990,6 +998,7 @@ public class VideoController extends BaseController {
             userAction.setFrom_user_id(Integer.parseInt(first_user_id));
             userAction.setTo_user_id(currentUser.getId());
             userAction.setType(103);
+            userAction.setFlag(2);
             userAction.setContent_id(Integer.parseInt(comment_id));
             userAction.setCreate_time((int) (new Date().getTime() /1000));
             iUser.addUserAction(userAction);
