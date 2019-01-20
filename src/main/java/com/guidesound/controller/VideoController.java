@@ -1,5 +1,6 @@
 package com.guidesound.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.guidesound.Service.IVideoService;
 import com.guidesound.dao.*;
 import com.guidesound.dto.VideoDTO;
@@ -442,20 +443,21 @@ public class VideoController extends BaseController {
 
 
 
-    @RequestMapping(value = "/get_info")
-    public @ResponseBody RepVideo  getVideo(HttpServletRequest request) {
-        String id = request.getParameter("id");
-        RepVideo rsp = new RepVideo();
-        if(id == null) {
-            rsp.msg = "缺少视频id参数";
-            rsp.code = 201;
-            return rsp;
+    @RequestMapping(value = "/video_by_id")
+    @ResponseBody
+    public JSONResult getVideoById(String video_id) {
+        if(video_id == null) {
+            return JSONResult.errorMsg("缺少video_id");
         }
-        Video video = videoService.getVideo(Integer.parseInt(id));
-        rsp.code = 200;
-        rsp.msg = "ok";
-        rsp.video = video;
-        return rsp;
+        VideoShow videoShow = iVideo.getVideoById(video_id);
+        if(videoShow == null) {
+            return JSONResult.errorMsg("视频不存在");
+        }
+        List<VideoShow> list = new ArrayList<>();
+        list.add(videoShow);
+        improveVideoList(list);
+        return JSONResult.ok(list.get(0));
+
     }
 
     /**

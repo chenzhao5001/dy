@@ -221,6 +221,7 @@ public class ManagerController extends BaseController {
             List<ArticleVerify> articleVerifies = new ArrayList<>();
             for (ArticleAnswer item: answerList) {
                 ArticleVerify articleVerify = new ArticleVerify();
+                articleVerify.setType(2);
                 articleVerify.setArticle_id(item.getId());
                 articleVerify.setArticleAid(item.getId());
                 articleVerify.setArticleGrade_class(SignMap.getGradeTypeByID(0));
@@ -264,6 +265,8 @@ public class ManagerController extends BaseController {
             List<ArticleVerify> articleVerifies = new ArrayList<>();
             for (ArticleInfo item: articleList) {
                 ArticleVerify articleVerify = new ArticleVerify();
+
+                articleVerify.setType(1);
                 articleVerify.setArticle_id(item.getId());
                 articleVerify.setArticleAid(item.getId());
                 articleVerify.setArticleGrade_class(SignMap.getGradeTypeByID(item.getGrade()));
@@ -418,7 +421,7 @@ public class ManagerController extends BaseController {
 
     @RequestMapping(value = "/examine_article")
     @ResponseBody
-    JSONResult examineArticle(String article_id,String status,String type_list,String fail_reason,String fail_content) throws IOException, InterruptedException, JMSException {
+    JSONResult examineArticle(String article_id,String status,String type_list,String fail_reason,String fail_content,String type) throws IOException, InterruptedException, JMSException {
 
         Integer userId = getUserId();
         if ( userId == null ) {
@@ -429,17 +432,29 @@ public class ManagerController extends BaseController {
             return JSONResult.errorMsg("缺少status 或 article_id");
         }
 
+        if ( type == null ) {
+            return JSONResult.errorMsg("缺少type");
+        }
+
         if(Integer.parseInt(status) == 1) {
             if(type_list == null) {
                 return JSONResult.errorMsg("缺少type_list");
             }
-            iArticle.setExamineSuccess(Integer.parseInt(article_id),type_list);
+            if(type.equals("1")) {
+                iArticle.setExamineSuccess(Integer.parseInt(article_id),type_list);
+            } else {
+                iArticle.setAnswerExamineSuccess(Integer.parseInt(article_id),type_list);
+            }
 
         } else {
             if(fail_reason == null || fail_content == null) {
                 return JSONResult.errorMsg("缺少fail_reason或fail_content");
             }
-            iArticle.setExamineFail(Integer.parseInt(article_id),fail_reason,fail_content);
+            if(type.equals("1")) {
+                iArticle.setExamineFail(Integer.parseInt(article_id),fail_reason,fail_content);
+            } else {
+                iArticle.setAnswerExamineFail(Integer.parseInt(article_id),fail_reason,fail_content);
+            }
         }
         return JSONResult.ok();
     }

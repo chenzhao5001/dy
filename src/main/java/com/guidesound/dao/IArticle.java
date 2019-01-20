@@ -68,6 +68,9 @@ public interface IArticle {
 //    @Select("select * from article where deleted = 0 limit #{arg0},#{arg1}")
     List<ArticleInfo> getList(ArticleFind articleFind);
 
+    @Select("select * from article where id = #{arg0}")
+    ArticleInfo getArticleById(String id);
+
     @Select("select count(*) from article where user_id = #{arg0} and deleted = 0")
     int countByUserID(int user_id);
     @Select("select * from article where user_id = #{arg0} and deleted = 0 limit #{arg1},#{arg2}")
@@ -168,12 +171,17 @@ public interface IArticle {
     @Select("select * from articleAnswer where examine_person = 0 and deleted = 0 and examine_status = 0 limit 0 ,5")
     List<ArticleAnswer> getExamineAnswer();
 
-
     @Update("update article set examine_status = 1,type_list = #{arg1} where id = #{arg0}")
     void setExamineSuccess(int id, String type_list);
 
+    @Update("update articleAnswer set examine_status = 1,type_list = #{arg1} where id = #{arg0}")
+    void setAnswerExamineSuccess(int id, String type_list);
+
     @Update("update article set examine_status = 2,examine_reason = #{arg1},fail_content = #{arg2} where id = #{arg0}")
     void setExamineFail(int id, String fail_reson, String fail_content);
+
+    @Update("update articleAnswer set examine_status = 2,examine_reason = #{arg1},fail_content = #{arg2} where id = #{arg0}")
+    void setAnswerExamineFail(int id, String fail_reson, String fail_content);
 
     @Update("<script>"
             + "update article set examine_person = #{arg1}  WHERE id IN "

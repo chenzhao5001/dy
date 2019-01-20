@@ -252,6 +252,25 @@ public class ArticleController extends BaseController {
     }
 
     /**
+     *获得id获文章
+     */
+    @RequestMapping("/article_by_id")
+    @ResponseBody
+    JSONResult getArticleById(String article_id) {
+        if(article_id == null) {
+            return JSONResult.errorMsg("缺少article_id");
+        }
+
+        ArticleInfo articleInfo = iArticle.getArticleById(article_id);
+        if(articleInfo == null) {
+            return JSONResult.errorMsg("文章不存在");
+        }
+        List<ArticleInfo> list = new ArrayList<>();
+        list.add(articleInfo);
+        getExtendInfo(list);
+        return JSONResult.ok(list.get(0));
+    }
+    /**
      *获得文章列表
      */
     @RequestMapping("/list")

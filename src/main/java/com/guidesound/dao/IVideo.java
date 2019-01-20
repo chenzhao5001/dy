@@ -67,8 +67,10 @@ public interface IVideo {
             + "</foreach>"
             + "</script>")
     List<User> getUserHeadByIds(@Param("iList") List<Integer> iList);
-
     List<VideoShow> findVideo(VideoFind videoFind);
+
+    @Select("select * from video where id = #{arg0}")
+    VideoShow getVideoById(String id);
 
     int findVideoCount(VideoFind videoFind);
 

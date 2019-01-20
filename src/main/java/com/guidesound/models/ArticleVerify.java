@@ -10,7 +10,16 @@ public class ArticleVerify {
     ArticlePathTemp articlePathTemp = new ArticlePathTemp();
     UserInfoTemp userInfoTemp = new UserInfoTemp();
     int article_id;
+    int type;
 
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public void setArticleTitle(String title) { articleInfoTemp.setTitle(title); }
     public void setArticleSubject(String subject) { articleInfoTemp.setSubject(subject); }
