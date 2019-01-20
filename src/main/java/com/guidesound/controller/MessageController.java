@@ -60,7 +60,7 @@ public class MessageController extends BaseController {
 
         int current_user_id = getCurrentUserId();
         int time = (int) (new Date().getTime()/1000);
-        iUser.updateFriendState(current_user_id,Integer.parseInt(add_user_id),time);
+        iUser.updateFriendState(Integer.parseInt(add_user_id),current_user_id,time);
         if(type.equals("1")) {
             TlsSigTest.PushMessage(add_user_id,"12");
         } else {
