@@ -3,16 +3,16 @@ package com.guidesound.models;
 public class UserAction {
     int id;
     int from_user_id;
-    String from_user_name;
-    String from_user_head;
+    String from_user_name = "";
+    String from_user_head = "";
     int to_user_id;
-    String to_user_name;
-    String to_user_head;
+    String to_user_name = "";
+    String to_user_head = "";
     int type;
     int content_id;
-    String content_url;
-    String first_comment;
-    String second_comment;
+    String content_url = "";
+    String first_comment = "";
+    String second_comment = "";
     int flag;
     int create_time;
 

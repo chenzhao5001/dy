@@ -997,9 +997,11 @@ public class UserController extends BaseController{
             return JSONResult.ok(new ArrayList<>());
         }
         List<UserInfo> users = iUser.getUserByIds(ids);
-        List<UserFriend> friendList = iUser.newFriendOther(user_id);
+        List<UserFriend> friendList = iUser.newFriend(user_id);
         Map<Integer,String> m_state = new HashMap<>();
+        Map<Integer,Integer> m_time = new HashMap<>();
         for (UserFriend item : friendList) {
+            m_time.put(item.getAdd_user_id(),item.getCreate_time());
             if(item.getState() == 1) {
                 m_state.put(item.getAdd_user_id(),"1");
             } else if(item.getState() == 2) {
@@ -1010,6 +1012,9 @@ public class UserController extends BaseController{
         for (UserInfo info : users) {
             if(m_state.containsKey(info.getId())) {
                 info.setFriend_state(m_state.get(info.getId()));
+            }
+            if(m_time.containsKey(info.getId())) {
+                info.setCreate_time(m_time.get(info.getId()));
             }
         }
         return JSONResult.ok(users);
@@ -1023,19 +1028,24 @@ public class UserController extends BaseController{
         if(ids.isEmpty()) {
             return JSONResult.ok(new ArrayList<>());
         }
-        List<UserFriend> friendList = iUser.newFriend(user_id);
+        List<UserFriend> friendList = iUser.newFriendOther(user_id);
         Map<Integer,String> m_state = new HashMap<>();
+        Map<Integer,Integer> m_time = new HashMap<>();
         for (UserFriend item : friendList) {
+            m_time.put(item.getUser_id(),item.getCreate_time());
             if(item.getState() == 1) {
-                m_state.put(item.getAdd_user_id(),"1");
+                m_state.put(item.getUser_id(),"1");
             } else if(item.getState() == 2) {
-                m_state.put(item.getAdd_user_id(),"2");
+                m_state.put(item.getUser_id(),"2");
             }
         }
         List<UserInfo> users = iUser.getUserByIds(ids);
         for (UserInfo info : users) {
             if(m_state.containsKey(info.getId())) {
                 info.setFriend_state(m_state.get(info.getId()));
+            }
+            if(m_time.containsKey(info.getId())) {
+                info.setCreate_time(m_time.get(info.getId()));
             }
         }
         return JSONResult.ok(users);

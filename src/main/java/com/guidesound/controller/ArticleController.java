@@ -175,10 +175,10 @@ public class ArticleController extends BaseController {
             userAction.setTo_user_id(articleInfo.getUser_id());
             userAction.setType(202);
             userAction.setContent_id(Integer.parseInt(article_id));
+            userAction.setContent_url(articleInfo.getHead_pic1());
             userAction.setFlag(2);
             userAction.setCreate_time((int) (new Date().getTime() /1000));
             iUser.addUserAction(userAction);
-
 
         } else {
             return JSONResult.errorMsg("已经点过赞");
@@ -724,6 +724,7 @@ public class ArticleController extends BaseController {
             userAction.setTo_user_id(currentUser.getId());
             userAction.setType(203);
             userAction.setContent_id(Integer.parseInt(comment_id));
+            userAction.setContent_url("");
             userAction.setFlag(2);
             userAction.setCreate_time((int) (new Date().getTime() /1000));
             iUser.addUserAction(userAction);

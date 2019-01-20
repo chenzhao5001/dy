@@ -1003,6 +1003,7 @@ public class VideoController extends BaseController {
             userAction.setType(103);
             userAction.setFlag(2);
             userAction.setContent_id(Integer.parseInt(comment_id));
+            userAction.setContent_url("");
             userAction.setCreate_time((int) (new Date().getTime() /1000));
             iUser.addUserAction(userAction);
 
