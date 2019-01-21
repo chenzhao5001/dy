@@ -18,6 +18,40 @@ public class VideoShow {
     int resolution_h;
     int shared_count;
 
+    String content;
+    String pic_up_path;
+    String video_show_path;
+    String video_up_path;
+    String pic_cut_path;
+    int play_count;
+    boolean praise;
+    int praise_count;
+    int chat_count;
+    String user_head;
+    boolean collection;
+    int collection_count;
+    boolean follow;
+    int user_type;
+    String user_type_name;
+    String user_subject;
+    String user_grade;
+    String user_level;
+    int out_relay;
+    int inner_relay;
+    int group;
+    String video_state;
+    String pools;
+    int rec_count;
+    int create_time;
+
+    public int getRec_count() {
+        return rec_count;
+    }
+
+    public void setRec_count(int rec_count) {
+        this.rec_count = rec_count;
+    }
+
     public int getExamine_status() {
         return examine_status;
     }
@@ -42,30 +76,6 @@ public class VideoShow {
         this.resolution_h = resolution_h;
     }
 
-    String content;
-    String pic_up_path;
-    String video_show_path;
-    String video_up_path;
-    String pic_cut_path;
-    int play_count;
-    boolean praise;
-    int praise_count;
-    int chat_count;
-    String user_head;
-    boolean collection;
-    int collection_count;
-    boolean follow;
-    int user_type;
-    String user_type_name;
-    String user_subject;
-    String user_grade;
-    String user_level;
-    int out_relay;
-    int inner_relay;
-    int group;
-    int video_state;
-    String pools;
-    int create_time;
 
     public String getPools() {
         return pools;
@@ -83,11 +93,11 @@ public class VideoShow {
         this.group = group;
     }
 
-    public int getVideo_state() {
+    public String getVideo_state() {
         return video_state;
     }
 
-    public void setVideo_state(int video_state) {
+    public void setVideo_state(String video_state) {
         this.video_state = video_state;
     }
 

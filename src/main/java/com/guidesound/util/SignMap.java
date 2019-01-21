@@ -141,6 +141,8 @@ public class SignMap {
 //    static Map<Integer,String> grade_type2;
     static Map<Integer,String> user_level;
     static List<Content2> channel;
+    static Map<Integer,String> video_state;
+
 //    static List<Content2> article_channel;
 
     static boolean flag = false;
@@ -223,39 +225,25 @@ public class SignMap {
         content2.setChannel_name("其他");
         channel.add(content2);
 
-//        article_channel = new ArrayList<>();
-//        content2 = new Content2();
-//        content2.setChannel_info("1");
-//        content2.setChannel_name("推荐");
-//        article_channel.add(content2);
-//
-//        content2 = new Content2();
-//        content2.setChannel_info("2");
-//        content2.setChannel_name("问答");
-//        article_channel.add(content2);
-//
-//
-//        content2 = new Content2();
-//        content2.setChannel_info("101");
-//        content2.setChannel_name("语文");
-//        article_channel.add(content2);
-//
-//        content2 = new Content2();
-//        content2.setChannel_info("102");
-//        content2.setChannel_name("数学");
-//        article_channel.add(content2);
-//
-//        content2 = new Content2();
-//        content2.setChannel_info("103");
-//        content2.setChannel_name("英语");
-//        article_channel.add(content2);
-//
-//        content2 = new Content2();
-//        content2.setChannel_info("104");
-//        content2.setChannel_name("物理");
-//        article_channel.add(content2);
+        video_state = new HashMap<>();
+        video_state.put(0,"待审核");
+        video_state.put(1,"推荐中");
+        video_state.put(2,"审核失败");
+        video_state.put(3,"转码中");
+        video_state.put(4,"转码失败");
+        video_state.put(5,"推荐池");
+        video_state.put(6,"已完成");
+        video_state.put(7,"已下架");
+
+
     }
 
+    public static String getVideoState(int state) {
+        if (video_state.containsKey(state)) {
+            return video_state.get(state);
+        }
+        return "未知";
+    }
     public static List<Content2> getChannelList() throws JsonProcessingException {
         return channel;
     }

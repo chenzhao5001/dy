@@ -776,6 +776,7 @@ public class VideoController extends BaseController {
         int user_id = getCurrentUserId();
         List<Integer> idList = new ArrayList<>();
         for(VideoShow item:list_temp) {
+            item.setVideo_state(SignMap.getVideoState(item.getExamine_status()));
             item.setWatch_type_name(SignMap.getGradeTypeByID(item.getWatch_type()));
             item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
             String video_temp = item.getVideo_show_path().replace("cos.ap-beijing","file");

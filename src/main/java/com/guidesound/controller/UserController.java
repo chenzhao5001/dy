@@ -1083,7 +1083,7 @@ public class UserController extends BaseController{
                 return JSONResult.ok(list.get(0));
             }
         }
-        return JSONResult.ok(null);
+        return JSONResult.errorMsg("账号不存在");
     }
     /**
      *评论与赞接口
