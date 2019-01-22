@@ -2,81 +2,85 @@ package com.guidesound.controller;
 
 import com.guidesound.dao.ICourse;
 import com.guidesound.dao.IUser;
+import com.guidesound.dto.Course1V1DTO;
+import com.guidesound.dto.CourseClassDTO;
 import com.guidesound.find.IntroductionInfo;
+import com.guidesound.models.Course;
 import com.guidesound.models.InUser;
 import com.guidesound.models.User;
 import com.guidesound.util.JSONResult;
+import com.guidesound.util.ToolsFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/course")
-public class CourseController {
-
+public class CourseController extends BaseController{
 
     @Autowired
     private ICourse iCourse;
     @Autowired
     private IUser iUser;
 
-    @RequestMapping("/add_course")
+    @RequestMapping("/add_1v1_course")
     @ResponseBody
-    public JSONResult addCourse(String course_name,
-                             String subject,
-                             String grade_level,
-                             String method,
-                             String parents_state,
-                             String price,
-                             String course_area,
-                                String test_method,
-                                String test_duration,
-                                String test_price,
-                                String max_student,
-                                String all_duration,
-                                String all_price,
-                                String test_live_time,
-                                String course_introduction,
-                                String course_outline,
-                                String teacher,
-                                String teacher_introduction
-                                ) {
-        String name = (course_name == null) ? "" : course_name;
-        int i_subject = (subject == null) ? 0 : Integer.parseInt(subject);
-        int i_grade_level = (grade_level == null) ? 0 : Integer.parseInt(grade_level);
-        int i_method = (method == null) ? 0 : Integer.parseInt(method);
-        int i_price = (price == null) ? 0 : Integer.parseInt(price);
-        String area = (course_area == null) ? "" : course_area;
-        int i_parents_state = (parents_state == null) ? 0:Integer.parseInt(parents_state);
-        int i_test_method = (test_method == null) ? 0: Integer.parseInt(test_method);
-        int i_test_duration = (test_duration == null) ? 0:Integer.parseInt(test_duration);
+    public JSONResult add_1v1_course(@Valid Course1V1DTO course1V1DTO,BindingResult result) {
 
-        int i_test_price = (test_price == null) ? 0:Integer.parseInt(test_price);
-        int i_max_student = (max_student == null) ? 0:Integer.parseInt(max_student);
-        int i_all_hours = (all_duration == null) ? 0:Integer.parseInt(all_duration);
-        int i_all_price = (all_price == null) ? 0:Integer.parseInt(all_price);
-        int i_test_live_time = (test_live_time == null) ? 0:Integer.parseInt(test_live_time);
-
-        course_introduction = (course_introduction == null) ? "":course_introduction;
-        course_outline = (course_outline == null) ? "":course_outline;
-        teacher = (teacher == null) ? "":teacher;
-        teacher_introduction = (teacher_introduction == null) ? "":teacher_introduction;
-
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User) request.getAttribute("user_info");
-
-        int time = (int) (new Date().getTime() / 1000);
-//        iCourse.add1v1(currentUser.getId(),name,i_subject,i_grade_level,i_method,i_price,pic,area,time);
+        StringBuilder msg = new StringBuilder();
+        if(!ToolsFunction.paramCheck(result,msg)) {
+            return JSONResult.errorMsg(msg.toString());
+        }
+        course1V1DTO.setUser_id(getCurrentUserId());
+        course1V1DTO.setCreate_time((int) (new Date().getTime()/1000));
+        iCourse.add1v1(course1V1DTO);
         return JSONResult.ok();
-
     }
 
+
+    @RequestMapping("/add_class_course")
+    @ResponseBody
+    public JSONResult addClassCourse(@Valid CourseClassDTO courseClassDTO,BindingResult result) {
+
+        StringBuilder msg = new StringBuilder();
+        if(!ToolsFunction.paramCheck(result,msg)) {
+            return JSONResult.errorMsg(msg.toString());
+        }
+        courseClassDTO.setUser_id(getCurrentUserId());
+        courseClassDTO.setCreate_time((int) (new Date().getTime()/1000));
+        iCourse.addClass(courseClassDTO);
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/up_course_pic")
+    @ResponseBody
+    public JSONResult updateCoursePic(String course_id,String pic) {
+        if(course_id == null || pic == null) {
+            return JSONResult.errorMsg("缺少course_id 或 pic");
+        }
+        int user_id = getCurrentUserId();
+        iCourse.updateCoursePic(user_id,Integer.parseInt(course_id),pic);
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/course_list")
+    @ResponseBody
+    public JSONResult getCourseList(String user_id) {
+        if(user_id == null) {
+            return JSONResult.errorMsg("缺少 user_id");
+        }
+        List<Course> list = iCourse.getCourseList(Integer.parseInt(user_id));
+        return JSONResult.ok(list);
+    }
 
     @RequestMapping("/up_introduction_pic")
     @ResponseBody
@@ -120,4 +124,6 @@ public class CourseController {
         IntroductionInfo introductionInfo = iUser.getIntroductionInfo(Integer.parseInt(user_id));
         return JSONResult.ok(introductionInfo);
     }
+
+
 }
