@@ -109,30 +109,6 @@ public class VideoController extends BaseController {
         return JSONResult.ok(SignMap.getWatchList());
     }
 
-    @RequestMapping(value = "/find_video")
-    @ResponseBody
-    JSONResult findVideo(HttpServletRequest request) {
-        String sType = request.getParameter("s_type");
-        if(request.getParameter("s_type") == null ) {
-            return JSONResult.errorMsg("缺少 s_type 参数");
-        }
-        String content = request.getParameter("content") == null ? "":request.getParameter("content");
-        int iPage = request.getParameter("page") == null ? 1:Integer.parseInt(request.getParameter("page"));
-        int iSize = request.getParameter("size") == null ? 1:Integer.parseInt(request.getParameter("size"));
-
-        int count_temp = iVideo.getVideoCount("0");
-        int begin = (iPage -1)*iSize;
-        int end = iSize;
-//        if( sType == "1") {
-//            List<VideoShow> list_temp  = iVideo.selectVideo(status,begin,end);
-//        } else {
-//
-//        }
-//        List<VideoShow> list_temp  = iVideo.selectVideo(status,begin,end);
-
-        return null;
-    }
-
 
     @RequestMapping(value = "/list_by_channel")
     public @ResponseBody

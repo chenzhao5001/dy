@@ -98,7 +98,6 @@
                 #{id}
             </foreach>
         </if>
-
         and deleted = 0
     </select>
 
@@ -148,14 +147,29 @@
         </if>
 
         and deleted = 0
-        <if test="sType != null and sType == 1">
+        <if test="sType != null and sType == 101">
             ORDER BY praise_count DESC
         </if>
-        <if test="sType != null and sType == 2">
+        <if test="sType != null and sType == 102">
+            ORDER BY comment_count DESC
+        </if>
+        <if test="sType != null and sType == 103">
+            ORDER BY out_relay DESC
+        </if>
+        <if test="sType != null and sType == 104">
+            ORDER BY inner_relay DESC
+        </if>
+        <if test="sType != null and sType == 105">
+            ORDER BY collection_count DESC
+        </if>
+        <if test="sType != null and sType == 106">
             ORDER BY play_count DESC
         </if>
-        <if test="sType != null and sType == 3">
-            ORDER BY create_time DESC
+        <if test="sType != null and sType == 107">
+            ORDER BY rec_count DESC
+        </if>
+        <if test="sType != null and sType == 108">
+            ORDER BY group DESC
         </if>
         limit #{begin},#{end}
 

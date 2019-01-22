@@ -87,6 +87,9 @@ public class CourseController {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User) request.getAttribute("user_info");
+        if(currentUser.getType() != 1) {
+            return JSONResult.errorMsg("不是老师");
+        }
         iUser.upIntroductionPic(currentUser.getId(),introduction_pic);
         return JSONResult.ok();
     }
@@ -97,9 +100,12 @@ public class CourseController {
         if(introduction == null) {
             return JSONResult.errorMsg("缺少参数");
         }
-
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User) request.getAttribute("user_info");
+
+        if(currentUser.getType() != 1) {
+            return JSONResult.errorMsg("不是老师");
+        }
         iUser.upIntroduction(currentUser.getId(),introduction);
         return JSONResult.ok();
     }
@@ -107,12 +113,11 @@ public class CourseController {
     @RequestMapping("/introduction_info")
     @ResponseBody
     public JSONResult getIntroductionInfo(String user_id) {
+
         if(user_id == null) {
-            return JSONResult.errorMsg("缺少参数");
+            return JSONResult.errorMsg("缺少 user_id");
         }
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User) request.getAttribute("user_info");
-        IntroductionInfo introductionInfo = iUser.getIntroductionInfo(currentUser.getId());
+        IntroductionInfo introductionInfo = iUser.getIntroductionInfo(Integer.parseInt(user_id));
         return JSONResult.ok(introductionInfo);
     }
 }
