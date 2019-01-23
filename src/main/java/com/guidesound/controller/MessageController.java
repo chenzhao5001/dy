@@ -56,6 +56,7 @@ public class MessageController extends BaseController {
         List<UserFriend> friends = iUser.findFriend(min_user_id,max_user_id);
         if(friends.size() > 0 && friends.get(friends.size()-1).getType() < Integer.parseInt(type)) {
             iUser.updateAddFriendType(min_user_id,max_user_id,Integer.parseInt(type));
+            return JSONResult.ok();
         } else if(friends.size() > 0)  {
             return JSONResult.errorMsg("已经申请加过好友，不应走到此逻辑");
         }
