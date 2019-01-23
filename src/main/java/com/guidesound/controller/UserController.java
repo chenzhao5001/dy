@@ -1001,7 +1001,14 @@ public class UserController extends BaseController{
         Map<Integer,String> m_state = new HashMap<>();
         Map<Integer,Integer> m_time = new HashMap<>();
         for (UserFriend item : friendList) {
-            m_time.put(item.getAdd_user_id(),item.getCreate_time());
+            int temp_id = 0;
+            if(item.getUser_id() == user_id) {
+                temp_id = item.getAdd_user_id();
+            } else {
+                temp_id = item.getUser_id();
+            }
+            m_time.put(temp_id,item.getCreate_time());
+
             if(item.getState() == 1) {
                 m_state.put(item.getAdd_user_id(),"1");
             } else if(item.getState() == 2) {
@@ -1028,11 +1035,17 @@ public class UserController extends BaseController{
         if(ids.isEmpty()) {
             return JSONResult.ok(new ArrayList<>());
         }
-        List<UserFriend> friendList = iUser.newFriendOther(user_id);
+        List<UserFriend> friendList = iUser.newFriend(user_id);
         Map<Integer,String> m_state = new HashMap<>();
         Map<Integer,Integer> m_time = new HashMap<>();
         for (UserFriend item : friendList) {
-            m_time.put(item.getUser_id(),item.getCreate_time());
+            int temp_id = 0;
+            if(item.getUser_id() == user_id) {
+                temp_id = item.getAdd_user_id();
+            } else {
+                temp_id = item.getUser_id();
+            }
+            m_time.put(temp_id,item.getCreate_time());
             if(item.getState() == 1) {
                 m_state.put(item.getUser_id(),"1");
             } else if(item.getState() == 2) {

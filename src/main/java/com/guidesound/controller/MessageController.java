@@ -41,8 +41,26 @@ public class MessageController extends BaseController {
             return JSONResult.errorMsg("缺少 add_user_id 或 type");
         }
         int current_user_id = getCurrentUserId();
+        int other_user_id = Integer.parseInt(add_user_id);
         int time = (int) (new Date().getTime()/1000);
-        iUser.addFriend(current_user_id,Integer.parseInt(add_user_id),Integer.parseInt(type),time);
+        int min_user_id = 0;
+        int max_user_id = 0;
+        if(current_user_id < other_user_id) {
+            min_user_id = current_user_id;
+            max_user_id = other_user_id;
+        } else {
+            min_user_id = other_user_id;
+            max_user_id = current_user_id;
+        }
+
+        List<UserFriend> friends = iUser.findFriend(min_user_id,max_user_id);
+        if(friends.size() > 0 && friends.get(friends.size()-1).getType() < Integer.parseInt(type)) {
+            iUser.updateAddFriendType(min_user_id,max_user_id,Integer.parseInt(type));
+        } else if(friends.size() > 0)  {
+            return JSONResult.errorMsg("已经申请加过好友，不应走到此逻辑");
+        }
+        iUser.addFriend(min_user_id,max_user_id,Integer.parseInt(type),time);
+
         if(type.equals("1")) {
             TlsSigTest.PushMessage(add_user_id,"11");
         } else {
@@ -59,9 +77,19 @@ public class MessageController extends BaseController {
         }
 
         int current_user_id = getCurrentUserId();
+        int other_user_id = Integer.parseInt(add_user_id);
+        int min_user_id = 0;
+        int max_user_id = 0;
+        if(current_user_id < other_user_id) {
+            min_user_id = current_user_id;
+            max_user_id = other_user_id;
+        } else {
+            min_user_id = other_user_id;
+            max_user_id = current_user_id;
+        }
         int time = (int) (new Date().getTime()/1000);
-        iUser.updateFriendState(Integer.parseInt(add_user_id),current_user_id,time);
-        iUser.updateFriendState(current_user_id,Integer.parseInt(add_user_id),time);
+
+        iUser.updateFriendState(min_user_id,max_user_id,time);
         if(type.equals("1")) {
             TlsSigTest.PushMessage(add_user_id,"12");
         } else {
@@ -79,8 +107,14 @@ public class MessageController extends BaseController {
         Map<Integer,String> m_state = new HashMap<>();
         Map<Integer,Integer> m_time = new HashMap<>();
         for (UserFriend item : friendList) {
-            m_time.put(item.getUser_id(),item.getCreate_time());
-            list.add(item.getUser_id());
+            int temp_id = 0;
+            if(item.getUser_id() == user_id) {
+                temp_id = item.getAdd_user_id();
+            } else {
+                temp_id = item.getUser_id();
+            }
+            m_time.put(temp_id,item.getCreate_time());
+            list.add(temp_id);
             if(item.getState() == 1) {
                 m_state.put(item.getUser_id(),"1");
             } else if(item.getState() == 2) {

@@ -216,20 +216,26 @@ public interface IUser {
     @Select("select funs_user_id from userFuns where user_id = #{arg0} and deleted = 0")
     public List<Integer> getFollowMe(int user_id);
 
+    @Update("update user_friend set type = #{arg2} where user_id = #{arg0} and add_user_id =#{arg1}")
+    public void updateAddFriendType(int user_id,int add_user_id,int type);
+
     @Insert("insert into user_friend (user_id,add_user_id,type,state,create_time) values (#{arg0},#{arg1},#{arg2},1,#{arg3})")
     public void addFriend(int user_id,int add_user_id,int type,int time);
+
+    @Select("select * from user_friend where user_id = #{arg0} and add_user_id =#{arg1}")
+    public List<UserFriend> findFriend(int user_id,int add_user_id);
 
     @Update("update user_friend set state = 2,create_time = #{arg2} where user_id = #{arg0} and add_user_id = #{arg1}")
     public void updateFriendState(int user_id,int add_user_id,int time);
 
-    @Select("select * from user_friend where user_id = #{arg0} and type = 1")
+    @Select("select * from user_friend where user_id = #{arg0} or add_user_id = #{arg0}")
     public List<UserFriend> newFriend(int user_id);
 
-    @Select("select * from user_friend where add_user_id = #{arg0} and type = 1")
-    public List<UserFriend> newFriendOther(int user_id);
+//    @Select("select * from user_friend where add_user_id = #{arg0} and type = 1")
+//    public List<UserFriend> newFriendOther(int user_id);
 
 
-    @Select("select * from user_friend where add_user_id = #{arg0} and type = 2")
+    @Select("select * from user_friend where (user_id = #{arg0} or add_user_id = #{arg0}) and type = 2")
     public List<UserFriend> newFriendByPhone(int user_id);
 
     @Insert("insert into user_action (" +
