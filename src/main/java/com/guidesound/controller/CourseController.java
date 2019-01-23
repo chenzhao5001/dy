@@ -1,5 +1,9 @@
 package com.guidesound.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.dao.ICourse;
 import com.guidesound.dao.IUser;
 import com.guidesound.dto.Course1V1DTO;
@@ -20,6 +24,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -80,6 +85,38 @@ public class CourseController extends BaseController{
         }
         List<Course> list = iCourse.getCourseList(Integer.parseInt(user_id));
         return JSONResult.ok(list);
+    }
+
+    @RequestMapping("/set_outline")
+    @ResponseBody
+    public JSONResult setCourseOutline(String course_id,String outline) throws IOException {
+
+        if(course_id == null || outline == null) {
+            return JSONResult.errorMsg("缺少 course_id 获 outline");
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        List<CourseOutline> beanList = mapper.readValue(outline, new TypeReference<List<CourseOutline>>() {});
+        if(beanList.size() < 1) {
+            return JSONResult.errorMsg("格式错误");
+        }
+        CourseOutline lastItem = beanList.get(beanList.size() -1);
+        int overTime = lastItem.getTime() + 3600*lastItem.getDuration();
+        String content  = mapper.writeValueAsString(beanList);
+        iCourse.setCourseOutline(Integer.parseInt(course_id),content,overTime);
+        return JSONResult.ok();
+    }
+
+
+    @RequestMapping("/get_outline")
+    @ResponseBody
+    public JSONResult setCourseOutline(String course_id) throws IOException {
+        if(course_id == null) {
+            return JSONResult.errorMsg("缺少course_id");
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        String outLine = iCourse.getCourseOutline(Integer.parseInt(course_id));
+        List<CourseOutline> beanList = mapper.readValue(outLine, new TypeReference<List<CourseOutline>>() {});
+        return JSONResult.ok(beanList);
     }
 
     @RequestMapping("/up_introduction_pic")

@@ -510,7 +510,7 @@ public class ManagerController extends BaseController {
             return JSONResult.errorMsg("缺少video_id");
         }
         iVideo.UpVideo(Integer.parseInt(video_id));
-        return JSONResult.ok();
+        return JSONResult.ok("已完成");
     }
 
     @RequestMapping(value = "/down_video")
@@ -524,7 +524,7 @@ public class ManagerController extends BaseController {
             return JSONResult.errorMsg("缺少video_id");
         }
         iVideo.downVideo(Integer.parseInt(video_id));
-        return JSONResult.ok();
+        return JSONResult.ok("已下架");
     }
 
     @RequestMapping(value = "/pools_list")

@@ -49,6 +49,14 @@ public interface ICourse {
     void updateCoursePic(int user_id,int course_id,String pic);
     @Select("select * from course where user_id = #{arg0}")
     List<Course> getCourseList(int user_id);
+
+    @Update("update course set course_outline = #{arg1}, over_time = #{arg2} where id = #{arg0}")
+    void setCourseOutline(int course_id,String outline,int over_time);
+
+    @Select("select course_outline from course where id = #{arg0}")
+    String getCourseOutline(int course_id);
+
+
     @Select("select * from subject_config")
     List<Subject> getSubject();
 }

@@ -206,10 +206,10 @@ public interface IVideo {
     @Delete("delete from video where user_id = #{arg0}")
     void deleteVideoByUser(int user);
 
-    @Update("update video set deleted = 1 where user_id = #{arg0}")
-    void UpVideo(int usre_id);
-    @Update("update video set deleted = 0 where user_id = #{arg0}")
-    void downVideo(int usre_id);
+    @Update("update video set examine_status = 6 where id = #{arg0}")
+    void UpVideo(int video_id);
+    @Update("update video set examine_status = 7 where id = #{arg0}")
+    void downVideo(int video_id);
 
     @Insert("insert into videoChat (video_id,first_user_id,first_comment,second_user_id,second_comment,create_time) " +
             "value (#{video_id},#{first_user_id},#{first_comment},#{second_user_id},#{second_comment},#{create_time})")
