@@ -54,13 +54,23 @@ public class MessageController extends BaseController {
         }
 
         List<UserFriend> friends = iUser.findFriend(min_user_id,max_user_id);
+        String toUsers = "";
+        if(friends.size() > 0) {
+            toUsers = friends.get(friends.size()-1).getTo_user_id();
+            if(!toUsers.contains(add_user_id + ",")) {
+                toUsers += add_user_id + ",";
+            }
+        } else {
+            toUsers = add_user_id + ",";
+        }
         if(friends.size() > 0 && friends.get(friends.size()-1).getType() < Integer.parseInt(type)) {
-            iUser.updateAddFriendType(min_user_id,max_user_id,Integer.parseInt(type));
+                iUser.updateAddFriendType(min_user_id,max_user_id,Integer.parseInt(type),toUsers);
             return JSONResult.ok();
         } else if(friends.size() > 0)  {
-            return JSONResult.errorMsg("已经申请加过好友，不应走到此逻辑");
+            iUser.updateToUser(min_user_id,max_user_id,toUsers);
+            return JSONResult.ok();
         }
-        iUser.addFriend(min_user_id,max_user_id,Integer.parseInt(type),time);
+        iUser.addFriend(min_user_id,max_user_id,Integer.parseInt(type),time,toUsers);
 
         if(type.equals("1")) {
             TlsSigTest.PushMessage(add_user_id,"11");
@@ -70,6 +80,26 @@ public class MessageController extends BaseController {
         return JSONResult.ok();
     }
 
+    @RequestMapping(value = "/delete_friend")
+    @ResponseBody
+    JSONResult deleteFriend(String friend_id) {
+        if(friend_id == null) {
+            return JSONResult.errorMsg("缺少friend_id");
+        }
+        int current_user_id = getCurrentUserId();
+        int other_user_id = Integer.parseInt(friend_id);
+        int min_user_id = 0;
+        int max_user_id = 0;
+        if(current_user_id < other_user_id) {
+            min_user_id = current_user_id;
+            max_user_id = other_user_id;
+        } else {
+            min_user_id = other_user_id;
+            max_user_id = current_user_id;
+        }
+        iUser.deleteFriend(min_user_id,max_user_id);
+        return JSONResult.ok();
+    }
     @RequestMapping(value = "/confirm_friend")
     @ResponseBody
     JSONResult confirmFriend(String add_user_id,String type) throws IOException {
@@ -108,6 +138,9 @@ public class MessageController extends BaseController {
         Map<Integer,String> m_state = new HashMap<>();
         Map<Integer,Integer> m_time = new HashMap<>();
         for (UserFriend item : friendList) {
+            if(!item.getTo_user_id().contains(String.valueOf(user_id) + ",")) {
+                continue;
+            }
             int temp_id = 0;
             if(item.getUser_id() == user_id) {
                 temp_id = item.getAdd_user_id();
@@ -117,9 +150,9 @@ public class MessageController extends BaseController {
             m_time.put(temp_id,item.getCreate_time());
             list.add(temp_id);
             if(item.getState() == 1) {
-                m_state.put(item.getUser_id(),"1");
+                m_state.put(temp_id,"1");
             } else if(item.getState() == 2) {
-                m_state.put(item.getUser_id(),"2");
+                m_state.put(temp_id,"2");
             }
         }
         if(list.size() == 0) {

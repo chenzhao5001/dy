@@ -216,17 +216,23 @@ public interface IUser {
     @Select("select funs_user_id from userFuns where user_id = #{arg0} and deleted = 0")
     public List<Integer> getFollowMe(int user_id);
 
-    @Update("update user_friend set type = #{arg2} where user_id = #{arg0} and add_user_id =#{arg1}")
-    public void updateAddFriendType(int user_id,int add_user_id,int type);
+    @Update("update user_friend set type = #{arg2},to_user_id = #{arg3} where user_id = #{arg0} and add_user_id =#{arg1}")
+    public void updateAddFriendType(int user_id,int add_user_id,int type,String to_user_id);
 
-    @Insert("insert into user_friend (user_id,add_user_id,type,state,create_time) values (#{arg0},#{arg1},#{arg2},1,#{arg3})")
-    public void addFriend(int user_id,int add_user_id,int type,int time);
+    @Update("update user_friend set to_user_id = #{arg2} where user_id = #{arg0} and add_user_id =#{arg1}")
+    void updateToUser(int user_id,int add_user_id,String to_user_id);
+
+    @Insert("insert into user_friend (user_id,add_user_id,type,state,create_time,to_user_id) values (#{arg0},#{arg1},#{arg2},1,#{arg3},#{arg4})")
+    public void addFriend(int user_id,int add_user_id,int type,int time,String to_user_id);
 
     @Select("select * from user_friend where user_id = #{arg0} and add_user_id =#{arg1}")
     public List<UserFriend> findFriend(int user_id,int add_user_id);
 
     @Update("update user_friend set state = 2,create_time = #{arg2} where user_id = #{arg0} and add_user_id = #{arg1}")
     public void updateFriendState(int user_id,int add_user_id,int time);
+
+    @Delete("delete from user_friend where user_id = #{arg0} and add_user_id = #{arg1}")
+    public void deleteFriend(int user_id,int add_user_id);
 
     @Select("select * from user_friend where user_id = #{arg0} or add_user_id = #{arg0}")
     public List<UserFriend> newFriend(int user_id);

@@ -3,9 +3,18 @@ package com.guidesound.models;
 public class UserFriend {
     int user_id;
     int add_user_id;
+    String to_user_id;
     int type;
     int state;
     int create_time;
+
+    public String getTo_user_id() {
+        return to_user_id;
+    }
+
+    public void setTo_user_id(String to_user_id) {
+        this.to_user_id = to_user_id;
+    }
 
     public int getCreate_time() {
         return create_time;

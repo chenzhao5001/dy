@@ -1010,9 +1010,11 @@ public class UserController extends BaseController{
             m_time.put(temp_id,item.getCreate_time());
 
             if(item.getState() == 1) {
-                m_state.put(item.getAdd_user_id(),"1");
+                if(item.getTo_user_id().contains(String.valueOf(user_id) + ",")) {
+                    m_state.put(temp_id,"1");
+                }
             } else if(item.getState() == 2) {
-                m_state.put(item.getAdd_user_id(),"2");
+                m_state.put(temp_id,"2");
             }
         }
 
@@ -1047,9 +1049,11 @@ public class UserController extends BaseController{
             }
             m_time.put(temp_id,item.getCreate_time());
             if(item.getState() == 1) {
-                m_state.put(item.getUser_id(),"1");
+                if(item.getTo_user_id().contains(String.valueOf(user_id) + ",")) {
+                    m_state.put(temp_id,"1");
+                }
             } else if(item.getState() == 2) {
-                m_state.put(item.getUser_id(),"2");
+                m_state.put(temp_id,"2");
             }
         }
         List<UserInfo> users = iUser.getUserByIds(ids);
