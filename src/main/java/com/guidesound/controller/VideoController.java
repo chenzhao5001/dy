@@ -1,7 +1,9 @@
 package com.guidesound.controller;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.Service.IVideoService;
+import com.guidesound.TempStruct.ItemInfo;
 import com.guidesound.dao.*;
 import com.guidesound.dto.VideoDTO;
 import com.guidesound.find.VideoFind;
@@ -112,7 +114,7 @@ public class VideoController extends BaseController {
 
     @RequestMapping(value = "/list_by_channel")
     public @ResponseBody
-    JSONResult selectVideoByChannel(String channel,String user_guid,String page, String size) {
+    JSONResult selectVideoByChannel(String channel,String user_guid,String page, String size) throws JsonProcessingException {
         if(channel == null || user_guid == null) {
             return JSONResult.errorMsg("缺少channel 或 user_guid");
         }
@@ -253,8 +255,8 @@ public class VideoController extends BaseController {
      * 获取视频列表
      */
     @RequestMapping(value = "/video_list")
-    public @ResponseBody
-    JSONResult selectVideo(
+    @ResponseBody
+    public JSONResult selectVideo(
             String status,
             String content,
             String page,
@@ -264,7 +266,7 @@ public class VideoController extends BaseController {
             String grade_class,
             String video_id,
             String user_id,
-            String user_name) {
+            String user_name) throws JsonProcessingException {
         status = (status == null || status.equals("")) ? null:status;
         String title = (content == null || content.equals("")) ? null:content;
         int iPage = page == null ? 1:Integer.parseInt(page);
@@ -421,7 +423,7 @@ public class VideoController extends BaseController {
 
     @RequestMapping(value = "/video_by_id")
     @ResponseBody
-    public JSONResult getVideoById(String video_id) {
+    public JSONResult getVideoById(String video_id) throws JsonProcessingException {
         if(video_id == null) {
             return JSONResult.errorMsg("缺少video_id");
         }
@@ -582,7 +584,7 @@ public class VideoController extends BaseController {
      */
     @RequestMapping(value = "/collection_video")
     @ResponseBody
-    public JSONResult getMyCollectionVideo(String user_id,String page,String size) {
+    public JSONResult getMyCollectionVideo(String user_id,String page,String size) throws JsonProcessingException {
         if(user_id == null) {
             return JSONResult.errorMsg("缺少user_id");
         }
@@ -617,7 +619,7 @@ public class VideoController extends BaseController {
      */
     @RequestMapping(value = "/publish_video")
     @ResponseBody
-    public JSONResult getPublishVideo(String user_id,String page,String size) {
+    public JSONResult getPublishVideo(String user_id,String page,String size) throws JsonProcessingException {
 
         if(user_id == null ) {
             return JSONResult.errorMsg("缺少user_id 获 state");
@@ -747,7 +749,7 @@ public class VideoController extends BaseController {
         return JSONResult.ok();
     }
 
-    void improveVideoList(List<VideoShow> list_temp) {
+    void improveVideoList(List<VideoShow> list_temp) throws JsonProcessingException {
 
         int user_id = getCurrentUserId();
         List<Integer> idList = new ArrayList<>();
@@ -760,6 +762,27 @@ public class VideoController extends BaseController {
             String pic_temp = item.getPic_up_path().replace("cos.ap-beijing","image");
             item.setVideo_show_path(video_temp);
             item.setPic_up_path(pic_temp);
+
+
+            String[] temps = ((String)item.getPools()).split(",");
+            List<ItemInfo> poolList = new ArrayList<>();
+            for (String cell : temps) {
+                if(cell.equals("")) {
+                    continue;
+                }
+                ItemInfo itemInfo = new ItemInfo();
+                itemInfo.setId(Integer.parseInt(cell));
+                itemInfo.setInfo(SignMap.getPoolById(Integer.parseInt(cell)));
+                poolList.add(itemInfo);
+
+            }
+            if(poolList.size() > 0) {
+//                ObjectMapper mapper = new ObjectMapper();
+//                String jsonlist = mapper.writeValueAsString(poolList);
+//                jsonlist = jsonlist.replace("\\","");
+                item.setPools(poolList);
+            }
+
             if(item.getExamine_status() == 3) {
                 item.setExamine_status(0);
             }

@@ -7,10 +7,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b7c7c742-9c4d-41b3-a82e-f22b8938a7fb" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/MessageController.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/MessageController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IUser.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IUser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/models/UserFriend.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/models/UserFriend.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/WEB-INF/jsp/code_loading.jsp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/WEB-INF/jsp/content.jsp" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/web/WEB-INF/jsp/verify.jsp" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/models/VideoShow.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/models/VideoShow.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/WEB-INF/GuideSound-servlet.xml" afterPath="$PROJECT_DIR$/web/WEB-INF/GuideSound-servlet.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -26,76 +31,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CourseController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/CourseController.java">
+      <file leaf-file-name="VideoController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="118" column="37" lean-forward="false" selection-start-line="118" selection-start-column="29" selection-end-line="118" selection-end-column="37" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="12917">
-              <caret line="1014" column="17" lean-forward="false" selection-start-line="1014" selection-start-column="17" selection-end-line="1014" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MessageController.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/MessageController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
-              <caret line="140" column="75" lean-forward="false" selection-start-line="140" selection-start-column="75" selection-end-line="140" selection-end-column="75" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserFriend.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/UserFriend.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-225">
-              <caret line="6" column="13" lean-forward="true" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+            <state relative-caret-position="25">
+              <caret line="782" column="38" lean-forward="false" selection-start-line="782" selection-start-column="38" selection-end-line="782" selection-end-column="38" />
               <folding>
-                <element signature="e#204#205#0" expanded="true" />
-                <element signature="e#237#238#0" expanded="true" />
-                <element signature="e#289#290#0" expanded="true" />
-                <element signature="e#333#334#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TlsSigTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/TlsSigTest.java">
+      <file leaf-file-name="ObjectMapper.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.9.6/jackson-databind-2.9.6.jar!/com/fasterxml/jackson/databind/ObjectMapper.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="59" column="25" lean-forward="false" selection-start-line="59" selection-start-column="25" selection-end-line="59" selection-end-column="25" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserInfoTemp.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/TempStruct/UserInfoTemp.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="50">
-              <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IUser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IUser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="124">
-              <caret line="225" column="16" lean-forward="false" selection-start-line="225" selection-start-column="16" selection-end-line="225" selection-end-column="16" />
+            <state relative-caret-position="25475">
+              <caret line="1220" column="34" lean-forward="false" selection-start-line="1220" selection-start-column="34" selection-end-line="1220" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -104,31 +56,90 @@
       <file leaf-file-name="InvocableHandlerMethod.class" pinned="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.0.8.RELEASE/spring-web-5.0.8.RELEASE.jar!/org/springframework/web/method/support/InvocableHandlerMethod.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="382">
+            <state relative-caret-position="2700">
               <caret line="126" column="0" lean-forward="false" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ICourse.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/ICourse.java">
+      <file leaf-file-name="SignMap.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="56" column="11" lean-forward="false" selection-start-line="56" selection-start-column="11" selection-end-line="56" selection-end-column="11" />
+            <state relative-caret-position="4650">
+              <caret line="239" column="21" lean-forward="false" selection-start-line="239" selection-start-column="8" selection-end-line="239" selection-end-column="21" />
+              <folding>
+                <element signature="e#6436#6437#0" expanded="true" />
+                <element signature="e#6472#6473#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ItemInfo.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/TempStruct/ItemInfo.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="50">
+              <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ManagerController.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="String.java" pinned="false" current-in-tab="false">
+        <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/lang/String.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="58575">
+              <caret line="2420" column="11" lean-forward="false" selection-start-line="2420" selection-start-column="11" selection-end-line="2420" selection-end-column="19" />
+              <folding>
+                <element signature="e#94598#94599#0" expanded="true" />
+                <element signature="e#94636#94637#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="VideoShow.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/VideoShow.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1625">
+              <caret line="83" column="31" lean-forward="false" selection-start-line="83" selection-start-column="31" selection-end-line="83" selection-end-column="31" />
+              <folding>
+                <element signature="e#1662#1663#0" expanded="true" />
+                <element signature="e#1696#1697#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ManagerController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1663">
-              <caret line="511" column="22" lean-forward="false" selection-start-line="511" selection-start-column="15" selection-end-line="511" selection-end-column="22" />
+            <state relative-caret-position="200">
+              <caret line="589" column="27" lean-forward="true" selection-start-line="589" selection-start-column="27" selection-end-line="589" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ArticleController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="44" column="24" lean-forward="false" selection-start-line="44" selection-start-column="24" selection-end-line="44" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ShowInfoTemp.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/TempStruct/ShowInfoTemp.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="50">
+              <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -145,8 +156,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>limit</find>
-      <find>me_f</find>
       <find>page</find>
       <find>jackson</find>
       <find>me_follow_users</find>
@@ -172,9 +181,11 @@
       <find>addRecommend</find>
       <find>findVideo</find>
       <find>ArticleDTO</find>
-      <find>up_video</find>
       <find>me_fo</find>
+      <find>up_video</find>
       <find>me_</find>
+      <find>commend_pools</find>
+      <find>split</find>
     </findStrings>
     <dirStrings>
       <dir>E:\work\guide_sound\src\main\java</dir>
@@ -196,9 +207,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/Subject.java" />
-        <option value="$MAVEN_REPOSITORY$/org/springframework/spring-beans/5.0.8.RELEASE/spring-beans-5.0.8.RELEASE.jar!/org/springframework/beans/BeanUtils.class" />
-        <option value="$MAVEN_REPOSITORY$/org/mybatis/mybatis/3.4.5/mybatis-3.4.5.jar!/org/apache/ibatis/annotations/Delete.class" />
         <option value="$PROJECT_DIR$/src/main/resources/mapping/UserMaper.xml" />
         <option value="$PROJECT_DIR$/web/css/weixin.css" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/Home.java" />
@@ -225,20 +233,15 @@
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/VideoComment.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/TempStruct/ItemInfo.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/Video.java" />
-        <option value="$PROJECT_DIR$/web/WEB-INF/GuideSound-servlet.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/UserAction.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/ArticleVerify.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/VideoShow.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/find/VideoFind.java" />
         <option value="$PROJECT_DIR$/src/main/resources/mapping/VideoMaper.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dto/Course1V1DTO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dto/CourseClassDTO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/Course.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IVideo.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/TempStruct/CourseOutline.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/ICourse.java" />
@@ -247,6 +250,14 @@
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IUser.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/MessageController.java" />
+        <option value="$MAVEN_REPOSITORY$/org/springframework/spring-web/5.0.8.RELEASE/spring-web-5.0.8.RELEASE.jar!/org/springframework/web/bind/annotation/ResponseBody.class" />
+        <option value="$MAVEN_REPOSITORY$/org/springframework/spring-context/5.0.8.RELEASE/spring-context-5.0.8.RELEASE.jar!/org/springframework/stereotype/Controller.class" />
+        <option value="$PROJECT_DIR$/src/main/resources/jdbc.properties" />
+        <option value="$PROJECT_DIR$/web/WEB-INF/GuideSound-servlet.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/VideoShow.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" />
       </list>
     </option>
   </component>
@@ -298,9 +309,6 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="AndroidView" />
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -318,13 +326,6 @@
               <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
               <item name="classes" type="462c0819:PsiDirectoryNode" />
               <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
-              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
-              <item name="classes" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-              <item name="guidesound" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
@@ -368,7 +369,17 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="guidesound" type="462c0819:PsiDirectoryNode" />
-              <item name="find" type="462c0819:PsiDirectoryNode" />
+              <item name="controller" type="462c0819:PsiDirectoryNode" />
+              <item name="VideoController.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </path>
+            <path>
+              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
+              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="guidesound" type="462c0819:PsiDirectoryNode" />
+              <item name="dao" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
@@ -384,7 +395,19 @@
               <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="guidesound" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
+              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="guidesound" type="462c0819:PsiDirectoryNode" />
+              <item name="util" type="462c0819:PsiDirectoryNode" />
+              <item name="SignMap.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
             </path>
             <path>
               <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
@@ -392,12 +415,25 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="mapping" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
+              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
+              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -405,7 +441,7 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="E:/gy_examine" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -628,6 +664,10 @@
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
   </component>
+  <component name="SpringBeansView">
+    <option name="showImplicitBeans" value="false" />
+    <option name="showInfrastructureBeans" value="false" />
+  </component>
   <component name="StructureViewFactory">
     <option name="ACTIVE_ACTIONS" value=",SHOW_LAMBDA" />
   </component>
@@ -651,12 +691,14 @@
       <workItem from="1545475375117" duration="109356000" />
       <workItem from="1546430633249" duration="9143000" />
       <workItem from="1546528321237" duration="133841000" />
-      <workItem from="1548041521295" duration="41902000" />
+      <workItem from="1548041521295" duration="55169000" />
+      <workItem from="1548578822346" duration="9118000" />
+      <workItem from="1548688862546" duration="897000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="587707000" />
+    <option name="totallyTimeSpent" value="610989000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -674,7 +716,7 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3536184" sideWeight="0.50907713" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="JRebel Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30921054" sideWeight="0.5030257" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="JRebel Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19736843" sideWeight="0.5121029" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="JRebel Executor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -683,7 +725,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19736843" sideWeight="0.49092284" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46052632" sideWeight="0.48789713" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34539473" sideWeight="0.43040848" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -691,12 +733,13 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46710527" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35098335" sideWeight="0.48867315" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2730711" sideWeight="0.48867315" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="JRebel" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2730711" sideWeight="0.51132685" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38157895" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -704,7 +747,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38157895" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -751,302 +793,15 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="247" />
+      <option name="time" value="257" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/resources/mybatis-config.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/VideoInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/resp/UserResp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2263">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/mapping/UserMaper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1200">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1545287323116" expanded="true" signature="544:1004" ph="INSERT INTO user... " />
-            <marker date="1545287323116" expanded="true" signature="1098:1116" ph="SELECT * FRO... user" />
-            <marker date="1545287323116" expanded="true" signature="1212:1386" ph="UPDATE user " />
-            <marker date="1545287323116" expanded="true" signature="1635:1680" ph="select * fro... user" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.4/commons-lang3-3.4.jar!/org/apache/commons/lang3/StringUtils.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="1447" column="25" lean-forward="false" selection-start-line="1447" selection-start-column="25" selection-end-line="1447" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/Video.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="24" column="18" lean-forward="false" selection-start-line="24" selection-start-column="18" selection-end-line="24" selection-end-column="18" />
-          <folding>
-            <element signature="e#445#446#0" expanded="false" />
-            <element signature="e#473#474#0" expanded="false" />
-            <element signature="e#515#516#0" expanded="false" />
-            <element signature="e#549#550#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/Arrays.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="3798" column="30" lean-forward="false" selection-start-line="3798" selection-start-column="30" selection-end-line="3798" selection-end-column="30" />
-          <folding>
-            <element signature="e#177013#177014#0" expanded="false" />
-            <element signature="e#177054#177055#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/lang/String.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="2420" column="20" lean-forward="false" selection-start-line="2420" selection-start-column="20" selection-end-line="2420" selection-end-column="20" />
-          <folding>
-            <element signature="e#94598#94599#0" expanded="false" />
-            <element signature="e#94636#94637#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/rebel.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/WEB-INF/GuideSound-servlet.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="759">
-          <caret line="52" column="9" lean-forward="true" selection-start-line="52" selection-start-column="9" selection-end-line="52" selection-end-column="9" />
-          <folding>
-            <element signature="e#3836#3847#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/HashMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="127" column="27" lean-forward="true" selection-start-line="127" selection-start-column="27" selection-end-line="127" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/resp/ListResp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/UserInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="46" column="42" lean-forward="false" selection-start-line="46" selection-start-column="35" selection-end-line="46" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/UserAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1868">
-          <caret line="14" column="25" lean-forward="false" selection-start-line="14" selection-start-column="11" selection-end-line="14" selection-end-column="25" />
-          <folding>
-            <element signature="e#423#424#0" expanded="false" />
-            <element signature="e#450#451#0" expanded="false" />
-            <element signature="e#487#488#0" expanded="false" />
-            <element signature="e#519#520#0" expanded="false" />
-            <element signature="e#560#561#0" expanded="false" />
-            <element signature="e#597#598#0" expanded="false" />
-            <element signature="e#657#658#0" expanded="false" />
-            <element signature="e#709#710#0" expanded="false" />
-            <element signature="e#748#749#0" expanded="false" />
-            <element signature="e#783#784#0" expanded="false" />
-            <element signature="e#839#840#0" expanded="false" />
-            <element signature="e#887#888#0" expanded="false" />
-            <element signature="e#927#928#0" expanded="false" />
-            <element signature="e#963#964#0" expanded="false" />
-            <element signature="e#1021#1022#0" expanded="false" />
-            <element signature="e#1071#1072#0" expanded="false" />
-            <element signature="e#1112#1113#0" expanded="false" />
-            <element signature="e#1149#1150#0" expanded="false" />
-            <element signature="e#1209#1210#0" expanded="false" />
-            <element signature="e#1261#1262#0" expanded="false" />
-            <element signature="e#1299#1300#0" expanded="false" />
-            <element signature="e#1333#1334#0" expanded="false" />
-            <element signature="e#1387#1388#0" expanded="false" />
-            <element signature="e#1433#1434#0" expanded="false" />
-            <element signature="e#1474#1475#0" expanded="false" />
-            <element signature="e#1511#1512#0" expanded="false" />
-            <element signature="e#1571#1572#0" expanded="false" />
-            <element signature="e#1623#1624#0" expanded="false" />
-            <element signature="e#1662#1663#0" expanded="false" />
-            <element signature="e#1697#1698#0" expanded="false" />
-            <element signature="e#1753#1754#0" expanded="false" />
-            <element signature="e#1801#1802#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1650">
-          <caret line="71" column="4" lean-forward="false" selection-start-line="71" selection-start-column="4" selection-end-line="71" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/JSONResult.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1025">
-          <caret line="55" column="14" lean-forward="false" selection-start-line="55" selection-start-column="14" selection-end-line="55" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/ServiceResponse.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/StorageSts.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/Service/IVideoService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="9" column="16" lean-forward="false" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/Map.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="164" column="12" lean-forward="false" selection-start-line="164" selection-start-column="12" selection-end-line="164" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/VideoShow.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="40" column="14" lean-forward="true" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
-          <folding>
-            <element signature="e#910#911#0" expanded="true" />
-            <element signature="e#942#943#0" expanded="true" />
-            <element signature="e#989#990#0" expanded="true" />
-            <element signature="e#1031#1032#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/find/IntroductionInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="294" column="15" lean-forward="true" selection-start-line="294" selection-start-column="15" selection-end-line="294" selection-end-column="15" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/find/VideoFind.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/mapping/VideoMaper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-625">
-          <caret line="153" column="39" lean-forward="true" selection-start-line="153" selection-start-column="39" selection-end-line="153" selection-end-column="39" />
-          <folding>
-            <marker date="1548139225373" expanded="true" signature="279:946" ph="INSERT INTO video... " />
-            <marker date="1548139225373" expanded="true" signature="1070:1122" ph="SELECT * FRO... video" />
-            <marker date="1548139225373" expanded="true" signature="1250:1327" ph="SELECT * FRO... video" />
-            <marker date="1548139225373" expanded="true" signature="1414:2577" ph="SELECT count... video" />
-            <marker date="1548139225373" expanded="true" signature="2686:4696" ph="SELECT * FRO... video" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/TempStruct/VideoInfoTemp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dto/StudentInfoDTO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="6" column="4" lean-forward="false" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="37" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1058,19 +813,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="142">
-          <caret line="51" column="0" lean-forward="false" selection-start-line="51" selection-start-column="0" selection-end-line="54" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dto/ArticleDTO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="100">
           <caret line="4" column="23" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1078,56 +824,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="9" selection-end-column="23" />
-          <folding>
-            <element signature="e#754#755#0" expanded="true" />
-            <element signature="e#788#789#0" expanded="true" />
-            <element signature="e#842#843#0" expanded="true" />
-            <element signature="e#888#889#0" expanded="true" />
-            <element signature="e#925#926#0" expanded="true" />
-            <element signature="e#958#959#0" expanded="true" />
-            <element signature="e#1010#1011#0" expanded="true" />
-            <element signature="e#1054#1055#0" expanded="true" />
-            <element signature="e#1085#1086#0" expanded="true" />
-            <element signature="e#1115#1116#0" expanded="true" />
-            <element signature="e#1158#1159#0" expanded="true" />
-            <element signature="e#1196#1197#0" expanded="true" />
-            <element signature="e#1231#1232#0" expanded="true" />
-            <element signature="e#1265#1266#0" expanded="true" />
-            <element signature="e#1316#1317#0" expanded="true" />
-            <element signature="e#1362#1363#0" expanded="true" />
-            <element signature="e#1400#1401#0" expanded="true" />
-            <element signature="e#1434#1435#0" expanded="true" />
-            <element signature="e#1488#1489#0" expanded="true" />
-            <element signature="e#1534#1535#0" expanded="true" />
-            <element signature="e#1566#1567#0" expanded="true" />
-            <element signature="e#1600#1601#0" expanded="true" />
-            <element signature="e#1642#1643#0" expanded="true" />
-            <element signature="e#1682#1683#0" expanded="true" />
-            <element signature="e#1715#1716#0" expanded="true" />
-            <element signature="e#1744#1745#0" expanded="true" />
-            <element signature="e#1788#1789#0" expanded="true" />
-            <element signature="e#1824#1825#0" expanded="true" />
-            <element signature="e#1856#1857#0" expanded="true" />
-            <element signature="e#1884#1885#0" expanded="true" />
-            <element signature="e#1926#1927#0" expanded="true" />
-            <element signature="e#1960#1961#0" expanded="true" />
-            <element signature="e#1991#1992#0" expanded="true" />
-            <element signature="e#2018#2019#0" expanded="true" />
-            <element signature="e#2058#2059#0" expanded="true" />
-            <element signature="e#2090#2091#0" expanded="true" />
-            <element signature="e#2128#2129#0" expanded="true" />
-            <element signature="e#2162#2163#0" expanded="true" />
-            <element signature="e#2216#2217#0" expanded="true" />
-            <element signature="e#2262#2263#0" expanded="true" />
-            <element signature="e#2302#2303#0" expanded="true" />
-            <element signature="e#2338#2339#0" expanded="true" />
-            <element signature="e#2396#2397#0" expanded="true" />
-            <element signature="e#2446#2447#0" expanded="true" />
-            <element signature="e#2483#2484#0" expanded="true" />
-            <element signature="e#2516#2517#0" expanded="true" />
-            <element signature="e#2568#2569#0" expanded="true" />
-            <element signature="e#2612#2613#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1135,55 +831,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="775">
           <caret line="31" column="41" lean-forward="false" selection-start-line="31" selection-start-column="41" selection-end-line="31" selection-end-column="41" />
-          <folding>
-            <element signature="e#908#909#0" expanded="true" />
-            <element signature="e#972#973#0" expanded="true" />
-            <element signature="e#1028#1029#0" expanded="true" />
-            <element signature="e#1065#1066#0" expanded="true" />
-            <element signature="e#1098#1099#0" expanded="true" />
-            <element signature="e#1150#1151#0" expanded="true" />
-            <element signature="e#1194#1195#0" expanded="true" />
-            <element signature="e#1229#1230#0" expanded="true" />
-            <element signature="e#1263#1264#0" expanded="true" />
-            <element signature="e#1314#1315#0" expanded="true" />
-            <element signature="e#1360#1361#0" expanded="true" />
-            <element signature="e#1391#1392#0" expanded="true" />
-            <element signature="e#1421#1422#0" expanded="true" />
-            <element signature="e#1464#1465#0" expanded="true" />
-            <element signature="e#1502#1503#0" expanded="true" />
-            <element signature="e#1540#1541#0" expanded="true" />
-            <element signature="e#1574#1575#0" expanded="true" />
-            <element signature="e#1628#1629#0" expanded="true" />
-            <element signature="e#1674#1675#0" expanded="true" />
-            <element signature="e#1712#1713#0" expanded="true" />
-            <element signature="e#1746#1747#0" expanded="true" />
-            <element signature="e#1800#1801#0" expanded="true" />
-            <element signature="e#1846#1847#0" expanded="true" />
-            <element signature="e#1883#1884#0" expanded="true" />
-            <element signature="e#1916#1917#0" expanded="true" />
-            <element signature="e#1968#1969#0" expanded="true" />
-            <element signature="e#2012#2013#0" expanded="true" />
-            <element signature="e#2051#2052#0" expanded="true" />
-            <element signature="e#2086#2087#0" expanded="true" />
-            <element signature="e#2142#2143#0" expanded="true" />
-            <element signature="e#2190#2191#0" expanded="true" />
-            <element signature="e#2226#2227#0" expanded="true" />
-            <element signature="e#2258#2259#0" expanded="true" />
-            <element signature="e#2308#2309#0" expanded="true" />
-            <element signature="e#2350#2351#0" expanded="true" />
-            <element signature="e#2386#2387#0" expanded="true" />
-            <element signature="e#2418#2419#0" expanded="true" />
-            <element signature="e#2468#2469#0" expanded="true" />
-            <element signature="e#2510#2511#0" expanded="true" />
-            <element signature="e#2550#2551#0" expanded="true" />
-            <element signature="e#2586#2587#0" expanded="true" />
-            <element signature="e#2644#2645#0" expanded="true" />
-            <element signature="e#2694#2695#0" expanded="true" />
-            <element signature="e#2731#2732#0" expanded="true" />
-            <element signature="e#2764#2765#0" expanded="true" />
-            <element signature="e#2816#2817#0" expanded="true" />
-            <element signature="e#2860#2861#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1191,7 +838,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="377">
           <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1199,76 +845,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="475">
           <caret line="19" column="20" lean-forward="true" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
-          <folding>
-            <element signature="e#409#410#0" expanded="true" />
-            <element signature="e#434#435#0" expanded="true" />
-            <element signature="e#467#468#0" expanded="true" />
-            <element signature="e#495#496#0" expanded="true" />
-            <element signature="e#526#527#0" expanded="true" />
-            <element signature="e#556#557#0" expanded="true" />
-            <element signature="e#599#600#0" expanded="true" />
-            <element signature="e#637#638#0" expanded="true" />
-            <element signature="e#675#676#0" expanded="true" />
-            <element signature="e#709#710#0" expanded="true" />
-            <element signature="e#763#764#0" expanded="true" />
-            <element signature="e#809#810#0" expanded="true" />
-            <element signature="e#844#845#0" expanded="true" />
-            <element signature="e#878#879#0" expanded="true" />
-            <element signature="e#929#930#0" expanded="true" />
-            <element signature="e#975#976#0" expanded="true" />
-            <element signature="e#1005#1006#0" expanded="true" />
-            <element signature="e#1034#1035#0" expanded="true" />
-            <element signature="e#1075#1076#0" expanded="true" />
-            <element signature="e#1111#1112#0" expanded="true" />
-            <element signature="e#1146#1147#0" expanded="true" />
-            <element signature="e#1180#1181#0" expanded="true" />
-            <element signature="e#1231#1232#0" expanded="true" />
-            <element signature="e#1277#1278#0" expanded="true" />
-            <element signature="e#1306#1307#0" expanded="true" />
-            <element signature="e#1334#1335#0" expanded="true" />
-            <element signature="e#1373#1374#0" expanded="true" />
-            <element signature="e#1407#1408#0" expanded="true" />
-            <element signature="e#1438#1439#0" expanded="true" />
-            <element signature="e#1465#1466#0" expanded="true" />
-            <element signature="e#1505#1506#0" expanded="true" />
-            <element signature="e#1537#1538#0" expanded="true" />
-            <element signature="e#1574#1575#0" expanded="true" />
-            <element signature="e#1607#1608#0" expanded="true" />
-            <element signature="e#1659#1660#0" expanded="true" />
-            <element signature="e#1703#1704#0" expanded="true" />
-            <element signature="e#1738#1739#0" expanded="true" />
-            <element signature="e#1772#1773#0" expanded="true" />
-            <element signature="e#1823#1824#0" expanded="true" />
-            <element signature="e#1869#1870#0" expanded="true" />
-            <element signature="e#1906#1907#0" expanded="true" />
-            <element signature="e#1942#1943#0" expanded="true" />
-            <element signature="e#1997#1998#0" expanded="true" />
-            <element signature="e#2047#2048#0" expanded="true" />
-            <element signature="e#2081#2082#0" expanded="true" />
-            <element signature="e#2114#2115#0" expanded="true" />
-            <element signature="e#2163#2164#0" expanded="true" />
-            <element signature="e#2207#2208#0" expanded="true" />
-            <element signature="e#2240#2241#0" expanded="true" />
-            <element signature="e#2272#2273#0" expanded="true" />
-            <element signature="e#2319#2320#0" expanded="true" />
-            <element signature="e#2361#2362#0" expanded="true" />
-            <element signature="e#2395#2396#0" expanded="true" />
-            <element signature="e#2428#2429#0" expanded="true" />
-            <element signature="e#2477#2478#0" expanded="true" />
-            <element signature="e#2521#2522#0" expanded="true" />
-            <element signature="e#2557#2558#0" expanded="true" />
-            <element signature="e#2592#2593#0" expanded="true" />
-            <element signature="e#2645#2646#0" expanded="true" />
-            <element signature="e#2693#2694#0" expanded="true" />
-            <element signature="e#2726#2727#0" expanded="true" />
-            <element signature="e#2758#2759#0" expanded="true" />
-            <element signature="e#2805#2806#0" expanded="true" />
-            <element signature="e#2847#2848#0" expanded="true" />
-            <element signature="e#2882#2883#0" expanded="true" />
-            <element signature="e#2916#2917#0" expanded="true" />
-            <element signature="e#2967#2968#0" expanded="true" />
-            <element signature="e#3013#3014#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1280,52 +856,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="240" column="25" lean-forward="false" selection-start-line="240" selection-start-column="25" selection-end-line="240" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IVideo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-231">
-          <caret line="210" column="57" lean-forward="false" selection-start-line="210" selection-start-column="57" selection-end-line="210" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/TempStruct/ItemInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="2" column="7" lean-forward="false" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/TempStruct/CourseOutline.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#161#162#0" expanded="true" />
-            <element signature="e#190#191#0" expanded="true" />
-            <element signature="e#231#232#0" expanded="true" />
-            <element signature="e#267#268#0" expanded="true" />
-            <element signature="e#299#300#0" expanded="true" />
-            <element signature="e#330#331#0" expanded="true" />
-            <element signature="e#375#376#0" expanded="true" />
-            <element signature="e#415#416#0" expanded="true" />
-            <element signature="e#443#444#0" expanded="true" />
-            <element signature="e#470#471#0" expanded="true" />
-            <element signature="e#507#508#0" expanded="true" />
-            <element signature="e#539#540#0" expanded="true" />
-            <element signature="e#573#574#0" expanded="true" />
-            <element signature="e#603#604#0" expanded="true" />
-            <element signature="e#649#650#0" expanded="true" />
-            <element signature="e#687#688#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1333,7 +867,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="268">
           <caret line="56" column="11" lean-forward="false" selection-start-line="56" selection-start-column="11" selection-end-line="56" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1341,17 +874,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="432">
           <caret line="118" column="37" lean-forward="false" selection-start-line="118" selection-start-column="29" selection-end-line="118" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1663">
-          <caret line="511" column="22" lean-forward="false" selection-start-line="511" selection-start-column="15" selection-end-line="511" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1359,7 +881,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="50">
           <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1371,48 +892,289 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.0.8.RELEASE/spring-web-5.0.8.RELEASE.jar!/org/springframework/web/method/support/InvocableHandlerMethod.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/UserFriend.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="382">
-          <caret line="126" column="0" lean-forward="false" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
+        <state relative-caret-position="-225">
+          <caret line="6" column="13" lean-forward="true" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/ToolsFunction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="320" column="25" lean-forward="false" selection-start-line="320" selection-start-column="25" selection-end-line="320" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10217">
+          <caret line="507" column="8" lean-forward="false" selection-start-line="507" selection-start-column="8" selection-end-line="507" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/jsp/content.jsp" />
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/jsp/code_loading.jsp" />
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/jsp/verify.jsp" />
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/jsp/edit.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-893">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/jsp/preview.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="775">
+          <caret line="31" column="16" lean-forward="false" selection-start-line="31" selection-start-column="12" selection-end-line="31" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.0.8.RELEASE/spring-web-5.0.8.RELEASE.jar!/org/springframework/web/bind/annotation/RequestMapping.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="18" column="18" lean-forward="false" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.0.8.RELEASE/spring-web-5.0.8.RELEASE.jar!/org/springframework/web/bind/annotation/ResponseBody.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="16" column="18" lean-forward="false" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-context/5.0.8.RELEASE/spring-context-5.0.8.RELEASE.jar!/org/springframework/stereotype/Controller.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="18" column="18" lean-forward="false" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/log4j2.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="875">
+          <caret line="35" column="12" lean-forward="false" selection-start-line="35" selection-start-column="12" selection-end-line="35" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/rebel.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/city-list.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/guide_sound.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/mapping/VideoMaper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2918">
+          <caret line="153" column="39" lean-forward="false" selection-start-line="153" selection-start-column="39" selection-end-line="153" selection-end-column="39" />
+          <folding>
+            <marker date="1548139225373" expanded="true" signature="279:946" ph="INSERT INTO video... " />
+            <marker date="1548139225373" expanded="true" signature="1070:1122" ph="SELECT * FRO... video" />
+            <marker date="1548139225373" expanded="true" signature="1250:1327" ph="SELECT * FRO... video" />
+            <marker date="1548139225373" expanded="true" signature="1414:2577" ph="SELECT count... video" />
+            <marker date="1548139225373" expanded="true" signature="2686:4696" ph="SELECT * FRO... video" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/mapping/UserMaper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1332">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="10" column="1" lean-forward="false" selection-start-line="10" selection-start-column="1" selection-end-line="11" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/Home.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/jdbc.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="1" column="109" lean-forward="false" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="109" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/MessageController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="22" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="9" column="17" lean-forward="false" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/GuideSound-servlet.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2750">
+          <caret line="110" column="11" lean-forward="false" selection-start-line="110" selection-start-column="11" selection-end-line="110" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/WEB-INF/web.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="12" column="32" lean-forward="false" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/mybatis-config.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="7" column="53" lean-forward="false" selection-start-line="7" selection-start-column="39" selection-end-line="7" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IVideo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1600">
+          <caret line="69" column="20" lean-forward="false" selection-start-line="69" selection-start-column="20" selection-end-line="69" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IUser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="225" column="16" lean-forward="false" selection-start-line="225" selection-start-column="16" selection-end-line="225" selection-end-column="16" />
+        <state relative-caret-position="1925">
+          <caret line="81" column="25" lean-forward="false" selection-start-line="81" selection-start-column="25" selection-end-line="81" selection-end-column="25" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/UserFriend.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/lang/String.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-225">
-          <caret line="6" column="13" lean-forward="true" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        <state relative-caret-position="58575">
+          <caret line="2420" column="11" lean-forward="false" selection-start-line="2420" selection-start-column="11" selection-end-line="2420" selection-end-column="19" />
           <folding>
-            <element signature="e#204#205#0" expanded="true" />
-            <element signature="e#237#238#0" expanded="true" />
-            <element signature="e#289#290#0" expanded="true" />
-            <element signature="e#333#334#0" expanded="true" />
+            <element signature="e#94598#94599#0" expanded="true" />
+            <element signature="e#94636#94637#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/TempStruct/ItemInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12917">
-          <caret line="1014" column="17" lean-forward="false" selection-start-line="1014" selection-start-column="17" selection-end-line="1014" selection-end-column="17" />
+        <state relative-caret-position="50">
+          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/MessageController.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.0.8.RELEASE/spring-web-5.0.8.RELEASE.jar!/org/springframework/web/method/support/InvocableHandlerMethod.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="140" column="75" lean-forward="false" selection-start-line="140" selection-start-column="75" selection-end-line="140" selection-end-column="75" />
+        <state relative-caret-position="2700">
+          <caret line="126" column="0" lean-forward="false" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.9.6/jackson-databind-2.9.6.jar!/com/fasterxml/jackson/databind/ObjectMapper.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25475">
+          <caret line="1220" column="34" lean-forward="false" selection-start-line="1220" selection-start-column="34" selection-end-line="1220" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4650">
+          <caret line="239" column="21" lean-forward="false" selection-start-line="239" selection-start-column="8" selection-end-line="239" selection-end-column="21" />
+          <folding>
+            <element signature="e#6436#6437#0" expanded="true" />
+            <element signature="e#6472#6473#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/VideoShow.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1625">
+          <caret line="83" column="31" lean-forward="false" selection-start-line="83" selection-start-column="31" selection-end-line="83" selection-end-column="31" />
+          <folding>
+            <element signature="e#1662#1663#0" expanded="true" />
+            <element signature="e#1696#1697#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="782" column="38" lean-forward="false" selection-start-line="782" selection-start-column="38" selection-end-line="782" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="44" column="24" lean-forward="false" selection-start-line="44" selection-start-column="24" selection-end-line="44" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/TempStruct/ShowInfoTemp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="50">
+          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="589" column="27" lean-forward="true" selection-start-line="589" selection-start-column="27" selection-end-line="589" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

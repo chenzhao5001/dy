@@ -2,6 +2,7 @@ package com.guidesound.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.guidesound.TempStruct.ItemInfo;
 import com.guidesound.dao.ICourse;
 import com.guidesound.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,6 +143,7 @@ public class SignMap {
     static Map<Integer,String> user_level;
     static List<Content2> channel;
     static Map<Integer,String> video_state;
+    static Map<Integer,String> commend_pools;
 
 //    static List<Content2> article_channel;
 
@@ -235,7 +237,41 @@ public class SignMap {
         video_state.put(6,"已完成");
         video_state.put(7,"已下架");
 
+        commend_pools = new TreeMap<>();
+        commend_pools.put(101,"入园前");
+        commend_pools.put(102,"幼儿园");
+        commend_pools.put(199,"学龄前");
 
+        commend_pools.put(201,"一年级");
+        commend_pools.put(202,"二年级");
+        commend_pools.put(203,"三年级");
+        commend_pools.put(204,"四年级");
+        commend_pools.put(205,"五年级");
+        commend_pools.put(206,"六年级");
+        commend_pools.put(299,"小学");
+
+        commend_pools.put(301,"初一");
+        commend_pools.put(302,"初二");
+        commend_pools.put(303,"初三");
+        commend_pools.put(399,"初中");
+
+        commend_pools.put(401,"高一");
+        commend_pools.put(402,"高二");
+        commend_pools.put(403,"高三");
+        commend_pools.put(499,"高中");
+        commend_pools.put(999,"公共池");
+
+
+    }
+    public static Map<Integer,String> getPoolList() {
+        return commend_pools;
+    }
+
+    public static String getPoolById(int pool_id) {
+        if(commend_pools.containsKey( pool_id)) {
+            return commend_pools.get(pool_id);
+        }
+        return "未知";
     }
 
     public static String getVideoState(int state) {

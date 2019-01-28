@@ -40,7 +40,7 @@ public class VideoShow {
     int inner_relay;
     int group;
     String video_state;
-    String pools;
+    Object pools;
     int rec_count;
     int create_time;
 
@@ -77,11 +77,11 @@ public class VideoShow {
     }
 
 
-    public String getPools() {
+    public Object getPools() {
         return pools;
     }
 
-    public void setPools(String pools) {
+    public void setPools(Object pools) {
         this.pools = pools;
     }
 

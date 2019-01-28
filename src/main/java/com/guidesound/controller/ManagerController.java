@@ -127,9 +127,9 @@ public class ManagerController extends BaseController {
         if(videoList != null && videoList.size() > 0) {
             ArrayList<Integer> list = new ArrayList<>();
             for (VideoInfo item : videoList) {
+                item.setTitle(ToolsFunction.URLDecoderString(item.getTitle()));
                 list.add(item.getId());
             }
-
             iVideo.setExaminePerson(list,userId);
             return JSONResult.ok(getVideoShow(videoList));
         }
@@ -532,28 +532,13 @@ public class ManagerController extends BaseController {
     public JSONResult getPoolsList() {
 
         List<ItemInfo> list = new ArrayList<>();
-        list.add(new ItemInfo().setId(101).setInfo("入园前"));
-        list.add(new ItemInfo().setId(102).setInfo("幼儿园"));
-        list.add(new ItemInfo().setId(199).setInfo("学龄前"));
-        list.add(new ItemInfo().setId(201).setInfo("一年级"));
-        list.add(new ItemInfo().setId(202).setInfo("二年级"));
-        list.add(new ItemInfo().setId(203).setInfo("三年级"));
-        list.add(new ItemInfo().setId(204).setInfo("四年级"));
-        list.add(new ItemInfo().setId(205).setInfo("五年级"));
-        list.add(new ItemInfo().setId(206).setInfo("六年级"));
-        list.add(new ItemInfo().setId(299).setInfo("小学"));
-
-        list.add(new ItemInfo().setId(301).setInfo("初一"));
-        list.add(new ItemInfo().setId(302).setInfo("初二"));
-        list.add(new ItemInfo().setId(303).setInfo("初三"));
-        list.add(new ItemInfo().setId(399).setInfo("初中"));
-
-        list.add(new ItemInfo().setId(401).setInfo("高一"));
-        list.add(new ItemInfo().setId(402).setInfo("高二"));
-        list.add(new ItemInfo().setId(403).setInfo("高三"));
-        list.add(new ItemInfo().setId(499).setInfo("高中"));
-
-        list.add(new ItemInfo().setId(999).setInfo("公共池"));
+        Map<Integer,String> pool_list = SignMap.getPoolList();
+        for(int id:pool_list.keySet()) {
+            ItemInfo itemInfo = new ItemInfo();
+            itemInfo.setId(id);
+            itemInfo.setInfo(pool_list.get(id));
+            list.add(itemInfo);
+        }
         return JSONResult.ok(list);
     }
 
@@ -596,8 +581,23 @@ public class ManagerController extends BaseController {
 
     @RequestMapping(value = "/remove_pool")
     @ResponseBody
-    JSONResult removePool(String video_id,String pools) {
-        return null;
+    JSONResult removePool(String video_id,String pool_id) {
+
+        if(video_id == null || pool_id == null) {
+            return JSONResult.errorMsg("缺少video_id 或 pool_id");
+        }
+        Video video = iVideo.getVideo(Integer.parseInt(video_id));
+        if(video == null) {
+            return JSONResult.errorMsg("视频不存在");
+        }
+        String pools = video.getPools();
+        List<String> lists = new ArrayList<>(Arrays.asList(pools.split(",")));
+        if(lists.contains(pool_id)) {
+            lists.remove(pool_id);
+        }
+        String temp = StringUtils.join(lists, ",");
+        iVideo.setPoolByVideoId(video_id,temp);
+        return JSONResult.ok();
     }
 }
 
