@@ -7,6 +7,7 @@ import com.guidesound.dao.IVideo;
 import com.guidesound.models.*;
 import com.guidesound.util.*;
 import com.guidesound.TempStruct.ItemInfo;
+import com.qcloud.Common.Sign;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -177,9 +178,6 @@ public class ManagerController extends BaseController {
             } catch (JMSException e) {
                 e.printStackTrace();
             }
-
-//            String tempUrl = iVideo.getTempVideoById(Integer.parseInt(video_id));
-//            String url = ToolsFunction.changeVideo(tempUrl);
         } else {
             if(fail_reason == null || fail_content == null) {
                 return JSONResult.errorMsg("缺少fail_reason或fail_content");
@@ -598,6 +596,20 @@ public class ManagerController extends BaseController {
         String temp = StringUtils.join(lists, ",");
         iVideo.setPoolByVideoId(video_id,temp);
         return JSONResult.ok();
+    }
+
+    @RequestMapping(value = "/course_list")
+    @ResponseBody
+    public JSONResult getCourseList() {
+        Map<Integer,String> course_type = SignMap.getCourseType();
+        List<ItemInfo> list = new ArrayList<>();
+        for (Integer key : course_type.keySet()) {
+            ItemInfo itemInfo = new ItemInfo();
+            itemInfo.setId(key);
+            itemInfo.setInfo(course_type.get(key));
+            list.add(itemInfo);
+        }
+        return JSONResult.ok(list);
     }
 }
 

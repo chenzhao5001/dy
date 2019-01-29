@@ -139,13 +139,11 @@ public class SignMap {
     static Map<Integer,String> watch_type;
     static Map<Integer,String> user_type;
     static Map<Integer,String> grade_type;
-//    static Map<Integer,String> grade_type2;
     static Map<Integer,String> user_level;
     static List<Content2> channel;
     static Map<Integer,String> video_state;
     static Map<Integer,String> commend_pools;
-
-//    static List<Content2> article_channel;
+    static Map<Integer,String> course_type;
 
     static boolean flag = false;
 
@@ -164,6 +162,11 @@ public class SignMap {
 
     }
     static {
+
+        course_type = new TreeMap<>();
+        course_type.put(1,"1对1");
+        course_type.put(2,"班课");
+        course_type.put(3,"无");
 
         watch_type = new TreeMap<>();
         watch_type.put(1,"学龄前");
@@ -279,6 +282,10 @@ public class SignMap {
             return video_state.get(state);
         }
         return "未知";
+    }
+
+    public static Map<Integer,String> getCourseType() {
+        return course_type;
     }
     public static List<Content2> getChannelList() throws JsonProcessingException {
         return channel;
