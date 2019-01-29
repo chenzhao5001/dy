@@ -78,6 +78,10 @@
             and  user_id =  #{user_id}
         </if>
 
+        <if test="pools != null ">
+            and  pools LIKE CONCAT('%',#{pools},'%')
+        </if>
+
         <if test="subject_list != null ">
             and  subject IN
             <foreach collection="subject_list" item="id" index="index" open="(" close=")" separator=",">
@@ -98,6 +102,8 @@
                 #{id}
             </foreach>
         </if>
+
+
         and deleted = 0
     </select>
 
@@ -123,6 +129,9 @@
             and  user_id =  #{user_id}
         </if>
 
+        <if test="pools != null ">
+            and  pools LIKE CONCAT('%',#{pools},'%')
+        </if>
 
         <if test="subject_list != null ">
             and  subject IN

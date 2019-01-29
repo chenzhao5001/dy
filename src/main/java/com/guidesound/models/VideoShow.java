@@ -42,7 +42,25 @@ public class VideoShow {
     String video_state;
     Object pools;
     int rec_count;
+
+    String type_list;
+    String examine_reason;
     int create_time;
+
+    public String getType_list() {
+        return type_list;
+    }
+    public void setType_list(String type_list) {
+        this.type_list = type_list;
+    }
+
+    public String getExamine_reason() {
+        return examine_reason;
+    }
+
+    public void setExamine_reason(String examine_reason) {
+        this.examine_reason = examine_reason;
+    }
 
     public int getRec_count() {
         return rec_count;

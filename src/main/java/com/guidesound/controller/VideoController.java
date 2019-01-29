@@ -266,9 +266,10 @@ public class VideoController extends BaseController {
             String grade_class,
             String video_id,
             String user_id,
+            String pools,
             String user_name) throws JsonProcessingException {
         status = (status == null || status.equals("")) ? null:status;
-        String title = (content == null || content.equals("")) ? null:content;
+        String title = (content == null || content.equals("")) ? null:ToolsFunction.getURLEncoderString(content);
         int iPage = page == null ? 1:Integer.parseInt(page);
         int iSize = size == null ? 20:Integer.parseInt(size);
         int sType = s_type == null ? 0:Integer.parseInt(s_type);
@@ -306,6 +307,7 @@ public class VideoController extends BaseController {
         videoFind.setUser_id(user_id);
         videoFind.setVideo_id(video_id);
         videoFind.setUser_ids(user_ids);
+        videoFind.setPools(pools);
         int count_temp = iVideo.findVideoCount(videoFind);
         if (count_temp == 0) {
             ret.setCount(0);
@@ -777,12 +779,8 @@ public class VideoController extends BaseController {
 
             }
             if(poolList.size() > 0) {
-//                ObjectMapper mapper = new ObjectMapper();
-//                String jsonlist = mapper.writeValueAsString(poolList);
-//                jsonlist = jsonlist.replace("\\","");
                 item.setPools(poolList);
             }
-
             if(item.getExamine_status() == 3) {
                 item.setExamine_status(0);
             }
