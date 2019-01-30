@@ -38,6 +38,9 @@ public interface IUser {
     @Select("select id from user where name = #{arg0}")
     public List<Integer> getUserIdsByName(String name);
 
+    @Select("select id from user where name like CONCAT('%',#{arg0},'%')")
+    public List<Integer> getUserIdsByName2(String name);
+
 
     @Update("update user set phone = #{arg1},pwd = #{arg2} ,status = 1 where id = #{arg0}")
     public void phoneRegister(int id,String phone,String pwd);

@@ -285,7 +285,7 @@ public class VideoController extends BaseController {
 
         List<Integer> user_ids = null;
         if(user_name != null) {
-            user_ids = iUser.getUserIdsByName(user_name);
+            user_ids = iUser.getUserIdsByName2(user_name);
             if(user_ids.size() < 1) {
                 ret.setCount(0);
                 ret.setList(new ArrayList<>());

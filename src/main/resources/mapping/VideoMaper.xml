@@ -78,9 +78,15 @@
             and  user_id =  #{user_id}
         </if>
 
-        <if test="pools != null ">
-            and  pools LIKE CONCAT('%',#{pools},'%')
-        </if>
+        <choose>
+            <when test="pools == 1000">
+                and  pools = ""
+            </when>
+            <when test="pools !=null">
+                and  pools LIKE CONCAT('%',#{pools},'%')
+            </when>
+        </choose>
+
 
         <if test="subject_list != null ">
             and  subject IN
@@ -129,9 +135,15 @@
             and  user_id =  #{user_id}
         </if>
 
-        <if test="pools != null ">
-            and  pools LIKE CONCAT('%',#{pools},'%')
-        </if>
+        <choose>
+            <when test="pools == 1000">
+                and  pools = ""
+            </when>
+            <when test="pools !=null">
+                and  pools LIKE CONCAT('%',#{pools},'%')
+            </when>
+        </choose>
+
 
         <if test="subject_list != null ">
             and  subject IN

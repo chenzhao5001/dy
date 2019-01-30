@@ -263,6 +263,7 @@ public class SignMap {
         commend_pools.put(403,"高三");
         commend_pools.put(499,"高中");
         commend_pools.put(999,"公共池");
+        commend_pools.put(1000,"无");
 
 
     }
@@ -303,6 +304,7 @@ public class SignMap {
         }
         return "未知";
     }
+
 
     public static Map<Integer,String> getGradeByClass(int type,boolean role_flag) {
         Map<Integer,String> m = new TreeMap<>();
@@ -352,6 +354,8 @@ public class SignMap {
         }
         return m;
     }
+
+
     public static String getGradeTypeByID(int id) {
         if(grade_type.containsKey(id)) {
             return grade_type.get(id);
@@ -419,13 +423,33 @@ public class SignMap {
             temp.info = info;
             list.add(temp);
         }
+        Content3 temp = new Content3();
+        temp.id = 199;
+        temp.info = "学龄前";
+        list.add(temp);
+        temp = new Content3();
+        temp.id = 299;
+        temp.info = "小学";
+        list.add(temp);
+        temp = new Content3();
+        temp.id = 399;
+        temp.info = "初中";
+        list.add(temp);
+        temp = new Content3();
+        temp.id = 499;
+        temp.info = "高中";
+        list.add(temp);
+        temp = new Content3();
+        temp.id = 498;
+        temp.info = "初高";
+        list.add(temp);
         return list;
     }
 
 
-//    public static Map<Integer,Content> getGradeTypeList() {
-//        return grade_type;
-//    }
+    public static Map<Integer,String> getGradeTypeList() {
+        return grade_type;
+    }
 
     public static Object getGradeTypeInfo() {
         ListInfo gradeInfo1 = new ListInfo();//小学前

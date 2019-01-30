@@ -46,6 +46,15 @@ public class VideoShow {
     String type_list;
     String examine_reason;
     int create_time;
+    String fail_content;
+
+    public String getFail_content() {
+        return fail_content;
+    }
+
+    public void setFail_content(String fail_content) {
+        this.fail_content = fail_content;
+    }
 
     public String getType_list() {
         return type_list;
