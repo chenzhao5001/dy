@@ -71,8 +71,15 @@ public class TypeMapController extends BaseController {
     @RequestMapping(value = "/grade_type_list2")
     @ResponseBody
     public JSONResult getGradeType2() {
-        return JSONResult.ok(SignMap.getGradeTypeInfo2());
+        return JSONResult.ok(SignMap.getGradeTypeInfo2(false));
     }
+
+    @RequestMapping(value = "/grade_type_list3")
+    @ResponseBody
+    public JSONResult getGradeType3() {
+        return JSONResult.ok(SignMap.getGradeTypeInfo2(true));
+    }
+
 
     @RequestMapping(value = "/grade_type_list")
     @ResponseBody

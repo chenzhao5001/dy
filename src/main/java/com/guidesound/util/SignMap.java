@@ -414,7 +414,7 @@ public class SignMap {
         return user_type;
     }
 
-    public static Object getGradeTypeInfo2() {
+    public static Object getGradeTypeInfo2(boolean web_flag) {
         List<Content3> list = new ArrayList<>();
         for (Integer id: grade_type.keySet()) {
             String info = grade_type.get(id);
@@ -423,26 +423,29 @@ public class SignMap {
             temp.info = info;
             list.add(temp);
         }
-        Content3 temp = new Content3();
-        temp.id = 199;
-        temp.info = "学龄前";
-        list.add(temp);
-        temp = new Content3();
-        temp.id = 299;
-        temp.info = "小学";
-        list.add(temp);
-        temp = new Content3();
-        temp.id = 399;
-        temp.info = "初中";
-        list.add(temp);
-        temp = new Content3();
-        temp.id = 499;
-        temp.info = "高中";
-        list.add(temp);
-        temp = new Content3();
-        temp.id = 498;
-        temp.info = "初高";
-        list.add(temp);
+        if (web_flag == true) {
+            Content3 temp = new Content3();
+            temp.id = 199;
+            temp.info = "学龄前";
+            list.add(temp);
+            temp = new Content3();
+            temp.id = 299;
+            temp.info = "小学";
+            list.add(temp);
+            temp = new Content3();
+            temp.id = 399;
+            temp.info = "初中";
+            list.add(temp);
+            temp = new Content3();
+            temp.id = 499;
+            temp.info = "高中";
+            list.add(temp);
+            temp = new Content3();
+            temp.id = 498;
+            temp.info = "初高";
+            list.add(temp);
+        }
+
         return list;
     }
 

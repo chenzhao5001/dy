@@ -314,7 +314,7 @@ public class ManagerController extends BaseController {
             for (VideoInfo item: videoList) {
                 VideoVerify videoVerify = new VideoVerify();
                 videoVerify.setVideo_id(item.getId());
-                videoVerify.setVideo_title(item.getTitle());
+                videoVerify.setVideo_title(ToolsFunction.URLDecoderString(item.getTitle()));
                 videoVerify.setVideo_duration(item.getDuration() + "秒");
                 videoVerify.setVideo_pic_up_path(item.getPic_up_path());
                 videoVerify.setVideo_video_up_path(item.getVideo_up_path());
