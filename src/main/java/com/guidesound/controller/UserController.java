@@ -334,13 +334,16 @@ public class UserController extends BaseController{
             user = new UserInfo();
             user.setName(name);
             user.setCreate_time((int) (new Date().getTime() / 1000));
-            user.setLevel(2);
-            user.setType(1);
+//            user.setLevel(2);
+//            user.setType(1);
+
+            user.setLevel(1);
             user.setBackground_url("http://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg");
             iUser.addUserByName(user);
-            iUser.setDyId(user.getId(),10000000 + user.getId());
+//            iUser.setDyId(user.getId(),10000000 + user.getId());
+            iUser.setCreate_type(user.getId(),1);
             user.setToken(TockenUtil.makeTocken(user.getId()));
-            user.setDy_id(String.valueOf(10000000 + user.getId()));
+//            user.setDy_id(String.valueOf(10000000 + user.getId()));
         } else {
             user = userList.get(0);
         }

@@ -413,7 +413,6 @@ public class SignMap {
     public static Map<Integer,String> getUserTypeList() {
         return user_type;
     }
-
     public static Object getGradeTypeInfo2(boolean web_flag) {
         List<Content3> list = new ArrayList<>();
         for (Integer id: grade_type.keySet()) {
@@ -441,9 +440,10 @@ public class SignMap {
             temp.info = "高中";
             list.add(temp);
             temp = new Content3();
-            temp.id = 498;
+            temp.id = 499;
             temp.info = "初高";
             list.add(temp);
+
         }
 
         return list;
@@ -634,36 +634,20 @@ public class SignMap {
 
         } else if(grade_stage == 102){
             content2 = new Content2();
-            content2.setChannel_info("101,102,103,104,105,106,107,108,109");
+            content2.setChannel_info("101,102,103");
             content2.setChannel_name("学知识");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504");
-            content2.setChannel_name("兴趣爱好");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("601,602,701,702,801,802,803");
+            content2.setChannel_info("201,202,203,204,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,104,105,106,107,108,109,601,602,701,702,801,802,803");
             content2.setChannel_name("其他");
             list.add(content2);
         } else if(grade_stage == 2){
             content2 = new Content2();
-            content2.setChannel_info("101");
-            content2.setChannel_name("语文");
+            content2.setChannel_info("101,102,103");
+            content2.setChannel_name("学知识");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("102");
-            content2.setChannel_name("数学");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("103");
-            content2.setChannel_name("英语");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504");
-            content2.setChannel_name("兴趣爱好");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("104,105,106,107,108,109,601,602,701,702,801,802,803");
+            content2.setChannel_info("201,202,203,204,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,104,105,106,107,108,109,601,602,701,702,801,802,803");
             content2.setChannel_name("其他");
             list.add(content2);
 

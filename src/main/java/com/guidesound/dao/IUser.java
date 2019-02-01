@@ -177,6 +177,10 @@ public interface IUser {
     @Update("update user set dy_id = #{arg1} where id = #{arg0}")
     public void setDyId(int id,int dyId);
 
+    @Update("update user set create_type = #{arg1} where id = #{arg0}")
+    public void setCreate_type(int id,int create_type);
+
+
     @Select("<script>"
             + "SELECT * FROM user WHERE id IN "
             + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
