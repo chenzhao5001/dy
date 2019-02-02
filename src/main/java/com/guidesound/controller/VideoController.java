@@ -80,7 +80,13 @@ public class VideoController extends BaseController {
 
         User currentUser = (User)req.getAttribute("user_info");
         video.setSubject(currentUser.getSubject());
-        video.setWatch_type(Integer.parseInt(videoDTO.getWatch_type()));
+        if(currentUser.getType() == 2) {
+            int watch_type = (int)(Integer.parseInt(videoDTO.getWatch_type()) / 100) + 99;
+            video.setWatch_type(watch_type);
+        } else {
+            video.setWatch_type(Integer.parseInt(videoDTO.getWatch_type()));
+        }
+//        video.setWatch_type(Integer.parseInt(videoDTO.getWatch_type()));
         video.setContent(videoDTO.getContent());
         video.setDuration(Integer.parseInt(videoDTO.getDuration()));
 
