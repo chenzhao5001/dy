@@ -158,7 +158,7 @@ public class SignMap {
                 }
                 subject_type.put(subject.getLevel_2(),new Content(subject.getLevel_2_name(),subject.getLevel_1()));
             }
-            subject_type.put(901,new Content("老师",9));
+            subject_type.put(901,new Content("家长",9));
             subject_type.put(902,new Content("学生",9));
         }
 

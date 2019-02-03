@@ -22,6 +22,15 @@ public class User {
     private int grade_level;
     private int subject;
     private int channel_stage;
+    private int grade;
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
 
     public int getChannel_stage() {
         return channel_stage;

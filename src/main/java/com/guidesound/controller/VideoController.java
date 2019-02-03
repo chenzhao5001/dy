@@ -87,7 +87,8 @@ public class VideoController extends BaseController {
             video.setSubject(currentUser.getSubject());
         }
         if(currentUser.getType() == 2) {
-            int watch_type = (Integer.parseInt(videoDTO.getWatch_type()) / 100)*100 + 99;
+            int grade = currentUser.getGrade();
+            int watch_type = (grade / 100)*100 + 99;
             video.setWatch_type(watch_type);
         } else {
             video.setWatch_type(Integer.parseInt(videoDTO.getWatch_type()));
