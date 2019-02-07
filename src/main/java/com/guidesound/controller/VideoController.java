@@ -164,7 +164,12 @@ public class VideoController extends BaseController {
             video_list = getRecVideos(all_list,user_guid);
         } else {
             List<String> list = Arrays.asList(channel.split(","));
-            all_list = iVideo.getVideoByChannel(list,grade,other_grade1,other_grade2);
+
+            String pool_grade =  "," + String.valueOf(grade);
+            String pool_other_grade = "," +  String.valueOf(other_grade1);
+            String pool_other_comment = ",999";
+
+            all_list = iVideo.getVideoByChannel(list,pool_grade,pool_other_grade,pool_other_comment);
             Collections.shuffle(all_list);
             video_list = getRecVideos(all_list,user_guid);
         }

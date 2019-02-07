@@ -112,13 +112,13 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
-            + "<when test=' arg1 != 0 '>"
-            + "AND (watch_type = #{arg1} or watch_type = #{arg2} or watch_type = #{arg3}) "
-            + "</when>"
+
+            + "AND ( #{arg1} like pools  or #{arg2} like pools or #{arg3} like pools) "
+
             + " and examine_status = 1"
             + " and type_list like '%1%'"
             + "</script>")
-    List<VideoShow> getVideoByChannel(@Param("iList") List<String> iList,int grade,int other_grade1,int other_grade2);
+    List<VideoShow> getVideoByChannel(@Param("iList") List<String> iList,String grade,String other_grade1,String other_grade2);
 
     @Insert("insert into videoShare (user_id,video_id,created_time) values (#{arg0},#{arg1},#{arg2})")
     void shareVideo(int user_id, int video_id, int created_time);
