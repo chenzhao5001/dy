@@ -166,6 +166,9 @@ public interface IVideo {
     @Select("select finish_videos from userPlayFinish where user_guid = #{arg0}")
     String getFinishVideoByUserGuid(String user_guid);
 
+    @Delete("delete from userVideoPush where user_guid = #{arg0}")
+    void deletePushVideoByUserGuid(String user_guid);
+
     @Insert("insert into userVideoPush (user_guid,push_vidoes) values (#{arg0},#{arg1})")
     void insertPushVideo(String user_guid,String videos);
     @Update("update userVideoPush set push_vidoes = #{arg1} where user_guid = #{arg0}")

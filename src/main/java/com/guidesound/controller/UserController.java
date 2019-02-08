@@ -978,6 +978,7 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("缺少参数");
         }
         int user_id = getCurrentUserId();
+        iVideo.deletePushVideoByUserGuid(String.valueOf(user_id));
         iUser.setUserGradeStage(user_id,Integer.parseInt(stage));
         return JSONResult.ok();
     }
