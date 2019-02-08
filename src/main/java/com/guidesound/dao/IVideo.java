@@ -112,9 +112,7 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
-
-            + "AND ( #{arg1} like pools  or #{arg2} like pools or #{arg3} like pools) "
-
+            + "AND ( pools like CONCAT('%',#{arg1},'%')  or pools like CONCAT('%',#{arg2},'%') or pools like CONCAT('%',#{arg3},'%')) "
             + " and examine_status = 1"
             + " and type_list like '%1%'"
             + "</script>")
@@ -151,13 +149,11 @@ public interface IVideo {
 
     @Select("<script>"
             + "SELECT * FROM video WHERE 1 = 1"
-            + "<when test=' arg0 != 0 '>"
-            + "AND (watch_type = #{arg0} or watch_type = #{arg1} or watch_type = #{arg2}) "
-            + "</when>"
+            + " AND ( pools like CONCAT('%',#{arg0},'%') or pools like CONCAT('%',#{arg1},'%') or pools like CONCAT('%',#{arg2},'%')) "
             + " and examine_status = 1"
             + " and type_list like '%1%'"
             + "</script>")
-    List<VideoShow> getRecommendVideo(int grade,int other_grade1,int other_grade2);
+    List<VideoShow> getRecommendVideo(String grade,String other_grade1,String other_grade2);
 
 //    @Select("")
 //    int foo();

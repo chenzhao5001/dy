@@ -158,11 +158,14 @@ public class VideoController extends BaseController {
             }
         }
         Collections.shuffle(video_list);
-        if (channel.equals("1")) {
-            all_list = iVideo.getRecommendVideo(grade,other_grade1,other_grade2);
+        if (channel.equals("1")) { //推荐
+            String pool_grade =  "," + String.valueOf(grade);
+            String pool_other_grade = "," +  String.valueOf(other_grade1);
+            String pool_other_comment = ",999";
+            all_list = iVideo.getRecommendVideo(pool_grade,pool_other_grade,pool_other_comment);
             Collections.shuffle(all_list);
             video_list = getRecVideos(all_list,user_guid);
-        } else {
+        } else { //频道
             List<String> list = Arrays.asList(channel.split(","));
 
             String pool_grade =  "," + String.valueOf(grade);
@@ -194,18 +197,31 @@ public class VideoController extends BaseController {
             return new ArrayList<>();
         }
         List<VideoShow> video_list = new ArrayList<>();
-        String videoTemp = iVideo.getFinishVideoByUserGuid(user_guid);
+        String videoTemp = iVideo.getPushVideoByUserGuid(user_guid);
+        String strTemp = videoTemp;
+        boolean flag = false;
         ArrayList<String> arrVidoe = new ArrayList<>();
         if(videoTemp != null && !videoTemp.equals("")) {
             arrVidoe =  new ArrayList<String>(Arrays.asList(videoTemp.split(",")));
+        } else {
+            flag = true;
+            videoTemp = "";
         }
         List<VideoShow> retList = new ArrayList<>();
         for (VideoShow item : all_list) {
-            if(!arrVidoe.contains(item.getId())) {
+            if(!arrVidoe.contains(String.valueOf(item.getId()))) {
                 retList.add(item);
+                videoTemp += "," + item.getId();
                 if(retList.size() >= 20) {
                     break;
                 }
+            }
+        }
+        if(!videoTemp.equals("") && !videoTemp.equals(strTemp)) {
+            if(flag == true ) {
+                iVideo.insertPushVideo(user_guid,videoTemp);
+            } else {
+                iVideo.updatePushVidoe(user_guid,videoTemp);
             }
         }
         return retList;
