@@ -58,7 +58,7 @@ public class ArticleController extends BaseController {
         articleDTO.head_pic2 = articleDTO.head_pic2 == null ? "":articleDTO.head_pic2;
         articleDTO.head_pic3 = articleDTO.head_pic3 == null ? "":articleDTO.head_pic3;
         User currentUser = (User)request.getAttribute("user_info");
-        articleDTO.setSubject(String.valueOf(currentUser.getSubject()));
+        articleDTO.setSubject(String.valueOf(articleDTO.getSubject()));
         articleDTO.setContent(upStringToCloud(articleDTO.getContent()));
         articleDTO.setUser_id(currentUser.getId());
         articleDTO.setCreate_time((int)(new Date().getTime() / 1000));

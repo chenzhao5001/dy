@@ -1,7 +1,6 @@
 package com.guidesound.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.Service.IVideoService;
 import com.guidesound.TempStruct.ItemInfo;
 import com.guidesound.dao.*;
@@ -78,8 +77,7 @@ public class VideoController extends BaseController {
         video.setUser_id(user.getId());
         video.setTitle(videoDTO.getTitle());
 
-        User currentUser = (User)req.getAttribute("user_info");
-        video.setSubject(currentUser.getSubject());
+        video.setSubject(Integer.parseInt(videoDTO.getSubject()));
         video.setWatch_type(Integer.parseInt(videoDTO.getWatch_type()));
         video.setContent(videoDTO.getContent());
         video.setDuration(Integer.parseInt(videoDTO.getDuration()));
