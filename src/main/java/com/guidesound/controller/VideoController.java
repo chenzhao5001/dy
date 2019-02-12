@@ -79,21 +79,8 @@ public class VideoController extends BaseController {
         video.setTitle(videoDTO.getTitle());
 
         User currentUser = (User)req.getAttribute("user_info");
-        if(currentUser.getType() == 2) {
-            video.setSubject(901); //老师
-        } else if (currentUser.getType() == 3) {
-            video.setSubject(902); //学生
-        } else {
-            video.setSubject(currentUser.getSubject());
-        }
-        if(currentUser.getType() == 2) {
-            int grade = currentUser.getGrade();
-            int watch_type = (grade / 100)*100 + 99;
-            video.setWatch_type(watch_type);
-        } else {
-            video.setWatch_type(Integer.parseInt(videoDTO.getWatch_type()));
-        }
-//        video.setWatch_type(Integer.parseInt(videoDTO.getWatch_type()));
+        video.setSubject(currentUser.getSubject());
+        video.setWatch_type(Integer.parseInt(videoDTO.getWatch_type()));
         video.setContent(videoDTO.getContent());
         video.setDuration(Integer.parseInt(videoDTO.getDuration()));
 
