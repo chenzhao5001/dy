@@ -178,11 +178,11 @@ public class SignMap {
         watch_type.put(5,"初高");
 
         user_type = new HashMap<>();
-        user_type.put(1,"教师");
-        user_type.put(2,"家长");
-        user_type.put(3,"学生");
-        user_type.put(4,"达人");
-        user_type.put(5,"商家");
+        user_type.put(1,"普通用户");
+        user_type.put(2,"个人辅导老师");
+        user_type.put(3,"教育企业");
+        user_type.put(4,"教育达人");
+        user_type.put(5,"教育商品商家");
 
 
         grade_type = new TreeMap<>();

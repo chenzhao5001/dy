@@ -33,11 +33,17 @@ public class UserInfo {
     private String city;
     private String area;
 
-    private int identity_status;
-    private int education_status;
-    private int qualification_status;
-    private int juridical_status;
-    private int business_status;
+    int video_time;
+    String identity_card;
+    String graduation_card;
+    String teacher_card;
+    String achievement;
+    String license;
+    String confirmation_letter;
+    String shop;
+
+
+
     private String im_id;
     private String im_sig;
     private int pwd_state;
@@ -311,46 +317,6 @@ public class UserInfo {
         this.area = area;
     }
 
-    public int getIdentity_status() {
-        return identity_status;
-    }
-
-    public void setIdentity_status(int identity_status) {
-        this.identity_status = identity_status;
-    }
-
-    public int getEducation_status() {
-        return education_status;
-    }
-
-    public void setEducation_status(int education_status) {
-        this.education_status = education_status;
-    }
-
-    public int getQualification_status() {
-        return qualification_status;
-    }
-
-    public void setQualification_status(int qualification_status) {
-        this.qualification_status = qualification_status;
-    }
-
-    public int getJuridical_status() {
-        return juridical_status;
-    }
-
-    public void setJuridical_status(int juridical_status) {
-        this.juridical_status = juridical_status;
-    }
-
-    public int getBusiness_status() {
-        return business_status;
-    }
-
-    public void setBusiness_status(int business_status) {
-        this.business_status = business_status;
-    }
-
     public String getBackground_url() {
         return background_url;
     }
@@ -381,5 +347,70 @@ public class UserInfo {
 
     public void setGrade_level_name(String grade_level_name) {
         this.grade_level_name = grade_level_name;
+    }
+
+
+    public int getVideo_time() {
+        return video_time;
+    }
+
+    public void setVideo_time(int video_time) {
+        this.video_time = video_time;
+    }
+
+    public String getIdentity_card() {
+        return identity_card;
+    }
+
+    public void setIdentity_card(String identity_card) {
+        this.identity_card = identity_card;
+    }
+
+    public String getGraduation_card() {
+        return graduation_card;
+    }
+
+    public void setGraduation_card(String graduation_card) {
+        this.graduation_card = graduation_card;
+    }
+
+    public String getTeacher_card() {
+        return teacher_card;
+    }
+
+    public void setTeacher_card(String teacher_card) {
+        this.teacher_card = teacher_card;
+    }
+
+    public String getAchievement() {
+        return achievement;
+    }
+
+    public void setAchievement(String achievement) {
+        this.achievement = achievement;
+    }
+
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
+    }
+
+    public String getConfirmation_letter() {
+        return confirmation_letter;
+    }
+
+    public void setConfirmation_letter(String confirmation_letter) {
+        this.confirmation_letter = confirmation_letter;
+    }
+
+    public String getShop() {
+        return shop;
+    }
+
+    public void setShop(String shop) {
+        this.shop = shop;
     }
 }

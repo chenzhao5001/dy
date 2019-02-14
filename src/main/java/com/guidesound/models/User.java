@@ -23,6 +23,42 @@ public class User {
     private int subject;
     private int channel_stage;
     private int grade;
+    private String province;
+    private String city;
+    private String area;
+    private String user_introduce;
+
+    public String getUser_introduce() {
+        return user_introduce;
+    }
+
+    public void setUser_introduce(String user_introduce) {
+        this.user_introduce = user_introduce;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 
     public int getGrade() {
         return grade;

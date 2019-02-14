@@ -280,5 +280,17 @@ public interface IUser {
     @Delete("delete from user_action where to_user_id = #{arg0} and flag = #{arg1}")
     public void deleteAction(int user_id,int flag);
 
+    @Select("select video_duration from user where id = #{arg0}")
+    public Integer getVideoDuration(int user_id);
+
+    @Update("update user set video_duration = #{arg1} + video_duration WHERE id= #{arg0}")
+    public void addVideoDuration(int user_id,int duration);
+
+    @Update("update user set province = #{arg1},city = #{arg2},area = #{arg3} WHERE id= #{arg0}")
+    public void setUserArea(int user_id,String province,String city,String area);
+
+    @Update("update user set user_introduce = #{arg1} where id = #{arg0}")
+    void setUserIntroduce(int user_id,String introduce);
+
 }
 

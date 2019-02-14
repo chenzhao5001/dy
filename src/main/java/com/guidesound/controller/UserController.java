@@ -551,6 +551,7 @@ public class UserController extends BaseController{
         return JSONResult.ok();
     }
 
+
     /**
      *学生完善基本信息
      */
@@ -1176,6 +1177,64 @@ public class UserController extends BaseController{
         }
         int user_id = getCurrentUserId();
         iUser.deleteAction(user_id,Integer.parseInt(flag));
+        return JSONResult.ok();
+    }
+
+    /**
+     *删除评论与赞接口
+     */
+    @RequestMapping("/video_duration")
+    @ResponseBody
+    JSONResult getUserVideoDuration(String user_id) {
+        if(user_id == null) {
+            return JSONResult.errorMsg("缺少user_id");
+        }
+
+        Integer duration = iUser.getVideoDuration(Integer.parseInt(user_id));
+        if(duration == null) {
+            return JSONResult.ok(0);
+        }
+        return JSONResult.ok(duration);
+    }
+
+    /**
+     *删除评论与赞接口
+     */
+    @RequestMapping("/set_area")
+    @ResponseBody
+    JSONResult setUserArea(String province,String city,String area) {
+        if( province == null || city == null || area == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        if(!currentUser.getProvince().equals("")) {
+            return JSONResult.errorMsg("已经设置过地区");
+        }
+
+        iUser.setUserArea(currentUser.getId(),province,city,area);
+        iUser.addVideoDuration(currentUser.getId(),1);
+        return JSONResult.ok();
+    }
+
+    /**
+     *设置用户介绍
+     */
+    @RequestMapping("/user_introduce")
+    @ResponseBody
+    JSONResult setUserIntroduce(String introduce) {
+
+        if(introduce == null) {
+            return JSONResult.errorMsg("缺少introduce参数");
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        if(!currentUser.getUser_introduce().equals("")) {
+            return JSONResult.errorMsg("已经设置过介绍");
+        }
+        iUser.setUserIntroduce(currentUser.getId(),introduce);
+        iUser.addVideoDuration(currentUser.getId(),1);
         return JSONResult.ok();
     }
 }
