@@ -1,5 +1,6 @@
 package com.guidesound.controller;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.guidesound.Service.IUserService;
 import com.guidesound.dao.*;
@@ -779,18 +780,18 @@ public class UserController extends BaseController{
     /**
      *设置省市接口
      */
-    @RequestMapping(value = "/set_area")
-    @ResponseBody
-    public JSONResult setArea(String province, String city,String area) {
-        if (province == null || city == null || area == null) {
-            return JSONResult.errorMsg("缺少province 或 city 或 area 字段");
-        }
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User)request.getAttribute("user_info");
-
-        iUser.updateProvinceAndCity(currentUser.getId(),province,city,area);
-        return  JSONResult.ok();
-    }
+//    @RequestMapping(value = "/set_area")
+//    @ResponseBody
+//    public JSONResult setArea(String province, String city,String area) {
+//        if (province == null || city == null || area == null) {
+//            return JSONResult.errorMsg("缺少province 或 city 或 area 字段");
+//        }
+//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+//        User currentUser = (User)request.getAttribute("user_info");
+//
+//        iUser.updateProvinceAndCity(currentUser.getId(),province,city,area);
+//        return  JSONResult.ok();
+//    }
 
     /**
      *设置学科接口
@@ -1198,7 +1199,7 @@ public class UserController extends BaseController{
     }
 
     /**
-     *删除评论与赞接口
+     *设置省市接口
      */
     @RequestMapping("/set_area")
     @ResponseBody
@@ -1223,11 +1224,9 @@ public class UserController extends BaseController{
     @RequestMapping("/user_introduce")
     @ResponseBody
     JSONResult setUserIntroduce(String introduce) {
-
         if(introduce == null) {
             return JSONResult.errorMsg("缺少introduce参数");
         }
-
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
         if(!currentUser.getUser_introduce().equals("")) {
@@ -1235,6 +1234,44 @@ public class UserController extends BaseController{
         }
         iUser.setUserIntroduce(currentUser.getId(),introduce);
         iUser.addVideoDuration(currentUser.getId(),1);
+        return JSONResult.ok();
+    }
+
+
+    /**
+     *设置用户认证
+     * 1 老师 2 企业 3达人 4 商家
+     */
+    @RequestMapping("/user_authentication")
+    @ResponseBody
+    JSONResult userAuthentication(String type,
+                                  String identity_card,         //身份证
+                                  String graduation_card,       //毕业证
+                                  String teacher_card,          //教师证
+                                  String achievement,           //成就
+                                  String license,               //营业执照
+                                  String confirmation_letter,   //确认书
+                                  String shop_prove             //店铺证明
+    ) {
+        if(type == null && type.equals("0")) {
+            return JSONResult.errorMsg("缺少 type");
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        User currentUser = (User)request.getAttribute("user_info");
+        if(currentUser.getType() != 0) {
+            return JSONResult.errorMsg("此用户已经认证过");
+        }
+
+        int user_id = getCurrentUserId();
+        identity_card =  identity_card == null ? "" :identity_card;
+        graduation_card =  graduation_card == null ? "" :graduation_card;
+        teacher_card =  teacher_card == null ? "" :teacher_card;
+        achievement =  achievement == null ? "" :achievement;
+        license =  license == null ? "" :license;
+        confirmation_letter =  confirmation_letter == null ? "" :confirmation_letter;
+        shop_prove =  shop_prove == null ? "" :shop_prove;
+        iUser.setAuthentication(user_id,Integer.parseInt(type),identity_card,graduation_card,teacher_card,achievement,license,confirmation_letter,shop_prove);
         return JSONResult.ok();
     }
 }

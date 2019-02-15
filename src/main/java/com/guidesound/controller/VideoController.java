@@ -121,10 +121,10 @@ public class VideoController extends BaseController {
         int begin = (iPage -1)*iSize;
         int end =  iSize;
 
-        String videoTemp = iVideo.getFinishVideoByUserGuid(user_guid);
-        if(videoTemp == null) {
-            videoTemp = "";
-        }
+//        String videoTemp = iVideo.getFinishVideoByUserGuid(user_guid);
+//        if(videoTemp == null) {
+//            videoTemp = "";
+//        }
         List<VideoShow> video_list = new ArrayList<>();
         List<VideoShow> all_list = new ArrayList<>();
         int grade = 0;
@@ -135,12 +135,8 @@ public class VideoController extends BaseController {
         }
 
         int other_grade1 = -1;
-        int other_grade2 = -1;
         if(grade != 0) {
             other_grade1 = grade/100 *100 + 99;
-            if(other_grade1 == 399 || other_grade1 == 499) {
-                other_grade2 = 498;
-            }
         }
         Collections.shuffle(video_list);
         if (channel.equals("1")) { //推荐

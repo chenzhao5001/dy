@@ -28,6 +28,70 @@ public class User {
     private String area;
     private String user_introduce;
 
+    private String identity_card;
+    private String graduation_card;
+    private String teacher_card;
+    private String achievement;
+    private String license;
+    private String confirmation_letter;
+    private String shop_prove;
+
+    public String getIdentity_card() {
+        return identity_card;
+    }
+
+    public void setIdentity_card(String identity_card) {
+        this.identity_card = identity_card;
+    }
+
+    public String getGraduation_card() {
+        return graduation_card;
+    }
+
+    public void setGraduation_card(String graduation_card) {
+        this.graduation_card = graduation_card;
+    }
+
+    public String getTeacher_card() {
+        return teacher_card;
+    }
+
+    public void setTeacher_card(String teacher_card) {
+        this.teacher_card = teacher_card;
+    }
+
+    public String getAchievement() {
+        return achievement;
+    }
+
+    public void setAchievement(String achievement) {
+        this.achievement = achievement;
+    }
+
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
+    }
+
+    public String getConfirmation_letter() {
+        return confirmation_letter;
+    }
+
+    public void setConfirmation_letter(String confirmation_letter) {
+        this.confirmation_letter = confirmation_letter;
+    }
+
+    public String getShop_prove() {
+        return shop_prove;
+    }
+
+    public void setShop_prove(String shop_prove) {
+        this.shop_prove = shop_prove;
+    }
+
     public String getUser_introduce() {
         return user_introduce;
     }

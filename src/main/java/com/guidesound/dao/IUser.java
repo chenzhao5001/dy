@@ -292,5 +292,24 @@ public interface IUser {
     @Update("update user set user_introduce = #{arg1} where id = #{arg0}")
     void setUserIntroduce(int user_id,String introduce);
 
+    @Update("update user set type = #{arg1}," +
+            "identity_card = #{arg2}," +
+            "graduation_card = #{arg3}," +
+            "teacher_card = #{arg4}," +
+            "achievement = #{arg5}," +
+            "license = #{arg6}," +
+            "confirmation_letter = #{arg7}," +
+            "shop_prove = #{arg8}" +
+            " where id = #{arg0}")
+    void setAuthentication(int uesr_id,
+                           int type,
+                           String identity_card,         //身份证
+                           String graduation_card,       //毕业证
+                           String teacher_card,          //教师证
+                           String achievement,           //成就
+                           String license,               //营业执照
+                           String confirmation_letter,   //确认书
+                           String shop_prove             //店铺证明
+    );
 }
 
