@@ -1209,9 +1209,9 @@ public class UserController extends BaseController{
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
-        if(!currentUser.getProvince().equals("")) {
-            return JSONResult.errorMsg("已经设置过地区");
-        }
+//        if(!currentUser.getProvince().equals("")) {
+//            return JSONResult.errorMsg("已经设置过地区");
+//        }
 
         iUser.setUserArea(currentUser.getId(),province,city,area);
         iUser.addVideoDuration(currentUser.getId(),1);
@@ -1240,7 +1240,7 @@ public class UserController extends BaseController{
 
     /**
      *设置用户认证
-     * 1 老师 2 企业 3达人 4 商家
+     * 2 老师 2 企业 3达人 4 商家
      */
     @RequestMapping("/user_authentication")
     @ResponseBody
@@ -1273,5 +1273,49 @@ public class UserController extends BaseController{
         shop_prove =  shop_prove == null ? "" :shop_prove;
         iUser.setAuthentication(user_id,Integer.parseInt(type),identity_card,graduation_card,teacher_card,achievement,license,confirmation_letter,shop_prove);
         return JSONResult.ok();
+    }
+
+
+    @RequestMapping("/add_shop")
+    @ResponseBody
+    JSONResult addShop(String shop_url) {
+        if(shop_url == null) {
+            return JSONResult.errorMsg("缺少 shop_url ");
+        }
+        int user_id = getCurrentUserId();
+        int create_time = (int) (new Date().getTime() / 1000);
+        int update_time = (int) (new Date().getTime() / 1000);
+        iUser.addShop(user_id,shop_url,create_time,update_time);
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/shop_list")
+    @ResponseBody
+    JSONResult shopList() {
+        int user_id = getCurrentUserId();
+        List<UserShop> shopList = iUser.shopList(user_id);
+        return JSONResult.ok(shopList);
+    }
+
+    @RequestMapping("/add_commodity")
+    @ResponseBody
+    JSONResult addCommodity(String commodity,String commodity_pic) {
+        if(commodity == null || commodity_pic == null) {
+            return JSONResult.errorMsg("缺少commodity 或 commodity_pic");
+        }
+        int user_id = getCurrentUserId();
+        int create_time = (int) (new Date().getTime() / 1000);
+        int update_time = (int) (new Date().getTime() / 1000);
+        iUser.addCommodity(user_id,commodity,commodity_pic,create_time,update_time);
+
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/commodity_list")
+    @ResponseBody
+    JSONResult getCommodity() {
+        int user_id = getCurrentUserId();
+        List<UserCommodity> userCommodity = iUser.commodityList(user_id);
+        return JSONResult.ok(userCommodity);
     }
 }

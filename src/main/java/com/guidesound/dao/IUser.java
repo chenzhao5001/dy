@@ -311,5 +311,19 @@ public interface IUser {
                            String confirmation_letter,   //确认书
                            String shop_prove             //店铺证明
     );
+
+    @Insert("insert into user_shop (user_id,shop_url,create_time,update_time) values(#arg0,#arg1,#arg2,#arg3)")
+    void addShop(int user_id, String shop_url,int create_time,int update_time);
+
+    @Select("select * from user_shop where user_id = #{arg0}")
+    List<UserShop> shopList(int user_id);
+
+    @Insert("insert into user_commodity (user_id,commodity,commodity_pic,create_time,update_time) values(#arg0,#arg1,#arg2,#arg3,#arg4)")
+    void addCommodity(int user_id, String commodity,String commodity_pic,int create_time,int update_time);
+
+    @Insert("select * from user_shop where user_id = #{arg0}")
+    List<UserCommodity> commodityList(int user_id);
+
+
 }
 

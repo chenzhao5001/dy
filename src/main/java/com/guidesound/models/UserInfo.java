@@ -33,14 +33,16 @@ public class UserInfo {
     private String city;
     private String area;
 
+
     int video_time;
+    String user_introduce;
     String identity_card;
     String graduation_card;
     String teacher_card;
     String achievement;
     String license;
     String confirmation_letter;
-    String shop;
+    String shop_prove;
 
 
 
@@ -50,6 +52,14 @@ public class UserInfo {
     private int channel_stage;
     public String im_appid = "1400158534";
     public String friend_state = "0";
+
+    public String getUser_introduce() {
+        return user_introduce;
+    }
+
+    public void setUser_introduce(String user_introduce) {
+        this.user_introduce = user_introduce;
+    }
 
     public String getFriend_state() {
         return friend_state;
@@ -406,11 +416,13 @@ public class UserInfo {
         this.confirmation_letter = confirmation_letter;
     }
 
-    public String getShop() {
-        return shop;
+    public String getShop_prove() {
+        return shop_prove;
     }
 
-    public void setShop(String shop) {
-        this.shop = shop;
+    public void setShop_prove(String shop_prove) {
+        this.shop_prove = shop_prove;
     }
+
+
 }
