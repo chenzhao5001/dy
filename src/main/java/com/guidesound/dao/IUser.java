@@ -293,13 +293,15 @@ public interface IUser {
     void setUserIntroduce(int user_id,String introduce);
 
     @Update("update user set type = #{arg1}," +
+            "auth_state = 1," +
             "identity_card = #{arg2}," +
             "graduation_card = #{arg3}," +
             "teacher_card = #{arg4}," +
             "achievement = #{arg5}," +
             "license = #{arg6}," +
             "confirmation_letter = #{arg7}," +
-            "shop_prove = #{arg8}" +
+            "shop_prove = #{arg8}," +
+            "auth_info = #{arg9}" +
             " where id = #{arg0}")
     void setAuthentication(int uesr_id,
                            int type,
@@ -309,19 +311,20 @@ public interface IUser {
                            String achievement,           //成就
                            String license,               //营业执照
                            String confirmation_letter,   //确认书
-                           String shop_prove             //店铺证明
+                           String shop_prove,             //店铺证明
+                           String auth_info
     );
 
-    @Insert("insert into user_shop (user_id,shop_url,create_time,update_time) values(#arg0,#arg1,#arg2,#arg3)")
+    @Insert("insert into user_shop (user_id,shop_url,create_time,update_time) values (#{arg0},#{arg1},#{arg2},#{arg3})")
     void addShop(int user_id, String shop_url,int create_time,int update_time);
 
     @Select("select * from user_shop where user_id = #{arg0}")
     List<UserShop> shopList(int user_id);
 
-    @Insert("insert into user_commodity (user_id,commodity,commodity_pic,create_time,update_time) values(#arg0,#arg1,#arg2,#arg3,#arg4)")
+    @Insert("insert into user_commodity (user_id,commodity,commodity_pic,create_time,update_time) values(#{arg0},#{arg1},#{arg2},#{arg3},#{arg4})")
     void addCommodity(int user_id, String commodity,String commodity_pic,int create_time,int update_time);
 
-    @Insert("select * from user_shop where user_id = #{arg0}")
+    @Select("select * from user_commodity where user_id = #{arg0}")
     List<UserCommodity> commodityList(int user_id);
 
 

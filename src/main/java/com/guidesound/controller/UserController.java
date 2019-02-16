@@ -167,6 +167,8 @@ public class UserController extends BaseController{
             user.setLevel(1);
             user.setBackground_url("http://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg");
             iUser.addUserByUnionid(user);
+            iUser.setDyId(user.getId(),10000000 + user.getId());
+            user.setDy_id(String.valueOf(10000000 + user.getId()));
             String im_id = String.valueOf(user.getId());
             String im_sig = TlsSigTest.getUrlSig(String.valueOf(im_id));
             iUser.setImInfo(user.getId(),im_id,im_sig);
@@ -1251,15 +1253,16 @@ public class UserController extends BaseController{
                                   String achievement,           //成就
                                   String license,               //营业执照
                                   String confirmation_letter,   //确认书
-                                  String shop_prove             //店铺证明
+                                  String shop_prove,             //店铺证明
+                                  String auth_info               //认证信息
     ) {
-        if(type == null && type.equals("0")) {
+        if(type == null ) {
             return JSONResult.errorMsg("缺少 type");
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
-        if(currentUser.getType() != 0) {
+        if(currentUser.getType() != 1) {
             return JSONResult.errorMsg("此用户已经认证过");
         }
 
@@ -1270,8 +1273,9 @@ public class UserController extends BaseController{
         achievement =  achievement == null ? "" :achievement;
         license =  license == null ? "" :license;
         confirmation_letter =  confirmation_letter == null ? "" :confirmation_letter;
+        auth_info = auth_info == null? "":auth_info;
         shop_prove =  shop_prove == null ? "" :shop_prove;
-        iUser.setAuthentication(user_id,Integer.parseInt(type),identity_card,graduation_card,teacher_card,achievement,license,confirmation_letter,shop_prove);
+        iUser.setAuthentication(user_id,Integer.parseInt(type),identity_card,graduation_card,teacher_card,achievement,license,confirmation_letter,shop_prove,auth_info);
         return JSONResult.ok();
     }
 

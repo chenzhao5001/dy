@@ -43,6 +43,8 @@ public class UserInfo {
     String license;
     String confirmation_letter;
     String shop_prove;
+    int auth_state;
+    String auth_info;
 
 
 
@@ -52,6 +54,22 @@ public class UserInfo {
     private int channel_stage;
     public String im_appid = "1400158534";
     public String friend_state = "0";
+
+    public String getAuth_info() {
+        return auth_info;
+    }
+
+    public void setAuth_info(String auth_info) {
+        this.auth_info = auth_info;
+    }
+
+    public int getAuth_state() {
+        return auth_state;
+    }
+
+    public void setAuth_state(int auth_state) {
+        this.auth_state = auth_state;
+    }
 
     public String getUser_introduce() {
         return user_introduce;

@@ -140,8 +140,11 @@ public class VideoController extends BaseController {
         }
         Collections.shuffle(video_list);
         if (channel.equals("1")) { //推荐
-            String pool_grade =  "," + String.valueOf(grade);
-            String pool_other_grade = "," +  String.valueOf(other_grade1);
+            String pool_grade =  "," + grade;
+            String pool_other_grade = ",";
+            if(other_grade1 != -1) {
+                pool_other_grade = "," +  other_grade1;
+            }
             String pool_other_comment = ",999";
             all_list = iVideo.getRecommendVideo(pool_grade,pool_other_grade,pool_other_comment);
             Collections.shuffle(all_list);
@@ -149,8 +152,12 @@ public class VideoController extends BaseController {
         } else { //频道
             List<String> list = Arrays.asList(channel.split(","));
 
-            String pool_grade =  "," + String.valueOf(grade);
-            String pool_other_grade = "," +  String.valueOf(other_grade1);
+            String pool_other_grade = ",";
+            String pool_grade =  "," + grade;
+            if(other_grade1 != -1) {
+                pool_other_grade  +=  other_grade1;
+            }
+//            pool_other_grade = "," +  other_grade1;
             String pool_other_comment = ",999";
 
             all_list = iVideo.getVideoByChannel(list,pool_grade,pool_other_grade,pool_other_comment);
