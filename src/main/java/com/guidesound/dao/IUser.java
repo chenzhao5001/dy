@@ -327,6 +327,18 @@ public interface IUser {
     @Select("select * from user_commodity where user_id = #{arg0}")
     List<UserCommodity> commodityList(int user_id);
 
+    @Delete("delete  from user_shop where user_id = #{arg0} and id = #{arg1}")
+    void deleteShop(int user_id,String shop_id);
+
+    @Select("<script>"
+            + "delete from user_commodity WHERE id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and user_id = #{arg1}"
+            + "</script>")
+    void deleteCommodity(@Param("iList") List<String> iList,int user_id);
+
 
 }
 

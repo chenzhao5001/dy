@@ -1,6 +1,7 @@
 package com.guidesound.controller;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.guidesound.Service.IUserService;
 import com.guidesound.dao.*;
@@ -1322,5 +1323,29 @@ public class UserController extends BaseController{
         int user_id = getCurrentUserId();
         List<UserCommodity> userCommodity = iUser.commodityList(user_id);
         return JSONResult.ok(userCommodity);
+    }
+
+    @RequestMapping("/delete_shop")
+    @ResponseBody
+    JSONResult deleteShop(String shop_id) {
+        if(shop_id == null) {
+            return JSONResult.errorMsg("缺少shop_id参数");
+        }
+
+        int user_id = getCurrentUserId();
+        iUser.deleteShop(user_id,shop_id);
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/delete_commodity")
+    @ResponseBody
+    JSONResult deleteCommodity(String commodity_ids) {
+        if(commodity_ids == null) {
+            return JSONResult.errorMsg("缺少 commodity_ids 参数");
+        }
+        List<String> list = new ArrayList<String>(Arrays.asList(commodity_ids.split(",")));
+        int user_id = getCurrentUserId();
+        iUser.deleteCommodity(list,user_id);
+        return JSONResult.ok();
     }
 }
