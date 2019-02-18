@@ -4,8 +4,10 @@ public class UserCommodity {
 
     int id;
     int user_id;
-    String commodity;
+    String commodity_name;
     String commodity_pic;
+    String commodity_url;
+    int commodity_price;
     int state;
     int create_time;
     int update_time;
@@ -26,12 +28,28 @@ public class UserCommodity {
         this.user_id = user_id;
     }
 
-    public String getCommodity() {
-        return commodity;
+    public String getCommodity_name() {
+        return commodity_name;
     }
 
-    public void setCommodity(String commodity) {
-        this.commodity = commodity;
+    public void setCommodity_name(String commodity_name) {
+        this.commodity_name = commodity_name;
+    }
+
+    public String getCommodity_url() {
+        return commodity_url;
+    }
+
+    public void setCommodity_url(String commodity_url) {
+        this.commodity_url = commodity_url;
+    }
+
+    public int getCommodity_price() {
+        return commodity_price;
+    }
+
+    public void setCommodity_price(int commodity_price) {
+        this.commodity_price = commodity_price;
     }
 
     public String getCommodity_pic() {

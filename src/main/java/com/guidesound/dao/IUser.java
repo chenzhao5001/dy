@@ -321,8 +321,8 @@ public interface IUser {
     @Select("select * from user_shop where user_id = #{arg0}")
     List<UserShop> shopList(int user_id);
 
-    @Insert("insert into user_commodity (user_id,commodity,commodity_pic,create_time,update_time) values(#{arg0},#{arg1},#{arg2},#{arg3},#{arg4})")
-    void addCommodity(int user_id, String commodity,String commodity_pic,int create_time,int update_time);
+    @Insert("insert into user_commodity (user_id,commodity_name,commodity_pic,commodity_url,commodity_price,create_time,update_time) values(#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},#{arg6})")
+    void addCommodity(int user_id, String commodity,String commodity_pic,String commodity_url,int commodity_price,int create_time,int update_time);
 
     @Select("select * from user_commodity where user_id = #{arg0}")
     List<UserCommodity> commodityList(int user_id);

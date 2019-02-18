@@ -1303,15 +1303,16 @@ public class UserController extends BaseController{
 
     @RequestMapping("/add_commodity")
     @ResponseBody
-    JSONResult addCommodity(String commodity,String commodity_pic) {
-        if(commodity == null || commodity_pic == null) {
-            return JSONResult.errorMsg("缺少commodity 或 commodity_pic");
+    JSONResult addCommodity(String commodity_name,String commodity_pic,String commodity_url,String commodity_price) {
+        if(commodity_name == null || commodity_pic == null || commodity_url == null || commodity_price == null) {
+            return JSONResult.errorMsg("缺少参数");
         }
+
         int user_id = getCurrentUserId();
         int create_time = (int) (new Date().getTime() / 1000);
         int update_time = (int) (new Date().getTime() / 1000);
-        iUser.addCommodity(user_id,commodity,commodity_pic,create_time,update_time);
-
+        int price = Integer.parseInt(commodity_price);
+        iUser.addCommodity(user_id,commodity_name,commodity_pic,commodity_url,price,create_time,update_time);
         return JSONResult.ok();
     }
 
