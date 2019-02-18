@@ -9,8 +9,8 @@
         <module name="guide_sound" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="guide_sound" target="8" />
+    <bytecodeTargetLevel target="8">
+      <module name="guide_sound" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -184,15 +184,17 @@ public class VideoController extends BaseController {
         if(all_list.size() < 1) {
             return new ArrayList<>();
         }
+
         List<VideoShow> video_list = new ArrayList<>();
-        String videoTemp = iVideo.getPushVideoByUserGuid(user_guid);
-        String strTemp = videoTemp;
-        boolean flag = false;
+        List<String> videoList = iVideo.getPushVideoByUserGuid(user_guid);
+
+
+        String videoTemp;
         ArrayList<String> arrVidoe = new ArrayList<>();
-        if(videoTemp != null && !videoTemp.equals("")) {
-            arrVidoe =  new ArrayList<String>(Arrays.asList(videoTemp.split(",")));
+        if(videoList.size() > 0  && !videoList.get(0).equals("")) {
+            videoTemp = videoList.get(0);
+            arrVidoe =  new ArrayList<String>(Arrays.asList(videoList.get(0).split(",")));
         } else {
-            flag = true;
             videoTemp = "";
         }
         List<VideoShow> retList = new ArrayList<>();
@@ -205,72 +207,14 @@ public class VideoController extends BaseController {
                 }
             }
         }
-        if(!videoTemp.equals("") && !videoTemp.equals(strTemp)) {
-            if(flag == true ) {
-                iVideo.insertPushVideo(user_guid,videoTemp);
-            } else {
-                iVideo.updatePushVidoe(user_guid,videoTemp);
-            }
-        }
-        return retList;
-    }
 
-    List<VideoShow> getRecVideo(List<VideoShow> all_list,String user_guid) {
-        List<VideoShow> video_list = new ArrayList<>();
-
-        String videoTemp = iVideo.getPushVideoByUserGuid(user_guid);
-        boolean insertFlag = false;
-        if(videoTemp == null) {
-            videoTemp = "";
-            insertFlag = true;
-        }
-        ArrayList<String> arrVidoe = new ArrayList<>();
-        if(!videoTemp.equals("")) {
-            arrVidoe =  new ArrayList<String>(Arrays.asList(videoTemp.split(",")));
-        }
-
-        for (int i = 0; i < all_list.size(); i++) {
-            if (video_list.size() == 20) {
-                break;
-            }
-            for (int j = i; j < all_list.size(); j++) {
-                if (video_list.size() == 20) {
-                    break;
-                }
-                int temp = all_list.get(j).getId();
-                if (arrVidoe.contains(String.valueOf(temp))) {
-                    continue;
-                }
-                if (video_list.size() == 0) {
-                    video_list.add(all_list.get(j));
-                    arrVidoe.add(String.valueOf(all_list.get(j).getId()));
-                    continue;
-                }
-                if (all_list.get(j).getUser_id() != video_list.get(video_list.size() -1).getUser_id()) {
-                    video_list.add(all_list.get(j));
-                    arrVidoe.add(String.valueOf(all_list.get(j).getId()));
-                    i++;
-                    if (j != i) {
-                        Collections.swap(all_list, i, j);
-                    }
-                    continue;
-                }
-                if (j == all_list.size() - 1) {
-                    video_list.add(all_list.get(i));
-                    arrVidoe.add(String.valueOf(all_list.get(j).getId()));
-                }
-            }
-        }
-
-        String strVideos= StringUtils.join(arrVidoe, ",");
-        strVideos += ",";
-        if(insertFlag == true) {
-            iVideo.insertPushVideo(user_guid,strVideos);
+        if(iVideo.getPushVideoCountByUserGuid(user_guid) == 0) {
+            iVideo.insertPushVideo(user_guid,videoTemp);
         } else {
-            iVideo.updatePushVidoe(user_guid,strVideos);
+            iVideo.updatePushVidoe(user_guid,videoTemp);
         }
 
-        return video_list;
+        return retList;
     }
 
     /**

@@ -45,6 +45,7 @@ public class UserInfo {
     String shop_prove;
     int auth_state;
     String auth_info;
+    int video_duration;
 
 
 
@@ -54,6 +55,14 @@ public class UserInfo {
     private int channel_stage;
     public String im_appid = "1400158534";
     public String friend_state = "0";
+
+    public int getVideo_duration() {
+        return video_duration;
+    }
+
+    public void setVideo_duration(int video_duration) {
+        this.video_duration = video_duration;
+    }
 
     public String getAuth_info() {
         return auth_info;

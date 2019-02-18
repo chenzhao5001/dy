@@ -161,7 +161,10 @@ public interface IVideo {
     int getVideoCountByTime(int time);
 
     @Select("select push_vidoes from userVideoPush where user_guid = #{arg0}")
-    String getPushVideoByUserGuid(String user_guid);
+    List<String> getPushVideoByUserGuid(String user_guid);
+
+    @Select("select count(*) from userVideoPush where user_guid = #{arg0}")
+    int getPushVideoCountByUserGuid(String user_guid);
 
     @Select("select finish_videos from userPlayFinish where user_guid = #{arg0}")
     String getFinishVideoByUserGuid(String user_guid);
