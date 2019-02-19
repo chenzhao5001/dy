@@ -8,15 +8,19 @@ import com.guidesound.dao.ICourse;
 import com.guidesound.dao.IUser;
 import com.guidesound.dto.Course1V1DTO;
 import com.guidesound.dto.CourseClassDTO;
+import com.guidesound.dto.TeacherDTO;
+import com.guidesound.dto.VideoDTO;
 import com.guidesound.find.IntroductionInfo;
 import com.guidesound.models.Course;
 import com.guidesound.models.InUser;
+import com.guidesound.models.Teacher;
 import com.guidesound.models.User;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.ToolsFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -45,6 +49,7 @@ public class CourseController extends BaseController{
         if(!ToolsFunction.paramCheck(result,msg)) {
             return JSONResult.errorMsg(msg.toString());
         }
+
         course1V1DTO.setUser_id(getCurrentUserId());
         course1V1DTO.setCreate_time((int) (new Date().getTime()/1000));
         iCourse.add1v1(course1V1DTO);
@@ -163,4 +168,30 @@ public class CourseController extends BaseController{
     }
 
 
+    @RequestMapping("/add_teacher")
+    @ResponseBody
+    public JSONResult addTeacher(@Valid TeacherDTO teacherDTO, BindingResult result) {
+
+        StringBuilder msg = new StringBuilder();
+        if(!ToolsFunction.paramCheck(result,msg)) {
+            return JSONResult.errorMsg(msg.toString());
+        }
+        Teacher teacher = new Teacher();
+        teacher.setId(Integer.parseInt(teacherDTO.getId()));
+        teacher.setName(teacherDTO.getName());
+        teacher.setSex(Integer.parseInt(teacherDTO.getSex()));
+        teacher.setSubject(Integer.parseInt(teacherDTO.getSubject()));
+        teacher.setLevel(Integer.parseInt(teacherDTO.getLevel()));
+        teacher.setIntroduction(teacherDTO.getIntroduction());
+        teacher.setUser_id(getCurrentUserId());
+        if(teacherDTO.getId().equals("0")) {  //新增
+            teacher.setCreate_time((int) (new Date().getTime() /1000));
+            teacher.setUpdate_time((int) (new Date().getTime() /1000));
+            iCourse.addTeacher(teacher);
+        } else { //修改
+            teacher.setUpdate_time((int) (new Date().getTime() /1000));
+            iCourse.updateTeacher(teacher);
+        }
+        return JSONResult.ok();
+    }
 }

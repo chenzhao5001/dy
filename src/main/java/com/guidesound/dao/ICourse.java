@@ -4,6 +4,7 @@ import com.guidesound.dto.Course1V1DTO;
 import com.guidesound.dto.CourseClassDTO;
 import com.guidesound.models.Course;
 import com.guidesound.models.Subject;
+import com.guidesound.models.Teacher;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -59,4 +60,9 @@ public interface ICourse {
 
     @Select("select * from subject_config")
     List<Subject> getSubject();
+
+    @Insert("insert into teacher (name,sex,subject,level,introduction,user_id,create_time,update_time) value (#{name},#{sex},#{subject},#{level},#{introduction},#{user_id},#{create_time},#{update_time})")
+    void addTeacher(Teacher teacher);
+    @Update("update teacher set name = #{name},sex = #{sex},subject = #{subject},level = #{level},introduction = #{introduction},update_time = #{update_time} where id = #{id}")
+    void updateTeacher(Teacher teacher);
 }
