@@ -1355,6 +1355,6 @@ public class UserController extends BaseController{
 
     @RequestMapping("/treaty")
     String Treaty() {
-        return "content";
+        return "treaty";
     }
 }
