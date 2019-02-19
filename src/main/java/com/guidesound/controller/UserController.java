@@ -1,29 +1,22 @@
 package com.guidesound.controller;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.guidesound.Service.IUserService;
+
 import com.guidesound.dao.*;
-import com.guidesound.dto.StudentInfoDTO;
+import com.guidesound.dao.UserCommodity;
 import com.guidesound.models.*;
 import com.guidesound.resp.ListResp;
-import com.guidesound.resp.UserResp;
 import com.guidesound.util.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.security.auth.Subject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.*;
 
@@ -1347,5 +1340,21 @@ public class UserController extends BaseController{
         int user_id = getCurrentUserId();
         iUser.deleteCommodity(list,user_id);
         return JSONResult.ok();
+    }
+
+    @RequestMapping("/commodity_by_id")
+    @ResponseBody
+    JSONResult getCommodityById(String commodity_id) {
+        if(commodity_id == null) {
+            return JSONResult.errorMsg("缺少 commodity_id");
+        }
+
+        UserCommodity userCommodity = iUser.getCommodityById(commodity_id);
+        return JSONResult.ok(userCommodity);
+    }
+
+    @RequestMapping("/treaty")
+    String Treaty() {
+        return "content";
     }
 }

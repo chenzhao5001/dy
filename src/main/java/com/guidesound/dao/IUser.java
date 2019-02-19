@@ -339,6 +339,9 @@ public interface IUser {
             + "</script>")
     void deleteCommodity(@Param("iList") List<String> iList,int user_id);
 
+    @Select("select * from user_commodity where id = #{arg0}")
+    UserCommodity getCommodityById(String commodity_id);
+
 
 }
 

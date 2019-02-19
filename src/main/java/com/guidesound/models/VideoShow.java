@@ -48,6 +48,25 @@ public class VideoShow {
     int create_time;
     String fail_content;
 
+    int attachment_type;
+    int attachment_id;
+
+    public int getAttachment_type() {
+        return attachment_type;
+    }
+
+    public void setAttachment_type(int attachment_type) {
+        this.attachment_type = attachment_type;
+    }
+
+    public int getAttachment_id() {
+        return attachment_id;
+    }
+
+    public void setAttachment_id(int attachment_id) {
+        this.attachment_id = attachment_id;
+    }
+
     public String getFail_content() {
         return fail_content;
     }

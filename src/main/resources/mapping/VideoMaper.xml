@@ -19,6 +19,9 @@
         duration,
         resolution_w,
         resolution_h,
+
+        attachment_type,
+        attachment_id,
         create_time,
         update_time
         )
@@ -36,7 +39,8 @@
         #{duration},
         #{resolution_w},
         #{resolution_h},
-
+        #{attachment_type},
+        #{attachment_id},
         #{create_time},
         #{update_time}
         )

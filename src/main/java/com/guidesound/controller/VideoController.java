@@ -91,6 +91,8 @@ public class VideoController extends BaseController {
         video.setVideo_show_path("");
         video.setPic_cut_path(videoDTO.getPic_cut_url());
 
+        video.setAttachment_type(Integer.parseInt(videoDTO.getAttachment_type()));
+        video.setAttachment_id(Integer.parseInt(videoDTO.getAttachment_id()));
         video.setCreate_time((int) (new Date().getTime() / 1000));
         video.setUpdate_time((int) (new Date().getTime() / 1000));
         videoService.addVideo(video);

@@ -13,8 +13,10 @@ public class Video {
     String video_temp_path;
     String video_show_path;
     String pic_cut_path;
-
     String pools;
+
+    int attachment_type;
+    int attachment_id;
 
     int  resolution_w;
     int  resolution_h;
@@ -156,6 +158,22 @@ public class Video {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public int getAttachment_type() {
+        return attachment_type;
+    }
+
+    public void setAttachment_type(int attachment_type) {
+        this.attachment_type = attachment_type;
+    }
+
+    public int getAttachment_id() {
+        return attachment_id;
+    }
+
+    public void setAttachment_id(int attachment_id) {
+        this.attachment_id = attachment_id;
     }
 
     @Override
