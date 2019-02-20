@@ -1,5 +1,7 @@
 package com.guidesound.models;
 
+import java.util.Objects;
+
 public class Teacher {
     int id;
     int user_id;
@@ -7,7 +9,9 @@ public class Teacher {
     int sex;
     int subject;
     int level;
+    String certificate;
     String introduction;
+    int status;
     int create_time;
     int update_time;
 
@@ -59,12 +63,28 @@ public class Teacher {
         this.level = level;
     }
 
+    public String getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(String certificate) {
+        this.certificate = certificate;
+    }
+
     public String getIntroduction() {
         return introduction;
     }
 
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public int getCreate_time() {
@@ -82,4 +102,5 @@ public class Teacher {
     public void setUpdate_time(int update_time) {
         this.update_time = update_time;
     }
+
 }

@@ -49,10 +49,30 @@ public class CourseController extends BaseController{
         if(!ToolsFunction.paramCheck(result,msg)) {
             return JSONResult.errorMsg(msg.toString());
         }
+        Course course = new Course();
+        course.setUser_id(getCurrentUserId());
+        course.setId(Integer.parseInt(course1V1DTO.getCourse_id()));
+        course.setType(1);
+        course.setCourse_pic(course1V1DTO.getCourse_pic());
+        course.setCourse_name(course1V1DTO.getCourse_name());
+        course.setSubject(Integer.parseInt(course1V1DTO.getSubject()));
+        course.setGrade(Integer.parseInt(course1V1DTO.getGrade()));
+        course.setForm(Integer.parseInt(course1V1DTO.getForm()));
+        course.setPrice_one_hour(Integer.parseInt(course1V1DTO.getPrice_one_hour()));
+        course.setArea_service(course1V1DTO.getArea_service());
+        course.setTest_form(Integer.parseInt(course1V1DTO.getTest_form()));
+        course.setTest_duration(Integer.parseInt(course1V1DTO.getTest_duration()));
+        course.setTest_charge(Integer.parseInt(course1V1DTO.getTest_charge()));
+        course.setIntroduction_teacher(course1V1DTO.getIntroduction_teacher());
 
-        course1V1DTO.setUser_id(getCurrentUserId());
-        course1V1DTO.setCreate_time((int) (new Date().getTime()/1000));
-        iCourse.add1v1(course1V1DTO);
+        if(course1V1DTO.getCourse_id().equals("0")) {  //新建
+            course.setCreate_time((int) (new Date().getTime() / 1000));
+            iCourse.add1v1(course);
+        } else {  //更新
+            course.setUpdate_time((int) (new Date().getTime() / 1000));
+            iCourse.update1V1(course);
+        }
+
         return JSONResult.ok();
     }
 
@@ -65,9 +85,32 @@ public class CourseController extends BaseController{
         if(!ToolsFunction.paramCheck(result,msg)) {
             return JSONResult.errorMsg(msg.toString());
         }
-        courseClassDTO.setUser_id(getCurrentUserId());
-        courseClassDTO.setCreate_time((int) (new Date().getTime()/1000));
-        iCourse.addClass(courseClassDTO);
+
+        Course course = new Course();
+        course.setId(Integer.parseInt(courseClassDTO.getCourse_id()));
+        course.setUser_id(getCurrentUserId());
+        course.setType(2);
+        course.setCourse_pic(courseClassDTO.getCourse_pic());
+        course.setCourse_name(courseClassDTO.getCourse_name());
+        course.setSubject(Integer.parseInt(courseClassDTO.getSubject()));
+        course.setGrade(Integer.parseInt(courseClassDTO.getGrade()));
+        course.setForm(Integer.parseInt(courseClassDTO.getForm()));
+        course.setMax_person(Integer.parseInt(courseClassDTO.getMax_person()));
+        course.setAll_hours(Integer.parseInt(courseClassDTO.getAll_hours()));
+        course.setAll_charge(Integer.parseInt(courseClassDTO.getAll_charge()));
+        course.setForm(Integer.parseInt(courseClassDTO.getForm()));
+        course.setTest_duration(Integer.parseInt(courseClassDTO.getTest_duration()));
+        course.setTest_charge(Integer.parseInt(courseClassDTO.getTest_charge()));
+        course.setCourse_content(courseClassDTO.getCourse_content());
+        course.setOutline(courseClassDTO.getOutline());
+        course.setIntroduction_teacher(courseClassDTO.getIntroduction_teacher());
+
+        if(courseClassDTO.getCourse_id().equals("0")) {  //新建
+            iCourse.addClass(course);
+        } else {  //更新
+            iCourse.updateClass(course);
+        }
+
         return JSONResult.ok();
     }
 
@@ -182,6 +225,7 @@ public class CourseController extends BaseController{
         teacher.setSex(Integer.parseInt(teacherDTO.getSex()));
         teacher.setSubject(Integer.parseInt(teacherDTO.getSubject()));
         teacher.setLevel(Integer.parseInt(teacherDTO.getLevel()));
+        teacher.setCertificate(teacherDTO.getCertificate());
         teacher.setIntroduction(teacherDTO.getIntroduction());
         teacher.setUser_id(getCurrentUserId());
         if(teacherDTO.getId().equals("0")) {  //新增
@@ -194,4 +238,15 @@ public class CourseController extends BaseController{
         }
         return JSONResult.ok();
     }
+
+    @RequestMapping("/teacher_list")
+    @ResponseBody
+    JSONResult getTeacherList(String user_id) {
+
+        if(user_id == null) {
+            return JSONResult.errorMsg("缺少 user_id");
+        }
+        return JSONResult.ok(iCourse.getTeacherList(Integer.parseInt(user_id)));
+    }
+
 }

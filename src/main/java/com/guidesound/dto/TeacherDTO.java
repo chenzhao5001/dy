@@ -13,6 +13,8 @@ public class TeacherDTO {
     String subject;
     @NotNull(message = "level:不能为空;")
     String level;
+    @NotNull(message = "certificate:不能为空;")
+    String certificate;
     @NotNull(message = "introduction:不能为空;")
     String introduction;
 
@@ -50,6 +52,14 @@ public class TeacherDTO {
 
     public String getLevel() {
         return level;
+    }
+
+    public String getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(String certificate) {
+        this.certificate = certificate;
     }
 
     public void setLevel(String level) {

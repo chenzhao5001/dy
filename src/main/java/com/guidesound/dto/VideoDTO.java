@@ -32,6 +32,8 @@ public class VideoDTO {
     String attachment_type;
     @NotNull(message = "attachment_id:不能为空;")
     String attachment_id;
+    @NotNull(message = "attachment_name:不能为空;")
+    String attachment_name;
 
     public String getPic_cut_url() {
         return pic_cut_url;
@@ -127,5 +129,13 @@ public class VideoDTO {
 
     public void setAttachment_id(String attachment_id) {
         this.attachment_id = attachment_id;
+    }
+
+    public String getAttachment_name() {
+        return attachment_name;
+    }
+
+    public void setAttachment_name(String attachment_name) {
+        this.attachment_name = attachment_name;
     }
 }

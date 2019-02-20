@@ -1,23 +1,32 @@
 package com.guidesound.models;
 
+import javax.validation.constraints.NotNull;
+
 public class Course {
+
     int id;
     int user_id;
-    String course_name;
-    int course_type;
-    int method;
-    int grade_level;
-    int price;
-    String area;
     String course_pic;
-    int test_method;
+    String course_name;
+    int subject;
+    int grade;
+    int form;
+    int price_one_hour;
+    String area_service;
+    int test_form;
     int test_duration;
-    int test_price;
-    int test_time;
-    int max_person;
-    int all_duration;
-    int all_price;
+    int test_charge;
+    String introduction_teacher;
+    int type;
     int create_time;
+    int update_time;
+
+
+    int max_person;
+    int all_hours;
+    int all_charge;
+    String course_content;
+    String outline;
 
     public int getId() {
         return id;
@@ -25,62 +34,6 @@ public class Course {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
-
-    public String getCourse_name() {
-        return course_name;
-    }
-
-    public void setCourse_name(String course_name) {
-        this.course_name = course_name;
-    }
-
-    public int getCourse_type() {
-        return course_type;
-    }
-
-    public void setCourse_type(int course_type) {
-        this.course_type = course_type;
-    }
-
-    public int getMethod() {
-        return method;
-    }
-
-    public void setMethod(int method) {
-        this.method = method;
-    }
-
-    public int getGrade_level() {
-        return grade_level;
-    }
-
-    public void setGrade_level(int grade_level) {
-        this.grade_level = grade_level;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
     }
 
     public String getCourse_pic() {
@@ -91,12 +44,60 @@ public class Course {
         this.course_pic = course_pic;
     }
 
-    public int getTest_method() {
-        return test_method;
+    public String getCourse_name() {
+        return course_name;
     }
 
-    public void setTest_method(int test_method) {
-        this.test_method = test_method;
+    public void setCourse_name(String course_name) {
+        this.course_name = course_name;
+    }
+
+    public int getSubject() {
+        return subject;
+    }
+
+    public void setSubject(int subject) {
+        this.subject = subject;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public int getForm() {
+        return form;
+    }
+
+    public void setForm(int form) {
+        this.form = form;
+    }
+
+    public int getPrice_one_hour() {
+        return price_one_hour;
+    }
+
+    public void setPrice_one_hour(int price_one_hour) {
+        this.price_one_hour = price_one_hour;
+    }
+
+    public String getArea_service() {
+        return area_service;
+    }
+
+    public void setArea_service(String area_service) {
+        this.area_service = area_service;
+    }
+
+    public int getTest_form() {
+        return test_form;
+    }
+
+    public void setTest_form(int test_form) {
+        this.test_form = test_form;
     }
 
     public int getTest_duration() {
@@ -107,20 +108,52 @@ public class Course {
         this.test_duration = test_duration;
     }
 
-    public int getTest_price() {
-        return test_price;
+    public int getTest_charge() {
+        return test_charge;
     }
 
-    public void setTest_price(int test_price) {
-        this.test_price = test_price;
+    public void setTest_charge(int test_charge) {
+        this.test_charge = test_charge;
     }
 
-    public int getTest_time() {
-        return test_time;
+    public String getIntroduction_teacher() {
+        return introduction_teacher;
     }
 
-    public void setTest_time(int test_time) {
-        this.test_time = test_time;
+    public void setIntroduction_teacher(String introduction_teacher) {
+        this.introduction_teacher = introduction_teacher;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(int create_time) {
+        this.create_time = create_time;
+    }
+
+    public int getUpdate_time() {
+        return update_time;
+    }
+
+    public void setUpdate_time(int update_time) {
+        this.update_time = update_time;
     }
 
     public int getMax_person() {
@@ -131,27 +164,35 @@ public class Course {
         this.max_person = max_person;
     }
 
-    public int getAll_duration() {
-        return all_duration;
+    public int getAll_hours() {
+        return all_hours;
     }
 
-    public void setAll_duration(int all_duration) {
-        this.all_duration = all_duration;
+    public void setAll_hours(int all_hours) {
+        this.all_hours = all_hours;
     }
 
-    public int getAll_price() {
-        return all_price;
+    public int getAll_charge() {
+        return all_charge;
     }
 
-    public void setAll_price(int all_price) {
-        this.all_price = all_price;
+    public void setAll_charge(int all_charge) {
+        this.all_charge = all_charge;
     }
 
-    public int getCreate_time() {
-        return create_time;
+    public String getCourse_content() {
+        return course_content;
     }
 
-    public void setCreate_time(int create_time) {
-        this.create_time = create_time;
+    public void setCourse_content(String course_content) {
+        this.course_content = course_content;
+    }
+
+    public String getOutline() {
+        return outline;
+    }
+
+    public void setOutline(String outline) {
+        this.outline = outline;
     }
 }

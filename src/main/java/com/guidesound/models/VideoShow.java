@@ -50,6 +50,7 @@ public class VideoShow {
 
     int attachment_type;
     int attachment_id;
+    String attachment_name;
 
     public int getAttachment_type() {
         return attachment_type;
@@ -396,5 +397,13 @@ public class VideoShow {
 
     public void setShared_count(int shared_count) {
         this.shared_count = shared_count;
+    }
+
+    public String getAttachment_name() {
+        return attachment_name;
+    }
+
+    public void setAttachment_name(String attachment_name) {
+        this.attachment_name = attachment_name;
     }
 }

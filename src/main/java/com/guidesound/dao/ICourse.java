@@ -1,7 +1,5 @@
 package com.guidesound.dao;
 
-import com.guidesound.dto.Course1V1DTO;
-import com.guidesound.dto.CourseClassDTO;
 import com.guidesound.models.Course;
 import com.guidesound.models.Subject;
 import com.guidesound.models.Teacher;
@@ -13,38 +11,112 @@ import java.util.List;
 
 public interface ICourse {
 
-    @Insert("insert into course (user_id,course_name,course_type,grade_level,method,price,course_pic,test_method,test_duration,test_price,create_time) " +
-            "value (#{user_id},#{course_name},1,#{grade_level},#{method},#{price},#{course_pic},#{test_method},#{test_duration},#{test_price},#{create_time})")
-    void add1v1(Course1V1DTO course1V1DTO);
+    @Insert("insert into course " +
+            "(course_pic," +
+            "user_id," +
+            "course_name," +
+            "subject," +
+            "grade," +
+            "form," +
+            "price_one_hour," +
+            "area_service," +
+            "test_form," +
+            "test_duration," +
+            "test_charge," +
+            "introduction_teacher," +
+            "type," +
+            "create_time," +
+            "update_time)"  +
 
+            "value (" +
+            "#{course_pic}," +
+            "#{user_id}," +
+            "#{course_name}," +
+            "#{subject}," +
+            "#{grade}," +
+            "#{form}," +
+            "#{price_one_hour}," +
+            "#{area_service}," +
+            "#{test_form}," +
+            "#{test_duration}," +
+            "#{test_charge}," +
+            "#{introduction_teacher}," +
+            "#{type}," +
+            "#{create_time}," +
+            "#{update_time})")
+    void add1v1(Course course);
+
+    @Update("update course set " +
+            "course_pic = #{course_pic}," +
+            "course_name = #{course_name}," +
+            "subject = #{subject}," +
+            "grade = #{grade}," +
+            "form = #{form}," +
+            "price_one_hour = #{price_one_hour}," +
+            "area_service = #{area_service}," +
+            "test_form = #{test_form}," +
+            "test_duration = #{test_duration}," +
+            "test_charge = #{test_charge}," +
+            "introduction_teacher = #{introduction_teacher}," +
+            "update_time = #{update_time} where id = #{id}")
+    void update1V1(Course course);
     @Insert("insert into course (" +
             "user_id," +
-            "course_type," +
-            "course_name," +
-            "grade_level," +
+            "type," +
             "course_pic," +
+            "course_name," +
+            "subject," +
+            "grade," +
+            "form," +
             "max_person," +
-            "all_duration," +
-            "all_price," +
-            "test_time," +
+            "all_hours," +
+            "all_charge," +
+            "test_form," +
             "test_duration," +
-            "test_price," +
+            "test_charge," +
+            "course_content," +
+            "outline," +
+            "introduction_teacher," +
             "create_time) " +
 
             "value (" +
             "#{user_id}," +
             "2," +
-            "#{course_name}," +
-            "#{grade_level}," +
             "#{course_pic}," +
+            "#{course_name}," +
+            "#{subject}," +
+            "#{grade}," +
+            "#{form}," +
             "#{max_person}," +
-            "#{all_duration}," +
-            "#{test_time}," +
+            "#{all_hours}," +
+            "#{all_charge}," +
+            "#{test_form}," +
             "#{test_duration}," +
-            "#{test_price}," +
-            "#{test_price}," +
+            "#{test_charge}," +
+            "#{course_content}," +
+            "#{outline}," +
+            "#{introduction_teacher}," +
             "#{create_time})")
-    void addClass(CourseClassDTO courseClassDTO);
+    void addClass(Course course);
+
+    @Update("update course set " +
+            "course_pic = #{course_pic}," +
+            "course_name = #{course_name}," +
+            "subject = #{subject}," +
+            "grade = #{grade}," +
+            "form = #{form}," +
+            "max_person = #{max_person}," +
+            "all_hours = #{all_hours}," +
+            "all_charge = #{all_charge}," +
+            "test_form = #{test_form}," +
+            "test_duration = #{test_duration}," +
+            "test_charge = #{test_charge}," +
+
+            "course_content = #{course_content}," +
+            "outline = #{outline}," +
+            "introduction_teacher = #{introduction_teacher}," +
+            "update_time = #{update_time} where id = #{id}")
+    void updateClass(Course course);
 
     @Update("update course set course_pic = #{arg2} where user_id = #{arg0} and id = #{arg1}")
     void updateCoursePic(int user_id,int course_id,String pic);
@@ -61,8 +133,11 @@ public interface ICourse {
     @Select("select * from subject_config")
     List<Subject> getSubject();
 
-    @Insert("insert into teacher (name,sex,subject,level,introduction,user_id,create_time,update_time) value (#{name},#{sex},#{subject},#{level},#{introduction},#{user_id},#{create_time},#{update_time})")
+    @Insert("insert into teacher (name,sex,subject,level,certificate,introduction,user_id,create_time,update_time) value (#{name},#{sex},#{subject},#{level},#{introduction},#{certificate},#{user_id},#{create_time},#{update_time})")
     void addTeacher(Teacher teacher);
-    @Update("update teacher set name = #{name},sex = #{sex},subject = #{subject},level = #{level},introduction = #{introduction},update_time = #{update_time} where id = #{id}")
+    @Update("update teacher set name = #{name},sex = #{sex},subject = #{subject},level = #{level},certificate = #{certificate},introduction = #{introduction},update_time = #{update_time} where id = #{id}")
     void updateTeacher(Teacher teacher);
+
+    @Select("select * from teacher where user_id = #{arg0}")
+    List<Teacher> getTeacherList(int user_id);
 }

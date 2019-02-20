@@ -1,40 +1,44 @@
 package com.guidesound.dto;
-
 import javax.validation.constraints.NotNull;
 
 public class CourseClassDTO {
-    @NotNull(message = "course_name:不能为空;")
-    String course_name;
-    @NotNull(message = "grade_level:不能为空;")
-    String grade_level;
-
+    @NotNull(message = "course_id:不能为空;")
+    String course_id;
     @NotNull(message = "course_pic:不能为空;")
     String course_pic;
+    @NotNull(message = "course_name:不能为空;")
+    String course_name;
+    @NotNull(message = "subject:不能为空;")
+    String subject;
+    @NotNull(message = "grade:不能为空;")
+    String grade;
+    @NotNull(message = "form:不能为空;")
+    String form;
     @NotNull(message = "max_person:不能为空;")
     String max_person;
-    @NotNull(message = "all_duration:不能为空;")
-    String all_duration;
-    @NotNull(message = "all_price:不能为空;")
-    String all_price;
-
-    @NotNull(message = "test_time:不能为空;")
-    String test_time;
+    @NotNull(message = "all_hours:不能为空;")
+    String all_hours;
+    @NotNull(message = "all_charge:不能为空;")
+    String all_charge;
+    @NotNull(message = "test_form:不能为空;")
+    String test_form;
     @NotNull(message = "test_duration:不能为空;")
     String test_duration;
-    @NotNull(message = "test_price:不能为空;")
-    String test_price;
-    @NotNull(message = "course_introduce:不能为空;")
-    String course_introduce;
+    @NotNull(message = "test_charge:不能为空;")
+    String test_charge;
+    @NotNull(message = "course_content:不能为空;")
+    String course_content;
+    @NotNull(message = "outline:不能为空;")
+    String outline;
+    @NotNull(message = "introduction_teacher:不能为空;")
+    String introduction_teacher;
 
-    int create_time;
-    int user_id;
-
-    public String getCourse_introduce() {
-        return course_introduce;
+    public String getCourse_id() {
+        return course_id;
     }
 
-    public void setCourse_introduce(String course_introduce) {
-        this.course_introduce = course_introduce;
+    public void setCourse_id(String course_id) {
+        this.course_id = course_id;
     }
 
     public String getCourse_pic() {
@@ -45,22 +49,6 @@ public class CourseClassDTO {
         this.course_pic = course_pic;
     }
 
-    public int getCreate_time() {
-        return create_time;
-    }
-
-    public void setCreate_time(int create_time) {
-        this.create_time = create_time;
-    }
-
-    public int getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
-
     public String getCourse_name() {
         return course_name;
     }
@@ -69,12 +57,28 @@ public class CourseClassDTO {
         this.course_name = course_name;
     }
 
-    public String getGrade_level() {
-        return grade_level;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setGrade_level(String grade_level) {
-        this.grade_level = grade_level;
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getForm() {
+        return form;
+    }
+
+    public void setForm(String form) {
+        this.form = form;
     }
 
     public String getMax_person() {
@@ -85,28 +89,28 @@ public class CourseClassDTO {
         this.max_person = max_person;
     }
 
-    public String getAll_duration() {
-        return all_duration;
+    public String getAll_hours() {
+        return all_hours;
     }
 
-    public void setAll_duration(String all_duration) {
-        this.all_duration = all_duration;
+    public void setAll_hours(String all_hours) {
+        this.all_hours = all_hours;
     }
 
-    public String getAll_price() {
-        return all_price;
+    public String getAll_charge() {
+        return all_charge;
     }
 
-    public void setAll_price(String all_price) {
-        this.all_price = all_price;
+    public void setAll_charge(String all_charge) {
+        this.all_charge = all_charge;
     }
 
-    public String getTest_time() {
-        return test_time;
+    public String getTest_form() {
+        return test_form;
     }
 
-    public void setTest_time(String test_time) {
-        this.test_time = test_time;
+    public void setTest_form(String test_form) {
+        this.test_form = test_form;
     }
 
     public String getTest_duration() {
@@ -117,11 +121,35 @@ public class CourseClassDTO {
         this.test_duration = test_duration;
     }
 
-    public String getTest_price() {
-        return test_price;
+    public String getTest_charge() {
+        return test_charge;
     }
 
-    public void setTest_price(String test_price) {
-        this.test_price = test_price;
+    public void setTest_charge(String test_charge) {
+        this.test_charge = test_charge;
+    }
+
+    public String getCourse_content() {
+        return course_content;
+    }
+
+    public void setCourse_content(String course_content) {
+        this.course_content = course_content;
+    }
+
+    public String getOutline() {
+        return outline;
+    }
+
+    public void setOutline(String outline) {
+        this.outline = outline;
+    }
+
+    public String getIntroduction_teacher() {
+        return introduction_teacher;
+    }
+
+    public void setIntroduction_teacher(String introduction_teacher) {
+        this.introduction_teacher = introduction_teacher;
     }
 }
