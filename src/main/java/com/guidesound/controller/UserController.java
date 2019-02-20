@@ -1292,7 +1292,10 @@ public class UserController extends BaseController{
     JSONResult shopList() {
         int user_id = getCurrentUserId();
         List<UserShop> shopList = iUser.shopList(user_id);
-        return JSONResult.ok(shopList);
+        if(shopList.size() > 0) {
+            return JSONResult.ok(shopList.get(0));
+        }
+        return JSONResult.ok();
     }
 
     @RequestMapping("/add_commodity")
