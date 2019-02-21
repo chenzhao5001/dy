@@ -115,7 +115,7 @@ public class TlsSigTest {
 
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("SyncOtherMachine", 2);
-        jsonSend.put("From_Account", 397);
+        jsonSend.put("From_Account", "397");
         jsonSend.put("To_Account", user_id);
         jsonSend.put("MsgLifeTime", 60);
         jsonSend.put("MsgRandom", 1234);
