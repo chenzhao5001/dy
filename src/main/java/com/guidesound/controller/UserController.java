@@ -6,6 +6,7 @@ import com.guidesound.dao.UserCommodity;
 import com.guidesound.models.*;
 import com.guidesound.resp.ListResp;
 import com.guidesound.util.*;
+import com.sun.xml.internal.ws.resources.SenderMessages;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -1276,14 +1277,22 @@ public class UserController extends BaseController{
 
     @RequestMapping("/add_shop")
     @ResponseBody
-    JSONResult addShop(String shop_url) {
+    JSONResult addShop(String shop_url) throws IOException {
         if(shop_url == null) {
             return JSONResult.errorMsg("缺少 shop_url ");
         }
+
         int user_id = getCurrentUserId();
         int create_time = (int) (new Date().getTime() / 1000);
         int update_time = (int) (new Date().getTime() / 1000);
-        iUser.addShop(user_id,shop_url,create_time,update_time);
+        List<Integer> ids = iUser.findShop(user_id);
+        if(ids.size() == 0) {
+            iUser.addShop(user_id,shop_url,1,create_time,update_time);
+        } else {
+            iUser.updateShop(ids.get(0),shop_url,update_time);
+        }
+        String sendInfo = "通过：您发布的店铺“url”已经通过系统审核，快努力发高质量的视频推广您的店铺吧！";
+        TlsSigTest.SendMessage(String.valueOf(getCurrentUserId()),sendInfo);
         return JSONResult.ok();
     }
 
