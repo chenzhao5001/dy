@@ -18,6 +18,7 @@ public class Course {
     int test_charge;
     String introduction_teacher;
     int type;
+    int course_status;
     int create_time;
     int update_time;
 
@@ -42,6 +43,14 @@ public class Course {
 
     public void setCourse_pic(String course_pic) {
         this.course_pic = course_pic;
+    }
+
+    public int getCourse_status() {
+        return course_status;
+    }
+
+    public void setCourse_status(int course_status) {
+        this.course_status = course_status;
     }
 
     public String getCourse_name() {

@@ -2,6 +2,7 @@ package com.guidesound.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.dao.ICourse;
@@ -248,5 +249,37 @@ public class CourseController extends BaseController{
         }
         return JSONResult.ok(iCourse.getTeacherList(Integer.parseInt(user_id)));
     }
+
+    @RequestMapping("/course_by_id")
+    @ResponseBody
+    JSONResult getCourseById(String course_id,String type) {
+        if(course_id == null || type == null) {
+            return JSONResult.errorMsg("缺少 course_id 或 type");
+        }
+        Course course = iCourse.getCourseById(Integer.parseInt(course_id),Integer.parseInt(type));
+        return JSONResult.ok(course);
+    }
+
+    @RequestMapping("/down_course")
+    @ResponseBody
+    JSONResult downCourse(String course_id) {
+        if(course_id == null) {
+            return JSONResult.errorMsg("缺少 course_id");
+        }
+        iCourse.updateCourseType(Integer.parseInt(course_id),5);
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/delete_course")
+    @ResponseBody
+    JSONResult deleteCourse(String course_id) {
+        if(course_id == null) {
+            return JSONResult.errorMsg("缺少 course_id");
+        }
+        iCourse.deleteCourse(Integer.parseInt(course_id));
+        return JSONResult.ok();
+    }
+
+
 
 }

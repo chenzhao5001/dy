@@ -3,6 +3,7 @@ package com.guidesound.dao;
 import com.guidesound.models.Course;
 import com.guidesound.models.Subject;
 import com.guidesound.models.Teacher;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -128,6 +129,15 @@ public interface ICourse {
 
     @Select("select course_outline from course where id = #{arg0}")
     String getCourseOutline(int course_id);
+
+    @Select("select * from course where id = #{arg0} and type = #{arg1}")
+    Course getCourseById(int course_id,int type);
+
+    @Update("update course set type = #{arg1} where id = #{arg0}")
+    void updateCourseType(int course_id,int type);
+
+    @Delete("delete from course where id = #{arg0}")
+    void deleteCourse(int course_id);
 
 
     @Select("select * from subject_config")
