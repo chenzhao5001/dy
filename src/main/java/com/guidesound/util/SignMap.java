@@ -78,6 +78,46 @@ class Content3 {
     }
 }
 
+class GradeContent {
+    int id;
+    String gradeName;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getGradeName() {
+        return gradeName;
+    }
+
+    public void setGradeName(String gradeName) {
+        this.gradeName = gradeName;
+    }
+}
+class SubjectContent {
+    int id;
+    String subjectName;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
+    }
+}
 class ListItem implements Comparable<ListItem> {
     int id;
     String gradeName;
@@ -151,15 +191,15 @@ public class SignMap {
         if ( flag == false) {
             flag = true;
             subject_classify = new TreeMap<>();
-            subject_type = new HashMap<>();
+            subject_type = new TreeMap<>();
             for(Subject subject : subjectList) {
                 if(!subject_classify.containsKey(subject.getLevel_1())) {
                     subject_classify.put(subject.getLevel_1(),subject.getLevel_1_name());
                 }
                 subject_type.put(subject.getLevel_2(),new Content(subject.getLevel_2_name(),subject.getLevel_1()));
             }
-            subject_type.put(901,new Content("家长",9));
-            subject_type.put(902,new Content("学生",9));
+            subject_type.put(901,new Content("家长分享",9));
+            subject_type.put(902,new Content("学生分享",9));
         }
 
     }
@@ -307,6 +347,38 @@ public class SignMap {
         return "未知";
     }
 
+    public static List<GradeContent> getGrade() {
+        Map<Integer,String> m = new LinkedHashMap<>();
+        m.put(101,"0-3岁");
+        m.put(102,"幼儿园");
+        m.put(199,"学龄前");
+        m.put(201,"一年级");
+        m.put(202,"二年级");
+        m.put(203,"三年级");
+        m.put(204,"四年级");
+        m.put(205,"五年级");
+        m.put(206,"六年级");
+        m.put(299, "小学");
+        m.put(301,"初一");
+        m.put(302,"初二");
+        m.put(303,"初三");
+        m.put(399, "初中");
+        m.put(401,"高一");
+        m.put(402,"高二");
+        m.put(403,"高三");
+        m.put(499, "高中");
+        m.put(498, "初高");
+
+        List<GradeContent> list = new ArrayList<>();
+        for(Integer key : m.keySet()) {
+            String content = m.get(key);
+            GradeContent gradeItem = new GradeContent();
+            gradeItem.setId(key);
+            gradeItem.setGradeName(content);
+            list.add(gradeItem);
+        }
+        return list;
+    }
 
     public static Map<Integer,String> getGradeByClass(int type,boolean role_flag) {
         Map<Integer,String> m = new TreeMap<>();
@@ -614,6 +686,19 @@ public class SignMap {
         list.add(info7);
         list.add(info8);
         list.add(info10);
+        return list;
+    }
+
+
+    public static Object getSubjectList() {
+        List<SubjectContent> list = new ArrayList<>();
+        for(Integer key : subject_type.keySet()) {
+            Content content = subject_type.get(key);
+            SubjectContent item = new SubjectContent();
+            item.setId(key);
+            item.setSubjectName(content.getName());
+            list.add(item);
+        }
         return list;
     }
 

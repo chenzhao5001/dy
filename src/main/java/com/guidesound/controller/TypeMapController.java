@@ -115,6 +115,21 @@ public class TypeMapController extends BaseController {
     }
 
     /**
+     * 获取学科类型信息接口
+     */
+    @RequestMapping(value = "/subject_list")
+    @ResponseBody
+    public JSONResult getSubjectList() {
+        return JSONResult.ok(SignMap.getSubjectList());
+    }
+
+    @RequestMapping(value = "/grade_list")
+    @ResponseBody
+    public JSONResult getGradetList() {
+        return JSONResult.ok(SignMap.getGrade());
+    }
+
+    /**
      * 获取城市列表接口
      */
     @RequestMapping(value = "/area_list")
