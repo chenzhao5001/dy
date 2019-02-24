@@ -32,6 +32,10 @@ public class CourseClassDTO {
     String outline;
     @NotNull(message = "introduction_teacher:不能为空;")
     String introduction_teacher;
+    @NotNull(message = "teacher_id:不能为空;")
+    String teacher_id;
+    @NotNull(message = "teacher_name:不能为空;")
+    String teacher_name;
 
     public String getCourse_id() {
         return course_id;
@@ -151,5 +155,21 @@ public class CourseClassDTO {
 
     public void setIntroduction_teacher(String introduction_teacher) {
         this.introduction_teacher = introduction_teacher;
+    }
+
+    public String getTeacher_id() {
+        return teacher_id;
+    }
+
+    public void setTeacher_id(String teacher_id) {
+        this.teacher_id = teacher_id;
+    }
+
+    public String getTeacher_name() {
+        return teacher_name;
+    }
+
+    public void setTeacher_name(String teacher_name) {
+        this.teacher_name = teacher_name;
     }
 }

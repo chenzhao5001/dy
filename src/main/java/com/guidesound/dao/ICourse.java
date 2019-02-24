@@ -25,6 +25,8 @@ public interface ICourse {
             "test_duration," +
             "test_charge," +
             "introduction_teacher," +
+            "teacher_id," +
+            "teacher_name," +
             "type," +
             "create_time," +
             "update_time)"  +
@@ -42,6 +44,8 @@ public interface ICourse {
             "#{test_duration}," +
             "#{test_charge}," +
             "#{introduction_teacher}," +
+            "#{teacher_id}," +
+            "#{teacher_name}," +
             "#{type}," +
             "#{create_time}," +
             "#{update_time})")
@@ -59,6 +63,8 @@ public interface ICourse {
             "test_duration = #{test_duration}," +
             "test_charge = #{test_charge}," +
             "introduction_teacher = #{introduction_teacher}," +
+            "teacher_id = #{teacher_id}," +
+            "teacher_name = #{teacher_name}," +
             "update_time = #{update_time} where id = #{id}")
     void update1V1(Course course);
     @Insert("insert into course (" +
@@ -78,11 +84,13 @@ public interface ICourse {
             "course_content," +
             "outline," +
             "introduction_teacher," +
+            "teacher_id," +
+            "teacher_name," +
             "create_time) " +
 
             "value (" +
             "#{user_id}," +
-            "2," +
+            "#{type}," +
             "#{course_pic}," +
             "#{course_name}," +
             "#{subject}," +
@@ -97,6 +105,8 @@ public interface ICourse {
             "#{course_content}," +
             "#{outline}," +
             "#{introduction_teacher}," +
+            "#{teacher_id}," +
+            "#{teacher_name}," +
             "#{create_time})")
     void addClass(Course course);
 
@@ -116,6 +126,8 @@ public interface ICourse {
             "course_content = #{course_content}," +
             "outline = #{outline}," +
             "introduction_teacher = #{introduction_teacher}," +
+            "teacher_id = #{teacher_id}," +
+            "teacher_name = #{teacher_name}," +
             "update_time = #{update_time} where id = #{id}")
     void updateClass(Course course);
 

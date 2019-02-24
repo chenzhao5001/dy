@@ -184,6 +184,8 @@ public class SignMap {
     static Map<Integer,String> video_state;
     static Map<Integer,String> commend_pools;
     static Map<Integer,String> course_type;
+    static Map<Integer,String> course_form;
+    static Map<Integer,String> course_type_name;
 
     static boolean flag = false;
 
@@ -307,7 +309,33 @@ public class SignMap {
         commend_pools.put(999,"公共池");
         commend_pools.put(1000,"无");
 
+        course_form = new HashMap<>();
+        course_form.put(0,"线上");
+        course_form.put(1,"上门");
 
+        course_type_name = new HashMap<>();
+        course_type_name.put(0,"未提交审核");
+        course_type_name.put(1,"审核中");
+        course_type_name.put(2,"审核失败");
+        course_type_name.put(3,"展示中");
+        course_type_name.put(4,"自动下架");
+        course_type_name.put(5,"手动下架");
+
+
+    }
+
+    public static String getCourseFormById(int id) {
+        if(!course_form.containsKey(id)) {
+            return "未知";
+        }
+        return course_form.get(id);
+    }
+
+    public static String getCourseTypeNameById(int id) {
+        if(!course_type_name.containsKey(id)) {
+            return "未知";
+        }
+        return course_type_name.get(id);
     }
     public static Map<Integer,String> getPoolList() {
         return commend_pools;
@@ -514,7 +542,7 @@ public class SignMap {
             temp.info = "高中";
             list.add(temp);
             temp = new Content3();
-            temp.id = 499;
+            temp.id = 498;
             temp.info = "初高";
             list.add(temp);
 

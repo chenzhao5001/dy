@@ -1,8 +1,7 @@
 package com.guidesound.controller;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.dao.ICourse;
@@ -10,18 +9,19 @@ import com.guidesound.dao.IUser;
 import com.guidesound.dto.Course1V1DTO;
 import com.guidesound.dto.CourseClassDTO;
 import com.guidesound.dto.TeacherDTO;
-import com.guidesound.dto.VideoDTO;
 import com.guidesound.find.IntroductionInfo;
 import com.guidesound.models.Course;
-import com.guidesound.models.InUser;
 import com.guidesound.models.Teacher;
 import com.guidesound.models.User;
+import com.guidesound.ret.Course1V1;
+import com.guidesound.ret.CourseClass;
+import com.guidesound.ret.CourseItem;
 import com.guidesound.util.JSONResult;
+import com.guidesound.util.SignMap;
 import com.guidesound.util.ToolsFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -30,8 +30,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import static com.guidesound.util.SignMap.*;
+
 
 @Controller
 @RequestMapping("/course")
@@ -53,7 +56,7 @@ public class CourseController extends BaseController{
         Course course = new Course();
         course.setUser_id(getCurrentUserId());
         course.setId(Integer.parseInt(course1V1DTO.getCourse_id()));
-        course.setType(1);
+        course.setType(0);
         course.setCourse_pic(course1V1DTO.getCourse_pic());
         course.setCourse_name(course1V1DTO.getCourse_name());
         course.setSubject(Integer.parseInt(course1V1DTO.getSubject()));
@@ -65,7 +68,8 @@ public class CourseController extends BaseController{
         course.setTest_duration(Integer.parseInt(course1V1DTO.getTest_duration()));
         course.setTest_charge(Integer.parseInt(course1V1DTO.getTest_charge()));
         course.setIntroduction_teacher(course1V1DTO.getIntroduction_teacher());
-
+        course.setTeacher_id(Integer.parseInt(course1V1DTO.getTeacher_id()));
+        course.setTeacher_name(course1V1DTO.getTeacher_name());
         if(course1V1DTO.getCourse_id().equals("0")) {  //新建
             course.setCreate_time((int) (new Date().getTime() / 1000));
             iCourse.add1v1(course);
@@ -90,7 +94,7 @@ public class CourseController extends BaseController{
         Course course = new Course();
         course.setId(Integer.parseInt(courseClassDTO.getCourse_id()));
         course.setUser_id(getCurrentUserId());
-        course.setType(2);
+        course.setType(1);
         course.setCourse_pic(courseClassDTO.getCourse_pic());
         course.setCourse_name(courseClassDTO.getCourse_name());
         course.setSubject(Integer.parseInt(courseClassDTO.getSubject()));
@@ -105,6 +109,8 @@ public class CourseController extends BaseController{
         course.setCourse_content(courseClassDTO.getCourse_content());
         course.setOutline(courseClassDTO.getOutline());
         course.setIntroduction_teacher(courseClassDTO.getIntroduction_teacher());
+        course.setTeacher_id(Integer.parseInt(courseClassDTO.getTeacher_id()));
+        course.setTeacher_name(courseClassDTO.getTeacher_name());
 
         if(courseClassDTO.getCourse_id().equals("0")) {  //新建
             iCourse.addClass(course);
@@ -132,8 +138,24 @@ public class CourseController extends BaseController{
         if(user_id == null) {
             return JSONResult.errorMsg("缺少 user_id");
         }
+
         List<Course> list = iCourse.getCourseList(Integer.parseInt(user_id));
-        return JSONResult.ok(list);
+        List<CourseItem> course_list = new ArrayList<>();
+        for(Course course : list) {
+            CourseItem courseItem = new CourseItem();
+            courseItem.setCourse_id(course.getId());
+            courseItem.setCourse_pic(course.getCourse_pic());
+            courseItem.setCourse_status(course.getCourse_status());
+            courseItem.setCourse_name(course.getCourse_name());
+            courseItem.setForm(getCourseFormById(course.getForm()));
+            courseItem.setCourse_type(course.getType());
+            courseItem.setCourse_type_name(getCourseTypeNameById(course.getType()));
+            courseItem.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
+            courseItem.setGrade(SignMap.getGradeTypeByID(course.getGrade()));
+            courseItem.setPrice(course.getPrice_one_hour());
+            course_list.add(courseItem);
+        }
+        return JSONResult.ok(course_list);
     }
 
     @RequestMapping("/set_outline")
@@ -149,9 +171,9 @@ public class CourseController extends BaseController{
             return JSONResult.errorMsg("格式错误");
         }
         CourseOutline lastItem = beanList.get(beanList.size() -1);
-        int overTime = lastItem.getTime() + 3600*lastItem.getDuration();
+//        int overTime = lastItem.getTime() + 3600*lastItem.getDuration();
         String content  = mapper.writeValueAsString(beanList);
-        iCourse.setCourseOutline(Integer.parseInt(course_id),content,overTime);
+//        iCourse.setCourseOutline(Integer.parseInt(course_id),content,overTime);
         return JSONResult.ok();
     }
 
@@ -250,14 +272,87 @@ public class CourseController extends BaseController{
         return JSONResult.ok(iCourse.getTeacherList(Integer.parseInt(user_id)));
     }
 
-    @RequestMapping("/course_by_id")
+    @RequestMapping("/get_1v1_course")
     @ResponseBody
-    JSONResult getCourseById(String course_id,String type) {
-        if(course_id == null || type == null) {
-            return JSONResult.errorMsg("缺少 course_id 或 type");
+    JSONResult get1V1Course(String course_id) {
+        if(course_id == null) {
+            return JSONResult.errorMsg("缺少 course_id");
         }
-        Course course = iCourse.getCourseById(Integer.parseInt(course_id),Integer.parseInt(type));
+
+        Course course = iCourse.getCourseById(Integer.parseInt(course_id),Integer.parseInt("0"));
+        if(course == null) {
+            return JSONResult.ok(null);
+        }
+
+        Course1V1 course1V1 = new Course1V1();
+        course1V1.setCourse_id(course.getId());
+        course1V1.setCourse_status(course.getCourse_status());
+        course1V1.setCourse_type(course.getType());
+        course1V1.setCourse_type_name(getCourseTypeNameById(course.getType()));
+        course1V1.setCourse_pic(course.getCourse_pic());
+        course1V1.setCourse_name(course.getCourse_name());
+        course1V1.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
+        course1V1.setGrade(SignMap.getGradeTypeByID(course.getGrade()));
+        course1V1.setForm(getCourseFormById(course.getForm()));
+        course1V1.setPrice_one_hour(course.getPrice_one_hour());
+        course1V1.setArea_service(course.getArea_service());
+        course1V1.setTest_form(getCourseFormById(course.getTest_form()));
+        course1V1.setTest_duration(course.getTest_duration());
+        course1V1.setTest_charge(course.getTest_charge());
+        course1V1.setIntroduction_teacher(course.getIntroduction_teacher());
+        course1V1.setTeacher_id(course.getTeacher_id());
+        course1V1.setTeacher_name(course.getTeacher_name());
+
         return JSONResult.ok(course);
+    }
+
+    @RequestMapping("/get_class_course")
+    @ResponseBody
+    JSONResult getClassCourse(String course_id) {
+        if(course_id == null) {
+            return JSONResult.errorMsg("缺少 course_id");
+        }
+        Course course = iCourse.getCourseById(Integer.parseInt(course_id),Integer.parseInt("1"));
+        if(course == null) {
+            return JSONResult.ok(null);
+        }
+        CourseClass courseClass = new CourseClass();
+        courseClass.setCourse_id(course.getId());
+        courseClass.setCourse_status(course.getCourse_status());
+        courseClass.setCourse_type(course.getType());
+        courseClass.setCourse_type_name(getCourseTypeNameById(course.getType()));
+        courseClass.setCourse_pic(course.getCourse_pic());
+        courseClass.setCourse_name(course.getCourse_name());
+
+        courseClass.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
+        courseClass.setGrade(SignMap.getGradeTypeByID(course.getGrade()));
+        courseClass.setForm(getCourseFormById(course.getForm()));
+
+        courseClass.setMax_person(course.getMax_person());
+        courseClass.setAll_hours(course.getAll_hours());
+        courseClass.setAll_charge(course.getTest_charge());
+
+        courseClass.setTest_form(getCourseFormById(course.getTest_form()));
+        courseClass.setTest_duration(course.getTest_duration());
+        courseClass.setTest_charge(course.getTest_charge());
+
+        courseClass.setCourse_content(course.getCourse_content());
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<CourseOutline> beanList = null;
+        try {
+            beanList = mapper.readValue(course.getOutline(), new TypeReference<List<CourseOutline>>() {});
+            courseClass.setOutline(beanList);
+        } catch (IOException e) {
+            e.printStackTrace();
+            courseClass.setOutline("json 格式错误");
+        }
+
+        courseClass.setIntroduction_teacher(course.getIntroduction_teacher());
+        courseClass.setTeacher_id(course.getTeacher_id());
+        courseClass.setTeacher_name(courseClass.getTeacher_name());
+
+        return JSONResult.ok(courseClass);
     }
 
     @RequestMapping("/down_course")

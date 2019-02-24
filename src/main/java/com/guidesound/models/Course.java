@@ -17,6 +17,9 @@ public class Course {
     int test_duration;
     int test_charge;
     String introduction_teacher;
+    int teacher_id;
+    String teacher_name;
+
     int type;
     int course_status;
     int create_time;
@@ -203,5 +206,21 @@ public class Course {
 
     public void setOutline(String outline) {
         this.outline = outline;
+    }
+
+    public int getTeacher_id() {
+        return teacher_id;
+    }
+
+    public void setTeacher_id(int teacher_id) {
+        this.teacher_id = teacher_id;
+    }
+
+    public String getTeacher_name() {
+        return teacher_name;
+    }
+
+    public void setTeacher_name(String teacher_name) {
+        this.teacher_name = teacher_name;
     }
 }
