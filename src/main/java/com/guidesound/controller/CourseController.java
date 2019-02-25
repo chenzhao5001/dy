@@ -303,7 +303,7 @@ public class CourseController extends BaseController{
         course1V1.setTeacher_id(course.getTeacher_id());
         course1V1.setTeacher_name(course.getTeacher_name());
 
-        return JSONResult.ok(course);
+        return JSONResult.ok(course1V1);
     }
 
     @RequestMapping("/get_class_course")

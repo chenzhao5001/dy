@@ -93,6 +93,7 @@ public class VideoController extends BaseController {
 
         video.setAttachment_type(Integer.parseInt(videoDTO.getAttachment_type()));
         video.setAttachment_id(Integer.parseInt(videoDTO.getAttachment_id()));
+        video.setAttachment_name(videoDTO.getAttachment_name());
         video.setCreate_time((int) (new Date().getTime() / 1000));
         video.setUpdate_time((int) (new Date().getTime() / 1000));
 
