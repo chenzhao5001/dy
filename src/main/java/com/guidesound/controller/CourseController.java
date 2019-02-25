@@ -16,6 +16,7 @@ import com.guidesound.models.User;
 import com.guidesound.ret.Course1V1;
 import com.guidesound.ret.CourseClass;
 import com.guidesound.ret.CourseItem;
+import com.guidesound.ret.TeacherItem;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
 import com.guidesound.util.ToolsFunction;
@@ -269,7 +270,23 @@ public class CourseController extends BaseController{
         if(user_id == null) {
             return JSONResult.errorMsg("缺少 user_id");
         }
-        return JSONResult.ok(iCourse.getTeacherList(Integer.parseInt(user_id)));
+        List<Teacher> teacherList = iCourse.getTeacherList(Integer.parseInt(user_id));
+        List<TeacherItem> list = new ArrayList<>();
+        for(Teacher item: teacherList) {
+            TeacherItem teacherItem = new TeacherItem();
+            teacherItem.setId(item.getId());
+            teacherItem.setStatus(item.getStatus());
+            teacherItem.setName(item.getName());
+            teacherItem.setSex(item.getSex() == 0 ? "男":"女");
+            teacherItem.setSubject(SignMap.getSubjectTypeById(item.getSubject()));
+            teacherItem.setSubject_id(item.getSubject());
+            teacherItem.setLevel(SignMap.getWatchById(item.getLevel()));
+            teacherItem.setSubject_id(item.getLevel());
+            teacherItem.setCertificate(item.getCertificate());
+            teacherItem.setIntroduction(item.getIntroduction());
+            list.add(teacherItem);
+        }
+        return JSONResult.ok(list);
     }
 
     @RequestMapping("/get_1v1_course")
