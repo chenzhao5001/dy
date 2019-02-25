@@ -28,12 +28,12 @@ public class VideoDTO {
     @NotNull(message = "pic_cut_url:不能为空;")
     String pic_cut_url;
 
-    @NotNull(message = "attachment_type:不能为空;")
-    String attachment_type;
-    @NotNull(message = "attachment_id:不能为空;")
-    String attachment_id;
-    @NotNull(message = "attachment_name:不能为空;")
-    String attachment_name;
+//    @NotNull(message = "attachment_type:不能为空;")
+    String attachment_type = "0";
+//    @NotNull(message = "attachment_id:不能为空;")
+    String attachment_id = "0";
+//    @NotNull(message = "attachment_name:不能为空;")
+    String attachment_name = "";
 
     public String getPic_cut_url() {
         return pic_cut_url;

@@ -95,6 +95,7 @@ public class VideoController extends BaseController {
         video.setAttachment_id(Integer.parseInt(videoDTO.getAttachment_id()));
         video.setCreate_time((int) (new Date().getTime() / 1000));
         video.setUpdate_time((int) (new Date().getTime() / 1000));
+
         videoService.addVideo(video);
         return JSONResult.ok();
     }

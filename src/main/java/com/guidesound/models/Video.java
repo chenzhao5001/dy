@@ -17,9 +17,11 @@ public class Video {
 
     int attachment_type;
     int attachment_id;
+    String attachment_name;
 
     int  resolution_w;
     int  resolution_h;
+
     int create_time;
     int update_time;
 
@@ -174,6 +176,14 @@ public class Video {
 
     public void setAttachment_id(int attachment_id) {
         this.attachment_id = attachment_id;
+    }
+
+    public String getAttachment_name() {
+        return attachment_name;
+    }
+
+    public void setAttachment_name(String attachment_name) {
+        this.attachment_name = attachment_name;
     }
 
     @Override
