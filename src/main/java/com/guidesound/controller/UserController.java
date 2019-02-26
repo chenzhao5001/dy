@@ -459,6 +459,18 @@ public class UserController extends BaseController{
         userInfo.setVideo_count(videoCount);
         userInfo.setArticle_count(articleCount);
 
+        List<UserShop> shopList = iUser.shopList(Integer.parseInt(user_id));
+        if(shopList.size() > 0) {
+            userInfo.setShop_url(shopList.get(0).getShop_url());
+        } else {
+            userInfo.setShop_url("");
+        }
+
+        List<Course> coursesList = iCourse.getCourseList(Integer.parseInt(user_id));
+        if(coursesList.size() > 0) {
+            userInfo.setCourse_flag(true);
+        }
+
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         int currentUserID = 0;
@@ -1100,6 +1112,7 @@ public class UserController extends BaseController{
                 return JSONResult.ok(list.get(0));
             }
         }
+
         return JSONResult.errorMsg("账号不存在");
     }
     /**

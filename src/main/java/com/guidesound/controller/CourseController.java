@@ -392,6 +392,4 @@ public class CourseController extends BaseController{
         return JSONResult.ok();
     }
 
-
-
 }

@@ -47,6 +47,10 @@ public class UserInfo {
     String auth_info;
     int video_duration;
 
+    String shop_url;
+    boolean course_flag;
+
+
 
 
     private String im_id;
@@ -451,5 +455,19 @@ public class UserInfo {
         this.shop_prove = shop_prove;
     }
 
+    public String getShop_url() {
+        return shop_url;
+    }
 
+    public void setShop_url(String shop_url) {
+        this.shop_url = shop_url;
+    }
+
+    public boolean isCourse_flag() {
+        return course_flag;
+    }
+
+    public void setCourse_flag(boolean course_flag) {
+        this.course_flag = course_flag;
+    }
 }
