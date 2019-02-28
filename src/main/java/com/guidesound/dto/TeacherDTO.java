@@ -17,6 +17,8 @@ public class TeacherDTO {
     String certificate;
     @NotNull(message = "introduction:不能为空;")
     String introduction;
+    @NotNull(message = "save:不能为空;")
+    String save;
 
     public String getId() {
         return id;
@@ -72,5 +74,13 @@ public class TeacherDTO {
 
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    public String getSave() {
+        return save;
+    }
+
+    public void setSave(String save) {
+        this.save = save;
     }
 }

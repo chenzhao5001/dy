@@ -28,6 +28,7 @@ public interface ICourse {
             "teacher_id," +
             "teacher_name," +
             "type," +
+            "course_status," +
             "create_time," +
             "update_time)"  +
 
@@ -47,6 +48,7 @@ public interface ICourse {
             "#{teacher_id}," +
             "#{teacher_name}," +
             "#{type}," +
+            "#{course_status}," +
             "#{create_time}," +
             "#{update_time})")
     void add1v1(Course course);
@@ -65,6 +67,7 @@ public interface ICourse {
             "introduction_teacher = #{introduction_teacher}," +
             "teacher_id = #{teacher_id}," +
             "teacher_name = #{teacher_name}," +
+            "course_status = #{course_status}," +
             "update_time = #{update_time} where id = #{id}")
     void update1V1(Course course);
     @Insert("insert into course (" +
@@ -85,6 +88,7 @@ public interface ICourse {
             "outline," +
             "introduction_teacher," +
             "teacher_id," +
+            "course_status," +
             "teacher_name," +
             "create_time) " +
 
@@ -106,6 +110,7 @@ public interface ICourse {
             "#{outline}," +
             "#{introduction_teacher}," +
             "#{teacher_id}," +
+            "#{course_status}," +
             "#{teacher_name}," +
             "#{create_time})")
     void addClass(Course course);
@@ -128,6 +133,7 @@ public interface ICourse {
             "introduction_teacher = #{introduction_teacher}," +
             "teacher_id = #{teacher_id}," +
             "teacher_name = #{teacher_name}," +
+            "course_status = #{course_status}," +
             "update_time = #{update_time} where id = #{id}")
     void updateClass(Course course);
 
@@ -155,9 +161,9 @@ public interface ICourse {
     @Select("select * from subject_config")
     List<Subject> getSubject();
 
-    @Insert("insert into teacher (name,sex,subject,level,certificate,introduction,user_id,create_time,update_time) value (#{name},#{sex},#{subject},#{level},#{introduction},#{certificate},#{user_id},#{create_time},#{update_time})")
+    @Insert("insert into teacher (name,sex,subject,level,certificate,introduction,user_id,status,create_time,update_time) value (#{name},#{sex},#{subject},#{level},#{certificate},#{introduction},#{user_id},#{status},#{create_time},#{update_time})")
     void addTeacher(Teacher teacher);
-    @Update("update teacher set name = #{name},sex = #{sex},subject = #{subject},level = #{level},certificate = #{certificate},introduction = #{introduction},update_time = #{update_time} where id = #{id}")
+    @Update("update teacher set name = #{name},sex = #{sex},subject = #{subject},level = #{level},certificate = #{certificate},introduction = #{introduction},status = #{status},update_time = #{update_time} where id = #{id}")
     void updateTeacher(Teacher teacher);
 
     @Select("select * from teacher where user_id = #{arg0}")

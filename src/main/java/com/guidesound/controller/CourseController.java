@@ -71,6 +71,7 @@ public class CourseController extends BaseController{
         course.setIntroduction_teacher(course1V1DTO.getIntroduction_teacher());
         course.setTeacher_id(Integer.parseInt(course1V1DTO.getTeacher_id()));
         course.setTeacher_name(course1V1DTO.getTeacher_name());
+        course.setCourse_status(Integer.parseInt(course1V1DTO.getSave()));
         if(course1V1DTO.getCourse_id().equals("0")) {  //新建
             course.setCreate_time((int) (new Date().getTime() / 1000));
             iCourse.add1v1(course);
@@ -112,6 +113,7 @@ public class CourseController extends BaseController{
         course.setIntroduction_teacher(courseClassDTO.getIntroduction_teacher());
         course.setTeacher_id(Integer.parseInt(courseClassDTO.getTeacher_id()));
         course.setTeacher_name(courseClassDTO.getTeacher_name());
+        course.setCourse_status(Integer.parseInt(courseClassDTO.getSave()));
 
         if(courseClassDTO.getCourse_id().equals("0")) {  //新建
             iCourse.addClass(course);
@@ -252,6 +254,7 @@ public class CourseController extends BaseController{
         teacher.setCertificate(teacherDTO.getCertificate());
         teacher.setIntroduction(teacherDTO.getIntroduction());
         teacher.setUser_id(getCurrentUserId());
+        teacher.setStatus(Integer.parseInt(teacherDTO.getSave()));
         if(teacherDTO.getId().equals("0")) {  //新增
             teacher.setCreate_time((int) (new Date().getTime() /1000));
             teacher.setUpdate_time((int) (new Date().getTime() /1000));

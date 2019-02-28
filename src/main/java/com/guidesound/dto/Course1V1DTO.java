@@ -32,7 +32,8 @@ public class Course1V1DTO
     String teacher_id;
     @NotNull(message = "teacher_name:不能为空;")
     String teacher_name;
-
+    @NotNull(message = "save:不能为空;")
+    String save;
     public String getCourse_id() {
         return course_id;
     }
@@ -143,5 +144,13 @@ public class Course1V1DTO
 
     public void setTeacher_name(String teacher_name) {
         this.teacher_name = teacher_name;
+    }
+
+    public String getSave() {
+        return save;
+    }
+
+    public void setSave(String save) {
+        this.save = save;
     }
 }
