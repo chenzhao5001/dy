@@ -611,6 +611,12 @@ public class ManagerController extends BaseController {
         }
         return JSONResult.ok(list);
     }
+
+    @RequestMapping(value = "/examine_video_common")
+    @ResponseBody
+    public JSONResult videoExamineCommon(String type,String uid,String item_id,String result,String failure_id,String failure_content) {
+        return JSONResult.ok();
+    }
 }
 
 

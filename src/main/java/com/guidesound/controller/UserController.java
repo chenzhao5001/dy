@@ -1221,7 +1221,7 @@ public class UserController extends BaseController{
 //        }
 
         iUser.setUserArea(currentUser.getId(),province,city,area);
-        iUser.addVideoDuration(currentUser.getId(),1);
+        iUser.addVideoDuration(currentUser.getId(),60);
         return JSONResult.ok();
     }
 
@@ -1240,7 +1240,7 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("已经设置过介绍");
         }
         iUser.setUserIntroduce(currentUser.getId(),introduce);
-        iUser.addVideoDuration(currentUser.getId(),1);
+        iUser.addVideoDuration(currentUser.getId(),60);
         return JSONResult.ok();
     }
 
