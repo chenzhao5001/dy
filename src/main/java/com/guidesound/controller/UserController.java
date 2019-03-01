@@ -1345,7 +1345,16 @@ public class UserController extends BaseController{
         int create_time = (int) (new Date().getTime() / 1000);
         int update_time = (int) (new Date().getTime() / 1000);
         int price = Integer.parseInt(commodity_price);
-        iUser.addCommodity(user_id,commodity_name,commodity_pic,commodity_url,price,create_time,update_time);
+        Commodity commodity = new Commodity();
+        commodity.setUser_id(user_id);
+        commodity.setCommodity_name(commodity_name);
+        commodity.setCommodity_pic(commodity_pic);
+        commodity.setCommodity_url(commodity_url);
+        commodity.setCommodity_price(price);
+        commodity.setCreate_time(create_time);
+        commodity.setUpdate_time(update_time);
+        iUser.addCommodity(commodity);
+        iExamine.addCommodityExamine(user_id,4,commodity.getId(),"");
         return JSONResult.ok();
     }
 
