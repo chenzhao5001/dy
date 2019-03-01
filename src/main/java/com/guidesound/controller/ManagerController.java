@@ -1,10 +1,9 @@
 package com.guidesound.controller;
 
-import com.guidesound.dao.IArticle;
-import com.guidesound.dao.IInUser;
-import com.guidesound.dao.IUser;
-import com.guidesound.dao.IVideo;
+import com.guidesound.dao.*;
 import com.guidesound.models.*;
+import com.guidesound.ret.Authentication;
+import com.guidesound.ret.UserAudit;
 import com.guidesound.util.*;
 import com.guidesound.TempStruct.ItemInfo;
 import com.qcloud.Common.Sign;
@@ -38,6 +37,8 @@ public class ManagerController extends BaseController {
     private IUser iUser;
     @Autowired
     private IArticle iArticle;
+    @Autowired
+    private IExamine iExamine;
     @RequestMapping(value = "/login")
     @ResponseBody
     JSONResult logIn(HttpServletRequest request, HttpServletResponse response) {
@@ -616,6 +617,43 @@ public class ManagerController extends BaseController {
     @ResponseBody
     public JSONResult videoExamineCommon(String type,String uid,String item_id,String result,String failure_id,String failure_content) {
         return JSONResult.ok();
+    }
+
+    @RequestMapping(value = "/user_examine")
+    @ResponseBody
+    public JSONResult userExamine() {
+
+        List<UserAudit> userAuditsList = new ArrayList<>();
+        List<UserExamine> list = iExamine.getUserExamine();
+        for (UserExamine userExamine: list
+             ) {
+
+            UserAudit userAudit = new UserAudit();
+            userAudit.setUid(userExamine.getUser_id());
+            userAudit.setItem_type(userExamine.getAuth_type());
+            userAudit.setText(userExamine.getText());
+
+            Authentication authentication = new Authentication();
+            authentication.setAchivement(userExamine.getAchivement());
+            authentication.setConfirmation_pic(userExamine.getConfirmation_pic());
+            authentication.setEnterprise_card(userExamine.getEnterprise_card());
+            authentication.setGraduation_card(userExamine.getGraduation_card());
+            authentication.setIdentity_card(userExamine.getIdentity_card());
+            authentication.setIdentity_info(userExamine.getIdentity_info());
+            authentication.setShop_card(userExamine.getShop_card());
+            authentication.setTeacher_card(userExamine.getTeacher_card());
+            authentication.setType(userExamine.getType());
+            userAudit.setAuthentication(authentication);
+            userAuditsList.add(userAudit);
+        }
+        return JSONResult.ok(userAuditsList);
+    }
+
+    @RequestMapping(value = "/commodity_examine")
+    @ResponseBody
+    public JSONResult getCommodity() {
+        List<CommodityExamine> list = iExamine.getCommodityExamine();
+        return JSONResult.ok(list);
     }
 }
 

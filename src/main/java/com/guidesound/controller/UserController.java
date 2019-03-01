@@ -36,6 +36,8 @@ public class UserController extends BaseController{
     private IVideo iVideo;
     @Autowired
     private IArticle iArticle;
+    @Autowired
+    private IExamine iExamine;
 
     /**
      * 用户登录
@@ -692,7 +694,11 @@ public class UserController extends BaseController{
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
-        iUser.updateHead(currentUser.getId(),head_url);
+        if(currentUser.getHead_flag() == 0) {
+            return JSONResult.errorMsg("头像未审核");
+        }
+        iExamine.addUserExamine(currentUser.getId(),0,head_url);
+        iUser.updateUserHeadFlag(currentUser.getId(),0);
         return JSONResult.ok();
     }
 
@@ -723,10 +729,13 @@ public class UserController extends BaseController{
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
-        iUser.updateName(currentUser.getId(),name);
+        if(currentUser.getName_flag() == 0) {
+            return JSONResult.errorMsg("昵称未审核");
+        }
+        iExamine.addUserExamine(currentUser.getId(),1,name);
+        iUser.updateUserNameFlag(currentUser.getId(),0);
         return JSONResult.ok();
     }
-
     /**
      *修改性别接口
      */
@@ -1231,16 +1240,19 @@ public class UserController extends BaseController{
     @RequestMapping("/user_introduce")
     @ResponseBody
     JSONResult setUserIntroduce(String introduce) {
-        if(introduce == null) {
+        if(introduce == null || introduce.equals("")) {
             return JSONResult.errorMsg("缺少introduce参数");
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
-        if(!currentUser.getUser_introduce().equals("")) {
-            return JSONResult.errorMsg("已经设置过介绍");
+        if(currentUser.getUser_introduce_flag() == 0) {
+            return JSONResult.errorMsg("用户介绍未审核");
         }
-        iUser.setUserIntroduce(currentUser.getId(),introduce);
-        iUser.addVideoDuration(currentUser.getId(),60);
+
+        iExamine.addUserExamine(currentUser.getId(),2,introduce);
+        iUser.updateUserIntroduceFlag(currentUser.getId(),0);
+//        iUser.setUserIntroduce(currentUser.getId(),introduce);
+//        iUser.addVideoDuration(currentUser.getId(),60);
         return JSONResult.ok();
     }
 
@@ -1297,10 +1309,15 @@ public class UserController extends BaseController{
         int update_time = (int) (new Date().getTime() / 1000);
         List<Integer> ids = iUser.findShop(user_id);
         if(ids.size() == 0) {
-            iUser.addShop(user_id,shop_url,1,create_time,update_time);
+            iUser.addShop(user_id,shop_url,0,create_time,update_time);
         } else {
+            UserShop userShop = iUser.getShopById(ids.get(0));
+            if(userShop.getState() == 0) {
+                return JSONResult.errorMsg("店铺未审核，不能修改");
+            }
             iUser.updateShop(ids.get(0),shop_url,update_time);
         }
+        iExamine.addCommodityExamine(user_id,5,0,shop_url);
         String sendInfo = "通过：您发布的店铺“url”已经通过系统审核，快努力发高质量的视频推广您的店铺吧！";
         TlsSigTest.SendMessage(String.valueOf(getCurrentUserId()),sendInfo);
         return JSONResult.ok();

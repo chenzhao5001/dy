@@ -318,11 +318,14 @@ public interface IUser {
     @Insert("insert into user_shop (user_id,shop_url,state,create_time,update_time) values (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4})")
     void addShop(int user_id, String shop_url,int state,int create_time,int update_time);
 
-    @Update("update user_shop set shop_url = #{arg1},update_time = #{arg2} where id = #{arg0}")
+    @Update("update user_shop set shop_url = #{arg1},update_time = #{arg2},state = 0 where id = #{arg0}")
     void updateShop(int id,String shop_url,int update_time);
 
     @Select("select id from user_shop where user_id = #{arg0}")
     List<Integer> findShop(int user_id);
+
+    @Select("select * from user_shop where id = #{arg0}")
+    UserShop getShopById(int id);
 
     @Select("select * from user_shop where user_id = #{arg0}")
     List<UserShop> shopList(int user_id);
@@ -348,6 +351,12 @@ public interface IUser {
     @Select("select * from user_commodity where id = #{arg0}")
     UserCommodity getCommodityById(String commodity_id);
 
+    @Update("update user set head_flag = #{arg1} where id = #{arg0}")
+    void updateUserHeadFlag(int user_id,int flag);
+    @Update("update user set name_flag = #{arg1} where id = #{arg0}")
+    void updateUserNameFlag(int user_id,int flag);
+    @Update("update user set introduce_flag = #{arg1} where id = #{arg0}")
+    void updateUserIntroduceFlag(int user_id,int flag);
 
 }
 

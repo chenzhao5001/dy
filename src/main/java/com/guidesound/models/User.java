@@ -35,6 +35,33 @@ public class User {
     private String license;
     private String confirmation_letter;
     private String shop_prove;
+    private int name_flag;
+    private int head_flag;
+    private int user_introduce_flag;
+
+    public int getName_flag() {
+        return name_flag;
+    }
+
+    public void setName_flag(int name_flag) {
+        this.name_flag = name_flag;
+    }
+
+    public int getHead_flag() {
+        return head_flag;
+    }
+
+    public void setHead_flag(int head_flag) {
+        this.head_flag = head_flag;
+    }
+
+    public int getUser_introduce_flag() {
+        return user_introduce_flag;
+    }
+
+    public void setUser_introduce_flag(int user_introduce_flag) {
+        this.user_introduce_flag = user_introduce_flag;
+    }
 
     public String getIdentity_card() {
         return identity_card;
