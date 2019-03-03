@@ -4,21 +4,21 @@ import javax.validation.constraints.NotNull;
 
 public class TeacherDTO {
     @NotNull(message = "id:不能为空;")
-    String id;
+    String id = "0";
     @NotNull(message = "name:不能为空;")
-    String name;
+    String name = "";
     @NotNull(message = "sex:不能为空;")
-    String sex;
+    String sex = "0";
     @NotNull(message = "subject:不能为空;")
-    String subject;
+    String subject = "0";
     @NotNull(message = "level:不能为空;")
-    String level;
+    String level = "0";
     @NotNull(message = "certificate:不能为空;")
-    String certificate;
+    String certificate = "";
     @NotNull(message = "introduction:不能为空;")
-    String introduction;
+    String introduction = "";
     @NotNull(message = "save:不能为空;")
-    String save;
+    String save = "0";
 
     public String getId() {
         return id;

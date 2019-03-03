@@ -3,42 +3,42 @@ import javax.validation.constraints.NotNull;
 
 public class CourseClassDTO {
     @NotNull(message = "course_id:不能为空;")
-    String course_id;
+    String course_id = "0";
     @NotNull(message = "course_pic:不能为空;")
-    String course_pic;
+    String course_pic = "";
     @NotNull(message = "course_name:不能为空;")
-    String course_name;
+    String course_name = "";
     @NotNull(message = "subject:不能为空;")
-    String subject;
+    String subject = "";
     @NotNull(message = "grade:不能为空;")
-    String grade;
+    String grade = "0";
     @NotNull(message = "form:不能为空;")
-    String form;
+    String form = "0";
     @NotNull(message = "max_person:不能为空;")
-    String max_person;
+    String max_person = "0";
     @NotNull(message = "all_hours:不能为空;")
-    String all_hours;
+    String all_hours = "0";
     @NotNull(message = "all_charge:不能为空;")
-    String all_charge;
+    String all_charge = "0";
     @NotNull(message = "test_form:不能为空;")
-    String test_form;
+    String test_form = "0";
     @NotNull(message = "test_duration:不能为空;")
-    String test_duration;
+    String test_duration = "0";
     @NotNull(message = "test_charge:不能为空;")
-    String test_charge;
+    String test_charge = "0";
     @NotNull(message = "course_content:不能为空;")
-    String course_content;
+    String course_content = "";
     @NotNull(message = "outline:不能为空;")
-    String outline;
+    String outline = "";
     @NotNull(message = "introduction_teacher:不能为空;")
-    String introduction_teacher;
+    String introduction_teacher = "";
     @NotNull(message = "teacher_id:不能为空;")
-    String teacher_id;
+    String teacher_id = "0";
     @NotNull(message = "teacher_name:不能为空;")
-    String teacher_name;
+    String teacher_name = "";
 
     @NotNull(message = "save:不能为空;")
-    String save;
+    String save = "0";
 
     public String getCourse_id() {
         return course_id;

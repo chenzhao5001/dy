@@ -17,4 +17,6 @@ public interface IExamine {
     void addCommodityExamine(int user_id,int type,int commodity_id, String shop_url);
     @Select("select * from commodity_examine")
     List<CommodityExamine> getCommodityExamine();
+
+    void addCourseExamine(int user_id,int type,int commodity_id, String shop_url);
 }

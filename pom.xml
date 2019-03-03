@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.guidesound</groupId>
-    <artifactId>guide_sound</artifactId>
+    <artifactId>guidesound</artifactId>
     <version>1.0-SNAPSHOT</version>
-
+    <packaging>war</packaging>
     <dependencies>
 
         <dependency>
@@ -178,11 +178,11 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <port>80</port>
+                    <port>8181</port>
                     <path>/guidesound</path>
-                    <url>http://140.143.121.78/manager/text</url>
-                    <username>chenzhao</username>
-                    <password>235566</password>
+                    <url>http://140.143.121.78/manager/text</url><!--url为tomcat访问路径-->
+                    <username>chenzhao</username>  <!--之前设置的用户名-->
+                    <password>235566</password>  <!--之前设置的密 -->
                 </configuration>
             </plugin>
             <plugin>
@@ -194,6 +194,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
