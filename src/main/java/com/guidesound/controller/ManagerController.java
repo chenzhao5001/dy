@@ -655,6 +655,14 @@ public class ManagerController extends BaseController {
         List<CommodityExamine> list = iExamine.getCommodityExamine();
         return JSONResult.ok(list);
     }
+
+
+    @RequestMapping("/course_examine")
+    @ResponseBody
+    JSONResult getCourseExamine() {
+        List<CourseExamine> list = iExamine.getCourseExamine();
+        return JSONResult.ok(list);
+    }
 }
 
 

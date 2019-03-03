@@ -32,6 +32,7 @@ public class Course {
     String course_content;
     String outline;
 
+
     public int getId() {
         return id;
     }

@@ -1,6 +1,7 @@
 package com.guidesound.dao;
 
 import com.guidesound.models.CommodityExamine;
+import com.guidesound.models.CourseExamine;
 import com.guidesound.models.UserExamine;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
@@ -18,5 +19,9 @@ public interface IExamine {
     @Select("select * from commodity_examine")
     List<CommodityExamine> getCommodityExamine();
 
-    void addCourseExamine(int user_id,int type,int commodity_id, String shop_url);
+    @Select("select * from course_examine")
+    List<CourseExamine> getCourseExamine();
+
+    @Insert("insert into course_examine (type,uid,item_id,item_sub_type) value (#{type},#{uid},#{item_id},#{item_sub_type})")
+    void addCourseExamine(CourseExamine courseExamine);
 }

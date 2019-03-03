@@ -1,6 +1,7 @@
 package com.guidesound.dao;
 
 import com.guidesound.models.Course;
+import com.guidesound.models.CourseExamine;
 import com.guidesound.models.Subject;
 import com.guidesound.models.Teacher;
 import org.apache.ibatis.annotations.*;
@@ -110,6 +111,7 @@ public interface ICourse {
             "#{course_status}," +
             "#{teacher_name}," +
             "#{create_time})")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     void addClass(Course course);
 
     @Update("update course set " +
@@ -133,6 +135,9 @@ public interface ICourse {
             "course_status = #{course_status}," +
             "update_time = #{update_time} where id = #{id}")
     void updateClass(Course course);
+
+    @Select("select * from course where id = #{agg0}")
+    Course getCouresByid(int id);
 
     @Update("update course set course_pic = #{arg2} where user_id = #{arg0} and id = #{arg1}")
     void updateCoursePic(int user_id,int course_id,String pic);
@@ -161,9 +166,12 @@ public interface ICourse {
     @Insert("insert into teacher (name,sex,subject,level,certificate,introduction,user_id,status,create_time,update_time) value (#{name},#{sex},#{subject},#{level},#{certificate},#{introduction},#{user_id},#{status},#{create_time},#{update_time})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     void addTeacher(Teacher teacher);
-    @Update("update teacher set name = #{name},sex = #{sex},subject = #{subject},level = #{level},certificate = #{certificate},introduction = #{introduction},status = #{status},update_time = #{update_time} where id = #{id}")
+    @Update("update teacher set name = #{name},sex = #{sex},subject = #{subject},level = #{level},certificate = #{certificate},introduction = #{introduction},status = 1,update_time = #{update_time} where id = #{id}")
     void updateTeacher(Teacher teacher);
+    @Select("select * from teacher where id = #{arg0}")
+    Teacher getTeacherById(int id);
 
     @Select("select * from teacher where user_id = #{arg0}")
     List<Teacher> getTeacherList(int user_id);
+
 }

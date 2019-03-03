@@ -5,12 +5,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.dao.ICourse;
+import com.guidesound.dao.IExamine;
 import com.guidesound.dao.IUser;
 import com.guidesound.dto.Course1V1DTO;
 import com.guidesound.dto.CourseClassDTO;
 import com.guidesound.dto.TeacherDTO;
 import com.guidesound.find.IntroductionInfo;
 import com.guidesound.models.Course;
+import com.guidesound.models.CourseExamine;
 import com.guidesound.models.Teacher;
 import com.guidesound.models.User;
 import com.guidesound.ret.Course1V1;
@@ -45,6 +47,10 @@ public class CourseController extends BaseController{
     private ICourse iCourse;
     @Autowired
     private IUser iUser;
+    @Autowired
+    private IExamine iExamine;
+
+
 
     @RequestMapping("/add_1v1_course")
     @ResponseBody
@@ -117,7 +123,18 @@ public class CourseController extends BaseController{
 
         if(courseClassDTO.getCourse_id().equals("0")) {  //新建
             iCourse.addClass(course);
+            CourseExamine courseExamine = new CourseExamine();
+            courseExamine.setType(7);
+            courseExamine.setItem_id(course.getId());
+            courseExamine.setUid(getCurrentUserId());
+            courseExamine.setItem_sub_type(1);
         } else {  //更新
+
+            Course course_temp  = iCourse.getCouresByid(course.getId());
+            if(course_temp != null && (course_temp.getCourse_status() == 0 || course_temp.getCourse_status() == 1)) {
+                return JSONResult.errorMsg("正在审核，无法修改老师信息");
+            }
+            course.setUpdate_time((int) (new Date().getTime() /1000));
             iCourse.updateClass(course);
         }
 
@@ -152,7 +169,7 @@ public class CourseController extends BaseController{
             courseItem.setCourse_name(course.getCourse_name());
             courseItem.setForm(getCourseFormById(course.getForm()));
             courseItem.setCourse_type(course.getType());
-            courseItem.setCourse_type_name(getCourseTypeNameById(course.getType()));
+            courseItem.setCourse_type_name(course.getType() == 0 ? "1对1授课 " : "班课");
             courseItem.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
             courseItem.setGrade(SignMap.getGradeTypeByID(course.getGrade()));
             courseItem.setPrice(course.getPrice_one_hour());
@@ -259,7 +276,18 @@ public class CourseController extends BaseController{
             teacher.setCreate_time((int) (new Date().getTime() /1000));
             teacher.setUpdate_time((int) (new Date().getTime() /1000));
             iCourse.addTeacher(teacher);
+            CourseExamine courseExamine = new CourseExamine();
+            courseExamine.setType(6);
+            courseExamine.setItem_id(teacher.getId());
+            courseExamine.setUid(getCurrentUserId());
+            courseExamine.setItem_sub_type(0);
+            iExamine.addCourseExamine(courseExamine);
+
         } else { //修改
+            Teacher teacher_temp = iCourse.getTeacherById(teacher.getId());
+            if(teacher_temp != null && (teacher_temp.getStatus() == 0 || teacher_temp.getStatus() == 1)) {
+                return JSONResult.errorMsg("正在审核，无法修改老师信息");
+            }
             teacher.setUpdate_time((int) (new Date().getTime() /1000));
             iCourse.updateTeacher(teacher);
         }
