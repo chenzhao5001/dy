@@ -71,8 +71,7 @@
           <element id="library" level="project" name="Maven: org.bouncycastle:bcpkix-jdk15on:1.59" />
         </element>
       </element>
-      <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/web.xml" />
-      <element id="dir-copy" path="$PROJECT_DIR$/web" />
+      <element id="javaee-facet-resources" facet="guide_sound/web/Web" />
     </root>
   </artifact>
 </component>

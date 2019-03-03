@@ -24,4 +24,7 @@ public interface IExamine {
 
     @Insert("insert into course_examine (type,uid,item_id,item_sub_type) value (#{type},#{uid},#{item_id},#{item_sub_type})")
     void addCourseExamine(CourseExamine courseExamine);
+
+    @Select("select * from user_examine where user_id = #{arg0} and auth_type = 0")
+    List<UserExamine> getHeadExamine(int user_id,int auth_type);
 }

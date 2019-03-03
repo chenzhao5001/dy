@@ -6,7 +6,6 @@ import com.guidesound.ret.Authentication;
 import com.guidesound.ret.UserAudit;
 import com.guidesound.util.*;
 import com.guidesound.TempStruct.ItemInfo;
-import com.qcloud.Common.Sign;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -613,9 +612,29 @@ public class ManagerController extends BaseController {
         return JSONResult.ok(list);
     }
 
-    @RequestMapping(value = "/examine_video_common")
+    @RequestMapping(value = "/examine_common")
     @ResponseBody
     public JSONResult videoExamineCommon(String type,String uid,String item_id,String result,String failure_id,String failure_content) {
+        if(type.equals("0")) { //头像
+            List<UserExamine> userExamine = iExamine.getHeadExamine(Integer.parseInt(uid),Integer.parseInt(type));
+
+        } else if(type.equals("1")) {  // 昵称
+
+        } else if(type.equals("2")) {  // 简介
+
+        } else if(type.equals("3")) {
+
+        } else if(type.equals("4")) {
+
+        } else if(type.equals("5")) {
+
+        } else if(type.equals("6")) {
+
+        } else if(type.equals("7")) {
+
+        }
+
+
         return JSONResult.ok();
     }
 
