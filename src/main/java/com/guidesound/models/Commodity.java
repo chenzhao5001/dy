@@ -7,8 +7,17 @@ public class Commodity {
     String commodity_pic;
     String commodity_url;
     int commodity_price;
+    int state;
     int create_time;
     int update_time;
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
 
     public int getId() {
         return id;

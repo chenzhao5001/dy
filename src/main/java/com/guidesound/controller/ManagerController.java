@@ -616,23 +616,82 @@ public class ManagerController extends BaseController {
     @ResponseBody
     public JSONResult videoExamineCommon(String type,String uid,String item_id,String result,String failure_id,String failure_content) {
         if(type.equals("0")) { //头像
-            List<UserExamine> userExamine = iExamine.getHeadExamine(Integer.parseInt(uid),Integer.parseInt(type));
+            List<UserExamine> userExamine = iExamine.getUserExamine(Integer.parseInt(uid),Integer.parseInt(type));
+            if(userExamine.size() > 0) {
+                String head = userExamine.get(0).getText();
+                if(Integer.parseInt(result) == 0) {
+                    iUser.updateHead(Integer.parseInt(uid),head);
+                }
+                iUser.updateUserHeadFlag(Integer.parseInt(uid),1);
+            }
+            iExamine.deleteUserExamine(Integer.parseInt(uid),0);
 
         } else if(type.equals("1")) {  // 昵称
-
+            List<UserExamine> userExamine = iExamine.getUserExamine(Integer.parseInt(uid),Integer.parseInt(type));
+            if(userExamine.size() > 0) {
+                String name = userExamine.get(0).getText();
+                if(Integer.parseInt(result) == 0) {
+                    iUser.updateName(Integer.parseInt(uid),name);
+                }
+                iUser.updateUserNameFlag(Integer.parseInt(uid),1);
+            }
+            iExamine.deleteUserExamine(Integer.parseInt(uid),1);
         } else if(type.equals("2")) {  // 简介
+            List<UserExamine> userExamine = iExamine.getUserExamine(Integer.parseInt(uid),Integer.parseInt(type));
+            if(userExamine.size() > 0) {
+                String introduction = userExamine.get(0).getText();
+                if(Integer.parseInt(result) == 0) {
+                    iUser.upIntroduction(Integer.parseInt(uid),introduction);
+                }
+                iUser.updateUserIntroduceFlag(Integer.parseInt(uid),1);
+            }
+            iExamine.deleteUserExamine(Integer.parseInt(uid),2);
 
-        } else if(type.equals("3")) {
+        } else if(type.equals("3")) { //身份认证
+            List<UserExamine> userExamine = iExamine.getUserExamine(Integer.parseInt(uid),Integer.parseInt(type));
+            if(userExamine.size() > 0) {
+                if(Integer.parseInt(result) == 0) {
+                    iUser.updateAuthState(Integer.parseInt(uid),1);
+                }
+            }
+            iExamine.deleteUserExamine(Integer.parseInt(uid),3);
 
-        } else if(type.equals("4")) {
+        } else if(type.equals("4")) { //设置店铺
+            List<CommodityExamine> commodityExamines = iExamine.getCommodityExamineByInfo(Integer.parseInt(uid),Integer.parseInt(type));
+            if (commodityExamines.size() > 0) {
+                if(Integer.parseInt(result) == 0) {
+                    iUser.updateShop(Integer.parseInt(item_id),commodityExamines.get(0).getShop_url());
+                }
+            }
+            iExamine.deleteCommodityExamine(Integer.parseInt(item_id),4);
 
-        } else if(type.equals("5")) {
+        } else if(type.equals("5")) {  //添加商品
+            List<CommodityExamine> commodityExamines = iExamine.getCommodityExamineByInfo(Integer.parseInt(uid),Integer.parseInt(type));
+            if (commodityExamines.size() > 0) {
+                if(Integer.parseInt(result) == 0) {
+                    iUser.updateCommodityState(Integer.parseInt(item_id),1);
+                }
+            }
+            iExamine.deleteCommodityExamine(Integer.parseInt(item_id),5);
 
-        } else if(type.equals("6")) {
+        } else if(type.equals("6")) {  //辅导老师
+            List<CourseExamine> courseExamine = iExamine.getCourseExamineById(Integer.parseInt(item_id),6);
+            if (courseExamine.size() > 0) {
+                if(Integer.parseInt(result) == 0) {
+                    iCourse.setTeacherState(Integer.parseInt(item_id),1);
+                }
+            }
+            iExamine.deleteCourseExamine(Integer.parseInt(item_id),6);
 
-        } else if(type.equals("7")) {
-
+        } else if(type.equals("7")) {  //辅导课
+            List<CourseExamine> courseExamine = iExamine.getCourseExamineById(Integer.parseInt(item_id),7);
+            if (courseExamine.size() > 0) {
+                if(Integer.parseInt(result) == 0) {
+                    iCourse.setCourseState(Integer.parseInt(item_id),1);
+                }
+            }
         }
+        iExamine.deleteCourseExamine(Integer.parseInt(item_id),7);
 
 
         return JSONResult.ok();

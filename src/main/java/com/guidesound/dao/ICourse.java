@@ -159,6 +159,9 @@ public interface ICourse {
     @Delete("delete from course where id = #{arg0}")
     void deleteCourse(int course_id);
 
+    @Update("update course set course_status = {#arg1} where id = {#arg0}")
+    void setCourseState(int course_id,int course_status);
+
 
     @Select("select * from subject_config")
     List<Subject> getSubject();
@@ -166,6 +169,10 @@ public interface ICourse {
     @Insert("insert into teacher (name,sex,subject,level,certificate,introduction,user_id,status,create_time,update_time) value (#{name},#{sex},#{subject},#{level},#{certificate},#{introduction},#{user_id},#{status},#{create_time},#{update_time})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     void addTeacher(Teacher teacher);
+
+    @Update("update teacher set status = #{arg1} where #{arg0}")
+    void setTeacherState(int id,int state);
+
     @Update("update teacher set name = #{name},sex = #{sex},subject = #{subject},level = #{level},certificate = #{certificate},introduction = #{introduction},status = 1,update_time = #{update_time} where id = #{id}")
     void updateTeacher(Teacher teacher);
     @Select("select * from teacher where id = #{arg0}")

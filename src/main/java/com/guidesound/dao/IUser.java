@@ -334,9 +334,23 @@ public interface IUser {
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     void addCommodity(Commodity commodity);
 
+    @Update("update user_commodity set " +
+            "commodity_name = {#commodity_name}," +
+            "commodity_pic = {#commodity_pic}," +
+            "commodity_url = {#commodity_url}," +
+            "commodity_price = {#commodity_price}," +
+            "state = 0," +
+            " where id = {#id}")
+    void updateCommodity(Commodity commodity);
+
+    @Update("update user_commodity set state = {#arg1} where id = {#arg0}")
+    void updateCommodityState(int id,int state);
+
     @Select("select * from user_commodity where user_id = #{arg0}")
     List<UserCommodity> commodityList(int user_id);
 
+    @Update("update user_shop set shop_url = #{arg1} where user_id = #{arg0}")
+    void updateShop(int user_id,String shop_url);
     @Delete("delete  from user_shop where user_id = #{arg0} and id = #{arg1}")
     void deleteShop(int user_id,String shop_id);
 
@@ -358,6 +372,9 @@ public interface IUser {
     void updateUserNameFlag(int user_id,int flag);
     @Update("update user set introduce_flag = #{arg1} where id = #{arg0}")
     void updateUserIntroduceFlag(int user_id,int flag);
+
+    @Update("update user set auth_state = #{arg1} where id = #{arg0}")
+    void updateAuthState(int user_id,int flag);
 
 }
 
