@@ -308,7 +308,8 @@ public class CourseController extends BaseController{
             teacherItem.setId(item.getId());
             teacherItem.setStatus(item.getStatus());
             teacherItem.setName(item.getName());
-            teacherItem.setSex(item.getSex() == 1 ? "男":"女");
+
+            teacherItem.setSex(SignMap.getSexById(item.getSex()));
             teacherItem.setSubject(SignMap.getSubjectTypeById(item.getSubject()));
             teacherItem.setSubject_id(item.getSubject());
             teacherItem.setLevel(SignMap.getWatchById(item.getLevel()));

@@ -7,112 +7,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b7c7c742-9c4d-41b3-a82e-f22b8938a7fb" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/guidesound.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/guidesound.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/guide_sound_war.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/guide_sound_war_exploded.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181025_225945_xuefulan270x140.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181025_230322_5668e23600011d6506000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_203109_xuefulan270x140.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_203138_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_204321_xuefulan270x140.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_204928_xuefulan270x140.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_205001_5668e23600011d6506000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_205157_5668e23600011d6506000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_210915_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_211707_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_211728_5668e23600011d6506000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_212531_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_213541_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_220106_xuefulan270x140.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_220210_xuefulan270x140.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_220221_5668e23600011d6506000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_220305_5668e23600011d6506000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_220324_xuefulan270x140.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_220916_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_221011_xuefulan270x140.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_221535_5668e23600011d6506000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_222018_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_222026_5668e23600011d6506000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_222034_xuefulan270x140.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_224259_5668e23600011d6506000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181026_225851_5668e23600011d6506000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181027_020011_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181027_020026_xuefulan270x140.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181027_034259_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181027_224135_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181027_224147_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181027_224213_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181027_224235_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181027_224255_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181028_001650_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181028_001713_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181028_001756_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_205559_FvLbITwt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_205636_sKy1grrm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_205810_pN5Nseh1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_210331_ZFlKNbBj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_210755_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_215032_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_215107_5668e23600011d6506000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_215129_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_215353_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_215836_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_215927_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_220059_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_220951_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_221740_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_221807_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_221922_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_222217_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_222253_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_222404_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_222443_5746788d0001677106000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_223631_5668e23600011d6506000338-240-135.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_223642_xuefulan270x140.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_224504_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_224512_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_225043_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_225048_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_225117_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_225123_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_225144_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_225201_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_225312_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_225451_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_225534_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_225541_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_230622_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_230952_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_230957_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_231142_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_231153_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_231809_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_232214_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_233628_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_233927_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_233951_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_234118_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_234124_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181030_234753_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181103_162917_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181103_163144_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181104_234153_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181104_234202_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181104_234715_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181104_234726_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181105_012838_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181113_221004_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181114_234808_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181114_234842_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181114_234931_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181114_234955_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181114_235025_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181115_145427_微信图片_20181027223143.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181115_145442_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181115_162647_微信图片_20181027223417.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit_upload/20181115_162926_微信图片_20181027223143.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/guide_sound.iml" beforeDir="false" afterPath="$PROJECT_DIR$/guide_sound.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IExamine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IExamine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/CourseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/CourseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -125,21 +25,9 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-425">
-              <caret line="586" column="54" selection-start-line="586" selection-start-column="30" selection-end-line="586" selection-end-column="54" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-22352">
+            <state relative-caret-position="1675">
               <caret line="95" column="62" selection-start-line="95" selection-start-column="62" selection-end-line="95" selection-end-column="62" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -151,7 +39,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/Register.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2527">
+            <state relative-caret-position="175">
               <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
             </state>
           </provider>
@@ -160,7 +48,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/MessageController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3502">
+            <state relative-caret-position="175">
               <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
             </state>
           </provider>
@@ -169,7 +57,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/UserExamine.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="448">
+            <state relative-caret-position="750">
               <caret line="42" column="29" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="29" />
               <folding>
                 <element signature="e#813#814#0" expanded="true" />
@@ -216,29 +104,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="141">
-              <caret line="619" column="114" selection-start-line="619" selection-start-column="114" selection-end-line="619" selection-end-column="114" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IUser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
-              <caret line="61" column="16" selection-start-line="61" selection-start-column="16" selection-end-line="61" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/CourseController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-6872">
-              <caret line="139" selection-start-line="139" selection-end-line="139" />
+            <state relative-caret-position="-450">
+              <caret line="203" column="9" lean-forward="true" selection-start-line="203" selection-start-column="9" selection-end-line="203" selection-end-column="9" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -247,9 +117,61 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IUser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1425">
+              <caret line="61" column="16" selection-start-line="61" selection-start-column="16" selection-end-line="61" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/CourseController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="158">
+              <caret line="310" lean-forward="true" selection-start-line="310" selection-end-line="310" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="295">
+              <caret line="328" column="35" selection-start-line="328" selection-start-column="25" selection-end-line="328" selection-end-column="35" />
+              <folding>
+                <element signature="e#1559#1560#0" expanded="true" />
+                <element signature="e#1584#1585#0" expanded="true" />
+                <element signature="e#1617#1618#0" expanded="true" />
+                <element signature="e#1645#1646#0" expanded="true" />
+                <element signature="e#1681#1682#0" expanded="true" />
+                <element signature="e#1713#1714#0" expanded="true" />
+                <element signature="e#1763#1764#0" expanded="true" />
+                <element signature="e#1805#1806#0" expanded="true" />
+                <element signature="e#2104#2105#0" expanded="true" />
+                <element signature="e#2150#2151#0" expanded="true" />
+                <element signature="e#12585#12586#0" expanded="true" />
+                <element signature="e#12624#12625#0" expanded="true" />
+                <element signature="e#12687#12688#0" expanded="true" />
+                <element signature="e#12722#12723#0" expanded="true" />
+                <element signature="e#12778#12779#0" expanded="true" />
+                <element signature="e#12811#12812#0" expanded="true" />
+                <element signature="e#12870#12871#0" expanded="true" />
+                <element signature="e#12902#12903#0" expanded="true" />
+                <element signature="e#13988#13989#0" expanded="true" />
+                <element signature="e#14021#14022#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IExamine.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
+            <state relative-caret-position="550">
               <caret line="28" column="20" selection-start-line="28" selection-start-column="20" selection-end-line="28" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -261,7 +183,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-21866">
+            <state relative-caret-position="500">
               <caret line="55" selection-start-line="55" selection-end-line="55" />
             </state>
           </provider>
@@ -279,7 +201,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getGradetList</find>
       <find>course_list</find>
       <find>teacher_id</find>
       <find>299</find>
@@ -309,6 +230,7 @@
       <find>add_class_course</find>
       <find>course_form</find>
       <find>add_te</find>
+      <find>女</find>
     </findStrings>
     <dirStrings>
       <dir>E:\work\guide_sound\src\main\java</dir>
@@ -371,13 +293,13 @@
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/Teacher.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dto/TeacherDTO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dto/CourseClassDTO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/CourseExamine.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/ICourse.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/Course.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/CourseController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IExamine.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/CourseController.java" />
       </list>
     </option>
   </component>
@@ -433,9 +355,9 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="897" />
-    <option name="y" value="238" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="896" />
+    <option name="y" value="237" />
     <option name="width" value="215" />
     <option name="height" value="60" />
   </component>
@@ -447,6 +369,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -565,13 +488,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551626336619" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551627105293" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="project.structure.last.edited" value="Artifacts" />
@@ -800,12 +722,13 @@
       <workItem from="1551362759928" duration="17501000" />
       <workItem from="1551455952667" duration="1315000" />
       <workItem from="1551457383284" duration="221000" />
-      <workItem from="1551457800609" duration="17462000" />
+      <workItem from="1551457800609" duration="18230000" />
+      <workItem from="1551681538304" duration="1445000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="860326000" />
+    <option name="totallyTimeSpent" value="862539000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -820,8 +743,7 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Web" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48867315" visible="true" weight="0.34450403" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48867315" visible="true" weight="0.34919572" />
       <window_info id="Structure" order="1" weight="0.24932976" />
       <window_info id="Designer" order="2" />
       <window_info id="JRebel" order="3" sideWeight="0.51132685" side_tool="true" weight="0.2730711" />
@@ -829,11 +751,11 @@
       <window_info id="UI Designer" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info id="Capture Tool" order="7" />
-      <window_info anchor="bottom" id="Java Enterprise" />
+      <window_info id="Web" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.38101983" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.42776203" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.48592493" weight="0.31161472" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.48592493" visible="true" weight="0.31161472" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3286119" />
@@ -848,6 +770,7 @@
       <window_info anchor="bottom" id="JRebel Console" order="15" sideWeight="0.51407504" side_tool="true" weight="0.31161472" />
       <window_info anchor="bottom" id="Docker" order="16" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="17" />
+      <window_info anchor="bottom" id="Java Enterprise" order="18" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -1603,35 +1526,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1175">
-          <caret line="313" column="29" selection-start-line="313" selection-start-column="29" selection-end-line="313" selection-end-column="29" />
-          <folding>
-            <element signature="e#1559#1560#0" expanded="true" />
-            <element signature="e#1584#1585#0" expanded="true" />
-            <element signature="e#1617#1618#0" expanded="true" />
-            <element signature="e#1645#1646#0" expanded="true" />
-            <element signature="e#1681#1682#0" expanded="true" />
-            <element signature="e#1713#1714#0" expanded="true" />
-            <element signature="e#1763#1764#0" expanded="true" />
-            <element signature="e#1805#1806#0" expanded="true" />
-            <element signature="e#2104#2105#0" expanded="true" />
-            <element signature="e#2150#2151#0" expanded="true" />
-            <element signature="e#12585#12586#0" expanded="true" />
-            <element signature="e#12624#12625#0" expanded="true" />
-            <element signature="e#12687#12688#0" expanded="true" />
-            <element signature="e#12722#12723#0" expanded="true" />
-            <element signature="e#12778#12779#0" expanded="true" />
-            <element signature="e#12811#12812#0" expanded="true" />
-            <element signature="e#12870#12871#0" expanded="true" />
-            <element signature="e#12902#12903#0" expanded="true" />
-            <element signature="e#13988#13989#0" expanded="true" />
-            <element signature="e#14021#14022#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/Course.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="25">
@@ -1668,40 +1562,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/Register.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2527">
-          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/MessageController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3502">
-          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/CourseController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6872">
-          <caret line="139" selection-start-line="139" selection-end-line="139" />
+        <state relative-caret-position="14175">
+          <caret line="586" column="54" selection-start-line="586" selection-start-column="30" selection-end-line="586" selection-end-column="54" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-21866">
-          <caret line="55" selection-start-line="55" selection-end-line="55" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-22352">
+        <state relative-caret-position="1675">
           <caret line="95" column="62" selection-start-line="95" selection-start-column="62" selection-end-line="95" selection-end-column="62" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1709,9 +1582,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/Register.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/MessageController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/UserExamine.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="448">
+        <state relative-caret-position="750">
           <caret line="42" column="29" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="29" />
           <folding>
             <element signature="e#813#814#0" expanded="true" />
@@ -1757,9 +1644,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IUser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1425">
+          <caret line="61" column="16" selection-start-line="61" selection-start-column="16" selection-end-line="61" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IExamine.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
+        <state relative-caret-position="550">
           <caret line="28" column="20" selection-start-line="28" selection-start-column="20" selection-end-line="28" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1767,27 +1661,59 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IUser.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="61" column="16" selection-start-line="61" selection-start-column="16" selection-end-line="61" selection-end-column="16" />
+        <state relative-caret-position="500">
+          <caret line="55" selection-start-line="55" selection-end-line="55" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-425">
-          <caret line="586" column="54" selection-start-line="586" selection-start-column="30" selection-end-line="586" selection-end-column="54" />
+        <state relative-caret-position="-450">
+          <caret line="203" column="9" lean-forward="true" selection-start-line="203" selection-start-column="9" selection-end-line="203" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="619" column="114" selection-start-line="619" selection-start-column="114" selection-end-line="619" selection-end-column="114" />
+        <state relative-caret-position="295">
+          <caret line="328" column="35" selection-start-line="328" selection-start-column="25" selection-end-line="328" selection-end-column="35" />
+          <folding>
+            <element signature="e#1559#1560#0" expanded="true" />
+            <element signature="e#1584#1585#0" expanded="true" />
+            <element signature="e#1617#1618#0" expanded="true" />
+            <element signature="e#1645#1646#0" expanded="true" />
+            <element signature="e#1681#1682#0" expanded="true" />
+            <element signature="e#1713#1714#0" expanded="true" />
+            <element signature="e#1763#1764#0" expanded="true" />
+            <element signature="e#1805#1806#0" expanded="true" />
+            <element signature="e#2104#2105#0" expanded="true" />
+            <element signature="e#2150#2151#0" expanded="true" />
+            <element signature="e#12585#12586#0" expanded="true" />
+            <element signature="e#12624#12625#0" expanded="true" />
+            <element signature="e#12687#12688#0" expanded="true" />
+            <element signature="e#12722#12723#0" expanded="true" />
+            <element signature="e#12778#12779#0" expanded="true" />
+            <element signature="e#12811#12812#0" expanded="true" />
+            <element signature="e#12870#12871#0" expanded="true" />
+            <element signature="e#12902#12903#0" expanded="true" />
+            <element signature="e#13988#13989#0" expanded="true" />
+            <element signature="e#14021#14022#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/CourseController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="310" lean-forward="true" selection-start-line="310" selection-end-line="310" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

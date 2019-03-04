@@ -186,6 +186,7 @@ public class SignMap {
     static Map<Integer,String> course_type;
     static Map<Integer,String> course_form;
     static Map<Integer,String> course_type_name;
+    static Map<Integer,String> sex_type;
 
     static boolean flag = false;
 
@@ -321,7 +322,15 @@ public class SignMap {
         course_type_name.put(4,"自动下架");
         course_type_name.put(5,"手动下架");
 
+        sex_type.put(1,"男");
+        sex_type.put(2,"女");
+    }
 
+    public static String getSexById(int id) {
+        if(!sex_type.containsKey(id)) {
+            return "未知";
+        }
+        return sex_type.get(id);
     }
 
     public static String getCourseFormById(int id) {
