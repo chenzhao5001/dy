@@ -1,7 +1,6 @@
 package com.guidesound.dao;
 
 import com.guidesound.models.Course;
-import com.guidesound.models.CourseExamine;
 import com.guidesound.models.Subject;
 import com.guidesound.models.Teacher;
 import org.apache.ibatis.annotations.*;

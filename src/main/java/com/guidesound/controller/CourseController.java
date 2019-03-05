@@ -379,7 +379,7 @@ public class CourseController extends BaseController{
 
         courseClass.setMax_person(course.getMax_person());
         courseClass.setAll_hours(course.getAll_hours());
-        courseClass.setAll_charge(course.getTest_charge());
+        courseClass.setAll_charge(course.getAll_charge());
 
         courseClass.setTest_form(getCourseFormById(course.getTest_form()));
         courseClass.setTest_duration(course.getTest_duration());

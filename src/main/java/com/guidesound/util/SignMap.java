@@ -322,6 +322,7 @@ public class SignMap {
         course_type_name.put(4,"自动下架");
         course_type_name.put(5,"手动下架");
 
+        sex_type = new HashMap<>();
         sex_type.put(1,"男");
         sex_type.put(2,"女");
     }

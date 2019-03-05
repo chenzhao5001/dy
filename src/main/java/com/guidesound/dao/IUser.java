@@ -350,7 +350,7 @@ public interface IUser {
     List<UserCommodity> commodityList(int user_id);
 
     @Update("update user_shop set shop_url = #{arg1} where user_id = #{arg0}")
-    void updateShop(int user_id,String shop_url);
+    void updateShopbyUserId(int user_id,String shop_url);
     @Delete("delete  from user_shop where user_id = #{arg0} and id = #{arg1}")
     void deleteShop(int user_id,String shop_id);
 

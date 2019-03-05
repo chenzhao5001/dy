@@ -26,7 +26,7 @@ public interface IExamine {
     void addCourseExamine(CourseExamine courseExamine);
 
     @Select("select * from user_examine where user_id = #{arg0} and auth_type = #{arg1}")
-    List<UserExamine> getUserExamine(int user_id,int auth_type);
+    List<UserExamine> getUserExamineByInfo(int user_id,int auth_type);
     @Delete("delete from user_examine where user_id = #{arg0} and auth_type = #{arg1}")
     void deleteUserExamine(int user_id,int auth_type);
 

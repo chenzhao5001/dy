@@ -616,7 +616,7 @@ public class ManagerController extends BaseController {
     @ResponseBody
     public JSONResult videoExamineCommon(String type,String uid,String item_id,String result,String failure_id,String failure_content) {
         if(type.equals("0")) { //头像
-            List<UserExamine> userExamine = iExamine.getUserExamine(Integer.parseInt(uid),Integer.parseInt(type));
+            List<UserExamine> userExamine = iExamine.getUserExamineByInfo(Integer.parseInt(uid),Integer.parseInt(type));
             if(userExamine.size() > 0) {
                 String head = userExamine.get(0).getText();
                 if(Integer.parseInt(result) == 0) {
@@ -627,7 +627,7 @@ public class ManagerController extends BaseController {
             iExamine.deleteUserExamine(Integer.parseInt(uid),0);
 
         } else if(type.equals("1")) {  // 昵称
-            List<UserExamine> userExamine = iExamine.getUserExamine(Integer.parseInt(uid),Integer.parseInt(type));
+            List<UserExamine> userExamine = iExamine.getUserExamineByInfo(Integer.parseInt(uid),Integer.parseInt(type));
             if(userExamine.size() > 0) {
                 String name = userExamine.get(0).getText();
                 if(Integer.parseInt(result) == 0) {
@@ -637,7 +637,7 @@ public class ManagerController extends BaseController {
             }
             iExamine.deleteUserExamine(Integer.parseInt(uid),1);
         } else if(type.equals("2")) {  // 简介
-            List<UserExamine> userExamine = iExamine.getUserExamine(Integer.parseInt(uid),Integer.parseInt(type));
+            List<UserExamine> userExamine = iExamine.getUserExamineByInfo(Integer.parseInt(uid),Integer.parseInt(type));
             if(userExamine.size() > 0) {
                 String introduction = userExamine.get(0).getText();
                 if(Integer.parseInt(result) == 0) {
@@ -648,7 +648,7 @@ public class ManagerController extends BaseController {
             iExamine.deleteUserExamine(Integer.parseInt(uid),2);
 
         } else if(type.equals("3")) { //身份认证
-            List<UserExamine> userExamine = iExamine.getUserExamine(Integer.parseInt(uid),Integer.parseInt(type));
+            List<UserExamine> userExamine = iExamine.getUserExamineByInfo(Integer.parseInt(uid),Integer.parseInt(type));
             if(userExamine.size() > 0) {
                 if(Integer.parseInt(result) == 0) {
                     iUser.updateAuthState(Integer.parseInt(uid),1);
@@ -660,7 +660,7 @@ public class ManagerController extends BaseController {
             List<CommodityExamine> commodityExamines = iExamine.getCommodityExamineByInfo(Integer.parseInt(uid),Integer.parseInt(type));
             if (commodityExamines.size() > 0) {
                 if(Integer.parseInt(result) == 0) {
-                    iUser.updateShop(Integer.parseInt(item_id),commodityExamines.get(0).getShop_url());
+                    iUser.updateShopbyUserId(Integer.parseInt(item_id),commodityExamines.get(0).getShop_url());
                 }
             }
             iExamine.deleteCommodityExamine(Integer.parseInt(item_id),4);
