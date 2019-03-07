@@ -82,8 +82,20 @@ public class CourseController extends BaseController{
             course.setCreate_time((int) (new Date().getTime() / 1000));
             iCourse.add1v1(course);
         } else {  //更新
+            Course course_temp  = iCourse.getCouresByid(course.getId());
+            if(course_temp != null && (course_temp.getCourse_status() == 1)) {
+                return JSONResult.errorMsg("正在审核，无法修改1v1课程信息");
+            }
             course.setUpdate_time((int) (new Date().getTime() / 1000));
             iCourse.update1V1(course);
+        }
+        if( course1V1DTO.getSave().equals("1")) {
+            CourseExamine courseExamine = new CourseExamine();
+            courseExamine.setType(7);
+            courseExamine.setItem_id(course.getId());
+            courseExamine.setUid(getCurrentUserId());
+            courseExamine.setItem_sub_type(0);
+            iExamine.addCourseExamine(courseExamine);
         }
 
         return JSONResult.ok();
@@ -123,21 +135,21 @@ public class CourseController extends BaseController{
 
         if(courseClassDTO.getCourse_id().equals("0")) {  //新建
             iCourse.addClass(course);
+        } else {  //更新
+            Course course_temp  = iCourse.getCouresByid(course.getId());
+            if(course_temp != null && (course_temp.getCourse_status() == 1)) {
+                return JSONResult.errorMsg("正在审核，无法修改班课信息");
+            }
+            course.setUpdate_time((int) (new Date().getTime() /1000));
+            iCourse.updateClass(course);
+        }
+        if(courseClassDTO.getSave().equals("1")) {
             CourseExamine courseExamine = new CourseExamine();
             courseExamine.setType(7);
             courseExamine.setItem_id(course.getId());
             courseExamine.setUid(getCurrentUserId());
             courseExamine.setItem_sub_type(1);
-        } else {  //更新
-
-            Course course_temp  = iCourse.getCouresByid(course.getId());
-            if(course_temp != null && (course_temp.getCourse_status() == 0 || course_temp.getCourse_status() == 1)) {
-                return JSONResult.errorMsg("正在审核，无法修改老师信息");
-            }
-            course.setUpdate_time((int) (new Date().getTime() /1000));
-            iCourse.updateClass(course);
         }
-
         return JSONResult.ok();
     }
 
@@ -172,7 +184,11 @@ public class CourseController extends BaseController{
             courseItem.setCourse_type_name(course.getType() == 0 ? "1对1授课 " : "班课");
             courseItem.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
             courseItem.setGrade(SignMap.getGradeTypeByID(course.getGrade()));
-            courseItem.setPrice(course.getPrice_one_hour());
+            if(course.getType() == 0) {
+                courseItem.setPrice(course.getPrice_one_hour());
+            } else {
+                courseItem.setPrice(course.getAll_charge());
+            }
             course_list.add(courseItem);
         }
         return JSONResult.ok(course_list);
@@ -276,20 +292,23 @@ public class CourseController extends BaseController{
             teacher.setCreate_time((int) (new Date().getTime() /1000));
             teacher.setUpdate_time((int) (new Date().getTime() /1000));
             iCourse.addTeacher(teacher);
+
+        } else { //修改
+            Teacher teacher_temp = iCourse.getTeacherById(teacher.getId());
+            if(teacher_temp != null && (teacher_temp.getStatus() == 1)) {
+                return JSONResult.errorMsg("正在审核，无法修改老师信息");
+            }
+            teacher.setUpdate_time((int) (new Date().getTime() /1000));
+            iCourse.updateTeacher(teacher);
+        }
+        //添加审核
+        if (teacherDTO.getSave().equals("1")) {
             CourseExamine courseExamine = new CourseExamine();
             courseExamine.setType(6);
             courseExamine.setItem_id(teacher.getId());
             courseExamine.setUid(getCurrentUserId());
             courseExamine.setItem_sub_type(0);
             iExamine.addCourseExamine(courseExamine);
-
-        } else { //修改
-            Teacher teacher_temp = iCourse.getTeacherById(teacher.getId());
-            if(teacher_temp != null && (teacher_temp.getStatus() == 0 || teacher_temp.getStatus() == 1)) {
-                return JSONResult.errorMsg("正在审核，无法修改老师信息");
-            }
-            teacher.setUpdate_time((int) (new Date().getTime() /1000));
-            iCourse.updateTeacher(teacher);
         }
         return JSONResult.ok();
     }
@@ -399,7 +418,7 @@ public class CourseController extends BaseController{
 
         courseClass.setIntroduction_teacher(course.getIntroduction_teacher());
         courseClass.setTeacher_id(course.getTeacher_id());
-        courseClass.setTeacher_name(courseClass.getTeacher_name());
+        courseClass.setTeacher_name(course.getTeacher_name());
 
         return JSONResult.ok(courseClass);
     }

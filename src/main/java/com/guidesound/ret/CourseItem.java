@@ -11,6 +11,15 @@ public class CourseItem {
       String grade;
       String form;
       int price;
+      int all_charge;
+
+    public int getAll_charge() {
+        return all_charge;
+    }
+
+    public void setAll_charge(int all_charge) {
+        this.all_charge = all_charge;
+    }
 
     public int getCourse_id() {
         return course_id;

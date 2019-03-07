@@ -60,6 +60,26 @@ public class UserInfo {
     public String im_appid = "1400158534";
     public String friend_state = "0";
 
+    public int name_flag;
+    public int head_flag;
+
+
+    public int getName_flag() {
+        return name_flag;
+    }
+
+    public void setName_flag(int name_flag) {
+        this.name_flag = name_flag;
+    }
+
+    public int getHead_flag() {
+        return head_flag;
+    }
+
+    public void setHead_flag(int head_flag) {
+        this.head_flag = head_flag;
+    }
+
     public int getVideo_duration() {
         return video_duration;
     }
