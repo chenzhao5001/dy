@@ -614,7 +614,7 @@ public class ManagerController extends BaseController {
 
     @RequestMapping(value = "/examine_common")
     @ResponseBody
-    public JSONResult videoExamineCommon(String type,String uid,String item_id,String result,String failure_id,String failure_content) {
+    public JSONResult videoExamineCommon(String type,String uid,String item_id,String result,String failure_id,String failure_content) throws IOException {
         if(type.equals("0")) { //头像
             List<UserExamine> userExamine = iExamine.getUserExamineByInfo(Integer.parseInt(uid),Integer.parseInt(type));
             if(userExamine.size() > 0) {
@@ -676,9 +676,13 @@ public class ManagerController extends BaseController {
 
         } else if(type.equals("6")) {  //辅导老师
             List<CourseExamine> courseExamine = iExamine.getCourseExamineById(Integer.parseInt(item_id),6);
+            Teacher teacher = iCourse.getTeacherById(Integer.parseInt(item_id));
             if (courseExamine.size() > 0) {
                 if(Integer.parseInt(result) == 0) {
                     iCourse.setTeacherState(Integer.parseInt(item_id),1);
+                    TlsSigTest.PushMessage(uid,"您添加的辅导老师“" + teacher.getName() + "”已经通过系统审核，现在可以发布辅导课程了。");
+                } else {
+                    TlsSigTest.PushMessage(uid,"您添加的辅导老师“" + teacher.getName() + "”未通过系统审核，未通过原因是“" + failure_content + "”。");
                 }
             }
             iExamine.deleteCourseExamine(Integer.parseInt(item_id),6);
@@ -686,8 +690,13 @@ public class ManagerController extends BaseController {
         } else if(type.equals("7")) {  //辅导课
             List<CourseExamine> courseExamine = iExamine.getCourseExamineById(Integer.parseInt(item_id),7);
             if (courseExamine.size() > 0) {
+                Course course = iCourse.getCourseById(Integer.parseInt(item_id));
                 if(Integer.parseInt(result) == 0) {
                     iCourse.setCourseState(Integer.parseInt(item_id),1);
+                    TlsSigTest.PushMessage(uid,"您发布的课程“" + course.getCourse_name() + "”已经通过系统审核，快努力发高质量的视频展示您自己吧！");
+                } else {
+                    TlsSigTest.PushMessage(uid,"您发布的课程“" + course.getCourse_name() + "”未通过系统审核，未通过原因是“" + failure_content + "”。");
+
                 }
             }
         }

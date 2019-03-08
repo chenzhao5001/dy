@@ -149,8 +149,8 @@ public interface ICourse {
     @Select("select course_outline from course where id = #{arg0}")
     String getCourseOutline(int course_id);
 
-    @Select("select * from course where id = #{arg0} and type = #{arg1}")
-    Course getCourseById(int course_id,int type);
+    @Select("select * from course where id = #{arg0}")
+    Course getCourseById(int course_id);
 
     @Update("update course set type = #{arg1} where id = #{arg0}")
     void updateCourseType(int course_id,int type);
@@ -169,7 +169,7 @@ public interface ICourse {
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     void addTeacher(Teacher teacher);
 
-    @Update("update teacher set status = #{arg1} where #{arg0}")
+    @Update("update teacher set status = #{arg1} where id = #{arg0}")
     void setTeacherState(int id,int state);
 
     @Update("update teacher set name = #{name},sex = #{sex},subject = #{subject},level = #{level},certificate = #{certificate},introduction = #{introduction},status = 1,update_time = #{update_time} where id = #{id}")
