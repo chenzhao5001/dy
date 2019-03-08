@@ -38,6 +38,15 @@ public class User {
     private int name_flag;
     private int head_flag;
     private int user_introduce_flag;
+    private int auth_state;
+
+    public int getAuth_state() {
+        return auth_state;
+    }
+
+    public void setAuth_state(int auth_state) {
+        this.auth_state = auth_state;
+    }
 
     public int getName_flag() {
         return name_flag;

@@ -293,7 +293,7 @@ public interface IUser {
     void setUserIntroduce(int user_id,String introduce);
 
     @Update("update user set type = #{arg1}," +
-            "auth_state = 1," +
+            "auth_state = 2," +
             "identity_card = #{arg2}," +
             "graduation_card = #{arg3}," +
             "teacher_card = #{arg4}," +
@@ -370,7 +370,7 @@ public interface IUser {
     void updateUserHeadFlag(int user_id,int flag);
     @Update("update user set name_flag = #{arg1} where id = #{arg0}")
     void updateUserNameFlag(int user_id,int flag);
-    @Update("update user set introduce_flag = #{arg1} where id = #{arg0}")
+    @Update("update user set user_introduce_flag = #{arg1} where id = #{arg0}")
     void updateUserIntroduceFlag(int user_id,int flag);
 
     @Update("update user set auth_state = #{arg1} where id = #{arg0}")

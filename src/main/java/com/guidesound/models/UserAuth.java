@@ -1,12 +1,7 @@
 package com.guidesound.models;
 
-public class UserExamine {
-
-    int id;
-    int user_id;
-    int auth_type;
-    String text;
-    String type;
+public class UserAuth {
+    int type;
     String identity_card;
     String graduation_card;
     String teacher_card;
@@ -16,43 +11,11 @@ public class UserExamine {
     String shop_prove;
     String auth_info;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
-
-    public int getAuth_type() {
-        return auth_type;
-    }
-
-    public void setAuth_type(int auth_type) {
-        this.auth_type = auth_type;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 

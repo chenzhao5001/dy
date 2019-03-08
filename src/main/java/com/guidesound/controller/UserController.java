@@ -1250,7 +1250,7 @@ public class UserController extends BaseController{
 
         iExamine.addUserExamine(currentUser.getId(),2,introduce);
         iUser.updateUserIntroduceFlag(currentUser.getId(),0);
-//        iUser.setUserIntroduce(currentUser.getId(),introduce);
+        iUser.setUserIntroduce(currentUser.getId(),introduce);
 //        iUser.addVideoDuration(currentUser.getId(),60);
         return JSONResult.ok();
     }
@@ -1278,8 +1278,8 @@ public class UserController extends BaseController{
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
-        if(currentUser.getType() != 1) {
-            return JSONResult.errorMsg("此用户已经认证过");
+        if(currentUser.getAuth_state() == 2) {
+            return JSONResult.errorMsg("认证中");
         }
 
         int user_id = getCurrentUserId();
@@ -1292,6 +1292,7 @@ public class UserController extends BaseController{
         auth_info = auth_info == null? "":auth_info;
         shop_prove =  shop_prove == null ? "" :shop_prove;
         iUser.setAuthentication(user_id,Integer.parseInt(type),identity_card,graduation_card,teacher_card,achievement,license,confirmation_letter,shop_prove,auth_info);
+        iExamine.addUserAuth(user_id,3,type,identity_card,graduation_card,teacher_card,achievement,license,confirmation_letter,shop_prove,auth_info);
         return JSONResult.ok();
     }
 

@@ -623,7 +623,8 @@ public class ManagerController extends BaseController {
                     iUser.updateHead(Integer.parseInt(uid),head);
                 }
                 iUser.updateUserHeadFlag(Integer.parseInt(uid),1);
-            }            iExamine.deleteUserExamine(Integer.parseInt(uid),0);
+            }
+            iExamine.deleteUserExamine(Integer.parseInt(uid),0);
 
         } else if(type.equals("1")) {  // 昵称
             List<UserExamine> userExamine = iExamine.getUserExamineByInfo(Integer.parseInt(uid),Integer.parseInt(type));
@@ -651,6 +652,11 @@ public class ManagerController extends BaseController {
             if(userExamine.size() > 0) {
                 if(Integer.parseInt(result) == 0) {
                     iUser.updateAuthState(Integer.parseInt(uid),1);
+                    iUser.addVideoDuration(Integer.parseInt(uid),60);
+                    TlsSigTest.SendMessage(uid,"您申请的认证“认证信息”已经通过系统审核，除真实身份体现外，同时您已经可以上传“x”分钟的短视频了。");
+                } else {
+                    iUser.updateAuthState(Integer.parseInt(uid),3);
+                    TlsSigTest.SendMessage(uid,"您申请的`认证“认证信息”未通过系统审核，未通过原因是“审核后台提交的结果”");
                 }
             }
             iExamine.deleteUserExamine(Integer.parseInt(uid),3);
@@ -700,10 +706,8 @@ public class ManagerController extends BaseController {
 
                 }
             }
+            iExamine.deleteCourseExamine(Integer.parseInt(item_id),7);
         }
-        iExamine.deleteCourseExamine(Integer.parseInt(item_id),7);
-
-
         return JSONResult.ok();
     }
 
@@ -722,13 +726,13 @@ public class ManagerController extends BaseController {
             userAudit.setText(userExamine.getText());
 
             Authentication authentication = new Authentication();
-            authentication.setAchivement(userExamine.getAchivement());
-            authentication.setConfirmation_pic(userExamine.getConfirmation_pic());
-            authentication.setEnterprise_card(userExamine.getEnterprise_card());
+            authentication.setAchivement(userExamine.getAchievement());
+            authentication.setConfirmation_pic(userExamine.getConfirmation_letter());
+            authentication.setEnterprise_card(userExamine.getLicense());
             authentication.setGraduation_card(userExamine.getGraduation_card());
             authentication.setIdentity_card(userExamine.getIdentity_card());
-            authentication.setIdentity_info(userExamine.getIdentity_info());
-            authentication.setShop_card(userExamine.getShop_card());
+            authentication.setIdentity_info(userExamine.getAuth_info());
+            authentication.setShop_card(userExamine.getShop_prove());
             authentication.setTeacher_card(userExamine.getTeacher_card());
             authentication.setType(userExamine.getType());
             userAudit.setAuthentication(authentication);

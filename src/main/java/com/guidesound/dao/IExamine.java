@@ -2,6 +2,7 @@ package com.guidesound.dao;
 
 import com.guidesound.models.CommodityExamine;
 import com.guidesound.models.CourseExamine;
+import com.guidesound.models.UserAuth;
 import com.guidesound.models.UserExamine;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -13,6 +14,31 @@ public interface IExamine {
 
     @Insert("insert into user_examine (user_id,auth_type,text) value (#{arg0},#{arg1},#{arg2})")
     void addUserExamine(int user_id,int auth_type,String head);
+
+    @Insert("insert into user_examine (user_id," +
+            "auth_type," +
+            "type," +
+            "identity_card," +
+            "graduation_card," +
+            "teacher_card," +
+            "achievement," +
+            "license," +
+            "confirmation_letter," +
+            "shop_prove," +
+            "auth_info) value (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},#{arg6},#{arg7},#{arg8},#{arg9},#{arg10})")
+    void addUserAuth(
+            int user_id,
+            int auth_type,
+            String type,
+            String identity_card,         //身份证
+            String graduation_card,       //毕业证
+            String teacher_card,          //教师证
+            String achievement,           //成就
+            String license,               //营业执照
+            String confirmation_letter,   //确认书
+            String shop_prove,             //店铺证明
+            String auth_info               //认证信息
+    );
     @Select("select * from user_examine")
     List<UserExamine> getUserExamine();
     @Insert("insert into commodity_examine (user_id,type,commodity_id,shop_url) value (#{arg0},#{arg1},#{arg2},#{arg3})")
