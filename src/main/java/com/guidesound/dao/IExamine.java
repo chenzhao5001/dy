@@ -39,10 +39,10 @@ public interface IExamine {
     @Select("select * from commodity_examine where user_id = #{arg0} and auth_type = #{arg1}")
     List<CommodityExamine> getCommodityExamineByInfo(int user_id,int auth_type);
 
-    @Select("select * from course_examine where item_id = #{arg0} and item_sub_type = #{arg1}")
-    List<CourseExamine> getCourseExamineById(int item_id,int item_sub_type);
+    @Select("select * from course_examine where item_id = #{arg0} and type = #{arg1}")
+    List<CourseExamine> getCourseExamineById(int item_id,int type);
 
     @Delete("delete from course_examine where item_id = #{arg0} and type = #{arg1}")
-    void deleteCourseExamine(int item_id,int item_sub_type);
+    void deleteCourseExamine(int item_id,int type);
 
 }

@@ -172,7 +172,7 @@ public interface ICourse {
     @Update("update teacher set status = #{arg1} where id = #{arg0}")
     void setTeacherState(int id,int state);
 
-    @Update("update teacher set name = #{name},sex = #{sex},subject = #{subject},level = #{level},certificate = #{certificate},introduction = #{introduction},status = 1,update_time = #{update_time} where id = #{id}")
+    @Update("update teacher set name = #{name},sex = #{sex},subject = #{subject},level = #{level},certificate = #{certificate},introduction = #{introduction},status = #{status},update_time = #{update_time} where id = #{id}")
     void updateTeacher(Teacher teacher);
     @Select("select * from teacher where id = #{arg0}")
     Teacher getTeacherById(int id);
