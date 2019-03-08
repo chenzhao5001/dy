@@ -347,7 +347,7 @@ public class CourseController extends BaseController{
             return JSONResult.errorMsg("缺少 course_id");
         }
 
-        Course course = iCourse.getCourseById(Integer.parseInt(course_id),Integer.parseInt("0"));
+        Course course = iCourse.getCourseById(Integer.parseInt(course_id));
         if(course == null) {
             return JSONResult.ok(null);
         }
@@ -380,7 +380,7 @@ public class CourseController extends BaseController{
         if(course_id == null) {
             return JSONResult.errorMsg("缺少 course_id");
         }
-        Course course = iCourse.getCourseById(Integer.parseInt(course_id),Integer.parseInt("1"));
+        Course course = iCourse.getCourseById(Integer.parseInt(course_id));
         if(course == null) {
             return JSONResult.ok(null);
         }
