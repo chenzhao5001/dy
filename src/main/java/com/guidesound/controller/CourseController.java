@@ -443,4 +443,31 @@ public class CourseController extends BaseController{
         return JSONResult.ok();
     }
 
+    @RequestMapping("/teacher_by_id")
+    @ResponseBody
+    JSONResult teacherByid(String teacher_id) {
+        if (teacher_id == null) {
+            return JSONResult.errorMsg("缺少 teacher_id");
+        }
+        Teacher teacher = iCourse.getTeacherById(Integer.parseInt(teacher_id));
+        if(teacher == null) {
+            return JSONResult.errorMsg("老师信息不存在");
+        }
+
+        TeacherItem teacherItem = new TeacherItem();
+        teacherItem.setId(teacher.getId());
+        teacherItem.setStatus(teacher.getStatus());
+        teacherItem.setName(teacher.getName());
+
+        teacherItem.setSex(SignMap.getSexById(teacher.getSex()));
+        teacherItem.setSubject(SignMap.getSubjectTypeById(teacher.getSubject()));
+        teacherItem.setSubject_id(teacher.getSubject());
+        teacherItem.setLevel(SignMap.getWatchById(teacher.getLevel()));
+        teacherItem.setLevel_id(teacher.getLevel());
+        teacherItem.setCertificate(teacher.getCertificate());
+        teacherItem.setIntroduction(teacher.getIntroduction());
+
+        return JSONResult.ok(teacherItem);
+    }
+
 }
