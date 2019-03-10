@@ -13,14 +13,24 @@ public class CourseClass {
     int max_person;
     int all_hours;
     int all_charge;
-    String test_form;
+    int test_time;
     int test_duration;
     int test_charge;
+
     String course_content;
     Object outline;
     String introduction_teacher;
     int teacher_id;
     String teacher_name;
+    int student_count;
+
+    public int getStudent_count() {
+        return student_count;
+    }
+
+    public void setStudent_count(int student_count) {
+        this.student_count = student_count;
+    }
 
     public int getCourse_id() {
         return course_id;
@@ -118,12 +128,12 @@ public class CourseClass {
         this.all_charge = all_charge;
     }
 
-    public String getTest_form() {
-        return test_form;
+    public int getTest_time() {
+        return test_time;
     }
 
-    public void setTest_form(String test_form) {
-        this.test_form = test_form;
+    public void setTest_time(int test_time) {
+        this.test_time = test_time;
     }
 
     public int getTest_duration() {

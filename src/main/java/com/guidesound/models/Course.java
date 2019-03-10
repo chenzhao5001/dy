@@ -16,6 +16,7 @@ public class Course {
     int test_form;
     int test_duration;
     int test_charge;
+    int test_time;
     String introduction_teacher;
     int teacher_id;
     String teacher_name;
@@ -32,6 +33,14 @@ public class Course {
     String course_content;
     String outline;
 
+
+    public int getTest_time() {
+        return test_time;
+    }
+
+    public void setTest_time(int test_time) {
+        this.test_time = test_time;
+    }
 
     public int getId() {
         return id;

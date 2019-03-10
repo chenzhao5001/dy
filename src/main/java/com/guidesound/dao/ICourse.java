@@ -48,6 +48,7 @@ public interface ICourse {
             "#{course_status}," +
             "#{create_time}," +
             "#{update_time})")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     void add1v1(Course course);
 
     @Update("update course set " +
@@ -81,6 +82,7 @@ public interface ICourse {
             "test_form," +
             "test_duration," +
             "test_charge," +
+            "test_time," +
             "course_content," +
             "outline," +
             "introduction_teacher," +
@@ -103,6 +105,7 @@ public interface ICourse {
             "#{test_form}," +
             "#{test_duration}," +
             "#{test_charge}," +
+            "#{test_time}," +
             "#{course_content}," +
             "#{outline}," +
             "#{introduction_teacher}," +
@@ -125,6 +128,7 @@ public interface ICourse {
             "test_form = #{test_form}," +
             "test_duration = #{test_duration}," +
             "test_charge = #{test_charge}," +
+            "test_time = #{test_time}," +
 
             "course_content = #{course_content}," +
             "outline = #{outline}," +
@@ -176,6 +180,9 @@ public interface ICourse {
     void updateTeacher(Teacher teacher);
     @Select("select * from teacher where id = #{arg0}")
     Teacher getTeacherById(int id);
+
+    @Delete("delete from teacher where id = #{arg0}")
+    void deleteTeacher(int id);
 
     @Select("select * from teacher where user_id = #{arg0}")
     List<Teacher> getTeacherList(int user_id);

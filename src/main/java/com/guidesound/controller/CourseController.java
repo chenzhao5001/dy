@@ -126,6 +126,7 @@ public class CourseController extends BaseController{
         course.setForm(Integer.parseInt(courseClassDTO.getForm()));
         course.setTest_duration(Integer.parseInt(courseClassDTO.getTest_duration()));
         course.setTest_charge(Integer.parseInt(courseClassDTO.getTest_charge()));
+        course.setTest_time(Integer.parseInt(courseClassDTO.getTest_time()));
         course.setCourse_content(courseClassDTO.getCourse_content());
         course.setOutline(courseClassDTO.getOutline());
         course.setIntroduction_teacher(courseClassDTO.getIntroduction_teacher());
@@ -149,6 +150,7 @@ public class CourseController extends BaseController{
             courseExamine.setItem_id(course.getId());
             courseExamine.setUid(getCurrentUserId());
             courseExamine.setItem_sub_type(1);
+            iExamine.addCourseExamine(courseExamine);
         }
         return JSONResult.ok();
     }
@@ -400,7 +402,7 @@ public class CourseController extends BaseController{
         courseClass.setAll_hours(course.getAll_hours());
         courseClass.setAll_charge(course.getAll_charge());
 
-        courseClass.setTest_form(getCourseFormById(course.getTest_form()));
+        courseClass.setTest_time(course.getTest_time());
         courseClass.setTest_duration(course.getTest_duration());
         courseClass.setTest_charge(course.getTest_charge());
 
@@ -468,6 +470,18 @@ public class CourseController extends BaseController{
         teacherItem.setIntroduction(teacher.getIntroduction());
 
         return JSONResult.ok(teacherItem);
+    }
+
+    @RequestMapping("/delete_teacher")
+    @ResponseBody
+    JSONResult deleteTeacher(String teacher_id) {
+        if (teacher_id == null) {
+            return JSONResult.errorMsg("缺少 teacher_id");
+        }
+        iCourse.deleteTeacher(Integer.parseInt(teacher_id));
+
+        return JSONResult.ok();
+
     }
 
 }

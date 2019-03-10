@@ -20,8 +20,8 @@ public class CourseClassDTO {
     String all_hours = "0";
     @NotNull(message = "all_charge:不能为空;")
     String all_charge = "0";
-    @NotNull(message = "test_form:不能为空;")
-    String test_form = "0";
+    @NotNull(message = "test_time:不能为空;")
+    String test_time = "0";
     @NotNull(message = "test_duration:不能为空;")
     String test_duration = "0";
     @NotNull(message = "test_charge:不能为空;")
@@ -112,12 +112,12 @@ public class CourseClassDTO {
         this.all_charge = all_charge;
     }
 
-    public String getTest_form() {
-        return test_form;
+    public String getTest_time() {
+        return test_time;
     }
 
-    public void setTest_form(String test_form) {
-        this.test_form = test_form;
+    public void setTest_time(String test_form) {
+        this.test_time = test_form;
     }
 
     public String getTest_duration() {
