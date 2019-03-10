@@ -12,6 +12,15 @@ public class CourseItem {
       String form;
       int price;
       int all_charge;
+      int test_time;
+
+    public int getTest_time() {
+        return test_time;
+    }
+
+    public void setTest_time(int test_time) {
+        this.test_time = test_time;
+    }
 
     public int getAll_charge() {
         return all_charge;
