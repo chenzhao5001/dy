@@ -2,8 +2,7 @@ package com.guidesound.dto;
 
 import javax.validation.constraints.NotNull;
 
-public class OrderClassDTO {
-
+public class Order1V1DTO {
     @NotNull(message = "course_name:不能为空;")
     String course_name;
     @NotNull(message = "teacher_id:不能为空;")
@@ -22,8 +21,6 @@ public class OrderClassDTO {
     String form;
     @NotNull(message = "way:不能为空;")
     String way;
-    @NotNull(message = "max_person:不能为空;")
-    String max_person;
     @NotNull(message = "all_hours:不能为空;")
     String all_hours;
     @NotNull(message = "price_one_hour:不能为空;")
@@ -34,8 +31,6 @@ public class OrderClassDTO {
     String refund_rule;
     @NotNull(message = "tutor_content:不能为空;")
     String tutor_content;
-    @NotNull(message = "outline:不能为空;")
-    String outline;
 
     int type;
     int create_time;
@@ -44,9 +39,16 @@ public class OrderClassDTO {
     public int getUser_id() {
         return user_id;
     }
-
     public void setUser_id(int user_id) {
         this.user_id = user_id;
+    }
+
+    public int getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(int create_time) {
+        this.create_time = create_time;
     }
 
     public int getType() {
@@ -129,14 +131,6 @@ public class OrderClassDTO {
         this.way = way;
     }
 
-    public String getMax_person() {
-        return max_person;
-    }
-
-    public void setMax_person(String max_person) {
-        this.max_person = max_person;
-    }
-
     public String getAll_hours() {
         return all_hours;
     }
@@ -161,14 +155,6 @@ public class OrderClassDTO {
         this.all_charge = all_charge;
     }
 
-    public int getCreate_time() {
-        return create_time;
-    }
-
-    public void setCreate_time(int create_time) {
-        this.create_time = create_time;
-    }
-
     public String getRefund_rule() {
         return refund_rule;
     }
@@ -183,13 +169,5 @@ public class OrderClassDTO {
 
     public void setTutor_content(String tutor_content) {
         this.tutor_content = tutor_content;
-    }
-
-    public String getOutline() {
-        return outline;
-    }
-
-    public void setOutline(String outline) {
-        this.outline = outline;
     }
 }

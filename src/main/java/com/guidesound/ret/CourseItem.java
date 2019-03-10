@@ -13,6 +13,15 @@ public class CourseItem {
       int price;
       int all_charge;
       int test_time;
+      int student_count;
+
+    public int getStudent_count() {
+        return student_count;
+    }
+
+    public void setStudent_count(int student_count) {
+        this.student_count = student_count;
+    }
 
     public int getTest_time() {
         return test_time;

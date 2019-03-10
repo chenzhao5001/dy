@@ -1,6 +1,5 @@
 package com.guidesound.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.guidesound.dao.IUser;
 import com.guidesound.models.UserFriend;
 import com.guidesound.models.UserInfo;

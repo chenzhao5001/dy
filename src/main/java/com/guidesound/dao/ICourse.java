@@ -156,7 +156,7 @@ public interface ICourse {
     @Select("select * from course where id = #{arg0}")
     Course getCourseById(int course_id);
 
-    @Update("update course set type = #{arg1} where id = #{arg0}")
+    @Update("update course set course_status = #{arg1} where id = #{arg0}")
     void updateCourseType(int course_id,int type);
 
     @Delete("delete from course where id = #{arg0}")
