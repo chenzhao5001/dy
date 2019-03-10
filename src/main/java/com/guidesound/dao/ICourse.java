@@ -162,7 +162,7 @@ public interface ICourse {
     @Delete("delete from course where id = #{arg0}")
     void deleteCourse(int course_id);
 
-    @Update("update course set course_status = {#arg1} where id = {#arg0}")
+    @Update("update course set course_status = #{arg1} where id = #{arg0}")
     void setCourseState(int course_id,int course_status);
 
 
