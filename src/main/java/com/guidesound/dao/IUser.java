@@ -328,6 +328,9 @@ public interface IUser {
     UserShop getShopById(int id);
 
     @Select("select * from user_shop where user_id = #{arg0}")
+    List<UserShop> getShopByUserId(int user_id);
+
+    @Select("select * from user_shop where user_id = #{arg0}")
     List<UserShop> shopList(int user_id);
 
     @Insert("insert into user_commodity (user_id,commodity_name,commodity_pic,commodity_url,commodity_price,create_time,update_time) values(#{user_id},#{commodity_name},#{commodity_pic},#{commodity_url},#{commodity_price},#{create_time},#{update_time})")
@@ -351,6 +354,8 @@ public interface IUser {
 
     @Update("update user_shop set shop_url = #{arg1} where user_id = #{arg0}")
     void updateShopbyUserId(int user_id,String shop_url);
+    @Update("update user_shop set state = #{arg1} where user_id = #{arg0}")
+    void updateShopState(int user_id,int state);
     @Delete("delete  from user_shop where user_id = #{arg0} and id = #{arg1}")
     void deleteShop(int user_id,String shop_id);
 

@@ -663,13 +663,20 @@ public class ManagerController extends BaseController {
             iExamine.deleteUserExamine(Integer.parseInt(uid),3);
 
         } else if(type.equals("4")) { //设置店铺
-            List<CommodityExamine> commodityExamines = iExamine.getCommodityExamineByInfo(Integer.parseInt(item_id),Integer.parseInt(type));
-            if (commodityExamines.size() > 0) {
+            List<CommodityExamine> commodityExamines = iExamine.getCommodityExamineByUserId(Integer.parseInt(uid),Integer.parseInt(type));
+            List<UserShop> shop_list = iUser.getShopByUserId(Integer.parseInt(uid));
+            if (commodityExamines.size() > 0 && shop_list.size() > 0) {
                 if(Integer.parseInt(result) == 0) {
-                    iUser.updateShopbyUserId(Integer.parseInt(item_id),commodityExamines.get(0).getShop_url());
+                    iUser.updateShopbyUserId(Integer.parseInt(uid),commodityExamines.get(0).getShop_url());
+                    iUser.updateShopState(Integer.parseInt(uid),1);
+                    TlsSigTest.SendMessage(uid,"您发布的店铺“" + shop_list.get(0).getShop_url() + "”已经通过系统审核，快努力发高质量的视频推广您的商品吧！");
+                } else {
+                    iUser.updateShopState(Integer.parseInt(uid),2);
+                    TlsSigTest.SendMessage(uid,"您发布的店铺“" + shop_list.get(0).getShop_url() + "”未通过系统审核，未通过原因是“" + failure_content + "”。");
                 }
+
             }
-            iExamine.deleteCommodityExamine(Integer.parseInt(item_id),4);
+            iExamine.deleteCommodityExamineByUserId(Integer.parseInt(uid),4);
 
         } else if(type.equals("5")) {  //添加商品
             List<CommodityExamine> commodityExamines = iExamine.getCommodityExamineByInfo(Integer.parseInt(item_id),5);
@@ -680,7 +687,7 @@ public class ManagerController extends BaseController {
                     TlsSigTest.SendMessage(uid,"您发布的商品“" + userCommodity.getCommodity_name() + "”已经通过系统审核，快努力发高质量的视频推广您的商品吧！");
                 } else {
                     iUser.updateCommodityState(Integer.parseInt(item_id),2);
-                    TlsSigTest.SendMessage(uid,"您发布的店铺“" + userCommodity.getCommodity_name() + "”未通过系统审核，未通过原因是“" + failure_content + "”。");
+                    TlsSigTest.SendMessage(uid,"您发布的商品“" + userCommodity.getCommodity_name() + "”未通过系统审核，未通过原因是“" + failure_content + "”。");
                 }
             }
             iExamine.deleteCommodityExamine(Integer.parseInt(item_id),5);
