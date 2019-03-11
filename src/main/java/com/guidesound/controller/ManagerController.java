@@ -1,6 +1,7 @@
 package com.guidesound.controller;
 
 import com.guidesound.dao.*;
+import com.guidesound.dao.UserCommodity;
 import com.guidesound.models.*;
 import com.guidesound.ret.Authentication;
 import com.guidesound.ret.UserAudit;
@@ -662,7 +663,7 @@ public class ManagerController extends BaseController {
             iExamine.deleteUserExamine(Integer.parseInt(uid),3);
 
         } else if(type.equals("4")) { //设置店铺
-            List<CommodityExamine> commodityExamines = iExamine.getCommodityExamineByInfo(Integer.parseInt(uid),Integer.parseInt(type));
+            List<CommodityExamine> commodityExamines = iExamine.getCommodityExamineByInfo(Integer.parseInt(item_id),Integer.parseInt(type));
             if (commodityExamines.size() > 0) {
                 if(Integer.parseInt(result) == 0) {
                     iUser.updateShopbyUserId(Integer.parseInt(item_id),commodityExamines.get(0).getShop_url());
@@ -671,10 +672,15 @@ public class ManagerController extends BaseController {
             iExamine.deleteCommodityExamine(Integer.parseInt(item_id),4);
 
         } else if(type.equals("5")) {  //添加商品
-            List<CommodityExamine> commodityExamines = iExamine.getCommodityExamineByInfo(Integer.parseInt(uid),Integer.parseInt(type));
+            List<CommodityExamine> commodityExamines = iExamine.getCommodityExamineByInfo(Integer.parseInt(item_id),5);
             if (commodityExamines.size() > 0) {
-                if(Integer.parseInt(result) == 0) {
+                UserCommodity userCommodity = iUser.getCommodityById(item_id);
+                if(Integer.parseInt(result) == 0 && userCommodity != null) {
                     iUser.updateCommodityState(Integer.parseInt(item_id),1);
+                    TlsSigTest.SendMessage(uid,"您发布的商品“" + userCommodity.getCommodity_name() + "”已经通过系统审核，快努力发高质量的视频推广您的商品吧！");
+                } else {
+                    iUser.updateCommodityState(Integer.parseInt(item_id),2);
+                    TlsSigTest.SendMessage(uid,"您发布的店铺“" + userCommodity.getCommodity_name() + "”未通过系统审核，未通过原因是“" + failure_content + "”。");
                 }
             }
             iExamine.deleteCommodityExamine(Integer.parseInt(item_id),5);

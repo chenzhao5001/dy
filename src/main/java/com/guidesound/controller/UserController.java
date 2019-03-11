@@ -1317,7 +1317,7 @@ public class UserController extends BaseController{
             }
             iUser.updateShop(ids.get(0),shop_url,update_time);
         }
-        iExamine.addCommodityExamine(user_id,5,0,shop_url);
+        iExamine.addCommodityExamine(user_id,4,0,shop_url);
         String sendInfo = "通过：您发布的店铺“url”已经通过系统审核，快努力发高质量的视频推广您的店铺吧！";
         TlsSigTest.SendMessage(String.valueOf(getCurrentUserId()),sendInfo);
         return JSONResult.ok();
@@ -1354,7 +1354,7 @@ public class UserController extends BaseController{
         commodity.setCreate_time(create_time);
         commodity.setUpdate_time(update_time);
         iUser.addCommodity(commodity);
-        iExamine.addCommodityExamine(user_id,4,commodity.getId(),"");
+        iExamine.addCommodityExamine(user_id,5,commodity.getId(),"");
         return JSONResult.ok();
     }
 

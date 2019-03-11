@@ -70,8 +70,9 @@
             <mvc:exclude-mapping path="/admin/**"/>
             <mvc:exclude-mapping path="/home/**"/>
 
-            <mvc:exclude-mapping path="course/get_class_course"/>
-            <mvc:exclude-mapping path="course/get_1v1_course"/>
+            <mvc:exclude-mapping path="/course/get_class_course"/>
+            <mvc:exclude-mapping path="/course/get_1v1_course"/>
+            <mvc:exclude-mapping path="/course/teacher_by_id"/>
 
 
             <bean class="com.guidesound.interceptor.Common"/>

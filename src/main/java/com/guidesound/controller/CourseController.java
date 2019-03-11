@@ -168,7 +168,7 @@ public class CourseController extends BaseController{
 
     @RequestMapping("/course_list")
     @ResponseBody
-    public JSONResult getCourseList(String user_id) {
+    public JSONResult getCourcourse_typeseList(String user_id) {
         if(user_id == null) {
             return JSONResult.errorMsg("缺少 user_id");
         }

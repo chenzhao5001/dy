@@ -343,7 +343,7 @@ public interface IUser {
             " where id = {#id}")
     void updateCommodity(Commodity commodity);
 
-    @Update("update user_commodity set state = {#arg1} where id = {#arg0}")
+    @Update("update user_commodity set state = #{arg1} where id = #{arg0}")
     void updateCommodityState(int id,int state);
 
     @Select("select * from user_commodity where user_id = #{arg0}")
