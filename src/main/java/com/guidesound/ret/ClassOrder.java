@@ -5,6 +5,8 @@ public class ClassOrder {
         int order_status;
         Object refund_info;
         int course_owner_id;
+        int course_id;
+        String course_pic;
         String course_owner_pic;
         String course_owner_name;
         String course_name;
@@ -28,6 +30,23 @@ public class ClassOrder {
         int class_time;
         String class_content;
         int class_status;
+
+
+    public int getCourse_id() {
+        return course_id;
+    }
+
+    public void setCourse_id(int course_id) {
+        this.course_id = course_id;
+    }
+
+    public String getCourse_pic() {
+        return course_pic;
+    }
+
+    public void setCourse_pic(String course_pic) {
+        this.course_pic = course_pic;
+    }
 
     public int getId() {
         return id;

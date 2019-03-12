@@ -12,7 +12,9 @@ public interface IOrder {
     @Insert("insert into user_order " +
             "(type," +
             "course_owner_id," +
+            "course_id," +
             "course_name," +
+            "course_pic," +
             "teacher_id," +
             "teacher_name," +
             "student_id," +
@@ -31,7 +33,9 @@ public interface IOrder {
             "outline) value " +
             "(#{type}," +
             "#{user_id}," +
+            "#{course_id}," +
             "#{course_name}," +
+            "#{course_pic}," +
             "#{teacher_id}," +
             "#{teacher_name}," +
             "#{student_id}," +
@@ -53,7 +57,9 @@ public interface IOrder {
     @Insert("insert into user_order " +
             "(type," +
             "course_owner_id," +
+            "course_id," +
             "course_name," +
+            "course_pic," +
             "teacher_id," +
             "teacher_name," +
             "student_id," +
@@ -66,11 +72,14 @@ public interface IOrder {
             "price_one_hour," +
             "all_charge," +
             "refund_rule," +
+            "outline," +
             "create_time," +
             "tutor_content) value " +
             "(#{type}," +
             "#{user_id}," +
+            "#{course_id}," +
             "#{course_name}," +
+            "#{course_pic}," +
             "#{teacher_id}," +
             "#{teacher_name}," +
             "#{student_id}," +
@@ -83,6 +92,7 @@ public interface IOrder {
             "#{price_one_hour}," +
             "#{all_charge}," +
             "#{refund_rule}," +
+            "#{outline}," +
             "#{create_time}," +
             "#{tutor_content})")
     void add1v1Order(Order1V1DTO order1V1DTO);

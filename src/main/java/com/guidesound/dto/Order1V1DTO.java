@@ -3,8 +3,12 @@ package com.guidesound.dto;
 import javax.validation.constraints.NotNull;
 
 public class Order1V1DTO {
+    @NotNull(message = "course_id:不能为空;")
+    String course_id;
     @NotNull(message = "course_name:不能为空;")
     String course_name;
+    @NotNull(message = "course_id:不能为空;")
+    String course_pic;
     @NotNull(message = "teacher_id:不能为空;")
     String teacher_id;
     @NotNull(message = "teacher_name:不能为空;")
@@ -35,6 +39,31 @@ public class Order1V1DTO {
     int type;
     int create_time;
     int user_id;
+    String outline;
+
+    public String getOutline() {
+        return outline;
+    }
+
+    public void setOutline(String outline) {
+        this.outline = outline;
+    }
+
+    public String getCourse_id() {
+        return course_id;
+    }
+
+    public void setCourse_id(String course_id) {
+        this.course_id = course_id;
+    }
+
+    public String getCourse_pic() {
+        return course_pic;
+    }
+
+    public void setCourse_pic(String course_pic) {
+        this.course_pic = course_pic;
+    }
 
     public int getUser_id() {
         return user_id;

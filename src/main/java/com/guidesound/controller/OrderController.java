@@ -1,5 +1,8 @@
 package com.guidesound.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.dao.IOrder;
 import com.guidesound.dto.Order1V1DTO;
 import com.guidesound.dto.OrderClassDTO;
@@ -14,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/order")
@@ -54,6 +59,7 @@ public class OrderController extends BaseController{
         order1V1DTO.setType(1);
         order1V1DTO.setCreate_time((int) (new Date().getTime() / 1000));
         order1V1DTO.setUser_id(user_id);
+        order1V1DTO.setOutline("");
         iOrder.add1v1Order(order1V1DTO);
         return JSONResult.ok();
     }
@@ -81,6 +87,23 @@ public class OrderController extends BaseController{
             return JSONResult.errorMsg("缺少 order_id 参数");
         }
         ClassOrder classOrder = iOrder.getClassOrderById(Integer.parseInt(order_id));
+
+        if(classOrder == null) {
+            return JSONResult.errorMsg("班课订单不存在");
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<CourseOutline> beanList = null;
+        try {
+            String str = (String) classOrder.getOutline();
+            System.out.println(str);
+            beanList = mapper.readValue((String) classOrder.getOutline(), new TypeReference<List<CourseOutline>>() {});
+            classOrder.setOutline(beanList);
+        } catch (IOException e) {
+            e.printStackTrace();
+            classOrder.setOutline("json 格式错误");
+        }
+
         return JSONResult.ok(classOrder);
     }
 
@@ -91,6 +114,9 @@ public class OrderController extends BaseController{
             return JSONResult.errorMsg("缺少 order_id 参数");
         }
         Order1V1 order1V1 = iOrder.get1v1OrderById(Integer.parseInt(order_id));
+        if(order1V1 == null) {
+            return JSONResult.errorMsg("订单不存在");
+        }
         return JSONResult.ok(order1V1);
     }
 
