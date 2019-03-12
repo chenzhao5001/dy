@@ -34,6 +34,17 @@ public class Course1V1DTO
     String teacher_name = "";
     @NotNull(message = "save:不能为空;")
     String save ="0";
+
+    String outline = "";
+
+    public String getOutline() {
+        return outline;
+    }
+
+    public void setOutline(String outline) {
+        this.outline = outline;
+    }
+
     public String getCourse_id() {
         return course_id;
     }

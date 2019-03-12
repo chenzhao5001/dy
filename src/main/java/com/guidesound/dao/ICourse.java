@@ -26,6 +26,7 @@ public interface ICourse {
             "teacher_name," +
             "type," +
             "course_status," +
+            "outline," +
             "create_time," +
             "update_time)"  +
 
@@ -46,6 +47,7 @@ public interface ICourse {
             "#{teacher_name}," +
             "#{type}," +
             "#{course_status}," +
+            "#{outline}," +
             "#{create_time}," +
             "#{update_time})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")

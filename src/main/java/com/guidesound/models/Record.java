@@ -2,7 +2,7 @@ package com.guidesound.models;
 
 public class Record {
 
-    int id;
+    int record_course_id;
     int user_id;
     String record_course_pic;
     String record_course_name;
