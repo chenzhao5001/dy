@@ -30,6 +30,43 @@ public class RecordDTO {
     @NotNull(message = "save:不能为空;")
     String save;
 
+    int user_id;
+    int record_course_status;
+    int create_time;
+    int update_time;
+
+    public int getUpdate_time() {
+        return update_time;
+    }
+
+    public void setUpdate_time(int update_time) {
+        this.update_time = update_time;
+    }
+
+    public int getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(int create_time) {
+        this.create_time = create_time;
+    }
+
+    public int getRecord_course_status() {
+        return record_course_status;
+    }
+
+    public void setRecord_course_status(int record_course_status) {
+        this.record_course_status = record_course_status;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
     public String getRecord_course_id() {
         return record_course_id;
     }
