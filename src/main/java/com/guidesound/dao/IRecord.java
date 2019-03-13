@@ -25,6 +25,7 @@ public interface IRecord {
             "intro_course_pic," +
             "videos," +
             "record_course_status," +
+            "save," +
             "create_time) " +
             "value " +
             "(#{user_id}," +
@@ -40,6 +41,7 @@ public interface IRecord {
             "#{intro_course_pic}," +
             "#{videos}," +
             "#{record_course_status}," +
+            "#{save}," +
             "#{create_time})")
     void add(RecordDTO recordDTO);
     @Update("update record_course " +
@@ -55,6 +57,7 @@ public interface IRecord {
             "intro_course_text = #{intro_course_text}," +
             "intro_course_pic = #{intro_course_pic}," +
             "videos = #{videos}," +
+            "save = #{save}," +
             "update_time = #{update_time}," +
             "record_course_status = #{record_course_status} where record_course_id = #{record_course_id}")
     void update(RecordDTO recordDTO);
@@ -64,5 +67,8 @@ public interface IRecord {
 
     @Select("select * from record_course")
     List<Record> list();
+
+    @Select("select * from record_course where record_course_id = #{arg0}")
+    Record get(int id);
 
 }
