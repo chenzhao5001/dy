@@ -78,6 +78,7 @@ public class CourseController extends BaseController{
         course.setTeacher_id(Integer.parseInt(course1V1DTO.getTeacher_id()));
         course.setTeacher_name(course1V1DTO.getTeacher_name());
         course.setCourse_status(Integer.parseInt(course1V1DTO.getSave()));
+        course.setCourse_content("");
         course.setOutline("");
         if(course1V1DTO.getCourse_id().equals("0")) {  //新建
             course.setCreate_time((int) (new Date().getTime() / 1000));
