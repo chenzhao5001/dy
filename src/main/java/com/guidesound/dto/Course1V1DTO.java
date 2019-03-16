@@ -164,4 +164,26 @@ public class Course1V1DTO
     public void setSave(String save) {
         this.save = save;
     }
+
+    @Override
+    public String toString() {
+        return "Course1V1DTO{" +
+                "course_id='" + course_id + '\'' +
+                ", course_pic='" + course_pic + '\'' +
+                ", course_name='" + course_name + '\'' +
+                ", subject='" + subject + '\'' +
+                ", grade='" + grade + '\'' +
+                ", form='" + form + '\'' +
+                ", price_one_hour='" + price_one_hour + '\'' +
+                ", area_service='" + area_service + '\'' +
+                ", test_form='" + test_form + '\'' +
+                ", test_duration='" + test_duration + '\'' +
+                ", test_charge='" + test_charge + '\'' +
+                ", introduction_teacher='" + introduction_teacher + '\'' +
+                ", teacher_id='" + teacher_id + '\'' +
+                ", teacher_name='" + teacher_name + '\'' +
+                ", save='" + save + '\'' +
+                ", outline='" + outline + '\'' +
+                '}';
+    }
 }

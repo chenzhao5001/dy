@@ -55,6 +55,7 @@ public class BaseController {
             SignMap.Init(iCourse.getSubject());
             log = (Logger) LogManager.getLogger();
         }
+
     }
 
 //    User getCurrentUser() {

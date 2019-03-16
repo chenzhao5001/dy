@@ -18,6 +18,15 @@ public class Course1V1 {
     String introduction_teacher;
     int teacher_id;
     String teacher_name;
+    int im_id;
+
+    public int getIm_id() {
+        return im_id;
+    }
+
+    public void setIm_id(int im_id) {
+        this.im_id = im_id;
+    }
 
     public int getCourse_id() {
         return course_id;

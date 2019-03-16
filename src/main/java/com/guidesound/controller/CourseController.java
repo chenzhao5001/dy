@@ -55,7 +55,7 @@ public class CourseController extends BaseController{
     @RequestMapping("/add_1v1_course")
     @ResponseBody
     public JSONResult add_1v1_course(@Valid Course1V1DTO course1V1DTO,BindingResult result) {
-
+        log.info(course1V1DTO);
         StringBuilder msg = new StringBuilder();
         if(!ToolsFunction.paramCheck(result,msg)) {
             return JSONResult.errorMsg(msg.toString());
@@ -99,7 +99,7 @@ public class CourseController extends BaseController{
             courseExamine.setItem_sub_type(0);
             iExamine.addCourseExamine(courseExamine);
         }
-
+        log.info("add_1v1_course ====================================");
         return JSONResult.ok();
     }
 
@@ -107,7 +107,7 @@ public class CourseController extends BaseController{
     @RequestMapping("/add_class_course")
     @ResponseBody
     public JSONResult addClassCourse(@Valid CourseClassDTO courseClassDTO,BindingResult result) {
-
+        log.info(courseClassDTO);
         StringBuilder msg = new StringBuilder();
         if(!ToolsFunction.paramCheck(result,msg)) {
             return JSONResult.errorMsg(msg.toString());
@@ -154,6 +154,7 @@ public class CourseController extends BaseController{
             courseExamine.setItem_sub_type(1);
             iExamine.addCourseExamine(courseExamine);
         }
+        log.info("add_class_course========================================================");
         return JSONResult.ok();
     }
 
@@ -356,7 +357,12 @@ public class CourseController extends BaseController{
             return JSONResult.ok(null);
         }
 
+
         Course1V1 course1V1 = new Course1V1();
+        Integer im_id = iUser.getImIdByUserId(course.getUser_id());
+        if(im_id != null) {
+            course1V1.setIm_id(im_id);
+        }
         course1V1.setCourse_id(course.getId());
         course1V1.setCourse_status(course.getCourse_status());
         course1V1.setCourse_type(course.getType());
@@ -389,6 +395,11 @@ public class CourseController extends BaseController{
             return JSONResult.ok(null);
         }
         CourseClass courseClass = new CourseClass();
+        Integer im_id = iUser.getImIdByUserId(course.getUser_id());
+        if(im_id != null) {
+            courseClass.setIm_id(im_id);
+        }
+
         courseClass.setCourse_id(course.getId());
         courseClass.setCourse_status(course.getCourse_status());
         courseClass.setCourse_type(course.getType());

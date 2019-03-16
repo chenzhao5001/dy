@@ -23,6 +23,7 @@ public class CourseClass {
     int teacher_id;
     String teacher_name;
     int student_count;
+    int im_id;
 
     public int getStudent_count() {
         return student_count;
@@ -190,5 +191,13 @@ public class CourseClass {
 
     public void setTeacher_name(String teacher_name) {
         this.teacher_name = teacher_name;
+    }
+
+    public int getIm_id() {
+        return im_id;
+    }
+
+    public void setIm_id(int im_id) {
+        this.im_id = im_id;
     }
 }

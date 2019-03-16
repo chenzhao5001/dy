@@ -183,4 +183,28 @@ public class CourseClassDTO {
     public void setSave(String save) {
         this.save = save;
     }
+
+    @Override
+    public String toString() {
+        return "CourseClassDTO{" +
+                "course_id='" + course_id + '\'' +
+                ", course_pic='" + course_pic + '\'' +
+                ", course_name='" + course_name + '\'' +
+                ", subject='" + subject + '\'' +
+                ", grade='" + grade + '\'' +
+                ", form='" + form + '\'' +
+                ", max_person='" + max_person + '\'' +
+                ", all_hours='" + all_hours + '\'' +
+                ", all_charge='" + all_charge + '\'' +
+                ", test_time='" + test_time + '\'' +
+                ", test_duration='" + test_duration + '\'' +
+                ", test_charge='" + test_charge + '\'' +
+                ", course_content='" + course_content + '\'' +
+                ", outline='" + outline + '\'' +
+                ", introduction_teacher='" + introduction_teacher + '\'' +
+                ", teacher_id='" + teacher_id + '\'' +
+                ", teacher_name='" + teacher_name + '\'' +
+                ", save='" + save + '\'' +
+                '}';
+    }
 }

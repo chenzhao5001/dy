@@ -381,5 +381,8 @@ public interface IUser {
     @Update("update user set auth_state = #{arg1} where id = #{arg0}")
     void updateAuthState(int user_id,int flag);
 
+    @Select("select im_id from user where id = #{arg0}")
+    Integer getImIdByUserId(int user_id);
+
 }
 
