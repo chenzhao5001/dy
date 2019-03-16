@@ -5,6 +5,7 @@ import com.guidesound.dto.OrderClassDTO;
 import com.guidesound.ret.ClassOrder;
 import com.guidesound.ret.Order1V1;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 public interface IOrder {
@@ -52,6 +53,7 @@ public interface IOrder {
             "#{refund_rule}," +
             "#{tutor_content}," +
             "#{outline})")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     void addClassOrder(OrderClassDTO orderClassDTO);
 
     @Insert("insert into user_order " +
@@ -95,6 +97,7 @@ public interface IOrder {
             "#{outline}," +
             "#{create_time}," +
             "#{tutor_content})")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     void add1v1Order(Order1V1DTO order1V1DTO);
 
     @Select("select * from user_order where id = #{arg0}")

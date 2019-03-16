@@ -61,7 +61,19 @@ public class OrderController extends BaseController{
         order1V1DTO.setUser_id(user_id);
         order1V1DTO.setOutline("");
         iOrder.add1v1Order(order1V1DTO);
-        return JSONResult.ok();
+        class RetTemp{
+            int id;
+            public int getId() {
+                return id;
+            }
+            public void setId(int id) {
+                this.id = id;
+            }
+        }
+        RetTemp retTemp = new RetTemp();
+        retTemp.setId(order1V1DTO.getId());
+
+        return JSONResult.ok(retTemp);
     }
     @RequestMapping("/add_class_order")
     @ResponseBody
@@ -77,7 +89,20 @@ public class OrderController extends BaseController{
         orderClassDTO.setUser_id(user_id);
 
         iOrder.addClassOrder(orderClassDTO);
-        return JSONResult.ok();
+        class RetTemp{
+            int id;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+        }
+        RetTemp retTemp = new RetTemp();
+        retTemp.setId(orderClassDTO.getId());
+        return JSONResult.ok(retTemp);
     }
 
     @RequestMapping("/get_class_order")

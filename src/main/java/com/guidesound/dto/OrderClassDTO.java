@@ -44,7 +44,16 @@ public class OrderClassDTO {
     int type;
     int create_time;
     int user_id;
+    int id;
 
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getCourse_id() {
         return course_id;

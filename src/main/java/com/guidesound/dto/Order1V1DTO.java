@@ -40,6 +40,15 @@ public class Order1V1DTO {
     int create_time;
     int user_id;
     String outline;
+    int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getOutline() {
         return outline;
