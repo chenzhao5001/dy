@@ -35,6 +35,9 @@ public class VideoDTO {
 //    @NotNull(message = "attachment_name:不能为空;")
     String attachment_name = "";
 
+    String attachment_subtype = "0";
+
+
     public String getPic_cut_url() {
         return pic_cut_url;
     }
@@ -137,5 +140,13 @@ public class VideoDTO {
 
     public void setAttachment_name(String attachment_name) {
         this.attachment_name = attachment_name;
+    }
+
+    public String getAttachment_subtype() {
+        return attachment_subtype;
+    }
+
+    public void setAttachment_subtype(String attachment_subtype) {
+        this.attachment_subtype = attachment_subtype;
     }
 }

@@ -555,9 +555,12 @@ public class SignMap {
             temp.id = 498;
             temp.info = "初高";
             list.add(temp);
-
+        } else {
+            Content3 temp = new Content3();
+            temp = new Content3();
+            temp.id = 0 ;
+            temp.info = "全部";
         }
-
         return list;
     }
 

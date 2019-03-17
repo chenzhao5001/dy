@@ -51,6 +51,15 @@ public class VideoShow {
     int attachment_type;
     int attachment_id;
     String attachment_name;
+    int attachment_subtype;
+
+    public int getAttachment_subtype() {
+        return attachment_subtype;
+    }
+
+    public void setAttachment_subtype(int attachment_subtype) {
+        this.attachment_subtype = attachment_subtype;
+    }
 
     public int getAttachment_type() {
         return attachment_type;
