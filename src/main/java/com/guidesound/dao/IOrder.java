@@ -2,11 +2,15 @@ package com.guidesound.dao;
 
 import com.guidesound.dto.Order1V1DTO;
 import com.guidesound.dto.OrderClassDTO;
+import com.guidesound.models.ClassRoom;
+import com.guidesound.models.OrderInfo;
 import com.guidesound.ret.ClassOrder;
 import com.guidesound.ret.Order1V1;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 public interface IOrder {
 
@@ -104,4 +108,13 @@ public interface IOrder {
     ClassOrder getClassOrderById(int order_id);
     @Select("select * from user_order where id = #{arg0}")
     Order1V1 get1v1OrderById(int order_id);
+
+    @Select("select * from user_order where id = #{arg0}")
+    OrderInfo getUserByOrderId(int order_id);
+
+    @Insert("insert into class_room (user_id,course_id) value (#{user_id},#{course_id})")
+    void addClassRoom(ClassRoom classRoom);
+
+    @Select("select * from class_room where course_id = #{arg0}")
+    List<ClassRoom> getClassRoomByCourseId(int course_id);
 }

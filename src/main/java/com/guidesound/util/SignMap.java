@@ -315,12 +315,8 @@ public class SignMap {
         course_form.put(1,"上门");
 
         course_type_name = new HashMap<>();
-        course_type_name.put(0,"未提交审核");
-        course_type_name.put(1,"审核中");
-        course_type_name.put(2,"审核失败");
-        course_type_name.put(3,"展示中");
-        course_type_name.put(4,"自动下架");
-        course_type_name.put(5,"手动下架");
+        course_type_name.put(0,"1对1");
+        course_type_name.put(1,"班课");
 
         sex_type = new HashMap<>();
         sex_type.put(1,"男");
@@ -560,6 +556,7 @@ public class SignMap {
             temp = new Content3();
             temp.id = 0 ;
             temp.info = "全部";
+            list.add(temp);
         }
         return list;
     }

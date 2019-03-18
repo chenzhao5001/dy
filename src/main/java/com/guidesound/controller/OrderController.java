@@ -6,6 +6,8 @@ import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.dao.IOrder;
 import com.guidesound.dto.Order1V1DTO;
 import com.guidesound.dto.OrderClassDTO;
+import com.guidesound.models.ClassRoom;
+import com.guidesound.models.OrderInfo;
 import com.guidesound.ret.ClassOrder;
 import com.guidesound.ret.Order1V1;
 import com.guidesound.util.JSONResult;
@@ -145,5 +147,57 @@ public class OrderController extends BaseController{
         return JSONResult.ok(order1V1);
     }
 
+    @RequestMapping("/pay")
+    @ResponseBody
+    JSONResult pay(String type,String order_id,String pay_way) {
+        if(type == null || order_id == null || pay_way == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+        OrderInfo orderInfo = iOrder.getUserByOrderId(Integer.parseInt(order_id));
+        if(orderInfo == null) {
+            return JSONResult.errorMsg("订单不存在");
+        }
+        if(iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).size() == 0) {
+            ClassRoom classRoom = new ClassRoom();
+            classRoom.setUser_id(orderInfo.getCourse_owner_id());
+            classRoom.setCourse_id(orderInfo.getCourse_id());
+            iOrder.addClassRoom(classRoom);
+        }
+        class Ret {
+            String token;
+            int price;
+            String order_sn;
+
+            public String getToken() {
+                return token;
+            }
+
+            public void setToken(String token) {
+                this.token = token;
+            }
+
+            public int getPrice() {
+                return price;
+            }
+
+            public void setPrice(int price) {
+                this.price = price;
+            }
+
+            public String getOrder_sn() {
+                return order_sn;
+            }
+
+            public void setOrder_sn(String order_sn) {
+                this.order_sn = order_sn;
+            }
+        }
+
+        Ret ret = new Ret();
+        ret.setToken("test");
+        ret.setPrice(0);
+        ret.setOrder_sn("test_sn");
+        return JSONResult.ok(ret);
+    }
 
 }
