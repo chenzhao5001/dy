@@ -6,9 +6,7 @@ import com.guidesound.models.ClassRoom;
 import com.guidesound.models.OrderInfo;
 import com.guidesound.ret.ClassOrder;
 import com.guidesound.ret.Order1V1;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -117,4 +115,8 @@ public interface IOrder {
 
     @Select("select * from class_room where course_id = #{arg0}")
     List<ClassRoom> getClassRoomByCourseId(int course_id);
+
+    @Update("update class_room set new_class_time = #{arg2} where class_id = #{arg0} and user_id = #{arg1}")
+    void setClassTime(int class_id,int user_id,String class_time);
+
 }

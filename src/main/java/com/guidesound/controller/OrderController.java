@@ -1,5 +1,7 @@
 package com.guidesound.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.TempStruct.CourseOutline;
@@ -198,6 +200,39 @@ public class OrderController extends BaseController{
         ret.setPrice(0);
         ret.setOrder_sn("test_sn");
         return JSONResult.ok(ret);
+    }
+
+    @RequestMapping("/search_pay")
+    @ResponseBody
+    JSONResult searchPay(String order_sn) {
+        if(order_sn == null) {
+            return JSONResult.errorMsg("缺少 order_sn 参数");
+        }
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/add_class_time")
+    @ResponseBody
+    JSONResult addClassTime(String class_id, String new_class_time) {
+        if(class_id == null || new_class_time == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        int user_id = getCurrentUserId();
+        iOrder.setClassTime(Integer.parseInt(class_id),user_id,new_class_time);
+
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/delete_class_time")
+    @ResponseBody
+    JSONResult deleteClassTime(String class_id) {
+        if(class_id == null) {
+            return JSONResult.errorMsg("缺少 class_id 参数");
+        }
+        int user_id = getCurrentUserId();
+        iOrder.setClassTime(Integer.parseInt(class_id),user_id,"");
+        return JSONResult.ok();
     }
 
 }
