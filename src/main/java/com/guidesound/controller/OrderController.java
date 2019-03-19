@@ -1,15 +1,15 @@
 package com.guidesound.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.dao.IOrder;
+import com.guidesound.dao.IUser;
 import com.guidesound.dto.Order1V1DTO;
 import com.guidesound.dto.OrderClassDTO;
 import com.guidesound.models.ClassRoom;
 import com.guidesound.models.OrderInfo;
+import com.guidesound.models.UserInfo;
 import com.guidesound.ret.ClassOrder;
 import com.guidesound.ret.Order1V1;
 import com.guidesound.util.JSONResult;
@@ -31,6 +31,8 @@ public class OrderController extends BaseController{
 
     @Autowired
     IOrder iOrder;
+    @Autowired
+    IUser iUser;
 
     @RequestMapping("/current_time")
     @ResponseBody
@@ -121,6 +123,15 @@ public class OrderController extends BaseController{
             return JSONResult.errorMsg("班课订单不存在");
         }
 
+        UserInfo userInfo = iUser.getUser(classOrder.getCourse_owner_id());
+        if(userInfo != null) {
+            classOrder.setCourse_owner_pic(userInfo.getHead());
+            classOrder.setCourse_owner_name(userInfo.getName());
+        } else {
+            classOrder.setCourse_owner_pic("");
+            classOrder.setCourse_owner_name("");
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         List<CourseOutline> beanList = null;
         try {
@@ -146,6 +157,16 @@ public class OrderController extends BaseController{
         if(order1V1 == null) {
             return JSONResult.errorMsg("订单不存在");
         }
+
+        UserInfo userInfo = iUser.getUser(order1V1.getCourse_owner_id());
+        if(userInfo != null) {
+            order1V1.setCourse_owner_pic(userInfo.getHead());
+            order1V1.setCourse_owner_name(userInfo.getName());
+        } else {
+            order1V1.setCourse_owner_pic("");
+            order1V1.setCourse_owner_name("");
+        }
+
         return JSONResult.ok(order1V1);
     }
 

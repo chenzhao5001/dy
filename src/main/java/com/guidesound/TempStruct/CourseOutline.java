@@ -6,6 +6,15 @@ public class CourseOutline
     int class_hours;
     int class_time;
     String class_content;
+    int class_status;
+
+    public int getClass_status() {
+        return class_status;
+    }
+
+    public void setClass_status(int class_status) {
+        this.class_status = class_status;
+    }
 
     public int getClass_number() {
         return class_number;
