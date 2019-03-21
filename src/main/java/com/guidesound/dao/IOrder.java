@@ -3,6 +3,7 @@ package com.guidesound.dao;
 import com.guidesound.dto.Order1V1DTO;
 import com.guidesound.dto.OrderClassDTO;
 import com.guidesound.models.ClassRoom;
+import com.guidesound.models.Course;
 import com.guidesound.models.OrderInfo;
 import com.guidesound.ret.ClassOrder;
 import com.guidesound.ret.Order1V1;
@@ -111,12 +112,36 @@ public interface IOrder {
     OrderInfo getUserByOrderId(int order_id);
 
     @Insert("insert into class_room (user_id,course_id) value (#{user_id},#{course_id})")
+    @Options(useGeneratedKeys=true, keyProperty="class_id", keyColumn="class_id")
     void addClassRoom(ClassRoom classRoom);
+
+    @Update("update class_room set room_number = #{arg1} where class_id = #{arg0}")
+    void addRoomNumber(int class_id,int room_number);
 
     @Select("select * from class_room where course_id = #{arg0}")
     List<ClassRoom> getClassRoomByCourseId(int course_id);
 
     @Update("update class_room set new_class_time = #{arg2} where class_id = #{arg0} and user_id = #{arg1}")
     void setClassTime(int class_id,int user_id,String class_time);
+
+    @Select("select * from class_room where class_id = #{arg0}")
+    ClassRoom getClassRoomById(int class_id);
+
+    @Update("update class_room set course_name = #{course_name}," +
+            "course_name = #{course_name}," +
+            "teacher_name = #{teacher_name}," +
+            "subject = #{subject}," +
+            "grade = #{grade}," +
+            "form = #{form}," +
+            "way = #{way}," +
+            "max_person = #{max_person}," +
+            "all_hours = #{all_hours}," +
+            "price_one_hour = #{price_one_hour}," +
+            "all_charge = #{all_charge}," +
+            "refund_rule = #{refund_rule}," +
+            "outline = #{outline}," +
+            "tutor_content = #{tutor_content}" +
+            " where class_id = #{id}")
+    void ClassRoomCourse(Course course);
 
 }

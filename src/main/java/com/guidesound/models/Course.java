@@ -20,6 +20,8 @@ public class Course {
     String introduction_teacher;
     int teacher_id;
     String teacher_name;
+    String way;
+    String refund_rule;
 
     int type;
     int course_status;
@@ -33,6 +35,31 @@ public class Course {
     String course_content;
     String outline;
 
+    String tutor_content;
+
+    public String getTutor_content() {
+        return tutor_content;
+    }
+
+    public void setTutor_content(String tutor_content) {
+        this.tutor_content = tutor_content;
+    }
+
+    public String getRefund_rule() {
+        return refund_rule;
+    }
+
+    public void setRefund_rule(String refund_rule) {
+        this.refund_rule = refund_rule;
+    }
+
+    public String getWay() {
+        return way;
+    }
+
+    public void setWay(String way) {
+        this.way = way;
+    }
 
     public int getTest_time() {
         return test_time;

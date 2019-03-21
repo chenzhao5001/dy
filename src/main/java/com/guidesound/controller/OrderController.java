@@ -8,6 +8,7 @@ import com.guidesound.dao.IUser;
 import com.guidesound.dto.Order1V1DTO;
 import com.guidesound.dto.OrderClassDTO;
 import com.guidesound.models.ClassRoom;
+import com.guidesound.models.Course;
 import com.guidesound.models.OrderInfo;
 import com.guidesound.models.UserInfo;
 import com.guidesound.ret.ClassOrder;
@@ -33,6 +34,7 @@ public class OrderController extends BaseController{
     IOrder iOrder;
     @Autowired
     IUser iUser;
+
 
     @RequestMapping("/current_time")
     @ResponseBody
@@ -181,10 +183,30 @@ public class OrderController extends BaseController{
             return JSONResult.errorMsg("订单不存在");
         }
         if(iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).size() == 0) {
-            ClassRoom classRoom = new ClassRoom();
-            classRoom.setUser_id(orderInfo.getCourse_owner_id());
-            classRoom.setCourse_id(orderInfo.getCourse_id());
-            iOrder.addClassRoom(classRoom);
+            if(type.equals("1")) {
+                Course course = iCourse.getCourseById(orderInfo.getCourse_id());
+                course.setWay(orderInfo.getWay());
+                course.setRefund_rule(orderInfo.getRefund_rule());
+                course.setTutor_content(orderInfo.getTutor_content());
+                if(course == null) {
+                    return JSONResult.errorMsg("辅导课不存在");
+                }
+                ClassRoom classRoom = new ClassRoom();
+                classRoom.setUser_id(orderInfo.getCourse_owner_id());
+                classRoom.setCourse_id(orderInfo.getCourse_id());
+                classRoom.setCreate_time((int) (new Date().getTime() / 1000));
+                iOrder.addClassRoom(classRoom);
+                int class_number = 1000000000 + classRoom.getClass_id();
+                iOrder.addRoomNumber(classRoom.getClass_id(),class_number);
+                course.setId(classRoom.getClass_id());
+                iOrder.ClassRoomCourse(course);
+            } else if(type.equals("0")){
+
+            } else {
+                return JSONResult.errorMsg("type 类型错误");
+            }
+        } else {
+            return JSONResult.errorMsg("此课程已经支付过");
         }
         class Ret {
             String token;
