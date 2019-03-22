@@ -5,6 +5,7 @@ import com.guidesound.dto.OrderClassDTO;
 import com.guidesound.models.ClassRoom;
 import com.guidesound.models.Course;
 import com.guidesound.models.OrderInfo;
+import com.guidesound.models.StudentClass;
 import com.guidesound.ret.ClassOrder;
 import com.guidesound.ret.Order1V1;
 import org.apache.ibatis.annotations.*;
@@ -143,5 +144,15 @@ public interface IOrder {
             "tutor_content = #{tutor_content}" +
             " where class_id = #{id}")
     void ClassRoomCourse(Course course);
+
+    @Insert("insert into student_class (user_id,course_id,class_id,order_id,create_time,update_time)" +
+            " value (#{user_id},#{course_id},#{class_id},#{order_id},#{create_time},#{update_time})")
+    void addStudentClass(StudentClass studentClass);
+
+    @Select("select * from student_class where user_id = #{arg0} and class_id = #{arg1}")
+    List<StudentClass> getStudentClassByInfo(int user_id,int class_id);
+
+    @Select("select * from student_class where user_id = #{arg0}")
+    List<StudentClass> getStudentClassByUserId(int user_id);
 
 }

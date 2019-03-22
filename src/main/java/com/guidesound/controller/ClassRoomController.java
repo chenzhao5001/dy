@@ -9,7 +9,9 @@ import com.guidesound.dao.IUser;
 import com.guidesound.dao.IUserFollow;
 import com.guidesound.models.ClassRoom;
 import com.guidesound.models.Record;
+import com.guidesound.models.StudentClass;
 import com.guidesound.models.UserInfo;
+import com.guidesound.ret.ClassInfo;
 import com.guidesound.ret.ClassRoomRet;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -111,14 +114,6 @@ public class ClassRoomController extends BaseController {
         }
 
 
-
-
-        Object class_use_info;
-        Object outline;
-        Object students;
-
-
-
         ClassRoomRet classRoomRet = new ClassRoomRet();
         classRoomRet.setClass_info_status(classRoom.getClass_info_status());
         classRoomRet.setCourse_owner_id(classRoom.getUser_id());
@@ -143,8 +138,27 @@ public class ClassRoomController extends BaseController {
         ObjectMapper mapper = new ObjectMapper();
         List<CourseOutline> beanList = mapper.readValue(classRoom.getOutline(), new TypeReference<List<CourseOutline>>() {});
         classRoomRet.setOutline(beanList);
-
         return JSONResult.ok(classRoomRet);
+    }
+
+    @RequestMapping("/my_class_room")
+    @ResponseBody
+    JSONResult myClassRoom() {
+        int user_id = getCurrentUserId();
+        List<ClassInfo> classInfo = new ArrayList<>();
+        List<StudentClass> student_list =  iOrder.getStudentClassByUserId(user_id);
+
+        return JSONResult.ok(classInfo);
+    }
+
+    @RequestMapping("/test_listen")
+    @ResponseBody
+    JSONResult testListen() {
+        int user_id = getCurrentUserId();
+        List<ClassInfo> classInfo = new ArrayList<>();
+        List<StudentClass> student_list =  iOrder.getStudentClassByUserId(user_id);
+
+        return JSONResult.ok(classInfo);
     }
 
 }
