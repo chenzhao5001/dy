@@ -191,4 +191,6 @@ public interface ICourse {
     @Select("select * from teacher where user_id = #{arg0}")
     List<Teacher> getTeacherList(int user_id);
 
+    @Select("select * from course")
+    List<Course> getAll();
 }

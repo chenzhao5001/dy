@@ -9,6 +9,7 @@ public class ClassRoom {
     int class_info_status;
 
     String course_name;
+    String course_pic;
     String teacher_name;
     int subject;
     int grade;
@@ -23,6 +24,16 @@ public class ClassRoom {
     String outline;
     int create_time;
     int update_time;
+
+    public int flag;
+
+    public String getCourse_pic() {
+        return course_pic;
+    }
+
+    public void setCourse_pic(String course_pic) {
+        this.course_pic = course_pic;
+    }
 
     public String getCourse_name() {
         return course_name;

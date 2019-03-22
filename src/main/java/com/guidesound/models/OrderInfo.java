@@ -6,6 +6,15 @@ public class OrderInfo {
     String way;
     String tutor_content;
     String refund_rule;
+    int order_status;
+
+    public int getOrder_status() {
+        return order_status;
+    }
+
+    public void setOrder_status(int order_status) {
+        this.order_status = order_status;
+    }
 
     public String getTutor_content() {
         return tutor_content;

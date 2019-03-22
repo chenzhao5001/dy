@@ -2,10 +2,7 @@ package com.guidesound.dao;
 
 import com.guidesound.dto.Order1V1DTO;
 import com.guidesound.dto.OrderClassDTO;
-import com.guidesound.models.ClassRoom;
-import com.guidesound.models.Course;
-import com.guidesound.models.OrderInfo;
-import com.guidesound.models.StudentClass;
+import com.guidesound.models.*;
 import com.guidesound.ret.ClassOrder;
 import com.guidesound.ret.Order1V1;
 import org.apache.ibatis.annotations.*;
@@ -154,5 +151,17 @@ public interface IOrder {
 
     @Select("select * from student_class where user_id = #{arg0}")
     List<StudentClass> getStudentClassByUserId(int user_id);
+
+    @Select("<script>"
+            + "SELECT * FROM class_room WHERE class_id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    List<ClassRoom> getClassInfoByIds(@Param("iList") List<Integer> iList);
+
+    @Select("select * from class_room where user_id = #{arg0}")
+    List<ClassRoom> getClassInfoByUserId(int user_id);
+
 
 }

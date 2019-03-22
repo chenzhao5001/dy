@@ -7,12 +7,11 @@ import com.guidesound.dao.IOrder;
 import com.guidesound.dao.IRecord;
 import com.guidesound.dao.IUser;
 import com.guidesound.dao.IUserFollow;
-import com.guidesound.models.ClassRoom;
-import com.guidesound.models.Record;
-import com.guidesound.models.StudentClass;
-import com.guidesound.models.UserInfo;
+import com.guidesound.models.*;
 import com.guidesound.ret.ClassInfo;
 import com.guidesound.ret.ClassRoomRet;
+import com.guidesound.ret.TeacherClass1;
+import com.guidesound.ret.TeacherClass2;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -144,11 +143,111 @@ public class ClassRoomController extends BaseController {
     @RequestMapping("/my_class_room")
     @ResponseBody
     JSONResult myClassRoom() {
-        int user_id = getCurrentUserId();
-        List<ClassInfo> classInfo = new ArrayList<>();
-        List<StudentClass> student_list =  iOrder.getStudentClassByUserId(user_id);
+        class Student {
+            int order_id;
+            int order_status;
 
-        return JSONResult.ok(classInfo);
+            public int getOrder_id() {
+                return order_id;
+            }
+
+            public void setOrder_id(int order_id) {
+                this.order_id = order_id;
+            }
+
+            public int getOrder_status() {
+                return order_status;
+            }
+
+            public void setOrder_status(int order_status) {
+                this.order_status = order_status;
+            }
+        }
+
+        class Teacher {
+            int class_info_id;
+            int class_info_status;
+
+            public int getClass_info_id() {
+                return class_info_id;
+            }
+
+            public void setClass_info_id(int class_info_id) {
+                this.class_info_id = class_info_id;
+            }
+
+            public int getClass_info_status() {
+                return class_info_status;
+            }
+
+            public void setClass_info_status(int class_info_status) {
+                this.class_info_status = class_info_status;
+            }
+        }
+
+        int user_id = getCurrentUserId();
+        List<ClassInfo> classInfoList = new ArrayList<>();
+        List<StudentClass> student_list =  iOrder.getStudentClassByUserId(user_id);
+        if(student_list.size() > 0) {
+            List<Integer> id_list = new ArrayList<>();
+            for (StudentClass item : student_list) {
+                id_list.add(item.getClass_id());
+            }
+            List<ClassRoom> rooms = iOrder.getClassInfoByIds(id_list);
+            List<ClassRoom> rooms_teacher = iOrder.getClassInfoByUserId(user_id);
+            for(ClassRoom item : rooms_teacher) {
+                item.flag = 1;
+                rooms.add(item);
+            }
+
+            for (ClassRoom item : rooms) {
+
+                TeacherClass1 teacherClass1 = new TeacherClass1();
+                teacherClass1.setClass_id(item.getClass_id());
+                teacherClass1.setCourse_name(item.getCourse_name());
+                teacherClass1.setCourse_pic(item.getCourse_pic());
+                teacherClass1.setCourse_owner_id(item.getUser_id());
+                UserInfo userInfo = iUser.getUser(item.getUser_id());
+                if(userInfo != null) {
+                    teacherClass1.setCourse_owner_name(userInfo.getName());
+                    teacherClass1.setCourse_owner_head(userInfo.getHead());
+                }
+                teacherClass1.setMax_person(item.getMax_person());
+                teacherClass1.setSubject(SignMap.getSubjectTypeById(item.getSubject()));
+                teacherClass1.setGrade(SignMap.getGradeTypeByID(item.getGrade()));
+                teacherClass1.setForm(SignMap.getCourseFormById(item.getForm()));
+                teacherClass1.setForm_id(item.getForm());
+                teacherClass1.setWay(item.getWay());
+                teacherClass1.setNext_class_NO(1);
+                teacherClass1.setNext_class_name("一元一次方程经典应用实例得到的点点");
+                teacherClass1.setNext_clsss_time(123);
+
+                if(item.flag == 0 ) {
+                    Student student = new Student();
+                    List<StudentClass> s_list = iOrder.getStudentClassByInfo(getCurrentUserId(),item.getClass_id());
+                    if(s_list.size() > 0) {
+                        student.setOrder_id(s_list.get(0).getOrder_id());
+                        OrderInfo orderInfo = iOrder.getUserByOrderId(s_list.get(0).getOrder_id());
+                        if(orderInfo != null) {
+                            student.setOrder_status(orderInfo.getOrder_status());
+                        }
+                    }
+                    teacherClass1.setStudent(student);
+                    teacherClass1.setTeacher(null);
+                } else if (item.flag == 1) {
+                    Teacher teacher = new Teacher();
+                    teacherClass1.setStudent(null);
+                    teacherClass1.setTeacher(teacher);
+
+                }
+                ClassInfo classInfo = new ClassInfo();
+                classInfo.setTeacher_class(teacherClass1);
+                classInfo.setVideo_class(null);
+                classInfoList.add(classInfo);
+            }
+        }
+
+        return JSONResult.ok(classInfoList);
     }
 
     @RequestMapping("/test_listen")
@@ -156,7 +255,11 @@ public class ClassRoomController extends BaseController {
     JSONResult testListen() {
         int user_id = getCurrentUserId();
         List<ClassInfo> classInfo = new ArrayList<>();
-        List<StudentClass> student_list =  iOrder.getStudentClassByUserId(user_id);
+        List<Course> list = iCourse.getAll();
+        for (Course item : list) {
+//            TeacherClass2 teacherClass2 = new TeacherClass2();
+//            teacherClass2.
+        }
 
         return JSONResult.ok(classInfo);
     }
