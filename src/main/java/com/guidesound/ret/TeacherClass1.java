@@ -51,7 +51,7 @@ public class TeacherClass1 {
         this.course_owner_id = course_owner_id;
     }
 
-    public String getCourse_owner_name() {
+    public String getCourse_owner_name(String name) {
         return course_owner_name;
     }
 

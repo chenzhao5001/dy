@@ -163,5 +163,8 @@ public interface IOrder {
     @Select("select * from class_room where user_id = #{arg0}")
     List<ClassRoom> getClassInfoByUserId(int user_id);
 
+    @Select("select * from class_room")
+    List<ClassRoom> getAllClassRoom();
+
 
 }

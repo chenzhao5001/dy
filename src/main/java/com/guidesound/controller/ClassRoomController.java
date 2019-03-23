@@ -14,6 +14,7 @@ import com.guidesound.ret.TeacherClass1;
 import com.guidesound.ret.TeacherClass2;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
+import com.qcloud.Common.Sign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/class_room")
@@ -254,14 +257,44 @@ public class ClassRoomController extends BaseController {
     @ResponseBody
     JSONResult testListen() {
         int user_id = getCurrentUserId();
-        List<ClassInfo> classInfo = new ArrayList<>();
-        List<Course> list = iCourse.getAll();
-        for (Course item : list) {
-//            TeacherClass2 teacherClass2 = new TeacherClass2();
-//            teacherClass2.
+        List<ClassInfo> classInfo_list = new ArrayList<>();
+        List<ClassRoom> list = iOrder.getAllClassRoom();
+        List<Integer> user_ids = new ArrayList<>();
+        Map<Integer, UserInfo> m_users = new HashMap<>();
+        for(ClassRoom item : list) {
+            if(!list.contains(item.getUser_id())) {
+                user_ids.add(item.getUser_id());
+            }
+        }
+        if(user_ids.size() > 0) {
+            List<UserInfo> users = iUser.getUserByIds(user_ids);
+            for(UserInfo userInfo : users) {
+                m_users.put(userInfo.getId(),userInfo);
+            }
         }
 
-        return JSONResult.ok(classInfo);
+        for (ClassRoom item : list) {
+            TeacherClass2 teacherClass2 = new TeacherClass2();
+            teacherClass2.setClass_id(item.getClass_id());
+            teacherClass2.setCourse_name(item.getCourse_name());
+            teacherClass2.setCourse_pic(item.getCourse_pic());
+            teacherClass2.setCourse_owner_id(item.getUser_id());
+            if(m_users.get(item.getUser_id()) != null) {
+                teacherClass2.setCourse_owner_head(m_users.get(item.getUser_id()).getHead());
+                teacherClass2.setCourse_owner_name(m_users.get(item.getUser_id()).getName());
+            }
+            teacherClass2.setMax_person(item.getMax_person());
+            teacherClass2.setSubject(SignMap.getSubjectTypeById(item.getSubject()));
+            teacherClass2.setGrade(SignMap.getGradeTypeByID(item.getGrade()));
+            teacherClass2.setForm(SignMap.getCourseFormById(item.getForm()));
+            teacherClass2.setForm_id(item.getForm());
+            teacherClass2.setWay(item.getWay());
+            ClassInfo classInfo = new ClassInfo();
+            classInfo.setTeacher_class(teacherClass2);
+            classInfo.setVideo_class(null);
+            classInfo_list.add(classInfo);
+        }
+        return JSONResult.ok(classInfo_list);
     }
 
 }
