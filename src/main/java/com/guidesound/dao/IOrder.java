@@ -108,6 +108,8 @@ public interface IOrder {
 
     @Select("select * from user_order where id = #{arg0}")
     OrderInfo getUserByOrderId(int order_id);
+    @Update("update user_order set order_status = #{arg1} where id = #{arg0}")
+    void setOrderStatus(int order_id,int state);
 
     @Insert("insert into class_room (user_id,course_id) value (#{user_id},#{course_id})")
     @Options(useGeneratedKeys=true, keyProperty="class_id", keyColumn="class_id")
@@ -121,9 +123,17 @@ public interface IOrder {
 
     @Update("update class_room set new_class_time = #{arg2} where class_id = #{arg0} and user_id = #{arg1}")
     void setClassTime(int class_id,int user_id,String class_time);
+    @Update("update user_order set outline = #{arg1} where id = #{arg0}")
+    void setOrderOutline(int order,String outline);
+    @Select("select new_class_time from class_room where class_id = #{arg0} and user_id = #{arg1}")
+    String getClassTime(int class_id,int user_id);
+    @Select("select outline from user_order where id = #{arg0}")
+    String getOutlinefromOrder(int order);
 
     @Select("select * from class_room where class_id = #{arg0}")
     ClassRoom getClassRoomById(int class_id);
+
+
 
     @Update("update class_room set course_name = #{course_name}," +
             "course_name = #{course_name}," +
