@@ -1,9 +1,12 @@
 package com.guidesound.ret;
 
+import com.guidesound.TempStruct.ClassUseInfo;
+import com.guidesound.TempStruct.RefundInfo;
+
 public class Order1V1 {
     int id;
     int order_status;
-    Object refund_info;
+    RefundInfo refund_info;
     int course_owner_id;
     int course_id;
     String course_pic;
@@ -22,7 +25,7 @@ public class Order1V1 {
     int create_time;
     String refund_rule;
     String tutor_content;
-    Object class_use_info;
+    ClassUseInfo class_use_info;
     Object outline;
 
     public int getCourse_id() {
@@ -57,12 +60,8 @@ public class Order1V1 {
         this.order_status = order_status;
     }
 
-    public Object getRefund_info() {
+    public RefundInfo getRefund_info() {
         return refund_info;
-    }
-
-    public void setRefund_info(Object refund_info) {
-        this.refund_info = refund_info;
     }
 
     public int getCourse_owner_id() {
@@ -193,11 +192,15 @@ public class Order1V1 {
         this.tutor_content = tutor_content;
     }
 
-    public Object getClass_use_info() {
+    public void setRefund_info(RefundInfo refund_info) {
+        this.refund_info = refund_info;
+    }
+
+    public ClassUseInfo getClass_use_info() {
         return class_use_info;
     }
 
-    public void setClass_use_info(Object class_use_info) {
+    public void setClass_use_info(ClassUseInfo class_use_info) {
         this.class_use_info = class_use_info;
     }
 

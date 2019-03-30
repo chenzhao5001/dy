@@ -105,12 +105,12 @@ public class ClassRoomController extends BaseController {
 
     @RequestMapping("/get_class")
     @ResponseBody
-    JSONResult getClassById(String class_info_id) throws IOException {
-        if(class_info_id == null) {
-            return JSONResult.errorMsg("缺少 class_info_id 参数");
+    JSONResult getClassById(String class_id) throws IOException {
+        if(class_id == null) {
+            return JSONResult.errorMsg("缺少 class_id 参数");
         }
 
-        ClassRoom classRoom = iOrder.getClassRoomById(Integer.parseInt(class_info_id));
+        ClassRoom classRoom = iOrder.getClassRoomById(Integer.parseInt(class_id));
         if( classRoom == null) {
             return  JSONResult.ok(null);
         }

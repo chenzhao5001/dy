@@ -3,7 +3,9 @@ package com.guidesound.controller;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.TempStruct.ClassTime;
+import com.guidesound.TempStruct.ClassUseInfo;
 import com.guidesound.TempStruct.CourseOutline;
+import com.guidesound.TempStruct.RefundInfo;
 import com.guidesound.dao.IOrder;
 import com.guidesound.dao.IUser;
 import com.guidesound.dto.Order1V1DTO;
@@ -148,6 +150,10 @@ public class OrderController extends BaseController {
             classOrder.setOutline("json 格式错误");
         }
 
+        RefundInfo refundInfo = new RefundInfo();
+        ClassUseInfo classUseInfo = new ClassUseInfo();
+        classOrder.setRefund_info(refundInfo);
+        classOrder.setClass_use_info(classUseInfo);
         return JSONResult.ok(classOrder);
     }
 
@@ -184,6 +190,8 @@ public class OrderController extends BaseController {
             order1V1.setOutline("outline 格式错误");
 
         }
+        order1V1.setRefund_info(new RefundInfo());
+        order1V1.setClass_use_info(new ClassUseInfo());
         return JSONResult.ok(order1V1);
     }
 
@@ -203,7 +211,7 @@ public class OrderController extends BaseController {
 
         iOrder.setOrderStatus(Integer.parseInt(order_id),1);
 
-        if(type.equals("1")) { //课堂
+        if(type.equals("0")) { //课堂
             int class_id = 0;
             if (iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).size() == 0) {
                 Course course = iCourse.getCourseById(orderInfo.getCourse_id());

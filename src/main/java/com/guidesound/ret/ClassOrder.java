@@ -1,9 +1,12 @@
 package com.guidesound.ret;
 
+import com.guidesound.TempStruct.ClassUseInfo;
+import com.guidesound.TempStruct.RefundInfo;
+
 public class ClassOrder {
         int id;
         int order_status;
-        Object refund_info;
+        RefundInfo refund_info;
         int course_owner_id;
         int course_id;
         String course_pic;
@@ -23,30 +26,13 @@ public class ClassOrder {
         int create_time;
         String refund_rule;
         String tutor_content;
-        Object class_use_info;
+        ClassUseInfo class_use_info;
         Object outline;
         int class_number;
         int class_hours;
         int class_time;
         String class_content;
         int class_status;
-
-
-    public int getCourse_id() {
-        return course_id;
-    }
-
-    public void setCourse_id(int course_id) {
-        this.course_id = course_id;
-    }
-
-    public String getCourse_pic() {
-        return course_pic;
-    }
-
-    public void setCourse_pic(String course_pic) {
-        this.course_pic = course_pic;
-    }
 
     public int getId() {
         return id;
@@ -64,11 +50,11 @@ public class ClassOrder {
         this.order_status = order_status;
     }
 
-    public Object getRefund_info() {
+    public RefundInfo getRefund_info() {
         return refund_info;
     }
 
-    public void setRefund_info(Object refund_info) {
+    public void setRefund_info(RefundInfo refund_info) {
         this.refund_info = refund_info;
     }
 
@@ -78,6 +64,22 @@ public class ClassOrder {
 
     public void setCourse_owner_id(int course_owner_id) {
         this.course_owner_id = course_owner_id;
+    }
+
+    public int getCourse_id() {
+        return course_id;
+    }
+
+    public void setCourse_id(int course_id) {
+        this.course_id = course_id;
+    }
+
+    public String getCourse_pic() {
+        return course_pic;
+    }
+
+    public void setCourse_pic(String course_pic) {
+        this.course_pic = course_pic;
     }
 
     public String getCourse_owner_pic() {
@@ -208,11 +210,11 @@ public class ClassOrder {
         this.tutor_content = tutor_content;
     }
 
-    public Object getClass_use_info() {
+    public ClassUseInfo getClass_use_info() {
         return class_use_info;
     }
 
-    public void setClass_use_info(Object class_use_info) {
+    public void setClass_use_info(ClassUseInfo class_use_info) {
         this.class_use_info = class_use_info;
     }
 
