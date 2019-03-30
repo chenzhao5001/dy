@@ -108,6 +108,9 @@ public interface IOrder {
 
     @Select("select * from user_order where id = #{arg0}")
     OrderInfo getUserByOrderId(int order_id);
+    @Select("select * from user_order where id = #{arg0} and course_owner_id = #{arg1}")
+    OrderInfo getUserByOrderIdAndUserId(int order_id,int user_id);
+
     @Update("update user_order set order_status = #{arg1} where id = #{arg0}")
     void setOrderStatus(int order_id,int state);
 
@@ -137,10 +140,11 @@ public interface IOrder {
 
     @Update("update class_room set course_name = #{course_name}," +
             "course_name = #{course_name}," +
+            "course_pic = #{course_pic}," +
             "teacher_name = #{teacher_name}," +
             "subject = #{subject}," +
             "grade = #{grade}," +
-            "form = #{form}," +
+            "form = #{type}," +
             "way = #{way}," +
             "max_person = #{max_person}," +
             "all_hours = #{all_hours}," +

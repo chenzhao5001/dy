@@ -128,7 +128,7 @@ public class ClassRoomController extends BaseController {
         classRoomRet.setTeacher_name(classRoom.getTeacher_name());
         classRoomRet.setSubject(SignMap.getSubjectTypeById(classRoom.getSubject()));
         classRoomRet.setGrade(SignMap.getGradeTypeByID(classRoom.getGrade()));
-        classRoomRet.setForm(SignMap.getCourseFormById(classRoom.getForm()));
+        classRoomRet.setForm(SignMap.getCourseTypeNameById(classRoom.getForm()));
         classRoomRet.setWay(classRoom.getWay());
         classRoomRet.setMax_person(classRoom.getMax_person());
         classRoomRet.setAll_hours(classRoom.getAll_hours());

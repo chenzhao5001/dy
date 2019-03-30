@@ -201,15 +201,13 @@ public class OrderController extends BaseController {
         if (type == null || order_id == null || pay_way == null) {
             return JSONResult.errorMsg("缺少参数");
         }
-        OrderInfo orderInfo = iOrder.getUserByOrderId(Integer.parseInt(order_id));
+        OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id),getCurrentUserId());
         if (orderInfo == null) {
             return JSONResult.errorMsg("订单不存在");
         }
         if(orderInfo.getOrder_status() != 0) {
             return JSONResult.errorMsg("此状态不能支付");
         }
-
-        iOrder.setOrderStatus(Integer.parseInt(order_id),1);
 
         if(type.equals("0")) { //课堂
             int class_id = 0;
@@ -231,6 +229,7 @@ public class OrderController extends BaseController {
                 course.setId(classRoom.getClass_id());
                 iOrder.ClassRoomCourse(course);
                 class_id = classRoom.getClass_id();
+                iOrder.setOrderStatus(Integer.parseInt(order_id),1);
             } else {
                 ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(0);
                 List<StudentClass> class_list = iOrder.getStudentClassByInfo(getCurrentUserId(),classRoom.getClass_id());
