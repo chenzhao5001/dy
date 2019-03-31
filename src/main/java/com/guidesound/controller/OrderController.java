@@ -229,7 +229,6 @@ public class OrderController extends BaseController {
                 course.setId(classRoom.getClass_id());
                 iOrder.ClassRoomCourse(course);
                 class_id = classRoom.getClass_id();
-                iOrder.setOrderStatus(Integer.parseInt(order_id),1);
             } else {
                 ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(0);
                 List<StudentClass> class_list = iOrder.getStudentClassByInfo(getCurrentUserId(),classRoom.getClass_id());
@@ -238,6 +237,7 @@ public class OrderController extends BaseController {
                 }
                 class_id = classRoom.getClass_id();
             }
+            iOrder.setOrderStatus(Integer.parseInt(order_id),1);
             StudentClass studentClass = new StudentClass();
             studentClass.setUser_id(getCurrentUserId());
             studentClass.setCourse_id(orderInfo.getCourse_id());

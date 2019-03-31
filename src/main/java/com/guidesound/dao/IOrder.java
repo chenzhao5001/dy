@@ -108,7 +108,7 @@ public interface IOrder {
 
     @Select("select * from user_order where id = #{arg0}")
     OrderInfo getUserByOrderId(int order_id);
-    @Select("select * from user_order where id = #{arg0} and course_owner_id = #{arg1}")
+    @Select("select * from user_order where id = #{arg0} and student_id = #{arg1}")
     OrderInfo getUserByOrderIdAndUserId(int order_id,int user_id);
 
     @Update("update user_order set order_status = #{arg1} where id = #{arg0}")
@@ -179,6 +179,9 @@ public interface IOrder {
 
     @Select("select * from class_room")
     List<ClassRoom> getAllClassRoom();
+
+    @Select("select * from class_room where user_id = #{arg0}")
+    List<ClassRoom> getClassRoomByUserId(int user_id);
 
 
 }
