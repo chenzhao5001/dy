@@ -115,7 +115,7 @@ public interface IOrder {
     @Update("update user_order set order_status = #{arg1} where id = #{arg0}")
     void setOrderStatus(int order_id,int state);
 
-    @Insert("insert into class_room (user_id,course_id) value (#{user_id},#{course_id})")
+    @Insert("insert into class_room (user_id,course_id,create_time) value (#{user_id},#{course_id},#{create_time})")
     @Options(useGeneratedKeys=true, keyProperty="class_id", keyColumn="class_id")
     void addClassRoom(ClassRoom classRoom);
 
@@ -167,6 +167,9 @@ public interface IOrder {
     @Select("select * from student_class where user_id = #{arg0}")
     List<StudentClass> getStudentClassByUserId(int user_id);
 
+    @Select("select * from student_class where class_id = #{arg0}")
+    List<StudentClass> getStudentClassByClassId(int class_id);
+
     @Select("<script>"
             + "SELECT * FROM class_room WHERE class_id IN "
             + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
@@ -190,8 +193,16 @@ public interface IOrder {
     @Select("select * from class_time where order_id = #{arg0} and student_id = #{arg1} and begin_time < #{arg2}")
     List<ClassTimeInfo> getClassTimeByInfo(int order_id, int student_id, int time);
 
-
     @Select("select * from class_time where order_id = #{arg0} and student_id = #{arg1} and begin_time < #{arg2} and status = 1")
     List<ClassTimeInfo> getTrueClassTimeByInfo(int order_id, int student_id, int time);
+
+
+    @Select("select * from class_time where class_id = #{arg0} and student_id = #{arg1} and teacher_id = #{arg3} and begin_time < #{arg2}")
+    List<ClassTimeInfo> getTeacherClassTimeByInfo(int class_id, int student_id, int time,int teacher_id);
+
+    @Select("select * from class_time where class_id = #{arg0} and student_id = #{arg1} and teacher_id = #{arg3} and begin_time < #{arg2} and status = 1")
+    List<ClassTimeInfo> getTeacherTrueClassTimeByInfo(int class_id, int student_id, int time,int teacher_id);
+
+
 
 }

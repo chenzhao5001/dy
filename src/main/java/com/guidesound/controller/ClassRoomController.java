@@ -2,7 +2,10 @@ package com.guidesound.controller;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.guidesound.TempStruct.ClassTime;
+import com.guidesound.TempStruct.ClassUseInfo;
 import com.guidesound.TempStruct.CourseOutline;
+import com.guidesound.TempStruct.StudentOrderTemp;
 import com.guidesound.dao.IOrder;
 import com.guidesound.dao.IRecord;
 import com.guidesound.dao.IUser;
@@ -21,10 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/class_room")
@@ -121,7 +121,7 @@ public class ClassRoomController extends BaseController {
         classRoomRet.setCourse_owner_id(classRoom.getUser_id());
         UserInfo userInfo = iUser.getUser(classRoom.getUser_id());
         if (userInfo != null) {
-            classRoomRet.setCourse_name(userInfo.getName());
+            classRoomRet.setCourse_owner_name(userInfo.getName());
             classRoomRet.setCourse_owner_head(userInfo.getHead());
         }
         classRoomRet.setCourse_name(classRoom.getCourse_name());
@@ -138,9 +138,55 @@ public class ClassRoomController extends BaseController {
         classRoomRet.setRefund_rule(classRoom.getRefund_rule());
         classRoomRet.setTutor_content(classRoom.getTutor_content());
         ObjectMapper mapper = new ObjectMapper();
+        if(classRoom.getOutline() == null) {
+            classRoom.setOutline("[]");
+        }
         List<CourseOutline> beanList = mapper.readValue(classRoom.getOutline(), new TypeReference<List<CourseOutline>>() {
         });
         classRoomRet.setOutline(beanList);
+
+        int hour_theory_use = 0;
+        int hour_actual_use = 0;
+        int hour_forget_use = 0;
+        int hour_surplus_use = 0;
+        int all_time = 0;
+        for(CourseOutline item:beanList) {
+            all_time += item.getClass_hours();
+        }
+        List<ClassTimeInfo> time_list = iOrder.getTeacherClassTimeByInfo(Integer.parseInt(class_id),getCurrentUserId(), (int) (new Date().getTime() /1000),getCurrentUserId());
+        for(ClassTimeInfo item : time_list) {
+            hour_theory_use += (item.getEnd_time() - item.getBegin_time()) / 3600;
+        }
+        time_list =  iOrder.getTeacherTrueClassTimeByInfo(Integer.parseInt(class_id),getCurrentUserId(), (int) (new Date().getTime() /1000),getCurrentUserId());
+        for(ClassTimeInfo item : time_list) {
+            hour_actual_use += (item.getEnd_time() - item.getBegin_time()) / 3600;
+        }
+        hour_forget_use = hour_theory_use - hour_actual_use;
+        hour_surplus_use = all_time - hour_theory_use;
+        ClassUseInfo classUseInfo = new ClassUseInfo();
+        classUseInfo.setHour_theory_use(hour_theory_use);
+        classUseInfo.setHour_actual_use(hour_actual_use);
+        classUseInfo.setHour_forget_use(hour_forget_use);
+        classUseInfo.setHour_surplus_use(hour_surplus_use);
+        classRoomRet.setClass_use_info(classUseInfo);
+        List<StudentClass> student_list = iOrder.getStudentClassByClassId(Integer.parseInt(class_id));
+        List<StudentOrderTemp> students = new ArrayList<>();
+        for(StudentClass item : student_list) {
+            StudentOrderTemp studentOrderTemp = new StudentOrderTemp();
+            studentOrderTemp.setStudent_id(item.getUser_id());
+            studentOrderTemp.setStudent_order(item.getOrder_id());
+            UserInfo userInfo1 = iUser.getUser(item.getUser_id());
+            if(userInfo1 != null) {
+                studentOrderTemp.setStudent_head_pic(userInfo1.getHead());
+                studentOrderTemp.setStudent_name(userInfo1.getName());
+            }
+            OrderInfo orderInfo = iOrder.getUserByOrderId(item.getOrder_id());
+            if(orderInfo != null) {
+                studentOrderTemp.setStudent_status(orderInfo.getOrder_status());
+            }
+            students.add(studentOrderTemp);
+        }
+        classRoomRet.setStudents(students);
         return JSONResult.ok(classRoomRet);
     }
 
@@ -298,6 +344,7 @@ public class ClassRoomController extends BaseController {
             classInfo.setVideo_class(null);
             classInfo_list.add(classInfo);
         }
+
         return JSONResult.ok(classInfo_list);
     }
 

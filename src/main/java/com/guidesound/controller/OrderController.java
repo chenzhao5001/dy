@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -205,7 +206,7 @@ public class OrderController extends BaseController {
         if(order1V1.getOutline().equals("")) {
             order1V1.setOutline("[]");
         }
-        List<ClassTime> class_item_list = null;
+        List<ClassTime> class_item_list = new ArrayList<>();
         ObjectMapper mapper_temp = new ObjectMapper();
         try {
             class_item_list = mapper_temp.readValue((String)order1V1.getOutline(), new TypeReference<List<ClassTime>>() {});
@@ -283,6 +284,26 @@ public class OrderController extends BaseController {
                 teacher_id = course.getTeacher_id();
                 outLine = course.getOutline();
 
+
+                List<ClassTime> class_item_list = null;
+                ObjectMapper mapper_temp = new ObjectMapper();
+                try {
+                    class_item_list = mapper_temp.readValue(outLine, new TypeReference<List<ClassTime>>() {});
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for(ClassTime classTime : class_item_list) {
+                    ClassTimeInfo classTimeInfo = new ClassTimeInfo();
+                    classTimeInfo.setOrder_id(Integer.parseInt(order_id));
+                    classTimeInfo.setClass_id(class_id);
+                    classTimeInfo.setStudent_id(teacher_id);
+                    classTimeInfo.setTeacher_id(teacher_id);
+                    classTimeInfo.setBegin_time(classTime.getClass_time());
+                    classTimeInfo.setEnd_time(classTime.getClass_time() + 3600 * classTime.getClass_hours());
+                    classTimeInfo.setClass_number(classTime.getClass_number());
+                    classTimeInfo.setStatus(0);
+                    iOrder.addClassTime(classTimeInfo);
+                }
             } else {
                 ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(0);
                 List<StudentClass> class_list = iOrder.getStudentClassByInfo(getCurrentUserId(),classRoom.getClass_id());
