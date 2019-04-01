@@ -128,6 +128,8 @@ public class OrderController extends BaseController {
             return JSONResult.errorMsg("班课订单不存在");
         }
 
+
+
         UserInfo userInfo = iUser.getUser(classOrder.getCourse_owner_id());
         if (userInfo != null) {
             classOrder.setCourse_owner_pic(userInfo.getHead());
@@ -151,7 +153,30 @@ public class OrderController extends BaseController {
         }
 
         RefundInfo refundInfo = new RefundInfo();
+        int hour_theory_use = 0;
+        int hour_actual_use = 0;
+        int hour_forget_use = 0;
+        int hour_surplus_use = 0;
+        int all_time = 0;
+        for(CourseOutline item:beanList) {
+            all_time += item.getClass_hours();
+        }
+        List<ClassTimeInfo> time_list = iOrder.getClassTimeByInfo(Integer.parseInt(order_id),getCurrentUserId(), (int) (new Date().getTime() /1000));
+        for(ClassTimeInfo item : time_list) {
+            hour_theory_use += (item.getEnd_time() - item.getBegin_time()) / 3600;
+        }
+        time_list =  iOrder.getTrueClassTimeByInfo(Integer.parseInt(order_id),getCurrentUserId(), (int) (new Date().getTime() /1000));
+        for(ClassTimeInfo item : time_list) {
+            hour_actual_use += (item.getEnd_time() - item.getBegin_time()) / 3600;
+        }
+        hour_forget_use = hour_theory_use - hour_actual_use;
+        hour_surplus_use = all_time - hour_theory_use;
         ClassUseInfo classUseInfo = new ClassUseInfo();
+        classUseInfo.setHour_theory_use(hour_theory_use);
+        classUseInfo.setHour_actual_use(hour_actual_use);
+        classUseInfo.setHour_forget_use(hour_forget_use);
+        classUseInfo.setHour_surplus_use(hour_surplus_use);
+
         classOrder.setRefund_info(refundInfo);
         classOrder.setClass_use_info(classUseInfo);
         return JSONResult.ok(classOrder);
@@ -191,7 +216,31 @@ public class OrderController extends BaseController {
 
         }
         order1V1.setRefund_info(new RefundInfo());
-        order1V1.setClass_use_info(new ClassUseInfo());
+
+        int hour_theory_use = 0;
+        int hour_actual_use = 0;
+        int hour_forget_use = 0;
+        int hour_surplus_use = 0;
+        int all_time = 0;
+        for(ClassTime item:class_item_list) {
+            all_time += item.getClass_hours();
+        }
+        List<ClassTimeInfo> time_list = iOrder.getClassTimeByInfo(Integer.parseInt(order_id),getCurrentUserId(), (int) (new Date().getTime() /1000));
+        for(ClassTimeInfo item : time_list) {
+            hour_theory_use += (item.getEnd_time() - item.getBegin_time()) / 3600;
+        }
+        time_list =  iOrder.getTrueClassTimeByInfo(Integer.parseInt(order_id),getCurrentUserId(), (int) (new Date().getTime() /1000));
+        for(ClassTimeInfo item : time_list) {
+            hour_actual_use += (item.getEnd_time() - item.getBegin_time()) / 3600;
+        }
+        hour_forget_use = hour_theory_use - hour_actual_use;
+        hour_surplus_use = all_time - hour_theory_use;
+        ClassUseInfo classUseInfo = new ClassUseInfo();
+        classUseInfo.setHour_theory_use(hour_theory_use);
+        classUseInfo.setHour_actual_use(hour_actual_use);
+        classUseInfo.setHour_forget_use(hour_forget_use);
+        classUseInfo.setHour_surplus_use(hour_surplus_use);
+        order1V1.setClass_use_info(classUseInfo);
         return JSONResult.ok(order1V1);
     }
 
@@ -211,14 +260,16 @@ public class OrderController extends BaseController {
 
         if(type.equals("0")) { //课堂
             int class_id = 0;
+            int teacher_id = 0;
+            String outLine = "";
             if (iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).size() == 0) {
                 Course course = iCourse.getCourseById(orderInfo.getCourse_id());
-                course.setWay(orderInfo.getWay());
-                course.setRefund_rule(orderInfo.getRefund_rule());
-                course.setTutor_content(orderInfo.getTutor_content());
                 if (course == null) {
                     return JSONResult.errorMsg("辅导课不存在");
                 }
+                course.setWay(orderInfo.getWay());
+                course.setRefund_rule(orderInfo.getRefund_rule());
+                course.setTutor_content(orderInfo.getTutor_content());
                 ClassRoom classRoom = new ClassRoom();
                 classRoom.setUser_id(orderInfo.getCourse_owner_id());
                 classRoom.setCourse_id(orderInfo.getCourse_id());
@@ -229,6 +280,9 @@ public class OrderController extends BaseController {
                 course.setId(classRoom.getClass_id());
                 iOrder.ClassRoomCourse(course);
                 class_id = classRoom.getClass_id();
+                teacher_id = course.getTeacher_id();
+                outLine = course.getOutline();
+
             } else {
                 ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(0);
                 List<StudentClass> class_list = iOrder.getStudentClassByInfo(getCurrentUserId(),classRoom.getClass_id());
@@ -236,7 +290,31 @@ public class OrderController extends BaseController {
                     return JSONResult.errorMsg("已经支付过");
                 }
                 class_id = classRoom.getClass_id();
+                teacher_id = classRoom.getUser_id();
+                outLine = classRoom.getOutline();
             }
+
+            List<ClassTime> class_item_list = null;
+            ObjectMapper mapper_temp = new ObjectMapper();
+            try {
+                class_item_list = mapper_temp.readValue(outLine, new TypeReference<List<ClassTime>>() {});
+                for(ClassTime classTime : class_item_list) {
+                    ClassTimeInfo classTimeInfo = new ClassTimeInfo();
+                    classTimeInfo.setOrder_id(Integer.parseInt(order_id));
+                    classTimeInfo.setClass_id(class_id);
+                    classTimeInfo.setStudent_id(getCurrentUserId());
+                    classTimeInfo.setTeacher_id(teacher_id);
+                    classTimeInfo.setBegin_time(classTime.getClass_time());
+                    classTimeInfo.setEnd_time(classTime.getClass_time() + 3600*classTime.getClass_hours());
+                    classTimeInfo.setClass_number(classTime.getClass_number());
+                    classTimeInfo.setStatus(0);
+                    iOrder.addClassTime(classTimeInfo);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return JSONResult.errorMsg("课堂大纲格式错误");
+            }
+
             iOrder.setOrderStatus(Integer.parseInt(order_id),1);
             StudentClass studentClass = new StudentClass();
             studentClass.setUser_id(getCurrentUserId());
@@ -249,7 +327,6 @@ public class OrderController extends BaseController {
         } else { //录播课
               
         }
-
         class Ret {
             String token;
             int price;

@@ -1,5 +1,6 @@
 package com.guidesound.dao;
 
+import com.guidesound.TempStruct.ClassTime;
 import com.guidesound.dto.Order1V1DTO;
 import com.guidesound.dto.OrderClassDTO;
 import com.guidesound.models.*;
@@ -182,6 +183,15 @@ public interface IOrder {
 
     @Select("select * from class_room where user_id = #{arg0}")
     List<ClassRoom> getClassRoomByUserId(int user_id);
+    @Insert("insert into class_time (class_id,order_id,teacher_id,student_id,begin_time,end_time,status)" +
+            " value(#{class_id},#{order_id},#{teacher_id},#{student_id},#{begin_time},#{end_time},#{status})")
+    void addClassTime(ClassTimeInfo classTime);
 
+    @Select("select * from class_time where order_id = #{arg0} and student_id = #{arg1} and begin_time < #{arg2}")
+    List<ClassTimeInfo> getClassTimeByInfo(int order_id, int student_id, int time);
+
+
+    @Select("select * from class_time where order_id = #{arg0} and student_id = #{arg1} and begin_time < #{arg2} and status = 1")
+    List<ClassTimeInfo> getTrueClassTimeByInfo(int order_id, int student_id, int time);
 
 }
