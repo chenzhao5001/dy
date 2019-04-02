@@ -127,8 +127,12 @@ public interface IOrder {
 
 
 
-    @Update("update class_room set new_class_time = #{arg2} where class_id = #{arg0} and user_id = #{arg1}")
-    void setClassTime(int class_id,int user_id,String class_time);
+    @Update("update class_room set new_class_time = #{arg1} where class_id = #{arg0}")
+    void setClassTime(int class_id,String class_time);
+
+    @Update("update class_room set outline = #{arg1} where class_id = #{arg0}")
+    void setClassRoomOutLine(int class_id,String out_line);
+
     @Update("update user_order set outline = #{arg1} where id = #{arg0}")
     void setOrderOutline(int order,String outline);
     @Select("select new_class_time from class_room where class_id = #{arg0} and user_id = #{arg1}")

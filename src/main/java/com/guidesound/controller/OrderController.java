@@ -1,5 +1,7 @@
 package com.guidesound.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.TempStruct.ClassTime;
@@ -298,17 +300,19 @@ public class OrderController extends BaseController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                for(ClassTime classTime : class_item_list) {
-                    ClassTimeInfo classTimeInfo = new ClassTimeInfo();
-                    classTimeInfo.setOrder_id(Integer.parseInt(order_id));
-                    classTimeInfo.setClass_id(class_id);
-                    classTimeInfo.setStudent_id(teacher_id);
-                    classTimeInfo.setTeacher_id(teacher_id);
-                    classTimeInfo.setBegin_time(classTime.getClass_time());
-                    classTimeInfo.setEnd_time(classTime.getClass_time() + 3600 * classTime.getClass_hours());
-                    classTimeInfo.setClass_number(classTime.getClass_number());
-                    classTimeInfo.setStatus(0);
-                    iOrder.addClassTime(classTimeInfo);
+                if(class_item_list != null) {
+                    for(ClassTime classTime : class_item_list) {
+                        ClassTimeInfo classTimeInfo = new ClassTimeInfo();
+                        classTimeInfo.setOrder_id(Integer.parseInt(order_id));
+                        classTimeInfo.setClass_id(class_id);
+                        classTimeInfo.setStudent_id(teacher_id);
+                        classTimeInfo.setTeacher_id(teacher_id);
+                        classTimeInfo.setBegin_time(classTime.getClass_time());
+                        classTimeInfo.setEnd_time(classTime.getClass_time() + 3600 * classTime.getClass_hours());
+                        classTimeInfo.setClass_number(classTime.getClass_number());
+                        classTimeInfo.setStatus(0);
+                        iOrder.addClassTime(classTimeInfo);
+                    }
                 }
             } else {
                 ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(0);
@@ -414,58 +418,94 @@ public class OrderController extends BaseController {
         if(classRoom == null) {
             return JSONResult.errorMsg("课堂不存在");
         }
-
+        List<StudentClass> s_list = iOrder.getStudentClassByInfo(getCurrentUserId(),Integer.parseInt(class_id));
+        if(s_list.size() < 1) {
+            return JSONResult.errorMsg("订单不存在");
+        }
+        StudentClass studentClass = s_list.get(0);
+        OrderInfo orderInfo = iOrder.getUserByOrderId(studentClass.getOrder_id());
+        if(orderInfo.getType() != 1) {
+            return JSONResult.errorMsg("不是1v1课程");
+        }
         ObjectMapper mapper = new ObjectMapper();
         ClassTime class_item = null;
         try {
             class_item = mapper.readValue(new_class_time, new TypeReference<ClassTime>() {});
+            if(class_item.getClass_time() < new Date().getTime() / 1000) {
+                return JSONResult.errorMsg("时间已过，无法发布");
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
             return JSONResult.errorMsg("new_class_time json 格式错误");
         }
 
-        int user_id = getCurrentUserId();
-        List<StudentClass> s_list = iOrder.getStudentClassByInfo(getCurrentUserId(),Integer.parseInt(class_id));
-        if(s_list.size() < 1) {
-            return JSONResult.errorMsg("订单不存在");
-        }
-        StudentClass studentClass = s_list.get(0);
-        Order1V1 order1V1 = iOrder.get1v1OrderById(studentClass.getOrder_id());
-
-        if(order1V1.getOutline() != null) {
+        List<ClassTime> class_item_list = new ArrayList<>();
+        String outLine = classRoom.getOutline();
+        if(outLine != null && !outLine.equals("")) {
             ObjectMapper mapper_temp = new ObjectMapper();
             try {
-                List<ClassTime> class_item_list = null;
-                String info = null;
-                if(((String)order1V1.getOutline()).equals("")) {
-                    info = "[]";
-                } else {
-                    info = (String)order1V1.getOutline();
-                }
-                class_item_list = mapper_temp.readValue(info, new TypeReference<List<ClassTime>>() {});
-                class_item_list.add(class_item);
-                ObjectMapper mapper_other = new ObjectMapper();
-                String mapJakcson = mapper.writeValueAsString(class_item_list);
-                iOrder.setClassTime(Integer.parseInt(class_id), user_id, mapJakcson);
-                iOrder.setOrderOutline(studentClass.getOrder_id(),mapJakcson);
-                System.out.println(mapJakcson);
-
+                class_item_list = mapper_temp.readValue(outLine, new TypeReference<List<ClassTime>>() {});
             } catch (IOException e) {
                 e.printStackTrace();
+                return JSONResult.errorMsg("大纲无法解析");
+            }
+
+            for(ClassTime item : class_item_list) {
+                if(item.getClass_time() > new Date().getTime() /1000) {
+                    return JSONResult.errorMsg("有未上课时");
+                }
             }
         }
+        class_item_list.add(class_item);
+        try {
+            String mapJakcson = mapper.writeValueAsString(class_item_list);
+            iOrder.setClassTime(Integer.parseInt(class_id), new_class_time);
+            iOrder.setClassRoomOutLine(Integer.parseInt(class_id), mapJakcson);
+            iOrder.setOrderOutline(studentClass.getOrder_id(),mapJakcson);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return JSONResult.errorMsg("json 格式错误");
+        }
+
         return JSONResult.ok();
     }
 
     @RequestMapping("/delete_class_time")
     @ResponseBody
-    JSONResult deleteClassTime(String class_id) {
+    JSONResult deleteClassTime(String class_id) throws IOException {
         if (class_id == null) {
             return JSONResult.errorMsg("缺少 class_id 参数");
         }
-        int user_id = getCurrentUserId();
-        iOrder.setClassTime(Integer.parseInt(class_id), user_id, "");
+        List<StudentClass> s_list = iOrder.getStudentClassByInfo(getCurrentUserId(),Integer.parseInt(class_id));
+        if(s_list.size() < 1) {
+            return JSONResult.errorMsg("订单不存在");
+        }
+        StudentClass studentClass = s_list.get(0);
+        iOrder.setClassTime(Integer.parseInt(class_id), "");
+        ClassRoom classRoom = iOrder.getClassRoomById(Integer.parseInt(class_id));
+        String outLine = classRoom.getOutline();
+        if(outLine == null || outLine.equals("")) {
+            iOrder.setClassRoomOutLine(Integer.parseInt(class_id), "");
+            iOrder.setOrderOutline(studentClass.getOrder_id(),"");
+            return JSONResult.ok();
+        }
+
+        List<ClassTime> class_item_list = new ArrayList<>();
+        ObjectMapper mapper_temp = new ObjectMapper();
+        class_item_list = mapper_temp.readValue(outLine, new TypeReference<List<ClassTime>>() {});
+
+        List<ClassTime> class_item_list_other = new ArrayList<>();
+        for(ClassTime item : class_item_list) {
+            if(item.getClass_time() < new Date().getTime() /1000) {
+                class_item_list_other.add(item);
+            }
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        String mapJakcson = mapper.writeValueAsString(class_item_list_other);
+        iOrder.setClassRoomOutLine(Integer.parseInt(class_id), mapJakcson);
+        iOrder.setOrderOutline(studentClass.getOrder_id(),mapJakcson);
+
         return JSONResult.ok();
     }
 
