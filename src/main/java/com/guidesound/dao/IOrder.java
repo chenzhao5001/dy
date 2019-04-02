@@ -125,6 +125,8 @@ public interface IOrder {
     @Select("select * from class_room where course_id = #{arg0}")
     List<ClassRoom> getClassRoomByCourseId(int course_id);
 
+
+
     @Update("update class_room set new_class_time = #{arg2} where class_id = #{arg0} and user_id = #{arg1}")
     void setClassTime(int class_id,int user_id,String class_time);
     @Update("update user_order set outline = #{arg1} where id = #{arg0}")
@@ -164,11 +166,18 @@ public interface IOrder {
     @Select("select * from student_class where user_id = #{arg0} and class_id = #{arg1}")
     List<StudentClass> getStudentClassByInfo(int user_id,int class_id);
 
+    @Select("select * from student_class where course_id = #{arg0}")
+    List<StudentClass> getStudentClassByCourseId(int course_id);
+
     @Select("select * from student_class where user_id = #{arg0}")
     List<StudentClass> getStudentClassByUserId(int user_id);
 
     @Select("select * from student_class where class_id = #{arg0}")
     List<StudentClass> getStudentClassByClassId(int class_id);
+
+
+    @Select("select * from student_class where order_id = #{arg0}")
+    List<StudentClass> getStudentClassByOrder(int order_id);
 
     @Select("<script>"
             + "SELECT * FROM class_room WHERE class_id IN "

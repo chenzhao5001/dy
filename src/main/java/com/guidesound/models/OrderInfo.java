@@ -7,6 +7,15 @@ public class OrderInfo {
     String tutor_content;
     String refund_rule;
     int order_status;
+    int type;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public int getOrder_status() {
         return order_status;

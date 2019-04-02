@@ -194,7 +194,7 @@ public class UserController extends BaseController{
         Cookie cookie = new Cookie("token",token);//创建新cookie
         cookie.setPath("/");//设置作用域
         response.addCookie(cookie);//将cookie添加到response的cookie数组中返回给客户端
-        
+
         String im_id2 = String.valueOf(user.getIm_id_2());
         if(im_id2.equals("")) {
             im_id2 = "dy" + String.valueOf(user.getId());

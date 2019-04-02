@@ -259,11 +259,16 @@ public class OrderController extends BaseController {
             return JSONResult.errorMsg("此状态不能支付");
         }
 
+        List<StudentClass> student = iOrder.getStudentClassByOrder(Integer.parseInt(order_id));
+        if(student.size() > 0) {
+            return JSONResult.errorMsg("此订单已经支付过");
+        }
+
         if(type.equals("0")) { //课堂
             int class_id = 0;
             int teacher_id = 0;
             String outLine = "";
-            if (iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).size() == 0) {
+            if (iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).size() == 0 || orderInfo.getType() == 1) {
                 Course course = iCourse.getCourseById(orderInfo.getCourse_id());
                 if (course == null) {
                     return JSONResult.errorMsg("辅导课不存在");
@@ -275,6 +280,7 @@ public class OrderController extends BaseController {
                 classRoom.setUser_id(orderInfo.getCourse_owner_id());
                 classRoom.setCourse_id(orderInfo.getCourse_id());
                 classRoom.setCreate_time((int) (new Date().getTime() / 1000));
+
                 iOrder.addClassRoom(classRoom);
                 int class_number = 1000000000 + classRoom.getClass_id();
                 iOrder.addRoomNumber(classRoom.getClass_id(), class_number);
@@ -306,9 +312,9 @@ public class OrderController extends BaseController {
                 }
             } else {
                 ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(0);
-                List<StudentClass> class_list = iOrder.getStudentClassByInfo(getCurrentUserId(),classRoom.getClass_id());
-                if(class_list.size() > 0) {
-                    return JSONResult.errorMsg("已经支付过");
+                List<StudentClass> student_list = iOrder.getStudentClassByCourseId(orderInfo.getCourse_id());
+                if(student_list.size() >= classRoom.getMax_person()) {
+                    return JSONResult.errorMsg("超过最大上课人数，无法支付");
                 }
                 class_id = classRoom.getClass_id();
                 teacher_id = classRoom.getUser_id();
