@@ -139,10 +139,11 @@ public class ClassRoomController extends BaseController {
         classRoomRet.setTutor_content(classRoom.getTutor_content());
         List<CourseOutline> beanList = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
-        if(classRoom.getOutline() == null || classRoom.getOutline().equals("")) {
+        if (classRoom.getOutline() == null || classRoom.getOutline().equals("")) {
             classRoom.setOutline("[]");
         } else {
-            beanList = mapper.readValue(classRoom.getOutline(), new TypeReference<List<CourseOutline>>() {});
+            beanList = mapper.readValue(classRoom.getOutline(), new TypeReference<List<CourseOutline>>() {
+            });
             classRoomRet.setOutline(beanList);
         }
 
@@ -151,15 +152,15 @@ public class ClassRoomController extends BaseController {
         int hour_forget_use = 0;
         int hour_surplus_use = 0;
         int all_time = 0;
-        for(CourseOutline item:beanList) {
+        for (CourseOutline item : beanList) {
             all_time += item.getClass_hours();
         }
-        List<ClassTimeInfo> time_list = iOrder.getTeacherClassTimeByInfo(Integer.parseInt(class_id),getCurrentUserId(), (int) (new Date().getTime() /1000),getCurrentUserId());
-        for(ClassTimeInfo item : time_list) {
+        List<ClassTimeInfo> time_list = iOrder.getTeacherClassTimeByInfo(Integer.parseInt(class_id), getCurrentUserId(), (int) (new Date().getTime() / 1000), getCurrentUserId());
+        for (ClassTimeInfo item : time_list) {
             hour_theory_use += (item.getEnd_time() - item.getBegin_time()) / 3600;
         }
-        time_list =  iOrder.getTeacherTrueClassTimeByInfo(Integer.parseInt(class_id),getCurrentUserId(), (int) (new Date().getTime() /1000),getCurrentUserId());
-        for(ClassTimeInfo item : time_list) {
+        time_list = iOrder.getTeacherTrueClassTimeByInfo(Integer.parseInt(class_id), getCurrentUserId(), (int) (new Date().getTime() / 1000), getCurrentUserId());
+        for (ClassTimeInfo item : time_list) {
             hour_actual_use += (item.getEnd_time() - item.getBegin_time()) / 3600;
         }
         hour_forget_use = hour_theory_use - hour_actual_use;
@@ -172,17 +173,17 @@ public class ClassRoomController extends BaseController {
         classRoomRet.setClass_use_info(classUseInfo);
         List<StudentClass> student_list = iOrder.getStudentClassByClassId(Integer.parseInt(class_id));
         List<StudentOrderTemp> students = new ArrayList<>();
-        for(StudentClass item : student_list) {
+        for (StudentClass item : student_list) {
             StudentOrderTemp studentOrderTemp = new StudentOrderTemp();
             studentOrderTemp.setStudent_id(item.getUser_id());
             studentOrderTemp.setStudent_order(item.getOrder_id());
             UserInfo userInfo1 = iUser.getUser(item.getUser_id());
-            if(userInfo1 != null) {
+            if (userInfo1 != null) {
                 studentOrderTemp.setStudent_head_pic(userInfo1.getHead());
                 studentOrderTemp.setStudent_name(userInfo1.getName());
             }
             OrderInfo orderInfo = iOrder.getUserByOrderId(item.getOrder_id());
-            if(orderInfo != null) {
+            if (orderInfo != null) {
                 studentOrderTemp.setStudent_status(orderInfo.getOrder_status());
             }
             students.add(studentOrderTemp);
@@ -272,9 +273,29 @@ public class ClassRoomController extends BaseController {
             teacherClass1.setForm(SignMap.getCourseFormById(item.getForm()));
             teacherClass1.setForm_id(item.getForm());
             teacherClass1.setWay(item.getWay());
-            teacherClass1.setNext_class_NO(1);
-            teacherClass1.setNext_class_name("一元一次方程经典应用实例得到的点点");
-            teacherClass1.setNext_clsss_time(123);
+            String outLine = item.getOutline();
+            teacherClass1.setNext_class_NO(0);
+            teacherClass1.setNext_class_name("等待老师发布");
+            teacherClass1.setNext_clsss_time(0);
+            if (outLine != null && !outLine.equals("")) {
+                try {
+                    ObjectMapper mapper_temp = new ObjectMapper();
+                    List<ClassTime> class_item_list = mapper_temp.readValue(outLine, new TypeReference<List<ClassTime>>() {
+                    });
+                    for(ClassTime classTime  :class_item_list) {
+                        if(classTime.getClass_time() > new Date().getTime() / 1000) {
+                            teacherClass1.setNext_class_NO(classTime.getClass_number());
+                            teacherClass1.setNext_class_name(classTime.getClass_content());
+                            teacherClass1.setNext_clsss_time(classTime.getClass_time());
+                            break;
+                        }
+                    }
+                } catch (IOException e) {
+                    teacherClass1.setNext_class_NO(0);
+                    teacherClass1.setNext_class_name("大纲无法解析");
+                    teacherClass1.setNext_clsss_time(0);
+                }
+            }
 
             if (item.flag == 0) {
                 Student student = new Student();
@@ -299,8 +320,6 @@ public class ClassRoomController extends BaseController {
             classInfo.setVideo_class(null);
             classInfoList.add(classInfo);
         }
-
-
         return JSONResult.ok(classInfoList);
     }
 
