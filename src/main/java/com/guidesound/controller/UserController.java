@@ -194,7 +194,15 @@ public class UserController extends BaseController{
         Cookie cookie = new Cookie("token",token);//创建新cookie
         cookie.setPath("/");//设置作用域
         response.addCookie(cookie);//将cookie添加到response的cookie数组中返回给客户端
-
+        
+        String im_id2 = String.valueOf(user.getIm_id_2());
+        if(im_id2.equals("")) {
+            im_id2 = "dy" + String.valueOf(user.getId());
+            String im_sig_2 = TlsSigTest.getUrlSig(String.valueOf(im_id2));
+            iUser.setIm2Info(user.getId(),im_id2,im_sig_2);
+            user.setIm_id_2(im_id2);
+            user.setIm_sig_2(im_sig_2);
+        }
         return JSONResult.ok(user);
     }
 
@@ -435,7 +443,7 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value = "/info")
     @ResponseBody
-    public JSONResult getUserInfoById(String user_id) {
+    public JSONResult getUserInfoById(String user_id) throws IOException {
 
         if(user_id == null) {
             return JSONResult.errorMsg("需要user_id");
@@ -494,6 +502,15 @@ public class UserController extends BaseController{
                 userInfo.setFollow(true);
             }
         }
+        String im_id2 = String.valueOf(userInfo.getIm_id_2());
+        if(im_id2.equals("")) {
+            im_id2 = "dy" + String.valueOf(userInfo.getId());
+            String im_sig_2 = TlsSigTest.getUrlSig(String.valueOf(im_id2));
+            iUser.setIm2Info(userInfo.getId(),im_id2,im_sig_2);
+            userInfo.setIm_id_2(im_id2);
+            userInfo.setIm_sig_2(im_sig_2);
+        }
+
         return JSONResult.ok(userInfo);
     }
     /**

@@ -317,6 +317,9 @@ public class OrderController extends BaseController {
 
             List<ClassTime> class_item_list = null;
             ObjectMapper mapper_temp = new ObjectMapper();
+            if(outLine == null || outLine.equals("")) {
+                outLine = "[]";
+            }
             try {
                 class_item_list = mapper_temp.readValue(outLine, new TypeReference<List<ClassTime>>() {});
                 for(ClassTime classTime : class_item_list) {

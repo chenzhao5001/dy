@@ -64,6 +64,10 @@ public interface IUser {
     @Update("update user set im_id = #{arg1}, im_sig = #{arg2} where id = #{arg0}")
     void setImInfo(int user_id,String im_id,String im_sig);
 
+    @Update("update user set im_id_2 = #{arg1}, im_sig_2 = #{arg2} where id = #{arg0}")
+    void setIm2Info(int user_id,String im_id_2,String im_sig_2);
+
+
     @Insert("insert into user (name,create_time,level,type) values (#{name},#{create_time},#{level},#{type})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     public void addUserByName(UserInfo user);

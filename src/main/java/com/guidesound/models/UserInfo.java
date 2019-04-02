@@ -55,6 +55,8 @@ public class UserInfo {
 
     private String im_id;
     private String im_sig;
+    private String im_id_2;
+    private String im_sig_2;
     private int pwd_state;
     private int channel_stage;
     public String im_appid = "1400158534";
@@ -63,6 +65,21 @@ public class UserInfo {
     public int name_flag;
     public int head_flag;
 
+    public String getIm_id_2() {
+        return im_id_2;
+    }
+
+    public void setIm_id_2(String im_id_2) {
+        this.im_id_2 = im_id_2;
+    }
+
+    public String getIm_sig_2() {
+        return im_sig_2;
+    }
+
+    public void setIm_sig_2(String im_sig_2) {
+        this.im_sig_2 = im_sig_2;
+    }
 
     public int getName_flag() {
         return name_flag;

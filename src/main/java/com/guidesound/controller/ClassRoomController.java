@@ -137,13 +137,14 @@ public class ClassRoomController extends BaseController {
         classRoomRet.setCreate_time(classRoom.getCreate_time());
         classRoomRet.setRefund_rule(classRoom.getRefund_rule());
         classRoomRet.setTutor_content(classRoom.getTutor_content());
+        List<CourseOutline> beanList = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
-        if(classRoom.getOutline() == null) {
+        if(classRoom.getOutline() == null || classRoom.getOutline().equals("")) {
             classRoom.setOutline("[]");
+        } else {
+            beanList = mapper.readValue(classRoom.getOutline(), new TypeReference<List<CourseOutline>>() {});
+            classRoomRet.setOutline(beanList);
         }
-        List<CourseOutline> beanList = mapper.readValue(classRoom.getOutline(), new TypeReference<List<CourseOutline>>() {
-        });
-        classRoomRet.setOutline(beanList);
 
         int hour_theory_use = 0;
         int hour_actual_use = 0;
