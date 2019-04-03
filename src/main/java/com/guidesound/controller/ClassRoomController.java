@@ -152,19 +152,20 @@ public class ClassRoomController extends BaseController {
         int hour_forget_use = 0;
         int hour_surplus_use = 0;
         int all_time = 0;
-        for (CourseOutline item : beanList) {
-            all_time += item.getClass_hours();
-        }
+
+        all_time = classRoom.getAll_hours();
         List<ClassTimeInfo> time_list = iOrder.getTeacherClassTimeByInfo(Integer.parseInt(class_id), getCurrentUserId(), (int) (new Date().getTime() / 1000), getCurrentUserId());
-        for (ClassTimeInfo item : time_list) {
-            hour_theory_use += (item.getEnd_time() - item.getBegin_time()) / 3600;
+        for(ClassTimeInfo item : time_list) {
+            if(item.getBegin_time() < new Date().getTime()/1000) {
+                hour_theory_use +=  (item.getEnd_time() - item.getBegin_time()) / 3600;
+                hour_actual_use +=  (item.getEnd_time() - item.getBegin_time()) / 3600;
+                if(item.getStatus() == 0) {
+                    hour_forget_use += (item.getEnd_time() - item.getBegin_time()) / 3600;
+                }
+            }
         }
-        time_list = iOrder.getTeacherTrueClassTimeByInfo(Integer.parseInt(class_id), getCurrentUserId(), (int) (new Date().getTime() / 1000), getCurrentUserId());
-        for (ClassTimeInfo item : time_list) {
-            hour_actual_use += (item.getEnd_time() - item.getBegin_time()) / 3600;
-        }
-        hour_forget_use = hour_theory_use - hour_actual_use;
-        hour_surplus_use = all_time - hour_theory_use;
+        hour_surplus_use = all_time - hour_actual_use;
+
         ClassUseInfo classUseInfo = new ClassUseInfo();
         classUseInfo.setHour_theory_use(hour_theory_use);
         classUseInfo.setHour_actual_use(hour_actual_use);

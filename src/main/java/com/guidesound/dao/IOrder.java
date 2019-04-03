@@ -115,7 +115,7 @@ public interface IOrder {
     @Update("update user_order set order_status = #{arg1} where id = #{arg0}")
     void setOrderStatus(int order_id,int state);
 
-    @Insert("insert into class_room (user_id,course_id,create_time) value (#{user_id},#{course_id},#{create_time})")
+    @Insert("insert into class_room (user_id,course_id,create_time,all_hours) value (#{user_id},#{course_id},#{create_time},#{all_hours})")
     @Options(useGeneratedKeys=true, keyProperty="class_id", keyColumn="class_id")
     void addClassRoom(ClassRoom classRoom);
 
@@ -143,8 +143,9 @@ public interface IOrder {
     @Select("select * from class_room where class_id = #{arg0}")
     ClassRoom getClassRoomById(int class_id);
 
-
-
+    @Delete("delete from class_time where class_id = #{arg0} and create_time > #{arg0}")
+    void deleteClassTime(int class_id,int time);
+    
     @Update("update class_room set course_name = #{course_name}," +
             "course_name = #{course_name}," +
             "course_pic = #{course_pic}," +
@@ -154,7 +155,6 @@ public interface IOrder {
             "form = #{type}," +
             "way = #{way}," +
             "max_person = #{max_person}," +
-            "all_hours = #{all_hours}," +
             "price_one_hour = #{price_one_hour}," +
             "all_charge = #{all_charge}," +
             "refund_rule = #{refund_rule}," +
@@ -205,6 +205,7 @@ public interface IOrder {
 
     @Select("select * from class_time where order_id = #{arg0} and student_id = #{arg1} and begin_time < #{arg2}")
     List<ClassTimeInfo> getClassTimeByInfo(int order_id, int student_id, int time);
+
 
     @Select("select * from class_time where order_id = #{arg0} and student_id = #{arg1} and begin_time < #{arg2} and status = 1")
     List<ClassTimeInfo> getTrueClassTimeByInfo(int order_id, int student_id, int time);

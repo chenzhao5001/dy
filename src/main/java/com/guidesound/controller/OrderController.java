@@ -17,6 +17,7 @@ import com.guidesound.ret.ClassOrder;
 import com.guidesound.ret.Order1V1;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.ToolsFunction;
+import com.sun.javafx.image.impl.IntArgbPre;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -283,6 +284,7 @@ public class OrderController extends BaseController {
                 classRoom.setUser_id(orderInfo.getCourse_owner_id());
                 classRoom.setCourse_id(orderInfo.getCourse_id());
                 classRoom.setCreate_time((int) (new Date().getTime() / 1000));
+                classRoom.setAll_hours(orderInfo.getAll_hours());
 
                 iOrder.addClassRoom(classRoom);
                 int class_number = 1000000000 + classRoom.getClass_id();
@@ -312,6 +314,8 @@ public class OrderController extends BaseController {
                         classTimeInfo.setEnd_time(classTime.getClass_time() + 3600 * classTime.getClass_hours());
                         classTimeInfo.setClass_number(classTime.getClass_number());
                         classTimeInfo.setStatus(0);
+                        iOrder.addClassTime(classTimeInfo);
+                        classTimeInfo.setStudent_id(getCurrentUserId());
                         iOrder.addClassTime(classTimeInfo);
                     }
                 }
@@ -468,7 +472,18 @@ public class OrderController extends BaseController {
             e.printStackTrace();
             return JSONResult.errorMsg("json 格式错误");
         }
-
+        ClassTimeInfo classTimeInfo = new ClassTimeInfo();
+        classTimeInfo.setClass_id(Integer.parseInt(class_id));
+        classTimeInfo.setOrder_id(orderInfo.getId());
+        classTimeInfo.setTeacher_id(getCurrentUserId());
+        classTimeInfo.setStudent_id(orderInfo.getStudent_id());
+        classTimeInfo.setClass_number(class_item.getClass_number());
+        classTimeInfo.setBegin_time(class_item.getClass_time());
+        classTimeInfo.setEnd_time(class_item.getClass_time() + 3600*class_item.getClass_hours());
+        classTimeInfo.setStatus(0);
+        iOrder.addClassTime(classTimeInfo);
+        classTimeInfo.setStudent_id(getCurrentUserId());
+        iOrder.addClassTime(classTimeInfo);
         return JSONResult.ok();
     }
 
@@ -506,6 +521,7 @@ public class OrderController extends BaseController {
         String mapJakcson = mapper.writeValueAsString(class_item_list_other);
         iOrder.setClassRoomOutLine(Integer.parseInt(class_id), mapJakcson);
         iOrder.setOrderOutline(studentClass.getOrder_id(),mapJakcson);
+        iOrder.deleteClassTime(Integer.parseInt(class_id), (int) (new Date().getTime() / 1000));
 
         return JSONResult.ok();
     }

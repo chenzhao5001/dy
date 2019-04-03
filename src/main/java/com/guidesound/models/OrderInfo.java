@@ -1,6 +1,7 @@
 package com.guidesound.models;
 
 public class OrderInfo {
+    int id;
     int course_owner_id;
     int course_id;
     String way;
@@ -8,6 +9,32 @@ public class OrderInfo {
     String refund_rule;
     int order_status;
     int type;
+    int all_hours;
+    int student_id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getStudent_id() {
+        return student_id;
+    }
+
+    public void setStudent_id(int student_id) {
+        this.student_id = student_id;
+    }
+
+    public int getAll_hours() {
+        return all_hours;
+    }
+
+    public void setAll_hours(int all_hours) {
+        this.all_hours = all_hours;
+    }
 
     public int getType() {
         return type;
