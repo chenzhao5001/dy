@@ -3,6 +3,7 @@ package com.guidesound.controller;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.TempStruct.ClassTime;
 import com.guidesound.TempStruct.ClassUseInfo;
@@ -155,7 +156,7 @@ public class OrderController extends BaseController {
             e.printStackTrace();
             classOrder.setOutline("json 格式错误");
         }
-        RefundInfo refundInfo = new RefundInfo();
+
         int hour_theory_use = 0;
         int hour_actual_use = 0;
         int hour_forget_use = 0;
@@ -182,8 +183,21 @@ public class OrderController extends BaseController {
         classUseInfo.setHour_forget_use(hour_forget_use);
         classUseInfo.setHour_surplus_use(hour_surplus_use);
 
-        classOrder.setRefund_info(refundInfo);
+
         classOrder.setClass_use_info(classUseInfo);
+
+        classOrder.setRefund_info(new RefundInfo());
+        OrderInfo orderInfo = iOrder.getUserByOrderId(Integer.parseInt(order_id));
+        if(orderInfo.getRefund_amount() != 0) {
+            RefundInfo refundInfo = new RefundInfo();
+            refundInfo.setAll_charge(classOrder.getAll_charge());
+            refundInfo.setHour_theory_use(hour_theory_use);
+            refundInfo.setHour_actual_use(hour_actual_use);
+            refundInfo.setHour_forget_use(hour_forget_use);
+            refundInfo.setRefund_amount(orderInfo.getRefund_amount());
+            refundInfo.setSubmit_time(orderInfo.getSubmit_time());
+            classOrder.setRefund_info(refundInfo);
+        }
         return JSONResult.ok(classOrder);
     }
 
@@ -246,6 +260,20 @@ public class OrderController extends BaseController {
         classUseInfo.setHour_forget_use(hour_forget_use);
         classUseInfo.setHour_surplus_use(hour_surplus_use);
         order1V1.setClass_use_info(classUseInfo);
+
+        OrderInfo orderInfo = iOrder.getUserByOrderId(Integer.parseInt(order_id));
+        if(orderInfo.getRefund_amount() != 0) {
+            RefundInfo refundInfo = new RefundInfo();
+            refundInfo.setAll_charge(order1V1.getAll_charge());
+            refundInfo.setHour_theory_use(hour_theory_use);
+            refundInfo.setHour_actual_use(hour_actual_use);
+            refundInfo.setHour_forget_use(hour_forget_use);
+            refundInfo.setRefund_amount(orderInfo.getRefund_amount());
+            refundInfo.setSubmit_time(orderInfo.getSubmit_time());
+            order1V1.setRefund_info(refundInfo);
+        }
+
+
         return JSONResult.ok(order1V1);
     }
 
@@ -523,6 +551,35 @@ public class OrderController extends BaseController {
         iOrder.setOrderOutline(studentClass.getOrder_id(),mapJakcson);
         iOrder.deleteClassTime(Integer.parseInt(class_id), (int) (new Date().getTime() / 1000));
 
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/refund_amount")
+    @ResponseBody
+    JSONResult deleteClassTime(String order_id,String refund_amount) {
+
+        if(order_id == null || refund_amount == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+        OrderInfo orderInfo = iOrder.getUserByOrderId(Integer.parseInt(order_id));
+        if(orderInfo.getRefund_amount() != 0) {
+            return JSONResult.errorMsg("已经退费过");
+        }
+        int all_time = orderInfo.getAll_hours();
+        int hour_theory_use = 0;
+        List<ClassTimeInfo> time_list = iOrder.getClassTimeByInfo(Integer.parseInt(order_id),getCurrentUserId(), (int) (new Date().getTime() /1000));
+        for(ClassTimeInfo item : time_list) {
+            if(item.getBegin_time() < new Date().getTime()/1000) {
+                hour_theory_use +=  (item.getEnd_time() - item.getBegin_time()) / 3600;
+            }
+        }
+        int hour_surplus_use = all_time - hour_theory_use;
+        int leaveMoney = orderInfo.getPrice_one_hour()*hour_surplus_use;
+
+        if(leaveMoney != Integer.parseInt(refund_amount)) {
+            return JSONResult.errorMsg("金额不符");
+        }
+        iOrder.setRefundAmount(Integer.parseInt(order_id),leaveMoney, (int) (new Date().getTime() / 1000));
         return JSONResult.ok();
     }
 

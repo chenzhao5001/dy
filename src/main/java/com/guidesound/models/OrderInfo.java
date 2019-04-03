@@ -11,6 +11,34 @@ public class OrderInfo {
     int type;
     int all_hours;
     int student_id;
+    int price_one_hour;
+    int refund_amount;
+    int submit_time;
+
+    public int getSubmit_time() {
+        return submit_time;
+    }
+
+    public void setSubmit_time(int submit_time) {
+        this.submit_time = submit_time;
+    }
+
+    public int getRefund_amount() {
+        return refund_amount;
+    }
+
+    public void setRefund_amount(int refund_amount) {
+        this.refund_amount = refund_amount;
+    }
+
+
+    public int getPrice_one_hour() {
+        return price_one_hour;
+    }
+
+    public void setPrice_one_hour(int price_one_hour) {
+        this.price_one_hour = price_one_hour;
+    }
 
     public int getId() {
         return id;

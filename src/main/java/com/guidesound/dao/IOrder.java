@@ -145,7 +145,7 @@ public interface IOrder {
 
     @Delete("delete from class_time where class_id = #{arg0} and create_time > #{arg0}")
     void deleteClassTime(int class_id,int time);
-    
+
     @Update("update class_room set course_name = #{course_name}," +
             "course_name = #{course_name}," +
             "course_pic = #{course_pic}," +
@@ -217,6 +217,7 @@ public interface IOrder {
     @Select("select * from class_time where class_id = #{arg0} and student_id = #{arg1} and teacher_id = #{arg3} and begin_time < #{arg2} and status = 1")
     List<ClassTimeInfo> getTeacherTrueClassTimeByInfo(int class_id, int student_id, int time,int teacher_id);
 
-
+    @Update("update user_order set refund_amount = #{arg1},submit_time = #{arg2} where id = #{arg0}")
+    void setRefundAmount(int order_id,int money,int time);
 
 }
