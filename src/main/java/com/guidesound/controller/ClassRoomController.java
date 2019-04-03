@@ -367,5 +367,4 @@ public class ClassRoomController extends BaseController {
 
         return JSONResult.ok(classInfo_list);
     }
-
 }
