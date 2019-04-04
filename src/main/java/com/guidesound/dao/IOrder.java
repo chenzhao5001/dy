@@ -159,6 +159,7 @@ public interface IOrder {
             "all_charge = #{all_charge}," +
             "refund_rule = #{refund_rule}," +
             "outline = #{outline}," +
+            "type = #{type}," +
             "tutor_content = #{tutor_content}" +
             " where class_id = #{id}")
     void ClassRoomCourse(Course course);
@@ -194,8 +195,8 @@ public interface IOrder {
     @Select("select * from class_room where user_id = #{arg0}")
     List<ClassRoom> getClassInfoByUserId(int user_id);
 
-    @Select("select * from class_room")
-    List<ClassRoom> getAllClassRoom();
+    @Select("select * from class_room where type = #{arg0}")
+    List<ClassRoom> getAllClassRoom(int type);
 
     @Select("select * from class_room where user_id = #{arg0}")
     List<ClassRoom> getClassRoomByUserId(int user_id);

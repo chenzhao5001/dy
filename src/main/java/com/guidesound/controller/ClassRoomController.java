@@ -329,7 +329,7 @@ public class ClassRoomController extends BaseController {
     JSONResult testListen() {
         int user_id = getCurrentUserId();
         List<ClassInfo> classInfo_list = new ArrayList<>();
-        List<ClassRoom> list = iOrder.getAllClassRoom();
+        List<ClassRoom> list = iOrder.getAllClassRoom(2);
         List<Integer> user_ids = new ArrayList<>();
         Map<Integer, UserInfo> m_users = new HashMap<>();
         for (ClassRoom item : list) {
