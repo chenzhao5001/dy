@@ -36,6 +36,8 @@ public class Order1V1DTO {
     @NotNull(message = "tutor_content:不能为空;")
     String tutor_content;
 
+
+
     int type;
     int create_time;
     int user_id;

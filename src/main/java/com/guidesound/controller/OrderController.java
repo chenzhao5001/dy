@@ -389,7 +389,7 @@ public class OrderController extends BaseController {
             studentClass.setCourse_id(orderInfo.getCourse_id());
             studentClass.setClass_id(class_id);
             studentClass.setOrder_id(Integer.parseInt(order_id));
-            studentClass.setTeacher_id(orderInfo.getTeacher_id());
+            studentClass.setTeacher_id(orderInfo.getCourse_owner_id());
             studentClass.setCreate_time((int) (new Date().getTime() / 1000));
             studentClass.setUpdate_time((int) (new Date().getTime() / 1000));
 
