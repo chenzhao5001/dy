@@ -187,7 +187,7 @@ public class OrderController extends BaseController {
         classOrder.setClass_use_info(classUseInfo);
 
         classOrder.setRefund_info(new RefundInfo());
-        OrderInfo orderInfo = iOrder.getUserByOrderId(Integer.parseInt(order_id));
+        OrderInfo orderInfo = iOrder.getOrderById(Integer.parseInt(order_id));
         if(orderInfo.getRefund_amount() != 0) {
             RefundInfo refundInfo = new RefundInfo();
             refundInfo.setAll_charge(classOrder.getAll_charge());
@@ -261,7 +261,7 @@ public class OrderController extends BaseController {
         classUseInfo.setHour_surplus_use(hour_surplus_use);
         order1V1.setClass_use_info(classUseInfo);
 
-        OrderInfo orderInfo = iOrder.getUserByOrderId(Integer.parseInt(order_id));
+        OrderInfo orderInfo = iOrder.getOrderById(Integer.parseInt(order_id));
         if(orderInfo.getRefund_amount() != 0) {
             RefundInfo refundInfo = new RefundInfo();
             refundInfo.setAll_charge(order1V1.getAll_charge());
@@ -313,8 +313,9 @@ public class OrderController extends BaseController {
                 classRoom.setCourse_id(orderInfo.getCourse_id());
                 classRoom.setCreate_time((int) (new Date().getTime() / 1000));
                 classRoom.setAll_hours(orderInfo.getAll_hours());
-
+                classRoom.setType(orderInfo.getType());
                 iOrder.addClassRoom(classRoom);
+
                 int class_number = 1000000000 + classRoom.getClass_id();
                 iOrder.addRoomNumber(classRoom.getClass_id(), class_number);
                 course.setId(classRoom.getClass_id());
@@ -388,8 +389,10 @@ public class OrderController extends BaseController {
             studentClass.setCourse_id(orderInfo.getCourse_id());
             studentClass.setClass_id(class_id);
             studentClass.setOrder_id(Integer.parseInt(order_id));
+            studentClass.setTeacher_id(orderInfo.getTeacher_id());
             studentClass.setCreate_time((int) (new Date().getTime() / 1000));
             studentClass.setUpdate_time((int) (new Date().getTime() / 1000));
+
             iOrder.addStudentClass(studentClass);
         } else { //录播课
               
@@ -451,12 +454,12 @@ public class OrderController extends BaseController {
         if(classRoom == null) {
             return JSONResult.errorMsg("课堂不存在");
         }
-        List<StudentClass> s_list = iOrder.getStudentClassByInfo(getCurrentUserId(),Integer.parseInt(class_id));
+        List<StudentClass> s_list = iOrder.getStudentClassByTeacherId(getCurrentUserId(),Integer.parseInt(class_id));
         if(s_list.size() < 1) {
             return JSONResult.errorMsg("订单不存在");
         }
         StudentClass studentClass = s_list.get(0);
-        OrderInfo orderInfo = iOrder.getUserByOrderId(studentClass.getOrder_id());
+        OrderInfo orderInfo = iOrder.getOrderById(studentClass.getOrder_id());
         if(orderInfo.getType() != 1) {
             return JSONResult.errorMsg("不是1v1课程");
         }
@@ -521,7 +524,7 @@ public class OrderController extends BaseController {
         if (class_id == null) {
             return JSONResult.errorMsg("缺少 class_id 参数");
         }
-        List<StudentClass> s_list = iOrder.getStudentClassByInfo(getCurrentUserId(),Integer.parseInt(class_id));
+        List<StudentClass> s_list = iOrder.getStudentClassByTeacherId(getCurrentUserId(),Integer.parseInt(class_id));
         if(s_list.size() < 1) {
             return JSONResult.errorMsg("订单不存在");
         }
@@ -561,7 +564,7 @@ public class OrderController extends BaseController {
         if(order_id == null || refund_amount == null) {
             return JSONResult.errorMsg("缺少参数");
         }
-        OrderInfo orderInfo = iOrder.getUserByOrderId(Integer.parseInt(order_id));
+        OrderInfo orderInfo = iOrder.getOrderById(Integer.parseInt(order_id));
         if(orderInfo.getRefund_amount() != 0) {
             return JSONResult.errorMsg("已经退费过");
         }
@@ -580,6 +583,7 @@ public class OrderController extends BaseController {
             return JSONResult.errorMsg("金额不符");
         }
         iOrder.setRefundAmount(Integer.parseInt(order_id),leaveMoney, (int) (new Date().getTime() / 1000));
+        iOrder.setOrderStatus(Integer.parseInt(order_id),2);
         return JSONResult.ok();
     }
 

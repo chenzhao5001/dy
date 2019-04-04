@@ -47,6 +47,74 @@ public class ClassRoomController extends BaseController {
         if (classRoom == null) {
             return JSONResult.errorMsg("class_id不存在");
         }
+        List<StudentClass> studentClasses = iOrder.getStudentClassByClassId(Integer.parseInt(class_id));
+        if(studentClasses.size() < 0) {
+            return JSONResult.errorMsg("课堂信息不存在");
+        }
+
+        if(classRoom.getType() != 0) {
+            return JSONResult.errorMsg("不是1v1课程");
+        }
+
+        boolean flag = false;
+        boolean teacher_flag = true;
+        for(StudentClass item : studentClasses) {
+            if(item.getTeacher_id() == getCurrentUserId()) {
+                flag = true;
+                teacher_flag = true;
+                break;
+            }
+            if(item.getUser_id() == getCurrentUserId()) {
+                flag = true;
+                teacher_flag = false;
+                break;
+            }
+        }
+
+        if(flag == false) {
+            return JSONResult.errorMsg("不是此课堂的学生或老师");
+        }
+
+        String outLine = classRoom.getOutline();
+        if(outLine == "") {
+            return JSONResult.errorMsg("没有发布课程");
+        }
+
+        List<ClassTime> class_item_list = null;
+        ObjectMapper mapper_temp = new ObjectMapper();
+        try {
+            class_item_list = mapper_temp.readValue(outLine, new TypeReference<List<ClassTime>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+            return JSONResult.errorMsg("课堂大纲解析失败");
+        }
+
+        boolean right_time = false;
+        List<TeacherEnterInfo> list = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id),getCurrentUserId());
+        for(ClassTime item : class_item_list) {
+            int beginTime = item.getClass_time() - 60*20;
+            int endTime =  item.getClass_time() + 60*60*item.getClass_hours();
+            int current_time = (int) (new Date().getTime() / 1000);
+            if(current_time > beginTime && current_time < endTime) {
+                if(teacher_flag == true) {
+                    if(list.size() == 0) {
+                        iOrder.setTeacherEnterInfo(getCurrentUserId(),Integer.parseInt(class_id),item.getClass_number(), (int) (new Date().getTime() /1000));
+                    }
+                }
+                right_time = true;
+                break;
+            }
+        }
+        if(right_time == false) {
+            return JSONResult.errorMsg("时间不对");
+        }
+        if(teacher_flag == false) {
+            if(list.size() == 0) {
+                return JSONResult.errorMsg("老师未进入");
+            }
+        }
+
+
         class Ret {
             int room_number;
             int ishost;
@@ -68,10 +136,10 @@ public class ClassRoomController extends BaseController {
             }
         }
 
+
         Ret ret = new Ret();
         ret.setRoom_number(classRoom.getRoom_number());
-        int user_id = classRoom.getUser_id();
-        if (user_id == getCurrentUserId()) {
+        if(teacher_flag == true) {
             ret.setIshost(0);
         } else {
             ret.setIshost(1);
@@ -183,7 +251,7 @@ public class ClassRoomController extends BaseController {
                 studentOrderTemp.setStudent_head_pic(userInfo1.getHead());
                 studentOrderTemp.setStudent_name(userInfo1.getName());
             }
-            OrderInfo orderInfo = iOrder.getUserByOrderId(item.getOrder_id());
+            OrderInfo orderInfo = iOrder.getOrderById(item.getOrder_id());
             if (orderInfo != null) {
                 studentOrderTemp.setStudent_status(orderInfo.getOrder_status());
             }
@@ -303,7 +371,7 @@ public class ClassRoomController extends BaseController {
                 List<StudentClass> s_list = iOrder.getStudentClassByInfo(getCurrentUserId(), item.getClass_id());
                 if (s_list.size() > 0) {
                     student.setOrder_id(s_list.get(0).getOrder_id());
-                    OrderInfo orderInfo = iOrder.getUserByOrderId(s_list.get(0).getOrder_id());
+                    OrderInfo orderInfo = iOrder.getOrderById(s_list.get(0).getOrder_id());
                     if (orderInfo != null) {
                         student.setOrder_status(orderInfo.getOrder_status());
                     }

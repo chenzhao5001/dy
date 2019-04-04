@@ -11,9 +11,18 @@ public class OrderInfo {
     int type;
     int all_hours;
     int student_id;
+    int teacher_id;
     int price_one_hour;
     int refund_amount;
     int submit_time;
+
+    public int getTeacher_id() {
+        return teacher_id;
+    }
+
+    public void setTeacher_id(int teacher_id) {
+        this.teacher_id = teacher_id;
+    }
 
     public int getSubmit_time() {
         return submit_time;

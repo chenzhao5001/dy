@@ -1,10 +1,19 @@
 package com.guidesound.TempStruct;
 
 public class ClassTime {
+    int class_id;
     int class_number;
     int class_hours;
     int class_time;
     String class_content;
+
+    public int getClass_id() {
+        return class_id;
+    }
+
+    public void setClass_id(int class_id) {
+        this.class_id = class_id;
+    }
 
     public int getClass_number() {
         return class_number;

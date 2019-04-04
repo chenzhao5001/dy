@@ -24,6 +24,15 @@ public class ClassRoom {
     String outline;
     int create_time;
     int update_time;
+    int type;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public int flag;
 

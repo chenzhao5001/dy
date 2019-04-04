@@ -2,11 +2,20 @@ package com.guidesound.models;
 
 public class StudentClass {
     int user_id;
+    int teacher_id;
     int course_id;
     int class_id;
     int order_id;
     int create_time;
     int update_time;
+
+    public int getTeacher_id() {
+        return teacher_id;
+    }
+
+    public void setTeacher_id(int teacher_id) {
+        this.teacher_id = teacher_id;
+    }
 
     public int getUser_id() {
         return user_id;

@@ -108,14 +108,14 @@ public interface IOrder {
     Order1V1 get1v1OrderById(int order_id);
 
     @Select("select * from user_order where id = #{arg0}")
-    OrderInfo getUserByOrderId(int order_id);
+    OrderInfo getOrderById(int order_id);
     @Select("select * from user_order where id = #{arg0} and student_id = #{arg1}")
     OrderInfo getUserByOrderIdAndUserId(int order_id,int user_id);
 
     @Update("update user_order set order_status = #{arg1} where id = #{arg0}")
     void setOrderStatus(int order_id,int state);
 
-    @Insert("insert into class_room (user_id,course_id,create_time,all_hours) value (#{user_id},#{course_id},#{create_time},#{all_hours})")
+    @Insert("insert into class_room (user_id,course_id,create_time,all_hours,type) value (#{user_id},#{course_id},#{create_time},#{all_hours},#{type})")
     @Options(useGeneratedKeys=true, keyProperty="class_id", keyColumn="class_id")
     void addClassRoom(ClassRoom classRoom);
 
@@ -164,12 +164,16 @@ public interface IOrder {
             " where class_id = #{id}")
     void ClassRoomCourse(Course course);
 
-    @Insert("insert into student_class (user_id,course_id,class_id,order_id,create_time,update_time)" +
-            " value (#{user_id},#{course_id},#{class_id},#{order_id},#{create_time},#{update_time})")
+    @Insert("insert into student_class (user_id,teacher_id,course_id,class_id,order_id,create_time,update_time)" +
+            " value (#{user_id},#{teacher_id},#{course_id},#{class_id},#{order_id},#{create_time},#{update_time})")
     void addStudentClass(StudentClass studentClass);
 
     @Select("select * from student_class where user_id = #{arg0} and class_id = #{arg1}")
     List<StudentClass> getStudentClassByInfo(int user_id,int class_id);
+
+    @Select("select * from student_class where teacher_id = #{arg0} and class_id = #{arg1}")
+    List<StudentClass> getStudentClassByTeacherId(int teacher_id,int class_id);
+
 
     @Select("select * from student_class where course_id = #{arg0}")
     List<StudentClass> getStudentClassByCourseId(int course_id);
@@ -220,5 +224,11 @@ public interface IOrder {
 
     @Update("update user_order set refund_amount = #{arg1},submit_time = #{arg2} where id = #{arg0}")
     void setRefundAmount(int order_id,int money,int time);
+
+    @Select("select * from teacher_enter_info where class_id = #{arg0} and #{arg1}")
+    List<TeacherEnterInfo> getTeacherEnterInfo(int class_id,int user_id);
+
+    @Insert("insert into teacher_enter_info (teacher_id,class_id,class_nunber,create_time) value (#{arg0},#{arg1},#{arg2},#{arg3})")
+    void setTeacherEnterInfo(int teacher_id,int class_id,int class_nunber,int create_time);
 
 }
