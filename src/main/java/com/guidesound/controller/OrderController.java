@@ -228,6 +228,20 @@ public class OrderController extends BaseController {
         ObjectMapper mapper_temp = new ObjectMapper();
         try {
             class_item_list = mapper_temp.readValue((String)order1V1.getOutline(), new TypeReference<List<ClassTime>>() {});
+            for(ClassTime item : class_item_list) {
+                if(item.getClass_time() > new Date().getTime() / 1000) {
+                    item.setClass_status(0);
+                } else {
+                    List<ClassTimeInfo> class_list = iOrder.getClassTimeStatus(Integer.parseInt(order_id),getCurrentUserId(),item.getClass_time());
+                    if(class_list.size() > 0) {
+                        if(class_list.get(0).getStatus() == 1) {
+                            item.setClass_status(1);
+                        } else {
+                            item.setClass_status(2);
+                        }
+                    }
+                }
+            }
             order1V1.setOutline(class_item_list);
         } catch (IOException e) {
             e.printStackTrace();
@@ -314,6 +328,8 @@ public class OrderController extends BaseController {
                 classRoom.setCreate_time((int) (new Date().getTime() / 1000));
                 classRoom.setAll_hours(orderInfo.getAll_hours());
                 classRoom.setType(orderInfo.getType());
+                classRoom.setAll_charge(orderInfo.getAll_charge());
+                classRoom.setPrice_one_hour(orderInfo.getPrice_one_hour());
                 iOrder.addClassRoom(classRoom);
 
                 int class_number = 1000000000 + classRoom.getClass_id();
@@ -321,7 +337,7 @@ public class OrderController extends BaseController {
                 course.setId(classRoom.getClass_id());
                 iOrder.ClassRoomCourse(course);
                 class_id = classRoom.getClass_id();
-                teacher_id = course.getTeacher_id();
+                teacher_id = course.getUser_id();
                 outLine = course.getOutline();
 
 
@@ -346,6 +362,7 @@ public class OrderController extends BaseController {
                         iOrder.addClassTime(classTimeInfo);
                         classTimeInfo.setStudent_id(getCurrentUserId());
                         iOrder.addClassTime(classTimeInfo);
+
                     }
                 }
             } else {
@@ -394,6 +411,7 @@ public class OrderController extends BaseController {
             studentClass.setUpdate_time((int) (new Date().getTime() / 1000));
 
             iOrder.addStudentClass(studentClass);
+            iOrder.addOrderClassId(Integer.parseInt(order_id),class_id);
         } else { //录播课
               
         }

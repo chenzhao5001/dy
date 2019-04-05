@@ -91,6 +91,7 @@ public class ClassRoomController extends BaseController {
 
         boolean right_time = false;
         List<TeacherEnterInfo> list = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id),getCurrentUserId());
+        int begin_time = 0;
         for(ClassTime item : class_item_list) {
             int beginTime = item.getClass_time() - 60*20;
             int endTime =  item.getClass_time() + 60*60*item.getClass_hours();
@@ -102,6 +103,7 @@ public class ClassRoomController extends BaseController {
                     }
                 }
                 right_time = true;
+                begin_time = beginTime;
                 break;
             }
         }
@@ -113,7 +115,7 @@ public class ClassRoomController extends BaseController {
                 return JSONResult.errorMsg("老师未进入");
             }
         }
-
+        iOrder.setClassTimeStatus(Integer.parseInt(class_id),getCurrentUserId(),begin_time,1);
 
         class Ret {
             int room_number;
@@ -213,6 +215,21 @@ public class ClassRoomController extends BaseController {
             beanList = mapper.readValue(classRoom.getOutline(), new TypeReference<List<CourseOutline>>() {
             });
             classRoomRet.setOutline(beanList);
+        }
+        boolean class_end_time_flag = true;
+        for(CourseOutline item : beanList) {
+            if(item.getClass_time() < new Date().getTime() / 1000) {
+                class_end_time_flag = false;
+                break;
+            }
+        }
+        if(class_end_time_flag == true) {
+            classRoomRet.setClass_info_status(3);
+        } else {
+            int count = iOrder.getReturnOrderByClassId(Integer.parseInt(class_id));
+            if(count == 0) {
+                classRoomRet.setClass_info_status(4);
+            }
         }
 
         int hour_theory_use = 0;

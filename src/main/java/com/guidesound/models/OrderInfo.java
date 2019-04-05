@@ -15,6 +15,15 @@ public class OrderInfo {
     int price_one_hour;
     int refund_amount;
     int submit_time;
+    int all_charge;
+
+    public int getAll_charge() {
+        return all_charge;
+    }
+
+    public void setAll_charge(int all_charge) {
+        this.all_charge = all_charge;
+    }
 
     public int getTeacher_id() {
         return teacher_id;

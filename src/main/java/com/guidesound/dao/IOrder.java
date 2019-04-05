@@ -115,7 +115,8 @@ public interface IOrder {
     @Update("update user_order set order_status = #{arg1} where id = #{arg0}")
     void setOrderStatus(int order_id,int state);
 
-    @Insert("insert into class_room (user_id,course_id,create_time,all_hours,type) value (#{user_id},#{course_id},#{create_time},#{all_hours},#{type})")
+    @Insert("insert into class_room (user_id,course_id,create_time,all_hours,type,all_charge,price_one_hour) " +
+            "value (#{user_id},#{course_id},#{create_time},#{all_hours},#{type},#{all_charge},#{price_one_hour})")
     @Options(useGeneratedKeys=true, keyProperty="class_id", keyColumn="class_id")
     void addClassRoom(ClassRoom classRoom);
 
@@ -129,6 +130,11 @@ public interface IOrder {
 
     @Update("update class_room set new_class_time = #{arg1} where class_id = #{arg0}")
     void setClassTime(int class_id,String class_time);
+
+    @Update("update class_time set status = #{arg3} where class_id = #{arg0} and student_id = #{arg1} and begin_time = #{arg2}")
+    void setClassTimeStatus(int class_id,int student_id, int begin_time,int status);
+    @Select("select * from class_time where order_id = #{arg0} and student_id = #{arg1} and begin_time = #{arg2}")
+    List<ClassTimeInfo> getClassTimeStatus(int order_id,int student_id,int begin_time);
 
     @Update("update class_room set outline = #{arg1} where class_id = #{arg0}")
     void setClassRoomOutLine(int class_id,String out_line);
@@ -230,5 +236,11 @@ public interface IOrder {
 
     @Insert("insert into teacher_enter_info (teacher_id,class_id,class_nunber,create_time) value (#{arg0},#{arg1},#{arg2},#{arg3})")
     void setTeacherEnterInfo(int teacher_id,int class_id,int class_nunber,int create_time);
+
+    @Update("update user_order set class_id = #{arg1} where id = #{arg0}")
+    void addOrderClassId(int order,int class_id);
+
+    @Select("select count(*) from user_order where class_id = #{arg0} and refund_amount != 0")
+    int getReturnOrderByClassId(int class_id);
 
 }
