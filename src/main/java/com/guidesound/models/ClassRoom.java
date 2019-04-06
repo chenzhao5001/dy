@@ -25,6 +25,15 @@ public class ClassRoom {
     int create_time;
     int update_time;
     int type;
+    String im_group_id;
+
+    public String getIm_group_id() {
+        return im_group_id;
+    }
+
+    public void setIm_group_id(String im_group_id) {
+        this.im_group_id = im_group_id;
+    }
 
     public int getType() {
         return type;

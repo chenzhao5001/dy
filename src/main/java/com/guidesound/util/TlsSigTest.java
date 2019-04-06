@@ -6,10 +6,10 @@ import org.junit.Assert;
 import com.tls.tls_sigature.*;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 public class TlsSigTest {
 
@@ -32,6 +32,61 @@ public class TlsSigTest {
 
     private static String importUrl = "https://console.tim.qq.com/v4/im_open_login_svc/account_import?usersig="  +  control_usersig + "&apn=1&identifier=" + user_control + "&sdkappid=1400158534&contenttype=json";
     private static String controlUrl = "https://console.tim.qq.com/v4/openim/sendmsg?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=99999999&contenttype=json";
+    public static String createGroup(String im_id,String GroupName) throws IOException {
+        Random random = new Random();
+        int randomInt = random.nextInt();
+//        String strRandomInt = String.valueOf(randomInt);
+        String addGroupUrl = "https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + randomInt+ "&contenttype=json";
+
+        String reqJson = "{\"Name\":\"" +GroupName + "\",\"Type\":\"Public\",\"Owner_Account\": \"" + im_id + "\"}";
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, reqJson);
+        Request req = new Request.Builder()
+                .url(addGroupUrl)
+                .post(body)
+                .build();
+        Response resp;
+        OkHttpClient client_temp = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+        resp = client_temp.newCall(req).execute();
+        String jsonString = resp.body().string();
+
+        JSONObject ret = new JSONObject(jsonString);
+        int code = ret.getInt("ErrorCode");
+        if(code == 0 ) {
+            return ret.getString("GroupId");
+        }
+        return "";
+    }
+    public static String addGroupPerson(String group_id,String new_person ) throws IOException {
+
+        Random random = new Random();
+        int randomInt = random.nextInt();
+        String addGroupUrl = "https://console.tim.qq.com/v4/group_open_http_svc/add_group_member?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + randomInt+ "&contenttype=json";
+        String info = "{" +
+                "\"GroupId\": \""+ group_id+"\"," +
+                "\"MemberList\": [{" +
+                "\"Member_Account\": \""+ new_person+"\"" +
+                "}]" +
+                "}";
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, info);
+        Request req = new Request.Builder()
+                .url(addGroupUrl)
+                .post(body)
+                .build();
+        Response resp;
+        OkHttpClient client_temp = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+        resp = client_temp.newCall(req).execute();
+        String jsonString = resp.body().string();
+
+        return jsonString;
+    }
     public static String getUrlSig(String im_id) throws IOException {
         tls_sigature.GenTLSSignatureResult result = tls_sigature.GenTLSSignatureEx(1400158534, im_id, privStr);
 

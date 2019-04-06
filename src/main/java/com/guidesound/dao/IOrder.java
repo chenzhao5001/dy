@@ -149,7 +149,7 @@ public interface IOrder {
     @Select("select * from class_room where class_id = #{arg0}")
     ClassRoom getClassRoomById(int class_id);
 
-    @Delete("delete from class_time where class_id = #{arg0} and create_time > #{arg0}")
+    @Delete("delete from class_time where class_id = #{arg0} and begin_time > #{arg0}")
     void deleteClassTime(int class_id,int time);
 
     @Update("update class_room set course_name = #{course_name}," +
@@ -242,5 +242,9 @@ public interface IOrder {
 
     @Select("select count(*) from user_order where class_id = #{arg0} and refund_amount != 0")
     int getReturnOrderByClassId(int class_id);
+    @Select("select count(*) from user_order where class_id = #{arg0}")
+    int getAllReturnOrderByClassId(int class_id);
+    @Update("update class_room set im_group_id = #{arg1} where class_id = #{arg0}")
+    void setClassRoomImGroupId(int class_id,String group_id);
 
 }

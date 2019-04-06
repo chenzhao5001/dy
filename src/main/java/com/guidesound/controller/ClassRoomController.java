@@ -223,11 +223,12 @@ public class ClassRoomController extends BaseController {
                 break;
             }
         }
-        if(class_end_time_flag == true) {
+        if(class_end_time_flag == true && beanList.size() > 0) {
             classRoomRet.setClass_info_status(3);
         } else {
             int count = iOrder.getReturnOrderByClassId(Integer.parseInt(class_id));
-            if(count == 0) {
+            int all_count = iOrder.getAllReturnOrderByClassId(Integer.parseInt(class_id));
+            if(count == all_count) {
                 classRoomRet.setClass_info_status(4);
             }
         }
@@ -373,6 +374,7 @@ public class ClassRoomController extends BaseController {
                             teacherClass1.setNext_class_NO(classTime.getClass_number());
                             teacherClass1.setNext_class_name(classTime.getClass_content());
                             teacherClass1.setNext_clsss_time(classTime.getClass_time());
+                            teacherClass1.setNext_class_hour(classTime.getClass_hours());
                             break;
                         }
                     }

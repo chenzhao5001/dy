@@ -17,6 +17,7 @@ import com.guidesound.models.*;
 import com.guidesound.ret.ClassOrder;
 import com.guidesound.ret.Order1V1;
 import com.guidesound.util.JSONResult;
+import com.guidesound.util.TlsSigTest;
 import com.guidesound.util.ToolsFunction;
 import com.sun.javafx.image.impl.IntArgbPre;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -293,7 +294,7 @@ public class OrderController extends BaseController {
 
     @RequestMapping("/pay")
     @ResponseBody
-    JSONResult pay(String type, String order_id, String pay_way) {
+    JSONResult pay(String type, String order_id, String pay_way) throws IOException {
         if (type == null || order_id == null || pay_way == null) {
             return JSONResult.errorMsg("缺少参数");
         }
@@ -330,16 +331,23 @@ public class OrderController extends BaseController {
                 classRoom.setType(orderInfo.getType());
                 classRoom.setAll_charge(orderInfo.getAll_charge());
                 classRoom.setPrice_one_hour(orderInfo.getPrice_one_hour());
-                iOrder.addClassRoom(classRoom);
+                UserInfo userInfo = iUser.getUser(classRoom.getUser_id());
 
+                String group_name = TlsSigTest.createGroup(userInfo.getIm_id(),course.getCourse_name());
+                if(group_name.equals("")) {
+                    return JSONResult.errorMsg("创建im群失败");
+                }
+
+                iOrder.addClassRoom(classRoom);
                 int class_number = 1000000000 + classRoom.getClass_id();
                 iOrder.addRoomNumber(classRoom.getClass_id(), class_number);
                 course.setId(classRoom.getClass_id());
                 iOrder.ClassRoomCourse(course);
+                iOrder.setClassRoomImGroupId(classRoom.getClass_id(),group_name);
+
                 class_id = classRoom.getClass_id();
                 teacher_id = course.getUser_id();
                 outLine = course.getOutline();
-
 
                 List<ClassTime> class_item_list = null;
                 ObjectMapper mapper_temp = new ObjectMapper();
@@ -359,10 +367,10 @@ public class OrderController extends BaseController {
                         classTimeInfo.setEnd_time(classTime.getClass_time() + 3600 * classTime.getClass_hours());
                         classTimeInfo.setClass_number(classTime.getClass_number());
                         classTimeInfo.setStatus(0);
+
                         iOrder.addClassTime(classTimeInfo);
                         classTimeInfo.setStudent_id(getCurrentUserId());
                         iOrder.addClassTime(classTimeInfo);
-
                     }
                 }
             } else {
@@ -412,6 +420,14 @@ public class OrderController extends BaseController {
 
             iOrder.addStudentClass(studentClass);
             iOrder.addOrderClassId(Integer.parseInt(order_id),class_id);
+
+            ClassRoom classRoom = iOrder.getClassRoomById(class_id);
+            UserInfo userInfo_me = iUser.getUser(getCurrentUserId());
+            UserInfo info = iUser.getUser(classRoom.getUser_id());
+            TlsSigTest.addGroupPerson(classRoom.getIm_group_id(),userInfo_me.getIm_id());
+            TlsSigTest.addGroupPerson(classRoom.getIm_group_id(),info.getIm_id());
+
+
         } else { //录播课
               
         }
