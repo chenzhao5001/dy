@@ -171,17 +171,19 @@ public class OrderController extends BaseController {
         int hour_actual_use = 0;
         int hour_forget_use = 0;
         int hour_surplus_use = 0;
-        int all_time = 0;
+        int all_time = classOrder.getAll_hours();
 
-        all_time = classOrder.getAll_hours();
-        List<ClassTimeInfo> time_list = iOrder.getClassTimeByInfo(Integer.parseInt(order_id),student_id, (int) (new Date().getTime() /1000));
-        for(ClassTimeInfo item : time_list) {
-            if(item.getBegin_time() < new Date().getTime()/1000) {
-                hour_theory_use +=  (item.getEnd_time() - item.getBegin_time()) / 3600;
-                if(item.getStatus() == 1) {
-                    hour_actual_use +=  (item.getEnd_time() - item.getBegin_time()) / 3600;
-                } else{
-                    hour_forget_use += (item.getEnd_time() - item.getBegin_time()) / 3600;
+        for (CourseOutline courseOutline : beanList) {
+            if(courseOutline.getClass_time() + courseOutline.getClass_hours()*3600 < new Date().getTime() / 1000 ) {
+                List<ClassTimeInfo> classTimeInfo_teacher = iOrder.getClassTimeStatus(Integer.parseInt(order_id),classOrder.getCourse_owner_id(),courseOutline.getClass_time());
+                if(classTimeInfo_teacher.size() > 0 && classTimeInfo_teacher.get(0).getStatus() == 1 ) {
+                    hour_theory_use += courseOutline.getClass_hours();
+                }
+                List<ClassTimeInfo> classTimeInfo_student = iOrder.getClassTimeStatus(Integer.parseInt(order_id),classOrder.getStudent_id(),courseOutline.getClass_time());
+                if(classTimeInfo_student.size() > 0 && classTimeInfo_student.get(0).getStatus() == 1) {
+                    hour_actual_use += courseOutline.getClass_hours();
+                } else {
+                    hour_forget_use += courseOutline.getClass_hours();
                 }
             }
         }
@@ -387,12 +389,13 @@ public class OrderController extends BaseController {
                         iOrder.addClassTime(classTimeInfo); //老师创建学时
                     }
                 }
-            } else { //第二次班课
+            } else { //第n次班课
                 ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(0);
                 List<StudentClass> student_list = iOrder.getStudentClassByCourseId(orderInfo.getCourse_id());
                 if(student_list.size() >= classRoom.getMax_person()) {
                     return JSONResult.errorMsg("超过最大上课人数，无法支付");
                 }
+
                 class_id = classRoom.getClass_id();
                 teacher_id = classRoom.getUser_id();
                 outLine = classRoom.getOutline();

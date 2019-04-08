@@ -218,27 +218,20 @@ public interface IOrder {
     List<ClassTimeInfo> getClassTimeByInfo(int order_id, int student_id, int time);
 
 
-    @Select("select * from class_time where order_id = #{arg0} and student_id = #{arg1} and begin_time < #{arg2} and status = 1")
-    List<ClassTimeInfo> getTrueClassTimeByInfo(int order_id, int student_id, int time);
-
-
-    @Select("select * from class_time where class_id = #{arg0} and student_id = #{arg1} and teacher_id = #{arg3} and begin_time < #{arg2}")
-    List<ClassTimeInfo> getTeacherClassTimeByInfo(int class_id, int student_id, int time,int teacher_id);
-
-    @Select("select * from class_time where class_id = #{arg0} and student_id = #{arg1} and teacher_id = #{arg3} and begin_time < #{arg2} and status = 1")
-    List<ClassTimeInfo> getTeacherTrueClassTimeByInfo(int class_id, int student_id, int time,int teacher_id);
-
     @Update("update user_order set refund_amount = #{arg1},submit_time = #{arg2} where id = #{arg0}")
     void setRefundAmount(int order_id,int money,int time);
 
-    @Select("select * from teacher_enter_info where class_id = #{arg0} and #{arg1}")
-    List<TeacherEnterInfo> getTeacherEnterInfo(int class_id,int user_id);
+    @Select("select * from teacher_enter_info where class_id = #{arg0} and class_nunber = #{arg1}")
+    List<TeacherEnterInfo> getTeacherEnterInfo(int class_id,int class_nunber);
 
-    @Insert("insert into teacher_enter_info (teacher_id,class_id,class_nunber,create_time) value (#{arg0},#{arg1},#{arg2},#{arg3})")
-    void setTeacherEnterInfo(int teacher_id,int class_id,int class_nunber,int create_time);
+    @Insert("insert into teacher_enter_info (teacher_id,class_id,class_nunber,create_time,state) value (#{arg0},#{arg1},#{arg2},#{arg3},1)")
+    void setTeacherEnterInfo(int teacher_id,int class_id,int class_nunber,int create_time,int state);
 
+    @Update("update teacher_enter_info set state = #{arg3} where teacher_id = #{arg0} and class_id = #{arg1} and class_nunber = #{arg2}")
+    void updateTeacherEnterInfo(int teacher_id,int class_id,int class_nunber,int state);
     @Update("update user_order set class_id = #{arg1} where id = #{arg0}")
     void addOrderClassId(int order,int class_id);
+
 
     @Select("select count(*) from user_order where class_id = #{arg0} and refund_amount != 0")
     int getReturnOrderByClassId(int class_id);
