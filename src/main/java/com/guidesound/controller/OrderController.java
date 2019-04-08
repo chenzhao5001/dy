@@ -70,7 +70,7 @@ public class OrderController extends BaseController {
             return JSONResult.errorMsg(msg.toString());
         }
         int user_id = getCurrentUserId();
-        order1V1DTO.setType(1);
+        order1V1DTO.setType(0);
         order1V1DTO.setCreate_time((int) (new Date().getTime() / 1000));
         order1V1DTO.setUser_id(user_id);
         order1V1DTO.setOutline("");
@@ -101,7 +101,17 @@ public class OrderController extends BaseController {
             return JSONResult.errorMsg(msg.toString());
         }
         int user_id = getCurrentUserId();
-        orderClassDTO.setType(2);
+
+        Course course = iCourse.getCourseById(Integer.parseInt(orderClassDTO.getCourse_id()));
+        if(course == null) {
+            return JSONResult.errorMsg("课程不存在");
+        }
+        if(course.getUser_id() != getCurrentUserId()) {
+            return JSONResult.errorMsg("不是课程拥有者，无法发布订单");
+        }
+
+
+        orderClassDTO.setType(1);
         orderClassDTO.setCreate_time((int) (new Date().getTime() / 1000));
         orderClassDTO.setUser_id(user_id);
 
@@ -133,8 +143,7 @@ public class OrderController extends BaseController {
         if (classOrder == null) {
             return JSONResult.errorMsg("班课订单不存在");
         }
-
-
+        int student_id = classOrder.getStudent_id();
 
         UserInfo userInfo = iUser.getUser(classOrder.getCourse_owner_id());
         if (userInfo != null) {
@@ -165,7 +174,7 @@ public class OrderController extends BaseController {
         int all_time = 0;
 
         all_time = classOrder.getAll_hours();
-        List<ClassTimeInfo> time_list = iOrder.getClassTimeByInfo(Integer.parseInt(order_id),getCurrentUserId(), (int) (new Date().getTime() /1000));
+        List<ClassTimeInfo> time_list = iOrder.getClassTimeByInfo(Integer.parseInt(order_id),student_id, (int) (new Date().getTime() /1000));
         for(ClassTimeInfo item : time_list) {
             if(item.getBegin_time() < new Date().getTime()/1000) {
                 hour_theory_use +=  (item.getEnd_time() - item.getBegin_time()) / 3600;
@@ -316,7 +325,7 @@ public class OrderController extends BaseController {
             int class_id = 0;
             int teacher_id = 0;
             String outLine = "";
-            if (iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).size() == 0 || orderInfo.getType() == 1) {
+            if (orderInfo.getClass_id() == 0 || orderInfo.getType() == 0) {
                 Course course = iCourse.getCourseById(orderInfo.getCourse_id());
                 if (course == null) {
                     return JSONResult.errorMsg("辅导课不存在");
@@ -342,11 +351,12 @@ public class OrderController extends BaseController {
                     }
                 }
 
-
+                //创建课堂
                 iOrder.addClassRoom(classRoom);
                 int class_number = 1000000000 + classRoom.getClass_id();
                 iOrder.addRoomNumber(classRoom.getClass_id(), class_number);
                 course.setId(classRoom.getClass_id());
+                //创建补充课堂信息
                 iOrder.ClassRoomCourse(course);
                 if(group_name != null) {
                     iOrder.setClassRoomImGroupId(classRoom.getClass_id(),"班课群 " + group_name);
@@ -374,13 +384,10 @@ public class OrderController extends BaseController {
                         classTimeInfo.setEnd_time(classTime.getClass_time() + 3600 * classTime.getClass_hours());
                         classTimeInfo.setClass_number(classTime.getClass_number());
                         classTimeInfo.setStatus(0);
-
-                        iOrder.addClassTime(classTimeInfo);
-                        classTimeInfo.setStudent_id(getCurrentUserId());
-                        iOrder.addClassTime(classTimeInfo);
+                        iOrder.addClassTime(classTimeInfo); //老师创建学时
                     }
                 }
-            } else {
+            } else { //第二次班课
                 ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(0);
                 List<StudentClass> student_list = iOrder.getStudentClassByCourseId(orderInfo.getCourse_id());
                 if(student_list.size() >= classRoom.getMax_person()) {
@@ -408,7 +415,7 @@ public class OrderController extends BaseController {
                     classTimeInfo.setEnd_time(classTime.getClass_time() + 3600*classTime.getClass_hours());
                     classTimeInfo.setClass_number(classTime.getClass_number());
                     classTimeInfo.setStatus(0);
-                    iOrder.addClassTime(classTimeInfo);
+                    iOrder.addClassTime(classTimeInfo); //学生创建学时
                 }
             } catch (IOException e) {
                 e.printStackTrace();

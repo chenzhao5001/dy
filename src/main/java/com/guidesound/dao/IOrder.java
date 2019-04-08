@@ -250,4 +250,9 @@ public interface IOrder {
     @Update("update class_room set istest = #{arg0} where class_id = #{arg1}")
     void setClassRoomIsTest(int is_test,int class_id);
 
+    @Select("select count from count_flag where id = 1")
+    int getCurrentCount();
+    @Update("update count_flag set count = #{arg0} where count = #{arg0}")
+    void setCurrentCount(int count);
+
 }

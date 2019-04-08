@@ -301,7 +301,6 @@ public class ClassRoomController extends BaseController {
         }
 
         class Teacher {
-//            int class_info_id;
             int class_info_status;
             int istest;
 
@@ -312,28 +311,11 @@ public class ClassRoomController extends BaseController {
             public void setIstest(int istest) {
                 this.istest = istest;
             }
-
-//            public int getClass_info_id() {
-//                return class_info_id;
-//            }
-//
-//            public void setClass_info_id(int class_info_id) {
-//                this.class_info_id = class_info_id;
-//            }
-
-            public int getClass_info_status() {
-                return class_info_status;
-            }
-
-            public void setClass_info_status(int class_info_status) {
-                this.class_info_status = class_info_status;
-            }
         }
 
         int user_id = getCurrentUserId();
         List<ClassInfo> classInfoList = new ArrayList<>();
         List<StudentClass> student_list = iOrder.getStudentClassByUserId(user_id);
-//        List<ClassRoom> classInfoList2 = iOrder.getClassRoomByUserId(getCurrentUserId());
         List<ClassRoom> rooms = new ArrayList<>();
         if (student_list.size() > 0) {
             List<Integer> id_list = new ArrayList<>();
