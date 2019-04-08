@@ -27,6 +27,16 @@ public class ClassRoom {
     int type;
     String im_group_id;
 
+    int istest;
+
+    public int getIstest() {
+        return istest;
+    }
+
+    public void setIstest(int istest) {
+        this.istest = istest;
+    }
+
     public String getIm_group_id() {
         return im_group_id;
     }

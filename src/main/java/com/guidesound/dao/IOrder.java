@@ -205,8 +205,8 @@ public interface IOrder {
     @Select("select * from class_room where user_id = #{arg0}")
     List<ClassRoom> getClassInfoByUserId(int user_id);
 
-    @Select("select * from class_room where type = #{arg0}")
-    List<ClassRoom> getAllClassRoom(int type);
+    @Select("select * from class_room where type = #{arg0} and istest = #{arg1}")
+    List<ClassRoom> getAllClassRoom(int type,int isTest);
 
     @Select("select * from class_room where user_id = #{arg0}")
     List<ClassRoom> getClassRoomByUserId(int user_id);
@@ -246,5 +246,8 @@ public interface IOrder {
     int getAllReturnOrderByClassId(int class_id);
     @Update("update class_room set im_group_id = #{arg1} where class_id = #{arg0}")
     void setClassRoomImGroupId(int class_id,String group_id);
+
+    @Update("update class_room set istest = #{arg0} where class_id = #{arg1}")
+    void setClassRoomIsTest(int is_test,int class_id);
 
 }

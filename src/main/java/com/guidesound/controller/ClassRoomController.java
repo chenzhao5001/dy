@@ -6,10 +6,7 @@ import com.guidesound.TempStruct.ClassTime;
 import com.guidesound.TempStruct.ClassUseInfo;
 import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.TempStruct.StudentOrderTemp;
-import com.guidesound.dao.IOrder;
-import com.guidesound.dao.IRecord;
-import com.guidesound.dao.IUser;
-import com.guidesound.dao.IUserFollow;
+import com.guidesound.dao.*;
 import com.guidesound.models.*;
 import com.guidesound.ret.ClassInfo;
 import com.guidesound.ret.ClassRoomRet;
@@ -37,6 +34,9 @@ public class ClassRoomController extends BaseController {
     @Autowired
     IUser iUser;
 
+    @Autowired
+    ICourse iCourse;
+
     @RequestMapping("/enter_class_room")
     @ResponseBody
     JSONResult enterClassRoom(String class_id) {
@@ -52,9 +52,6 @@ public class ClassRoomController extends BaseController {
             return JSONResult.errorMsg("课堂信息不存在");
         }
 
-        if(classRoom.getType() != 0) {
-            return JSONResult.errorMsg("不是1v1课程");
-        }
 
         boolean flag = false;
         boolean teacher_flag = true;
@@ -112,7 +109,7 @@ public class ClassRoomController extends BaseController {
         }
         if(teacher_flag == false) {
             if(list.size() == 0) {
-                return JSONResult.errorMsg("老师未进入");
+                return JSONResult.errorMsg("需要等待老师先进入课堂");
             }
         }
         iOrder.setClassTimeStatus(Integer.parseInt(class_id),getCurrentUserId(),begin_time,1);
@@ -304,16 +301,25 @@ public class ClassRoomController extends BaseController {
         }
 
         class Teacher {
-            int class_info_id;
+//            int class_info_id;
             int class_info_status;
+            int istest;
 
-            public int getClass_info_id() {
-                return class_info_id;
+            public int getIstest() {
+                return istest;
             }
 
-            public void setClass_info_id(int class_info_id) {
-                this.class_info_id = class_info_id;
+            public void setIstest(int istest) {
+                this.istest = istest;
             }
+
+//            public int getClass_info_id() {
+//                return class_info_id;
+//            }
+//
+//            public void setClass_info_id(int class_info_id) {
+//                this.class_info_id = class_info_id;
+//            }
 
             public int getClass_info_status() {
                 return class_info_status;
@@ -362,7 +368,12 @@ public class ClassRoomController extends BaseController {
             teacherClass1.setWay(item.getWay());
             String outLine = item.getOutline();
             teacherClass1.setNext_class_NO(0);
-            teacherClass1.setNext_class_name("等待老师发布");
+            if(item.getType() == 0) {
+                teacherClass1.setNext_class_name("需要发布新课时");
+            } else {
+                teacherClass1.setNext_class_name("等待老师发布");
+            }
+
             teacherClass1.setNext_clsss_time(0);
             if (outLine != null && !outLine.equals("")) {
                 try {
@@ -385,6 +396,15 @@ public class ClassRoomController extends BaseController {
                 }
             }
 
+            if(item.getIstest() == 1) {
+                Course course = iCourse.getCourseById(item.getCourse_id());
+                if(course == null ||  course.getTest_time() < new Date().getTime() /1000) {
+                    continue;
+                }
+                teacherClass1.setNext_clsss_time(course.getTest_time());
+
+            }
+
             if (item.flag == 0) {
                 Student student = new Student();
                 List<StudentClass> s_list = iOrder.getStudentClassByInfo(getCurrentUserId(), item.getClass_id());
@@ -399,6 +419,7 @@ public class ClassRoomController extends BaseController {
                 teacherClass1.setTeacher(null);
             } else if (item.flag == 1) {
                 Teacher teacher = new Teacher();
+                teacher.setIstest(item.getIstest());
                 teacherClass1.setStudent(null);
                 teacherClass1.setTeacher(teacher);
 
@@ -416,7 +437,7 @@ public class ClassRoomController extends BaseController {
     JSONResult testListen() {
         int user_id = getCurrentUserId();
         List<ClassInfo> classInfo_list = new ArrayList<>();
-        List<ClassRoom> list = iOrder.getAllClassRoom(2);
+        List<ClassRoom> list = iOrder.getAllClassRoom(1,1);
         List<Integer> user_ids = new ArrayList<>();
         Map<Integer, UserInfo> m_users = new HashMap<>();
         for (ClassRoom item : list) {
@@ -447,6 +468,10 @@ public class ClassRoomController extends BaseController {
             teacherClass2.setForm(SignMap.getCourseFormById(item.getForm()));
             teacherClass2.setForm_id(item.getForm());
             teacherClass2.setWay(item.getWay());
+
+            Course course = iCourse.getCourseById(item.getCourse_id());
+
+            teacherClass2.setNext_clsss_time(course.getTest_time());
             ClassInfo classInfo = new ClassInfo();
             classInfo.setTeacher_class(teacherClass2);
             classInfo.setVideo_class(null);

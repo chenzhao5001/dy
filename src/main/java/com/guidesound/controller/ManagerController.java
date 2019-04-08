@@ -39,6 +39,8 @@ public class ManagerController extends BaseController {
     private IArticle iArticle;
     @Autowired
     private IExamine iExamine;
+    @Autowired
+    private IOrder iOrder;
     @RequestMapping(value = "/login")
     @ResponseBody
     JSONResult logIn(HttpServletRequest request, HttpServletResponse response) {
@@ -713,6 +715,32 @@ public class ManagerController extends BaseController {
                 if(Integer.parseInt(result) == 0) {
                     iCourse.setCourseState(Integer.parseInt(item_id),3);
                     TlsSigTest.SendMessage(uid,"您发布的课程“" + course.getCourse_name() + "”已经通过系统审核，快努力发高质量的视频展示您自己吧！");
+                    if(course.getType() == 1) {
+                        ClassRoom classRoom = new ClassRoom();
+                        classRoom.setUser_id(course.getUser_id());
+                        classRoom.setCourse_id(course.getId());
+                        classRoom.setCourse_name(course.getCourse_name());
+                        classRoom.setCourse_pic(course.getCourse_pic());
+                        classRoom.setTeacher_name(course.getTeacher_name());
+                        classRoom.setSubject(course.getSubject());
+                        classRoom.setGrade(course.getGrade());
+                        classRoom.setMax_person(10);
+                        classRoom.setAll_hours(course.getAll_hours());
+                        classRoom.setPrice_one_hour(course.getPrice_one_hour());
+                        classRoom.setAll_charge(course.getAll_charge());
+                        classRoom.setRefund_rule(course.getRefund_rule());
+                        classRoom.setTutor_content(course.getTutor_content());
+                        classRoom.setOutline(course.getOutline());
+                        classRoom.setCreate_time((int) (new Date().getTime() / 1000));
+                        classRoom.setType(1);
+                        classRoom.setForm(1);
+                        classRoom.setWay("线上");
+                        iOrder.addClassRoom(classRoom);
+                        course.setId(classRoom.getClass_id());
+                        course.setWay("线上");
+                        iOrder.ClassRoomCourse(course);
+                        iOrder.setClassRoomIsTest(1,classRoom.getClass_id());
+                    }
                 } else {
                     iCourse.setCourseState(Integer.parseInt(item_id),2);
                     TlsSigTest.SendMessage(uid,"您发布的课程“" + course.getCourse_name() + "”未通过系统审核，未通过原因是“" + failure_content + "”。");
