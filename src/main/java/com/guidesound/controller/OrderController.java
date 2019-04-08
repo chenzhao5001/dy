@@ -334,17 +334,23 @@ public class OrderController extends BaseController {
                 classRoom.setPrice_one_hour(orderInfo.getPrice_one_hour());
                 UserInfo userInfo = iUser.getUser(classRoom.getUser_id());
 
-                String group_name = TlsSigTest.createGroup(userInfo.getIm_id(),course.getCourse_name());
-                if(group_name.equals("")) {
-                    return JSONResult.errorMsg("创建im群失败");
+                String group_name = null;
+                if(orderInfo.getType() == 1) {
+                    group_name = TlsSigTest.createGroup(userInfo.getIm_id(),course.getCourse_name());
+                    if(group_name.equals("")) {
+                        return JSONResult.errorMsg("创建im群失败");
+                    }
                 }
+
 
                 iOrder.addClassRoom(classRoom);
                 int class_number = 1000000000 + classRoom.getClass_id();
                 iOrder.addRoomNumber(classRoom.getClass_id(), class_number);
                 course.setId(classRoom.getClass_id());
                 iOrder.ClassRoomCourse(course);
-                iOrder.setClassRoomImGroupId(classRoom.getClass_id(),group_name);
+                if(group_name != null) {
+                    iOrder.setClassRoomImGroupId(classRoom.getClass_id(),"班课群 " + group_name);
+                }
 
                 class_id = classRoom.getClass_id();
                 teacher_id = course.getUser_id();
@@ -425,9 +431,10 @@ public class OrderController extends BaseController {
             ClassRoom classRoom = iOrder.getClassRoomById(class_id);
             UserInfo userInfo_me = iUser.getUser(getCurrentUserId());
             UserInfo info = iUser.getUser(classRoom.getUser_id());
-            TlsSigTest.addGroupPerson(classRoom.getIm_group_id(),userInfo_me.getIm_id());
-            TlsSigTest.addGroupPerson(classRoom.getIm_group_id(),info.getIm_id());
-
+            if(orderInfo.getType() == 1) {
+                TlsSigTest.addGroupPerson(classRoom.getIm_group_id(),userInfo_me.getIm_id());
+                TlsSigTest.addGroupPerson(classRoom.getIm_group_id(),info.getIm_id());
+            }
 
         } else { //录播课
               
