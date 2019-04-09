@@ -70,11 +70,11 @@ public class RecordCourseController extends BaseController {
 
     @RequestMapping("/list")
     @ResponseBody
-    JSONResult list(String who) {
-        if (who == null) {
-            return JSONResult.errorMsg("缺少 who 参数");
+    JSONResult list(String who,String user_id) {
+        if (who == null || user_id == null) {
+            return JSONResult.errorMsg("缺少 who 或 user_id 参数");
         }
-        List<Record> list = iRecord.list();
+        List<Record> list = iRecord.list(Integer.parseInt(user_id));
         List<RecordItem> recordList = new ArrayList<>();
         for (Record item : list) {
             RecordItem temp = new RecordItem();

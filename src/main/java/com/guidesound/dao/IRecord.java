@@ -65,8 +65,8 @@ public interface IRecord {
     @Delete("delete from record_course where user_id = #{arg0} and record_course_id = #{arg1}")
     void delete(int user_id,int record_course_id);
 
-    @Select("select * from record_course")
-    List<Record> list();
+    @Select("select * from record_course where user_id = #{arg0}")
+    List<Record> list(int user_id);
 
     @Select("select * from record_course where record_course_id = #{arg0}")
     Record get(int id);

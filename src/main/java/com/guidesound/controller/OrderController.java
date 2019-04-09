@@ -182,6 +182,7 @@ public class OrderController extends BaseController {
         int all_time = classOrder.getAll_hours();
 
 
+        int last_time = 0;
         for (CourseOutline courseOutline : beanList) {
             courseOutline.setClass_status(0);
             if(courseOutline.getClass_time() + courseOutline.getClass_hours()*3600 < new Date().getTime() / 1000 ) {
@@ -199,6 +200,7 @@ public class OrderController extends BaseController {
                     courseOutline.setClass_status(2); //缺课
                 }
             }
+            last_time = courseOutline.getClass_time() + 3600*courseOutline.getClass_hours();
         }
 
         hour_surplus_use = all_time - hour_theory_use;
@@ -223,6 +225,15 @@ public class OrderController extends BaseController {
             refundInfo.setSubmit_time(orderInfo.getSubmit_time());
             classOrder.setRefund_info(refundInfo);
         }
+
+        if(orderInfo.getRefund_amount() > 0) {
+            classOrder.setOrder_status(4); //退费
+        } else {
+            if(last_time < new Date().getTime() / 1000) {
+                classOrder.setOrder_status(3); //已经完成
+            }
+        }
+
         return JSONResult.ok(classOrder);
     }
 
@@ -258,9 +269,12 @@ public class OrderController extends BaseController {
 
         List<ClassTime> class_item_list = new ArrayList<>();
         ObjectMapper mapper_temp = new ObjectMapper();
+        int last_time = 0;
+        int temp_all_hours = 0;
         try {
             class_item_list = mapper_temp.readValue((String)order1V1.getOutline(), new TypeReference<List<ClassTime>>() {});
             for(ClassTime item : class_item_list) {
+                temp_all_hours += item.getClass_hours();
                 if(item.getClass_time() + 3600*item.getClass_hours() < new Date().getTime() / 1000) {
                     hour_theory_use += item.getClass_hours();
                     List<ClassTimeInfo> classTimeInfo_student = iOrder.getClassTimeStatus(Integer.parseInt(order_id),order1V1.getStudent_id(),item.getClass_time());
@@ -271,7 +285,9 @@ public class OrderController extends BaseController {
                     }
                 }
                 hour_surplus_use = all_time - hour_actual_use;
+                last_time = item.getClass_time() + item.getClass_hours()*3600;
             }
+
             order1V1.setOutline(class_item_list);
         } catch (IOException e) {
             e.printStackTrace();
@@ -297,6 +313,14 @@ public class OrderController extends BaseController {
             refundInfo.setRefund_amount(orderInfo.getRefund_amount());
             refundInfo.setSubmit_time(orderInfo.getSubmit_time());
             order1V1.setRefund_info(refundInfo);
+        }
+
+        if(orderInfo.getRefund_amount() != 0) {
+            order1V1.setOrder_status(4);
+        } else {
+            if(temp_all_hours == order1V1.getAll_hours() && last_time < new Date().getTime() / 1000) {
+                order1V1.setOrder_status(3);
+            }
         }
 
 

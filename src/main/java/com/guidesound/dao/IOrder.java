@@ -244,6 +244,8 @@ public interface IOrder {
 
     @Select("select count(*) from user_order where class_id = #{arg0} and refund_amount != 0")
     int getReturnOrderByClassId(int class_id);
+    @Select("select count(*) from user_order where class_id = #{arg0} and refund_amount == 0")
+    int getNoReturnOrderByClassId(int class_id);
     @Select("select count(*) from user_order where class_id = #{arg0}")
     int getAllReturnOrderByClassId(int class_id);
     @Update("update class_room set im_group_id = #{arg1} where class_id = #{arg0}")

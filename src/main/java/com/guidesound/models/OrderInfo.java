@@ -18,6 +18,7 @@ public class OrderInfo {
     int all_charge;
     int class_id;
 
+
     public int getClass_id() {
         return class_id;
     }
