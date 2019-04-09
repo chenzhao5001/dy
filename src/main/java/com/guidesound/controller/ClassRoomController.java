@@ -284,17 +284,29 @@ public class ClassRoomController extends BaseController {
         List<ClassTime> class_item_list = null;
         ObjectMapper mapper_temp = new ObjectMapper();
         try {
-            class_item_list = mapper_temp.readValue(classRoom.getOutline(), new TypeReference<List<ClassTime>>() {
+            String outline = classRoom.getOutline();
+            if(outline == null || outline.equals("")) {
+                outline = "[]";
+            }
+            class_item_list = mapper_temp.readValue(outline, new TypeReference<List<ClassTime>>() {
             });
         } catch (IOException e) {
             e.printStackTrace();
             return JSONResult.errorMsg("课堂大纲解析失败");
         }
         if (class_item_list.size() == 0) {
+            if(classRoom.getType() == 0) { //1v1
+                return JSONResult.errorMsg("当前没有已发布且未未上课的课时");
+            }
             return JSONResult.errorMsg("课堂大纲无数据");
         }
 
         ClassTime classTime = class_item_list.get(class_item_list.size() - 1);
+        if (classRoom.getIstest() != 1) {
+            if (iOrder.getNoReturnOrderByClassId(Integer.parseInt(class_id)) <= 0) {
+                return JSONResult.errorMsg("没有学生上课，老师不允许进入课堂");
+            }
+        }
         if (classRoom.getIstest() == 1) { //试听课
             Course course = iCourse.getCourseById(classRoom.getCourse_id());
             if (course == null) {
@@ -309,11 +321,6 @@ public class ClassRoomController extends BaseController {
                 return JSONResult.errorMsg("课程已结束");
             }
 
-            if (classRoom.getIstest() != 1) {
-                if (iOrder.getNoReturnOrderByClassId(Integer.parseInt(class_id)) <= 0) {
-                    return JSONResult.errorMsg("没有学生上课，老师不允许进入课堂");
-                }
-            }
 
             Ret ret = new Ret();
             List<TeacherEnterInfo> teacherEnterInfos = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id), -1);
