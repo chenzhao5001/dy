@@ -149,6 +149,7 @@ public interface IOrder {
     @Select("select * from class_room where class_id = #{arg0}")
     ClassRoom getClassRoomById(int class_id);
 
+
     @Delete("delete from class_time where class_id = #{arg0} and begin_time > #{arg0}")
     void deleteClassTime(int class_id,int time);
 
@@ -210,6 +211,10 @@ public interface IOrder {
 
     @Select("select * from class_room where user_id = #{arg0}")
     List<ClassRoom> getClassRoomByUserId(int user_id);
+
+    @Select("select * from class_room where user_id = #{arg0} and istest = 1")
+    List<ClassRoom> getTestClassRoomByUserId(int user_id);
+
     @Insert("insert into class_time (class_id,order_id,teacher_id,student_id,begin_time,end_time,status)" +
             " value(#{class_id},#{order_id},#{teacher_id},#{student_id},#{begin_time},#{end_time},#{status})")
     void addClassTime(ClassTimeInfo classTime);
@@ -229,6 +234,10 @@ public interface IOrder {
 
     @Update("update teacher_enter_info set state = #{arg3} where teacher_id = #{arg0} and class_id = #{arg1} and class_nunber = #{arg2}")
     void updateTeacherEnterInfo(int teacher_id,int class_id,int class_nunber,int state);
+
+    @Update("update teacher_enter_info set state = #{arg2} where teacher_id = #{arg0} and class_id = #{arg1}")
+    void updateAllTeacherEnterInfo(int teacher_id,int class_id,int state);
+
     @Update("update user_order set class_id = #{arg1} where id = #{arg0}")
     void addOrderClassId(int order,int class_id);
 
