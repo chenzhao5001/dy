@@ -163,6 +163,7 @@ public class ClassRoomController extends BaseController {
                 nextClassInfo.next_class_hour = item.getClass_hours();
                 nextClassInfo.next_clsss_time = item.getClass_time();
                 nextClassInfo.next_class_NO = item.getClass_number();
+                break;
             }
         }
         return nextClassInfo;
@@ -293,7 +294,7 @@ public class ClassRoomController extends BaseController {
         List<TeacherEnterInfo> teacherEnterInfos = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id), class_number);
         if (teacher_flag == false) { //学生
             if (teacherEnterInfos.size() == 0 || teacherEnterInfos.get(0).getState() == 0) {
-                return JSONResult.errorMsg("老师未进入");
+                return JSONResult.errorMsg("需要等待老师先进入房间");
             }
             ////
         } else { //老师
@@ -406,10 +407,17 @@ public class ClassRoomController extends BaseController {
             }
         }
 
+        int student_id = 0;
+        List<StudentClass> list_students = iOrder.getStudentClassByUserId(Integer.parseInt(class_id));
+        if(list_students.size() > 0) {
+            student_id = list_students.get(0).getUser_id();
+        }
+
         int hour_theory_use = 0;
         int hour_actual_use = 0;
         int hour_forget_use = 0;
         int hour_surplus_use = 0;
+        int hour_other_user = 0;
         int all_time = 0;
 
         all_time = classRoom.getAll_hours();
@@ -424,9 +432,17 @@ public class ClassRoomController extends BaseController {
                 } else {
                     hour_forget_use += item.getClass_hours();
                 }
+                //1v1 使用 计算学生实际进入房间时长
+                List<ClassTimeInfo> classTimeInfos2 = iOrder.getClassTimeStatus(Integer.parseInt(class_id), student_id, item.getClass_time());
+                if (classTimeInfos2.size() > 0 && classTimeInfos2.get(0).getStatus() == 1) {
+                    hour_other_user += item.getClass_hours();
+                }
             }
+        }
+        if(classRoom.getType() == 1) { //班课
             hour_surplus_use = all_time - hour_theory_use;
-
+        } else {
+            hour_surplus_use = all_time - hour_other_user;
         }
 
         ClassUseInfo classUseInfo = new ClassUseInfo();
@@ -510,11 +526,11 @@ public class ClassRoomController extends BaseController {
             rooms.add(item);
         }
 
-        List<ClassRoom> rooms_teacher2 = iOrder.getTestClassRoomByUserId(getCurrentUserId());
-        for (ClassRoom item : rooms_teacher2) {
-            item.flag = 1;
-            rooms.add(item);
-        }
+//        List<ClassRoom> rooms_teacher2 = iOrder.getTestClassRoomByUserId(getCurrentUserId());
+//        for (ClassRoom item : rooms_teacher2) {
+//            item.flag = 1;
+//            rooms.add(item);
+//        }
 
 
         for (ClassRoom item : rooms) {

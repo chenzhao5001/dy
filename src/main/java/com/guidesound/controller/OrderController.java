@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 @Controller
 @RequestMapping("/order")
 public class OrderController extends BaseController {
@@ -40,6 +41,13 @@ public class OrderController extends BaseController {
     IOrder iOrder;
     @Autowired
     IUser iUser;
+
+    //0待上课，1已完成，2缺课
+    public int getCourseState(List<ClassTime> iClassTime) {
+
+
+        return 0;
+    }
 
 
     @RequestMapping("/current_time")
@@ -173,8 +181,11 @@ public class OrderController extends BaseController {
         int hour_surplus_use = 0;
         int all_time = classOrder.getAll_hours();
 
+
         for (CourseOutline courseOutline : beanList) {
+            courseOutline.setClass_status(0);
             if(courseOutline.getClass_time() + courseOutline.getClass_hours()*3600 < new Date().getTime() / 1000 ) {
+
                 List<ClassTimeInfo> classTimeInfo_teacher = iOrder.getClassTimeStatus(Integer.parseInt(order_id),classOrder.getCourse_owner_id(),courseOutline.getClass_time());
                 if(classTimeInfo_teacher.size() > 0 && classTimeInfo_teacher.get(0).getStatus() == 1 ) {
                     hour_theory_use += courseOutline.getClass_hours();
@@ -182,8 +193,10 @@ public class OrderController extends BaseController {
                 List<ClassTimeInfo> classTimeInfo_student = iOrder.getClassTimeStatus(Integer.parseInt(order_id),classOrder.getStudent_id(),courseOutline.getClass_time());
                 if(classTimeInfo_student.size() > 0 && classTimeInfo_student.get(0).getStatus() == 1) {
                     hour_actual_use += courseOutline.getClass_hours();
+                    courseOutline.setClass_status(1); //已完成
                 } else {
                     hour_forget_use += courseOutline.getClass_hours();
+                    courseOutline.setClass_status(2); //缺课
                 }
             }
         }
@@ -237,23 +250,27 @@ public class OrderController extends BaseController {
         if(order1V1.getOutline().equals("")) {
             order1V1.setOutline("[]");
         }
+        int hour_theory_use = 0;
+        int hour_actual_use = 0;
+        int hour_forget_use = 0;
+        int hour_surplus_use = 0;
+        int all_time = order1V1.getAll_hours();
+
         List<ClassTime> class_item_list = new ArrayList<>();
         ObjectMapper mapper_temp = new ObjectMapper();
         try {
             class_item_list = mapper_temp.readValue((String)order1V1.getOutline(), new TypeReference<List<ClassTime>>() {});
             for(ClassTime item : class_item_list) {
-                if(item.getClass_time() > new Date().getTime() / 1000) {
-                    item.setClass_status(0);
-                } else {
-                    List<ClassTimeInfo> class_list = iOrder.getClassTimeStatus(Integer.parseInt(order_id),getCurrentUserId(),item.getClass_time());
-                    if(class_list.size() > 0) {
-                        if(class_list.get(0).getStatus() == 1) {
-                            item.setClass_status(1);
-                        } else {
-                            item.setClass_status(2);
-                        }
+                if(item.getClass_time() + 3600*item.getClass_hours() < new Date().getTime() / 1000) {
+                    hour_theory_use += item.getClass_hours();
+                    List<ClassTimeInfo> classTimeInfo_student = iOrder.getClassTimeStatus(Integer.parseInt(order_id),order1V1.getStudent_id(),item.getClass_time());
+                    if(classTimeInfo_student.size() > 0 && classTimeInfo_student.get(0).getStatus() == 1) {
+                        hour_actual_use += item.getClass_hours();
+                    } else {
+                        hour_forget_use += item.getClass_hours();
                     }
                 }
+                hour_surplus_use = all_time - hour_actual_use;
             }
             order1V1.setOutline(class_item_list);
         } catch (IOException e) {
@@ -263,24 +280,6 @@ public class OrderController extends BaseController {
         }
         order1V1.setRefund_info(new RefundInfo());
 
-        int hour_theory_use = 0;
-        int hour_actual_use = 0;
-        int hour_forget_use = 0;
-        int hour_surplus_use = 0;
-        int all_time = 0;
-
-        all_time = order1V1.getAll_hours();
-        List<ClassTimeInfo> time_list = iOrder.getClassTimeByInfo(Integer.parseInt(order_id),getCurrentUserId(), (int) (new Date().getTime() /1000));
-        for(ClassTimeInfo item : time_list) {
-            if(item.getBegin_time() < new Date().getTime()/1000) {
-                hour_theory_use +=  (item.getEnd_time() - item.getBegin_time()) / 3600;
-                hour_actual_use +=  (item.getEnd_time() - item.getBegin_time()) / 3600;
-                if(item.getStatus() == 0) {
-                    hour_forget_use += (item.getEnd_time() - item.getBegin_time()) / 3600;
-                }
-            }
-        }
-        hour_surplus_use = all_time - hour_actual_use;
         ClassUseInfo classUseInfo = new ClassUseInfo();
         classUseInfo.setHour_theory_use(hour_theory_use);
         classUseInfo.setHour_actual_use(hour_actual_use);

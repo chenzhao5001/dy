@@ -23,10 +23,19 @@ public class Order1V1 {
     int price_one_hour;
     int all_charge;
     int create_time;
+    int student_id;
     String refund_rule;
     String tutor_content;
     ClassUseInfo class_use_info;
     Object outline;
+
+    public int getStudent_id() {
+        return student_id;
+    }
+
+    public void setStudent_id(int student_id) {
+        this.student_id = student_id;
+    }
 
     public int getCourse_id() {
         return course_id;
