@@ -15,7 +15,6 @@ import com.guidesound.ret.TeacherClass1;
 import com.guidesound.ret.TeacherClass2;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
-import com.qcloud.Common.Sign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -221,11 +220,13 @@ public class ClassRoomController extends BaseController {
                 } else {
                     iOrder.updateTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), -1, 1);
                 }
+                //老师
                 ret.setIshost(1);
             } else {
                 if (teacherEnterInfos.size() == 0 || teacherEnterInfos.get(0).getState() == 0) {
                     return JSONResult.errorMsg("老师未进入");
                 }
+                //学生
                 ret.setIshost(0);
             }
             ret.setRoom_number(classRoom.getRoom_number());
@@ -428,8 +429,10 @@ public class ClassRoomController extends BaseController {
                 hour_theory_use += item.getClass_hours();
                 List<ClassTimeInfo> classTimeInfos = iOrder.getClassTimeStatus(Integer.parseInt(class_id), classRoom.getUser_id(), item.getClass_time());
                 if (classTimeInfos.size() > 0 && classTimeInfos.get(0).getStatus() == 1) {
+                    item.setClass_status(1);
                     hour_actual_use += item.getClass_hours();
                 } else {
+                    item.setClass_status(2);
                     hour_forget_use += item.getClass_hours();
                 }
                 //1v1 使用 计算学生实际进入房间时长
@@ -437,7 +440,10 @@ public class ClassRoomController extends BaseController {
                 if (classTimeInfos2.size() > 0 && classTimeInfos2.get(0).getStatus() == 1) {
                     hour_other_user += item.getClass_hours();
                 }
+            } else {
+                item.setClass_status(0);
             }
+
         }
         if(classRoom.getType() == 1) { //班课
             hour_surplus_use = all_time - hour_theory_use;
@@ -526,15 +532,7 @@ public class ClassRoomController extends BaseController {
             rooms.add(item);
         }
 
-//        List<ClassRoom> rooms_teacher2 = iOrder.getTestClassRoomByUserId(getCurrentUserId());
-//        for (ClassRoom item : rooms_teacher2) {
-//            item.flag = 1;
-//            rooms.add(item);
-//        }
-
-
         for (ClassRoom item : rooms) {
-
             TeacherClass1 teacherClass1 = new TeacherClass1();
             teacherClass1.setClass_id(item.getClass_id());
             teacherClass1.setCourse_name(item.getCourse_name());

@@ -740,6 +740,8 @@ public class ManagerController extends BaseController {
                         course.setWay("线上");
                         iOrder.ClassRoomCourse(course);
                         iOrder.setClassRoomIsTest(1,classRoom.getClass_id());
+                        int class_number = 1000000000 + classRoom.getClass_id();
+                        iOrder.addRoomNumber(classRoom.getClass_id(), class_number);
                     }
                 } else {
                     iCourse.setCourseState(Integer.parseInt(item_id),2);
