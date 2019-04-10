@@ -17,7 +17,15 @@ public class OrderInfo {
     int submit_time;
     int all_charge;
     int class_id;
+    String outline;
 
+    public String getOutline() {
+        return outline;
+    }
+
+    public void setOutline(String outline) {
+        this.outline = outline;
+    }
 
     public int getClass_id() {
         return class_id;
