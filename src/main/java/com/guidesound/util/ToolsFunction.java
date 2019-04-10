@@ -286,12 +286,13 @@ public class ToolsFunction {
         return newStr.toString();
     }
 
-    public static void sendSMS(String phone,String content) {
-
+    public static String sendSMS(String phone,String content) {
+        SmsSingleSenderResult result = null;
         try {
             SmsSingleSender ssender = new SmsSingleSender(1400162470, "412f551d35f00a8cf95ba5f63e1f8ffd");
-            SmsSingleSenderResult result = ssender.send(0, "86", phone,
+            result = ssender.send(0, "86", phone,
                     content, "", "");
+
             System.out.println(result);
         } catch (HTTPException e) {
             // HTTP响应码错误
@@ -303,6 +304,7 @@ public class ToolsFunction {
             // 网络IO错误
             e.printStackTrace();
         }
+        return result.toString();
     }
 
     public static String getURLEncoderString(String str) {

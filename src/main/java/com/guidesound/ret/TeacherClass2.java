@@ -16,6 +16,15 @@ public class TeacherClass2 {
     int next_class_NO;
     String next_class_name;
     int next_clsss_time;
+    int next_class_hour;
+
+    public int getNext_class_hour() {
+        return next_class_hour;
+    }
+
+    public void setNext_class_hour(int next_class_hour) {
+        this.next_class_hour = next_class_hour;
+    }
 
     public int getClass_id() {
         return class_id;

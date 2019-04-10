@@ -173,7 +173,7 @@ public class UserController extends BaseController{
             user.setIm_id(im_id);
             user.setIm_sig(im_sig);
 
-            String info = TlsSigTest.SendMessageByUser(im_id,"403","欢迎您成为导音用户，有任何问题随之咨询我！");
+            String info = TlsSigTest.SendMessageByUser(im_id,"403","欢迎您成为导音用户，有任何问题随时咨询我！");
             log.info("发送注册消息 info = {}",info);
         } else {
             user = userList.get(0);
@@ -210,6 +210,20 @@ public class UserController extends BaseController{
         }
         return JSONResult.ok(user);
     }
+    @RequestMapping(value = "/identifying_code_new")
+    @ResponseBody
+    public JSONResult getIdentifyingCodeNew(String phone,String purpose) {
+        if(purpose == null || phone == null || !ToolsFunction.isNumeric(phone) || phone.length() != 11) {
+            return JSONResult.build(201,"参数错误",null);
+        }
+        String code = ToolsFunction.getNumRandomString(6);
+        String content =  "【导音教育】验证码：" + code + "，用于" + purpose + "，5分钟内有效。验证码提供给他人可能导致帐号被盗，请勿泄露，谨防被骗。";
+        ToolsFunction.sendSMS(phone,content);
+        int time = (int) (new Date().getTime() / 1000);
+        iVerifyCode.addVerifyCode(phone,code,time,time);
+        return JSONResult.ok();
+
+    }
 
     @RequestMapping(value = "/identifying_code")
     @ResponseBody
@@ -219,7 +233,7 @@ public class UserController extends BaseController{
         }
 
         String code = ToolsFunction.getNumRandomString(6);
-        String content =  "【北京导音教育科技有限公司】您的短信验证码是：" + code + "，此验证码10分钟内有效";
+        String content =  "【导音教育】验证码：" + code + "，5分钟内有效。验证码提供给他人可能导致帐号被盗，请勿泄露，谨防被骗。";
         ToolsFunction.sendSMS(phone,content);
         int time = (int) (new Date().getTime() / 1000);
         iVerifyCode.addVerifyCode(phone,code,time,time);
@@ -800,7 +814,7 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("缺少请求参数");
         }
 
-        int time = (int) (new Date().getTime() / 1000) - 600;
+        int time = (int) (new Date().getTime() / 1000) - 300;
         int count = iVerifyCode.selectCode(phone,verify_code,time);
         if(count <= 0) {
             return JSONResult.build(201,"验证码错误",null);

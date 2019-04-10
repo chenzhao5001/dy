@@ -15,6 +15,8 @@ import com.guidesound.ret.TeacherClass1;
 import com.guidesound.ret.TeacherClass2;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
+import com.guidesound.util.TlsSigTest;
+import com.guidesound.util.ToolsFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -266,7 +268,7 @@ public class ClassRoomController extends BaseController {
 
     @RequestMapping("/enter_class_room")
     @ResponseBody
-    JSONResult enterClassRoom(String class_id) {
+    JSONResult enterClassRoom(String class_id) throws IOException {
         if (class_id == null) {
             return JSONResult.errorMsg("缺少 class_id 参数");
         }
@@ -413,6 +415,21 @@ public class ClassRoomController extends BaseController {
         } else { //老师
             if (teacherEnterInfos.size() == 0) {
                 iOrder.setTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), class_number, (int) (new Date().getTime() / 1000), 1);
+                List<StudentClass> s_list = iOrder.getStudentClassByClassId(Integer.parseInt(class_id));
+                List<Integer> ids = new ArrayList<>();
+                for(StudentClass item : s_list) {
+                    ids.add(item.getUser_id());
+                }
+                List<UserInfo> users = iUser.getUserByIds(ids);
+                for(UserInfo item : users) {
+                    TlsSigTest.SendMessage(item.getIm_id(),"你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！");
+                    log.info("进入课堂通知已发送 im_id = {} content = {}",item.getIm_id(),"test...");
+                    if(!item.getPhone().equals("")) {
+                        String content =  "【导音教育】你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！";
+                        String ret = ToolsFunction.sendSMS(item.getPhone(),content);
+                        log.info("进入课堂短信已发送 phone = {} content = {} ret = {}",item.getPhone(),content,ret);
+                    }
+                }
             } else {
                 iOrder.updateTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), class_number, 1);
             }
@@ -802,6 +819,7 @@ public class ClassRoomController extends BaseController {
 
             Course course = iCourse.getCourseById(item.getCourse_id());
             teacherClass2.setNext_clsss_time(course.getTest_time());
+            teacherClass2.setNext_class_hour(1);
             ClassInfo classInfo = new ClassInfo();
             classInfo.setTeacher_class(teacherClass2);
             classInfo.setVideo_class(null);

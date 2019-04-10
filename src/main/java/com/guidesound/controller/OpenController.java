@@ -18,4 +18,42 @@ public class OpenController {
         return null;
     }
 
+    @RequestMapping(value = "/trade_description")
+    String tradeDescription() {
+        return "tradeDescription";
+    }
+
+    @RequestMapping(value = "/shop_description")
+    String shopDescription() {
+        return "shopDescription";
+    }
+
+    @RequestMapping(value = "/report_description")
+    String reportDescription() {
+        return "reportDescription";
+    }
+
+
+    @RequestMapping(value = "/course_description")
+    String courseDescription() {
+        return "courseDescription";
+    }
+
+    @RequestMapping(value = "/about")
+    String about() {
+        return "about";
+    }
+    @RequestMapping(value = "/privacy_policy")
+    String privacyPolicy() {
+        return "privacyPolicy";
+    }
+
+    @RequestMapping(value = "/user_policy")
+    String userPolicy() {
+        return "userPolicy";
+    }
+
+
+
+
 }
