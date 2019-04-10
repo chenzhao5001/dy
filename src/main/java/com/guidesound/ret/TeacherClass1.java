@@ -20,6 +20,34 @@ public class TeacherClass1 {
        Object student;
        Object teacher;
 
+       int student_id;
+       String student_name;
+       String student_head;
+
+    public int getStudent_id() {
+        return student_id;
+    }
+
+    public void setStudent_id(int student_id) {
+        this.student_id = student_id;
+    }
+
+    public String getStudent_name() {
+        return student_name;
+    }
+
+    public void setStudent_name(String student_name) {
+        this.student_name = student_name;
+    }
+
+    public String getStudent_head() {
+        return student_head;
+    }
+
+    public void setStudent_head(String student_head) {
+        this.student_head = student_head;
+    }
+
     public int getNext_class_hour() {
         return next_class_hour;
     }

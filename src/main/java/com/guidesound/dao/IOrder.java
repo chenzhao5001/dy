@@ -166,6 +166,10 @@ public interface IOrder {
             "all_charge = #{all_charge}," +
             "refund_rule = #{refund_rule}," +
             "outline = #{outline}," +
+            "test_form = #{test_form}," +
+            "test_time = #{test_time}," +
+            "test_duration = #{test_duration}," +
+            "test_charge = #{test_charge}," +
             "type = #{type}," +
             "tutor_content = #{tutor_content}" +
             " where class_id = #{id}")
@@ -206,8 +210,8 @@ public interface IOrder {
     @Select("select * from class_room where user_id = #{arg0}")
     List<ClassRoom> getClassInfoByUserId(int user_id);
 
-    @Select("select * from class_room where type = #{arg0} and istest = #{arg1}")
-    List<ClassRoom> getAllClassRoom(int type,int isTest);
+    @Select("select * from class_room where type = #{arg0} and istest = #{arg1} and test_time > #{arg2}")
+    List<ClassRoom> getAllClassRoom(int type,int isTest,int endTime);
 
     @Select("select * from class_room where user_id = #{arg0}")
     List<ClassRoom> getClassRoomByUserId(int user_id);
@@ -244,7 +248,7 @@ public interface IOrder {
 
     @Select("select count(*) from user_order where class_id = #{arg0} and refund_amount != 0")
     int getReturnOrderByClassId(int class_id);
-    @Select("select count(*) from user_order where class_id = #{arg0} and refund_amount == 0")
+    @Select("select count(*) from user_order where class_id = #{arg0} and refund_amount = 0")
     int getNoReturnOrderByClassId(int class_id);
     @Select("select count(*) from user_order where class_id = #{arg0}")
     int getAllReturnOrderByClassId(int class_id);

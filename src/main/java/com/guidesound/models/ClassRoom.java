@@ -28,8 +28,50 @@ public class ClassRoom {
     String im_group_id;
 
     int istest;
+    int test_form;
+    int test_time;
+    int test_duration;
+    int test_charge;
 
+    public int getTest_form() {
+        return test_form;
+    }
 
+    public void setTest_form(int test_form) {
+        this.test_form = test_form;
+    }
+
+    public int getTest_time() {
+        return test_time;
+    }
+
+    public void setTest_time(int test_time) {
+        this.test_time = test_time;
+    }
+
+    public int getTest_duration() {
+        return test_duration;
+    }
+
+    public void setTest_duration(int test_duration) {
+        this.test_duration = test_duration;
+    }
+
+    public int getTest_charge() {
+        return test_charge;
+    }
+
+    public void setTest_charge(int test_charge) {
+        this.test_charge = test_charge;
+    }
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
 
     public int getIstest() {
         return istest;

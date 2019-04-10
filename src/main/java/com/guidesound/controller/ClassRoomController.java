@@ -324,6 +324,8 @@ public class ClassRoomController extends BaseController {
 
             Ret ret = new Ret();
             List<TeacherEnterInfo> teacherEnterInfos = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id), -1);
+            int temp_id = getCurrentUserId();
+            System.out.println(temp_id);
             if (classRoom.getUser_id() == getCurrentUserId()) { //老师
                 if (teacherEnterInfos.size() == 0) {
                     iOrder.setTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), -1, (int) (new Date().getTime() / 1000), 1);
@@ -331,13 +333,13 @@ public class ClassRoomController extends BaseController {
                     iOrder.updateTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), -1, 1);
                 }
                 //老师
-                ret.setIshost(1);
+                ret.setIshost(0);
             } else {
                 if (teacherEnterInfos.size() == 0 || teacherEnterInfos.get(0).getState() == 0) {
                     return JSONResult.errorMsg("老师未进入");
                 }
                 //学生
-                ret.setIshost(0);
+                ret.setIshost(1);
             }
             ret.setRoom_number(classRoom.getRoom_number());
             return JSONResult.ok(ret);
@@ -701,6 +703,18 @@ public class ClassRoomController extends BaseController {
             teacherClass1.setForm(SignMap.getCourseFormById(item.getForm()));
             teacherClass1.setForm_id(item.getForm());
             teacherClass1.setWay(item.getWay());
+            if(item.getType() == 0) {
+                List<StudentClass> listClass = iOrder.getStudentClassByClassId(item.getClass_id());
+                if(listClass.size() > 0) {
+                    StudentClass studentClass = listClass.get(0);
+                    UserInfo userInfo1 = iUser.getUser(studentClass.getUser_id());
+                    teacherClass1.setStudent_id(userInfo1.getId());
+                    teacherClass1.setStudent_head(userInfo1.getHead());
+                    teacherClass1.setStudent_name(userInfo1.getName());
+
+                }
+
+            }
 
             if (item.getIstest() == 1) { //试听课
                 if (item.getIstest() == 1) {
@@ -753,7 +767,8 @@ public class ClassRoomController extends BaseController {
     JSONResult testListen() {
         int user_id = getCurrentUserId();
         List<ClassInfo> classInfo_list = new ArrayList<>();
-        List<ClassRoom> list = iOrder.getAllClassRoom(1, 1);
+        int end_time = (int) (new Date().getTime() / 1000 - 3600);
+        List<ClassRoom> list = iOrder.getAllClassRoom(1, 1,end_time);
         List<Integer> user_ids = new ArrayList<>();
         Map<Integer, UserInfo> m_users = new HashMap<>();
         for (ClassRoom item : list) {
@@ -786,7 +801,6 @@ public class ClassRoomController extends BaseController {
             teacherClass2.setWay(item.getWay());
 
             Course course = iCourse.getCourseById(item.getCourse_id());
-
             teacherClass2.setNext_clsss_time(course.getTest_time());
             ClassInfo classInfo = new ClassInfo();
             classInfo.setTeacher_class(teacherClass2);
