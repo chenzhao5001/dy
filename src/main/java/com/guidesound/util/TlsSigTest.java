@@ -32,13 +32,13 @@ public class TlsSigTest {
 
     private static String importUrl = "https://console.tim.qq.com/v4/im_open_login_svc/account_import?usersig="  +  control_usersig + "&apn=1&identifier=" + user_control + "&sdkappid=1400158534&contenttype=json";
     private static String controlUrl = "https://console.tim.qq.com/v4/openim/sendmsg?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=99999999&contenttype=json";
-    public static String createGroup(String im_id,String GroupName) throws IOException {
+    public static String createGroup(String im_id,String GroupName,String GroupId) throws IOException {
         Random random = new Random();
         int randomInt = random.nextInt();
 //        String strRandomInt = String.valueOf(randomInt);
         String addGroupUrl = "https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + randomInt+ "&contenttype=json";
 
-        String reqJson = "{\"Name\":\"" +GroupName + "\",\"Type\":\"Private\",\"Owner_Account\": \"" + im_id + "\",\"FaceUrl\":\"https://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg\"}";
+        String reqJson = "{\"Name\":\"" +GroupName + "\",\"GroupId\":\"" + GroupId + "\",\"Type\":\"Public\",\"Owner_Account\": \"" + im_id + "\",\"FaceUrl\":\"https://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg\"}";
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, reqJson);
         Request req = new Request.Builder()
@@ -53,12 +53,14 @@ public class TlsSigTest {
         resp = client_temp.newCall(req).execute();
         String jsonString = resp.body().string();
 
+
+
         JSONObject ret = new JSONObject(jsonString);
         int code = ret.getInt("ErrorCode");
         if(code == 0 ) {
             return ret.getString("GroupId");
         }
-        return "";
+        return jsonString;
     }
     public static String addGroupPerson(String group_id,String new_person ) throws IOException {
 
@@ -153,6 +155,44 @@ public class TlsSigTest {
             return ret.toString();
         }
         return "";
+    }
+
+    public static String SendMessageByUser(String to_im_id, String from_im_id,String info) throws IOException {
+        String rand = ToolsFunction.getNumRandomString(10);
+        String controlUrl = "https://console.tim.qq.com/v4/openim/sendmsg?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + rand + "&contenttype=json";
+
+        JSONObject Info = new JSONObject();
+        Info.put("Data",info);
+        JSONObject cell = new JSONObject();
+        cell.put("MsgType","TIMCustomElem");
+        cell.put("MsgContent",Info);
+        List<JSONObject> arr = new ArrayList<>();
+        arr.add(cell);
+
+        JSONObject jsonSend = new JSONObject();
+        jsonSend.put("SyncOtherMachine", 2);
+        jsonSend.put("From_Account", from_im_id);
+        jsonSend.put("To_Account", to_im_id);
+        jsonSend.put("MsgLifeTime", 60);
+        jsonSend.put("MsgRandom", 1234);
+        jsonSend.put("MsgTimeStamp", new Date().getTime() / 1000);
+        jsonSend.put("MsgBody",arr);
+        String send = jsonSend.toString();
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, send);
+        Request req = new Request.Builder()
+                .url(controlUrl)
+                .post(body)
+                .build();
+        Response resp;
+        OkHttpClient client_temp = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+        resp = client_temp.newCall(req).execute();
+        String jsonString = resp.body().string();
+        JSONObject ret = new JSONObject(jsonString);
+        return jsonString;
     }
 
 

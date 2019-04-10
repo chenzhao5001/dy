@@ -20,6 +20,8 @@ import com.guidesound.util.JSONResult;
 import com.guidesound.util.TlsSigTest;
 import com.guidesound.util.ToolsFunction;
 import com.sun.javafx.image.impl.IntArgbPre;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -50,6 +52,11 @@ public class OrderController extends BaseController {
     }
 
 
+    int getCurrentCount() {
+        int count = iOrder.getCurrentCount();
+        iOrder.setCurrentCount(count + 1);
+        return count;
+    }
     @RequestMapping("/current_time")
     @ResponseBody
     JSONResult currentTime() {
@@ -351,7 +358,17 @@ public class OrderController extends BaseController {
             int class_id = 0;
             int teacher_id = 0;
             String outLine = "";
-            if (orderInfo.getClass_id() == 0 || orderInfo.getType() == 0) {
+
+            List<ClassRoom> r_list = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id());
+            boolean fitst_flag = true;
+            for (ClassRoom item : r_list) {
+                if(item.getIstest() != 1) {
+                    fitst_flag = false;
+                    break;
+                }
+            }
+            log.info("fitst_flag 标志 " + fitst_flag );
+            if (fitst_flag || orderInfo.getType() == 0) {
                 Course course = iCourse.getCourseById(orderInfo.getCourse_id());
                 if (course == null) {
                     return JSONResult.errorMsg("辅导课不存在");
@@ -369,12 +386,19 @@ public class OrderController extends BaseController {
                 classRoom.setPrice_one_hour(orderInfo.getPrice_one_hour());
                 UserInfo userInfo = iUser.getUser(classRoom.getUser_id());
 
-                String group_name = null;
-                if (orderInfo.getType() == 1) {
-                    group_name = TlsSigTest.createGroup(userInfo.getIm_id(), course.getCourse_name());
-                    if (group_name.equals("")) {
+                String group_id = null;
+                if (orderInfo.getType() == 1) { //创建群
+                    int currentCount = getCurrentCount();
+                    group_id = TlsSigTest.createGroup(userInfo.getIm_id(), "班课群 " + course.getId(),String.valueOf(currentCount));
+                    if (!group_id.equals(String.valueOf(currentCount))) {
+                        log.info("创建群失败 im_id = userInfo.getIm_id ={} ,group_name = {} ,ret = {}",userInfo.getIm_id(),"班课群 " + course.getCourse_name(),group_id);
                         return JSONResult.errorMsg("创建im群失败");
                     }
+                    String info_ret = TlsSigTest.addGroupPerson(group_id, String.valueOf(course.getUser_id()));
+                    log.info("加入群拥有者 group_id = {},user_id = {},ret = {}",group_id,String.valueOf(course.getUser_id()),info_ret);
+                    info_ret = TlsSigTest.addGroupPerson(group_id, String.valueOf(getCurrentUserId()));
+                    log.info("加入支付用户 group_id = {},user_id = {},ret = {}",group_id,String.valueOf(getCurrentUserId()),info_ret);
+
                 }
 
                 //创建课堂
@@ -384,8 +408,8 @@ public class OrderController extends BaseController {
                 course.setId(classRoom.getClass_id());
                 //创建补充课堂信息
                 iOrder.ClassRoomCourse(course);
-                if (group_name != null) {
-                    iOrder.setClassRoomImGroupId(classRoom.getClass_id(), "班课群 " + group_name);
+                if (group_id != null) {
+                    iOrder.setClassRoomImGroupId(classRoom.getClass_id(), group_id);
                 }
 
                 class_id = classRoom.getClass_id();
@@ -415,11 +439,14 @@ public class OrderController extends BaseController {
                     }
                 }
             } else { //第n次班课
-                ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(0);
+                log.info("班课增加成员");
+                ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(1);
                 List<StudentClass> student_list = iOrder.getStudentClassByCourseId(orderInfo.getCourse_id());
                 if (student_list.size() >= classRoom.getMax_person()) {
                     return JSONResult.errorMsg("超过最大上课人数，无法支付");
                 }
+                String info_ret = TlsSigTest.addGroupPerson(classRoom.getIm_group_id(), String.valueOf(getCurrentUserId()));
+                log.info("班课群增加成员 group_id = {},user_id = {},ret = {}",classRoom.getIm_group_id(),String.valueOf(getCurrentUserId()),info_ret);
 
                 class_id = classRoom.getClass_id();
                 teacher_id = classRoom.getUser_id();
@@ -463,14 +490,6 @@ public class OrderController extends BaseController {
 
             iOrder.addStudentClass(studentClass);
             iOrder.addOrderClassId(Integer.parseInt(order_id), class_id);
-
-            ClassRoom classRoom = iOrder.getClassRoomById(class_id);
-            UserInfo userInfo_me = iUser.getUser(getCurrentUserId());
-            UserInfo info = iUser.getUser(classRoom.getUser_id());
-            if (orderInfo.getType() == 1) {
-                TlsSigTest.addGroupPerson(classRoom.getIm_group_id(), userInfo_me.getIm_id());
-                TlsSigTest.addGroupPerson(classRoom.getIm_group_id(), info.getIm_id());
-            }
 
         } else { //录播课
 

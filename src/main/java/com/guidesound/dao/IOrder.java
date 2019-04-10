@@ -260,7 +260,7 @@ public interface IOrder {
 
     @Select("select count from count_flag where id = 1")
     int getCurrentCount();
-    @Update("update count_flag set count = #{arg0} where count = #{arg0}")
+    @Update("update count_flag set count = #{arg0} where id = 1")
     void setCurrentCount(int count);
 
 }

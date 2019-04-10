@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
+
+
 /**
  * 用户控制器
  */
@@ -170,6 +172,9 @@ public class UserController extends BaseController{
             iUser.setImInfo(user.getId(),im_id,im_sig);
             user.setIm_id(im_id);
             user.setIm_sig(im_sig);
+
+            String info = TlsSigTest.SendMessageByUser(im_id,"403","欢迎您成为导音用户，有任何问题随之咨询我！");
+            log.info("发送注册消息 info = {}",info);
         } else {
             user = userList.get(0);
         }
