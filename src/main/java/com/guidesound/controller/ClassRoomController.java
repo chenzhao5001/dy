@@ -374,6 +374,16 @@ public class ClassRoomController extends BaseController {
         int end_time = 0;
         int class_num = 0;
         if(classRoom.getIstest() == 1) { //试听课
+            //限制最大人数
+            if(classRoom.getUser_id() != getCurrentUserId()) {
+                int testPerson = iOrder.testClassPerson(Integer.parseInt(class_id));
+                if(testPerson >= 3 ) {
+                    return JSONResult.errorMsg("试听课学生超过最大人数");
+                } else {
+                    iOrder.updateTestClassPerson(Integer.parseInt(class_id));
+                }
+            }
+
             begin_time = classRoom.getTest_time() - 600;
             begin_time_wirte = classRoom.getTest_time();
             end_time = classRoom.getTest_time() + classRoom.getTest_duration()*60;
