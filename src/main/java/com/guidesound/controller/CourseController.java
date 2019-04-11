@@ -3,6 +3,7 @@ package com.guidesound.controller;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.guidesound.TempStruct.ClassTime;
 import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.dao.ICourse;
 import com.guidesound.dao.IExamine;
@@ -183,6 +184,27 @@ public class CourseController extends BaseController{
             courseItem.setCourse_id(course.getId());
             courseItem.setCourse_pic(course.getCourse_pic());
             courseItem.setCourse_status(course.getCourse_status());
+
+            if(course.getType() == 1) {
+                String outLine = course.getOutline();
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    List<CourseOutline> beanList = mapper.readValue(outLine, new TypeReference<List<CourseOutline>>() {
+                        });
+                    if(beanList.size() > 0) {
+                        CourseOutline lastClassTime = beanList.get(beanList.size() -1);
+                        if(lastClassTime.getClass_time() + lastClassTime.getClass_hours()*3600 < new Date().getTime()/1000) {
+                            if(course.getCourse_status() == 3) {
+                                iCourse.setCourseState(course.getId(),4);
+                                courseItem.setCourse_status(4);
+                            }
+                        }
+
+                    }
+                } catch (IOException e) {
+                    courseItem.setCourse_status(-1);
+                }
+            }
             courseItem.setCourse_name(course.getCourse_name());
             courseItem.setForm(getCourseFormById(course.getForm()));
             courseItem.setCourse_type(course.getType());

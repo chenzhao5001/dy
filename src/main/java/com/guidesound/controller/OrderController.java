@@ -294,6 +294,15 @@ public class OrderController extends BaseController {
                 }
                 hour_surplus_use = all_time - hour_actual_use;
                 last_time = item.getClass_time() + item.getClass_hours() * 3600;
+
+                if(last_time < new Date().getTime() / 1000) {
+                    List<ClassTimeInfo> classTimeInfo_student = iOrder.getClassTimeStatus(Integer.parseInt(order_id), order1V1.getStudent_id(), item.getClass_time());
+                    if (classTimeInfo_student.size() > 0 && classTimeInfo_student.get(0).getStatus() == 1) {
+                        item.setClass_status(1); //已完成
+                    } else {
+                        item.setClass_status(2); //缺课
+                    }
+                }
             }
 
             order1V1.setOutline(class_item_list);
@@ -355,6 +364,25 @@ public class OrderController extends BaseController {
         }
 
         if (type.equals("0")) { //课堂
+
+            if(orderInfo.getType() == 1) {
+                String order_outLine = orderInfo.getOutline();
+                try {
+                    ObjectMapper mapper_temp = new ObjectMapper();
+                    List<ClassTime> class_item_list = mapper_temp.readValue(order_outLine, new TypeReference<List<ClassTime>>() {
+                    });
+                    if(class_item_list.size() == 0) {
+                        return JSONResult.errorMsg("班课无内容");
+                    }
+                    if(class_item_list.get(0).getClass_time() < new Date().getTime() / 1000) {
+                        return JSONResult.errorMsg("已经开课，不允许支付");
+                    }
+
+                } catch (IOException e) {
+                    return JSONResult.errorMsg("班课课堂大纲错误");
+                }
+            }
+
             int class_id = 0;
             int teacher_id = 0;
             String outLine = "";
@@ -490,6 +518,16 @@ public class OrderController extends BaseController {
 
             iOrder.addStudentClass(studentClass);
             iOrder.addOrderClassId(Integer.parseInt(order_id), class_id);
+
+
+            ///班课订单达到最大人数 下架课程
+            if(orderInfo.getType() == 1){
+                ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(1);
+                List<StudentClass> student_list = iOrder.getStudentClassByCourseId(orderInfo.getCourse_id());
+                if (student_list.size() >= classRoom.getMax_person()) {
+                    iCourse.setCourseState(orderInfo.getCourse_id(),4);
+                }
+            }
 
         } else { //录播课
 

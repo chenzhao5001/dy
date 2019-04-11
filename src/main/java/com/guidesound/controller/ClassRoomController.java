@@ -30,8 +30,67 @@ import java.util.*;
 @RequestMapping("/class_room")
 public class ClassRoomController extends BaseController {
 
+    //课堂是否完成
+    boolean isClassOver(int class_id) {
+        ClassRoom classRoom = iOrder.getClassRoomById(class_id);
+        if (classRoom.getIstest() == 1) {
+            if (classRoom.getTest_time() + classRoom.getTest_duration() * 3600 < new Date().getTime() / 1000) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        if(iOrder.getAllReturnOrderByClassId(class_id) != 0) {
+            int retCount = iOrder.getNoReturnOrderByClassId(class_id);
+            if(retCount == 0) {
+                return true;
+            }
+        }
+
+        String outLine = "";
+        if (classRoom.getOutline() == null || classRoom.getOutline().equals("")) {
+            outLine = "[]";
+        } else {
+            outLine = classRoom.getOutline();
+        }
+        ObjectMapper mapper_temp = new ObjectMapper();
+        List<ClassTime> beanList = null;
+        try {
+            beanList = mapper_temp.readValue(outLine, new TypeReference<List<ClassTime>>() {
+            });
+        } catch (IOException e) {
+            return true;
+        }
+        if (beanList.size() == 0) {
+            if (classRoom.getType() == 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        int all_hours = 0;
+        for(ClassTime item : beanList) {
+            all_hours += item.getClass_hours();
+        }
+        ClassTime lastClass = beanList.get(beanList.size() - 1);
+        int lastTime = lastClass.getClass_time() + lastClass.getClass_hours() * 3600;
+        if(lastTime < new Date().getTime() /1000) {
+            if(classRoom.getType() == 0) {
+                if(all_hours == classRoom.getAll_hours()) {
+                    return true;
+                }
+            } else{
+                return true;
+            }
+        }
+        return false;
+
+    }
+
     int getTeacherClassState(ClassRoom classRoom) {
-        if(classRoom.getIstest() == 1) {
+        if (classRoom.getIstest() == 1) {
             return 1;
         }
         ObjectMapper mapper_temp = new ObjectMapper();
@@ -61,7 +120,7 @@ public class ClassRoomController extends BaseController {
                 return 4;
             } else {
 
-                if(classRoom.getUser_id() == getCurrentUserId()) { //老师
+                if (classRoom.getUser_id() == getCurrentUserId()) { //老师
                     if (all_hours >= classRoom.getAll_hours() && (last_time + 3600 * last_hour) < new Date().getTime() / 1000) {
                         return 3;
                     } else {
@@ -69,14 +128,14 @@ public class ClassRoomController extends BaseController {
                     }
                 } else { //学生
                     List<StudentClass> list_student = iOrder.getStudentClassByClassId(classRoom.getClass_id());
-                    if(list_student.size() != 0) {
+                    if (list_student.size() != 0) {
                         int order_id = list_student.get(0).getOrder_id();
                         OrderInfo orderInfo = iOrder.getOrderById(order_id);
-                        if(orderInfo != null) {
-                            if(orderInfo.getRefund_amount() != 0) {
+                        if (orderInfo != null) {
+                            if (orderInfo.getRefund_amount() != 0) {
                                 return 4;
                             } else {
-                                if(all_hours == orderInfo.getAll_hours() && last_time < new Date().getTime() / 1000) {
+                                if (all_hours == orderInfo.getAll_hours() && last_time < new Date().getTime() / 1000) {
                                     return 3;
                                 } else {
                                     return orderInfo.getOrder_status();
@@ -89,7 +148,7 @@ public class ClassRoomController extends BaseController {
             }
 
         } else { //班课
-            if(classRoom.getUser_id() == getCurrentUserId()) {
+            if (classRoom.getUser_id() == getCurrentUserId()) {
                 ClassTime courseOutline = beanList.get(beanList.size() - 1);
                 if (courseOutline.getClass_time() < new Date().getTime() / 1000) {
                     return 3;
@@ -103,14 +162,14 @@ public class ClassRoomController extends BaseController {
             } else {
 
                 List<StudentClass> list_student = iOrder.getStudentClassByClassId(classRoom.getClass_id());
-                if(list_student.size() != 0) {
+                if (list_student.size() != 0) {
                     int order_id = list_student.get(0).getOrder_id();
                     OrderInfo orderInfo = iOrder.getOrderById(order_id);
-                    if(orderInfo != null) {
-                        if(orderInfo.getRefund_amount() > 0) {
+                    if (orderInfo != null) {
+                        if (orderInfo.getRefund_amount() > 0) {
                             return 4;
                         } else {
-                            if(last_time < new Date().getTime() / 1000) {
+                            if (last_time < new Date().getTime() / 1000) {
                                 return 3;
                             } else {
                                 return orderInfo.getOrder_status();
@@ -282,12 +341,15 @@ public class ClassRoomController extends BaseController {
             return JSONResult.errorMsg("课堂信息不存在");
         }
 
+        if(isClassOver(Integer.parseInt(class_id))) {
+            return JSONResult.errorMsg("课程已结束");
+        }
 
         List<ClassTime> class_item_list = null;
         ObjectMapper mapper_temp = new ObjectMapper();
         try {
             String outline = classRoom.getOutline();
-            if(outline == null || outline.equals("")) {
+            if (outline == null || outline.equals("")) {
                 outline = "[]";
             }
             class_item_list = mapper_temp.readValue(outline, new TypeReference<List<ClassTime>>() {
@@ -296,155 +358,80 @@ public class ClassRoomController extends BaseController {
             e.printStackTrace();
             return JSONResult.errorMsg("课堂大纲解析失败");
         }
-        if (class_item_list.size() == 0) {
-            if(classRoom.getType() == 0) { //1v1
+
+        if (classRoom.getType() == 0) {
+            if(class_item_list.size() == 0) {
                 return JSONResult.errorMsg("当前没有已发布且未未上课的课时");
             }
-            return JSONResult.errorMsg("课堂大纲无数据");
-        }
-
-        ClassTime classTime = class_item_list.get(class_item_list.size() - 1);
-        if (classRoom.getIstest() != 1) {
-            if (iOrder.getNoReturnOrderByClassId(Integer.parseInt(class_id)) <= 0) {
-                return JSONResult.errorMsg("没有学生上课，老师不允许进入课堂");
-            }
-        }
-        if (classRoom.getIstest() == 1) { //试听课
-            Course course = iCourse.getCourseById(classRoom.getCourse_id());
-            if (course == null) {
-                return JSONResult.errorMsg("课堂信息不存在");
-            }
-            int beginTime = course.getTest_time() - 60 * 10;
-            int endTime = course.getTest_time() + 3600;
-            if (new Date().getTime() / 1000 < beginTime) {
-                return JSONResult.errorMsg("还没有到上课时间");
-            }
-            if (new Date().getTime() / 1000 > endTime) {
-                return JSONResult.errorMsg("课程已结束");
-            }
-
-
-            Ret ret = new Ret();
-            List<TeacherEnterInfo> teacherEnterInfos = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id), -1);
-            int temp_id = getCurrentUserId();
-            System.out.println(temp_id);
-            if (classRoom.getUser_id() == getCurrentUserId()) { //老师
-                if (teacherEnterInfos.size() == 0) {
-                    iOrder.setTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), -1, (int) (new Date().getTime() / 1000), 1);
-                } else {
-                    iOrder.updateTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), -1, 1);
-                }
-                //老师
-                ret.setIshost(0);
-            } else {
-                if (teacherEnterInfos.size() == 0 || teacherEnterInfos.get(0).getState() == 0) {
-                    return JSONResult.errorMsg("老师未进入");
-                }
-                //学生
-                ret.setIshost(1);
-            }
-            ret.setRoom_number(classRoom.getRoom_number());
-            return JSONResult.ok(ret);
-
-        } else if (classRoom.getType() == 0) { //1v1
-            int all_time = 0;
-            for (ClassTime item : class_item_list) {
-                all_time += item.getClass_hours();
-            }
-            if (all_time >= classRoom.getAll_hours() && classTime.getClass_time() + classTime.getClass_hours() * 3600 < new Date().getTime() / 1000) {
-                return JSONResult.errorMsg("课程已结束");
-            }
-
-            if (all_time < classRoom.getAll_hours() && (classTime.getClass_time() + classTime.getClass_hours() * 3600) < new Date().getTime() / 1000) {
+            ClassTime classTime = class_item_list.get(class_item_list.size() -1);
+            if(classTime.getClass_time() + classTime.getClass_hours() *3600 < new Date().getTime() /1000) {
                 return JSONResult.errorMsg("当前没有已发布且未未上课的课时");
             }
-        } else { //班课
-            if (classTime.getClass_time() + classTime.getClass_hours() * 3600 < new Date().getTime() / 1000) {
-                return JSONResult.errorMsg("课程已结束");
-            }
         }
 
-        boolean flag = false;
-        boolean teacher_flag = true;
-        if (classRoom.getUser_id() == getCurrentUserId()) {
-            flag = true;
-            teacher_flag = true;
-        } else {
-
-        }
-        for (StudentClass item : studentClasses) {
-            if (item.getUser_id() == getCurrentUserId()) {
-                flag = true;
-                teacher_flag = false;
-                break;
-            }
-        }
-
-        if (flag == false) {
-            return JSONResult.errorMsg("不是此课堂的学生或老师");
-        }
-
-        String outLine = classRoom.getOutline();
-        if (outLine == "") {
-            return JSONResult.errorMsg("没有发布课程");
-        }
-
-        boolean right_time = false;
         int begin_time = 0;
-        int class_number = -1;
-        for (ClassTime item : class_item_list) {
-            int beginTime = item.getClass_time() - 60 * 10;
-            int endTime = item.getClass_time() + 60 * 60 * item.getClass_hours();
-            int current_time = (int) (new Date().getTime() / 1000);
-            if (current_time > beginTime && current_time < endTime) {
-                class_number = item.getClass_number();
-                right_time = true;
-                begin_time = beginTime;
-                break;
-            }
-        }
-        if (right_time == false) {
-            return JSONResult.errorMsg("还没有到上课时间");
-        }
-        List<TeacherEnterInfo> teacherEnterInfos = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id), class_number);
-        if (teacher_flag == false) { //学生
-            if (teacherEnterInfos.size() == 0 || teacherEnterInfos.get(0).getState() == 0) {
-                return JSONResult.errorMsg("需要等待老师先进入房间");
-            }
-            ////
-        } else { //老师
-            if (teacherEnterInfos.size() == 0) {
-                iOrder.setTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), class_number, (int) (new Date().getTime() / 1000), 1);
-                List<StudentClass> s_list = iOrder.getStudentClassByClassId(Integer.parseInt(class_id));
-                List<Integer> ids = new ArrayList<>();
-                for(StudentClass item : s_list) {
-                    ids.add(item.getUser_id());
+        int begin_time_wirte = 0;
+        int end_time = 0;
+        int class_num = 0;
+        if(classRoom.getIstest() == 1) { //试听课
+            begin_time = classRoom.getTest_time() - 600;
+            begin_time_wirte = classRoom.getTest_time();
+            end_time = classRoom.getTest_time() + classRoom.getTest_duration()*60;
+            class_num = -1;
+        } else {
+            for (ClassTime classTime : class_item_list) {
+                if(classTime.getClass_time() - 600 < new Date().getTime() / 1000  && classTime.getClass_time() + classTime.getClass_hours()*3600 > new Date().getTime() / 1000) {
+                    begin_time = classTime.getClass_time() - 600;
+                    end_time = classTime.getClass_time() + classTime.getClass_hours()*3600;
+                    class_num = classTime.getClass_number();
+                    begin_time_wirte = classTime.getClass_time();
+                    break;
                 }
-                List<UserInfo> users = iUser.getUserByIds(ids);
-                for(UserInfo item : users) {
-                    TlsSigTest.SendMessage(item.getIm_id(),"你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！");
-                    log.info("进入课堂通知已发送 im_id = {} content = {}",item.getIm_id(),"test...");
-                    if(!item.getPhone().equals("")) {
-                        String content =  "【导音教育】你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！";
-                        String ret = ToolsFunction.sendSMS(item.getPhone(),content);
-                        log.info("进入课堂短信已发送 phone = {} content = {} ret = {}",item.getPhone(),content,ret);
-                    }
-                }
-            } else {
-                iOrder.updateTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), class_number, 1);
             }
         }
-
-        iOrder.setClassTimeStatus(Integer.parseInt(class_id), getCurrentUserId(), begin_time, 1);
-
+        int current_time = (int) (new Date().getTime() / 1000);
+        if(current_time < begin_time || current_time > end_time) {
+            return JSONResult.errorMsg("还未到上课时间");
+        }
 
         Ret ret = new Ret();
-        ret.setRoom_number(classRoom.getRoom_number());
-        if (teacher_flag == true) {
+        List<TeacherEnterInfo> teacherEnterInfos = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id), class_num);
+        if(classRoom.getUser_id() == getCurrentUserId()) { //老师
+
+           teacherEnterInfos = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id), class_num);
+            if (teacherEnterInfos.size() == 0) {
+                iOrder.setTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), class_num, (int) (new Date().getTime() / 1000), 1);
+            } else {
+                iOrder.updateTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), class_num, 1);
+            }
             ret.setIshost(0);
-        } else {
+
+
+            ///发送通知
+            List<StudentClass> s_list = iOrder.getStudentClassByClassId(Integer.parseInt(class_id));
+            List<Integer> ids = new ArrayList<>();
+            for (StudentClass item : s_list) {
+                ids.add(item.getUser_id());
+            }
+            List<UserInfo> users = iUser.getUserByIds(ids);
+            for (UserInfo item : users) {
+                TlsSigTest.SendMessage(item.getIm_id(), "你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！");
+                log.info("进入课堂通知已发送 im_id = {} content = {}", item.getIm_id(), "test...");
+                if (!item.getPhone().equals("")) {
+                    String content = "【导音教育】你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！";
+                    String ret_info = ToolsFunction.sendSMS(item.getPhone(), content);
+                    log.info("进入课堂短信已发送 phone = {} content = {} ret = {}", item.getPhone(), content, ret);
+                }
+            }
+
+        } else { //学生
+            if (teacherEnterInfos.size() == 0 || teacherEnterInfos.get(0).getState() == 0) {
+                return JSONResult.errorMsg("老师未进入");
+            }
             ret.setIshost(1);
         }
+        iOrder.setClassTimeStatus(Integer.parseInt(class_id), getCurrentUserId(), begin_time_wirte, 1);
+        ret.setRoom_number(classRoom.getRoom_number());
         return JSONResult.ok(ret);
     }
 
@@ -521,57 +508,49 @@ public class ClassRoomController extends BaseController {
             classRoomRet.setOutline(beanList);
         }
 
+        int state = getTeacherClassState(classRoom);
+        classRoomRet.setClass_info_status(state);
         //课程状态
-        if (classRoom.getType() == 0) { //1v1
-//            List<StudentClass> list = iOrder.getStudentClassByClassId(Integer.parseInt(class_id));
-            if (iOrder.getReturnOrderByClassId(Integer.parseInt(class_id)) > 0) {
-                classRoomRet.setClass_info_status(4); //退费
-            } else {
-                int all_hours = 0;
-                int last_time = 0;
-                int last_hour = 0;
-                for (CourseOutline item : beanList) {
-                    all_hours += item.getClass_hours();
-                    last_time = item.getClass_time();
-                    last_hour = item.getClass_hours();
-                }
-                if (all_hours >= classRoomRet.getAll_hours() && (last_time + 3600 * last_hour) < new Date().getTime() / 1000) {
-                    classRoomRet.setClass_info_status(3); //退费
-                } else {
-                    classRoomRet.setClass_info_status(1); //上课中
-                }
-            }
-
-        } else { //班课
-            CourseOutline courseOutline = beanList.get(beanList.size() - 1);
-            if (courseOutline.getClass_time() < new Date().getTime() / 1000) {
-                classRoomRet.setClass_info_status(3); //已完成
-            } else {
-                if (iOrder.getNoReturnOrderByClassId(Integer.parseInt(class_id)) > 0) {
-                    classRoomRet.setClass_info_status(1); //上课中
-                } else {
-                    classRoomRet.setClass_info_status(3);
-                }
-            }
-        }
-
-        boolean class_end_time_flag = true;
-        for (CourseOutline item : beanList) {
-            if (item.getClass_time() < new Date().getTime() / 1000) {
-                class_end_time_flag = false;
-                break;
-            }
-        }
-        if (class_end_time_flag == true && beanList.size() > 0) {
-            classRoomRet.setClass_info_status(3);
-        } else {
-            int count = iOrder.getReturnOrderByClassId(Integer.parseInt(class_id));
-            int all_count = iOrder.getAllReturnOrderByClassId(Integer.parseInt(class_id));
-            if (count == all_count) {
-                classRoomRet.setClass_info_status(4);
-            }
-        }
-
+//        if (classRoom.getType() == 0) { //1v1
+//            if (iOrder.getReturnOrderByClassId(Integer.parseInt(class_id)) > 0) {
+//                classRoomRet.setClass_info_status(4); //退费
+//            } else {
+//                int all_hours = 0;
+//                int last_time = 0;
+//                int last_hour = 0;
+//                for (CourseOutline item : beanList) {
+//                    all_hours += item.getClass_hours();
+//                    last_time = item.getClass_time();
+//                    last_hour = item.getClass_hours();
+//                }
+//                if (all_hours >= classRoomRet.getAll_hours() && (last_time + 3600 * last_hour) < new Date().getTime() / 1000) {
+//                    classRoomRet.setClass_info_status(3); //已完成
+//                } else {
+//                    classRoomRet.setClass_info_status(1); //上课中
+//                }
+//
+//                List<StudentClass> studentClasses = iOrder.getStudentClassByClassId(Integer.parseInt(class_id));
+//                if (studentClasses.size() > 0) {
+//                    OrderInfo orderInfo = iOrder.getOrderById(studentClasses.get(0).getOrder_id());
+//                    if (orderInfo != null && orderInfo.getRefund_amount() != 0) {
+//                        classRoomRet.setClass_info_status(4); //退费完成
+//                    }
+//                }
+//            }
+//
+//        } else { //班课
+//            CourseOutline courseOutline = beanList.get(beanList.size() - 1);
+//            if (courseOutline.getClass_time() < new Date().getTime() / 1000) {
+//                classRoomRet.setClass_info_status(3); //已完成
+//            } else {
+//                if (iOrder.getNoReturnOrderByClassId(Integer.parseInt(class_id)) > 0) {
+//                    classRoomRet.setClass_info_status(1); //上课中
+//                } else {
+//                    classRoomRet.setClass_info_status(3);
+//                }
+//            }
+//        }
+        //学生id  1v1 使用
         int student_id = 0;
         List<StudentClass> list_students = iOrder.getStudentClassByUserId(Integer.parseInt(class_id));
         if (list_students.size() > 0) {
@@ -587,11 +566,9 @@ public class ClassRoomController extends BaseController {
 
         all_time = classRoom.getAll_hours();
         for (CourseOutline item : beanList) {
-            int temp = item.getClass_time() + item.getClass_hours() * 3600;
-            System.out.println(temp);
             if ((item.getClass_time() + item.getClass_hours() * 3600) < new Date().getTime() / 1000) {
                 hour_theory_use += item.getClass_hours();
-                List<ClassTimeInfo> classTimeInfos = iOrder.getClassTimeStatus(Integer.parseInt(class_id), classRoom.getUser_id(), item.getClass_time());
+                List<ClassTimeInfo> classTimeInfos = iOrder.getClassTimeStatusByClassId(Integer.parseInt(class_id), classRoom.getUser_id(), item.getClass_time());
                 if (classTimeInfos.size() > 0 && classTimeInfos.get(0).getStatus() == 1) {
                     item.setClass_status(1);
                     hour_actual_use += item.getClass_hours();
@@ -720,9 +697,9 @@ public class ClassRoomController extends BaseController {
             teacherClass1.setForm(SignMap.getCourseFormById(item.getForm()));
             teacherClass1.setForm_id(item.getForm());
             teacherClass1.setWay(item.getWay());
-            if(item.getType() == 0) {
+            if (item.getType() == 0) {
                 List<StudentClass> listClass = iOrder.getStudentClassByClassId(item.getClass_id());
-                if(listClass.size() > 0) {
+                if (listClass.size() > 0) {
                     StudentClass studentClass = listClass.get(0);
                     UserInfo userInfo1 = iUser.getUser(studentClass.getUser_id());
                     teacherClass1.setStudent_id(userInfo1.getId());
@@ -785,7 +762,7 @@ public class ClassRoomController extends BaseController {
         int user_id = getCurrentUserId();
         List<ClassInfo> classInfo_list = new ArrayList<>();
         int end_time = (int) (new Date().getTime() / 1000 - 3600);
-        List<ClassRoom> list = iOrder.getAllClassRoom(1, 1,end_time);
+        List<ClassRoom> list = iOrder.getAllClassRoom(1, 1, end_time);
         List<Integer> user_ids = new ArrayList<>();
         Map<Integer, UserInfo> m_users = new HashMap<>();
         for (ClassRoom item : list) {

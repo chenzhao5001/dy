@@ -136,6 +136,9 @@ public interface IOrder {
     @Select("select * from class_time where order_id = #{arg0} and student_id = #{arg1} and begin_time = #{arg2}")
     List<ClassTimeInfo> getClassTimeStatus(int order_id,int student_id,int begin_time);
 
+    @Select("select * from class_time where class_id = #{arg0} and student_id = #{arg1} and begin_time = #{arg2}")
+    List<ClassTimeInfo> getClassTimeStatusByClassId(int class_id,int student_id,int begin_time);
+
     @Update("update class_room set outline = #{arg1} where class_id = #{arg0}")
     void setClassRoomOutLine(int class_id,String out_line);
 
@@ -163,6 +166,7 @@ public interface IOrder {
             "way = #{way}," +
             "max_person = #{max_person}," +
             "price_one_hour = #{price_one_hour}," +
+            "all_hours = #{all_hours}," +
             "all_charge = #{all_charge}," +
             "refund_rule = #{refund_rule}," +
             "outline = #{outline}," +
