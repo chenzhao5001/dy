@@ -240,6 +240,19 @@ public class UserController extends BaseController{
         return JSONResult.ok();
     }
 
+    JSONResult verifyPhoneCode(String phone,String verify_code) {
+        if(phone == null || verify_code == null || !ToolsFunction.isNumeric(phone) || phone.length() != 11) {
+            return JSONResult.build(500,"参数错误",null);
+        }
+
+        int time = (int) (new Date().getTime() / 1000) - 600;
+        int count = iVerifyCode.selectCode(phone,verify_code,time);
+        if(count <= 0) {
+            return JSONResult.build(500,"验证码错误",null);
+        }
+        return JSONResult.ok("验证码正确");
+    }
+
 
     /**
      *手机号登录
@@ -456,6 +469,27 @@ public class UserController extends BaseController{
         return JSONResult.ok();
     }
 
+    @RequestMapping(value = "/info_by_name")
+    @ResponseBody
+    public JSONResult getUserInfoByName(String name) throws IOException {
+        if(name == null) {
+            return JSONResult.errorMsg("缺少 name 参数");
+        }
+
+        List<Integer> user_ids = iUser.getUserIdsByName2(name);
+        if(user_ids.size() == 0) {
+            return JSONResult.ok(user_ids);
+        }
+
+        List<UserInfo> lists = new ArrayList<>();
+        for(int i : user_ids) {
+            JSONResult ret = getUserInfoById(String.valueOf(i));
+            if(ret.getStatus() == 200) {
+                lists.add((UserInfo)ret.getData());
+            }
+        }
+        return JSONResult.ok(lists);
+    }
 
     /**
      *息获得用户信息
@@ -817,7 +851,12 @@ public class UserController extends BaseController{
         int time = (int) (new Date().getTime() / 1000) - 300;
         int count = iVerifyCode.selectCode(phone,verify_code,time);
         if(count <= 0) {
-            return JSONResult.build(201,"验证码错误",null);
+            return JSONResult.build(500,"验证码错误",null);
+        }
+
+        List<UserInfo> list = iUser.getUserByPhone(phone);
+        if(list.size() > 0) {
+            return JSONResult.errorMsg("此手机号已经绑定过");
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
