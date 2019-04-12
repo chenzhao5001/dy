@@ -434,6 +434,12 @@ public class OrderController extends BaseController {
                 int class_number = 1000000000 + classRoom.getClass_id();
                 iOrder.addRoomNumber(classRoom.getClass_id(), class_number);
                 course.setId(classRoom.getClass_id());
+                if(orderInfo.getType() == 0) {
+                    course.setAll_hours(orderInfo.getAll_hours());
+                    course.setPrice_one_hour(orderInfo.getPrice_one_hour());
+                    course.setAll_charge(orderInfo.getAll_charge());
+
+                }
                 //创建补充课堂信息
                 iOrder.ClassRoomCourse(course);
                 if (group_id != null) {
