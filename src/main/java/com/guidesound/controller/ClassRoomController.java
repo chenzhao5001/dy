@@ -29,6 +29,92 @@ import java.util.*;
 @Controller
 @RequestMapping("/class_room")
 public class ClassRoomController extends BaseController {
+    class Student {
+        int order_id;
+        int order_status;
+
+        public int getOrder_id() {
+            return order_id;
+        }
+
+        public void setOrder_id(int order_id) {
+            this.order_id = order_id;
+        }
+
+        public int getOrder_status() {
+            return order_status;
+        }
+
+        public void setOrder_status(int order_status) {
+            this.order_status = order_status;
+        }
+    }
+
+    class Teacher {
+        int class_info_status;
+        int istest;
+
+        public int getClass_info_status() {
+            return class_info_status;
+        }
+
+        public void setClass_info_status(int class_info_status) {
+            this.class_info_status = class_info_status;
+        }
+
+        public int getIstest() {
+            return istest;
+        }
+
+        public void setIstest(int istest) {
+            this.istest = istest;
+        }
+    }
+
+
+    List<ClassInfo> sortClassInfo(List<ClassInfo> list) {
+
+        List<ClassInfo> new_list_1 = new ArrayList<>();
+        List<ClassInfo> new_list_2 = new ArrayList<>();
+        List<ClassInfo> new_list_3 = new ArrayList<>();
+
+        for (ClassInfo item : list) {
+            if (item.getTeacher_class() != null) {
+                TeacherClass1 temp = (TeacherClass1) item.getTeacher_class();
+                if (temp.getTeacher() != null) {
+                    Teacher teacher = (Teacher) temp.getTeacher();
+                    if (teacher.getClass_info_status() == 1) {
+                        new_list_1.add(item);
+                    } else if (teacher.getClass_info_status() == 3) {
+                        new_list_2.add(item);
+                    } else {
+                        new_list_3.add(item);
+                    }
+
+                }
+                if (temp.getStudent() != null) {
+                    Student student = (Student) temp.getStudent();
+                    if (student.getOrder_status() == 1) {
+                        new_list_1.add(item);
+                    } else if (student.getOrder_status() == 3) {
+                        new_list_2.add(item);
+                    } else {
+                        new_list_3.add(item);
+                    }
+                }
+
+            }
+        }
+
+        for (ClassInfo item : new_list_2) {
+            new_list_1.add(item);
+        }
+
+        for (ClassInfo item : new_list_3) {
+            new_list_1.add(item);
+        }
+        return new_list_1;
+    }
 
     //课堂是否完成
     boolean isClassOver(int class_id) {
@@ -41,9 +127,9 @@ public class ClassRoomController extends BaseController {
             }
         }
 
-        if(iOrder.getAllReturnOrderByClassId(class_id) != 0) {
+        if (iOrder.getAllReturnOrderByClassId(class_id) != 0) {
             int retCount = iOrder.getNoReturnOrderByClassId(class_id);
-            if(retCount == 0) {
+            if (retCount == 0) {
                 return true;
             }
         }
@@ -71,17 +157,17 @@ public class ClassRoomController extends BaseController {
         }
 
         int all_hours = 0;
-        for(ClassTime item : beanList) {
+        for (ClassTime item : beanList) {
             all_hours += item.getClass_hours();
         }
         ClassTime lastClass = beanList.get(beanList.size() - 1);
         int lastTime = lastClass.getClass_time() + lastClass.getClass_hours() * 3600;
-        if(lastTime < new Date().getTime() /1000) {
-            if(classRoom.getType() == 0) {
-                if(all_hours == classRoom.getAll_hours()) {
+        if (lastTime < new Date().getTime() / 1000) {
+            if (classRoom.getType() == 0) {
+                if (all_hours == classRoom.getAll_hours()) {
                     return true;
                 }
-            } else{
+            } else {
                 return true;
             }
         }
@@ -341,7 +427,7 @@ public class ClassRoomController extends BaseController {
             return JSONResult.errorMsg("课堂信息不存在");
         }
 
-        if(isClassOver(Integer.parseInt(class_id))) {
+        if (isClassOver(Integer.parseInt(class_id))) {
             return JSONResult.errorMsg("课程已结束");
         }
 
@@ -360,11 +446,11 @@ public class ClassRoomController extends BaseController {
         }
 
         if (classRoom.getType() == 0) {
-            if(class_item_list.size() == 0) {
+            if (class_item_list.size() == 0) {
                 return JSONResult.errorMsg("当前没有已发布且未未上课的课时");
             }
-            ClassTime classTime = class_item_list.get(class_item_list.size() -1);
-            if(classTime.getClass_time() + classTime.getClass_hours() *3600 < new Date().getTime() /1000) {
+            ClassTime classTime = class_item_list.get(class_item_list.size() - 1);
+            if (classTime.getClass_time() + classTime.getClass_hours() * 3600 < new Date().getTime() / 1000) {
                 return JSONResult.errorMsg("当前没有已发布且未未上课的课时");
             }
         }
@@ -373,11 +459,11 @@ public class ClassRoomController extends BaseController {
         int begin_time_wirte = 0;
         int end_time = 0;
         int class_num = 0;
-        if(classRoom.getIstest() == 1) { //试听课
+        if (classRoom.getIstest() == 1) { //试听课
             //限制最大人数
-            if(classRoom.getUser_id() != getCurrentUserId()) {
+            if (classRoom.getUser_id() != getCurrentUserId()) {
                 int testPerson = iOrder.testClassPerson(Integer.parseInt(class_id));
-                if(testPerson >= 3 ) {
+                if (testPerson >= 2) {
                     return JSONResult.errorMsg("试听课学生超过最大人数");
                 } else {
                     iOrder.updateTestClassPerson(Integer.parseInt(class_id));
@@ -386,13 +472,13 @@ public class ClassRoomController extends BaseController {
 
             begin_time = classRoom.getTest_time() - 600;
             begin_time_wirte = classRoom.getTest_time();
-            end_time = classRoom.getTest_time() + classRoom.getTest_duration()*60;
+            end_time = classRoom.getTest_time() + classRoom.getTest_duration() * 3600;
             class_num = -1;
         } else {
             for (ClassTime classTime : class_item_list) {
-                if(classTime.getClass_time() - 600 < new Date().getTime() / 1000  && classTime.getClass_time() + classTime.getClass_hours()*3600 > new Date().getTime() / 1000) {
+                if (classTime.getClass_time() - 600 < new Date().getTime() / 1000 && classTime.getClass_time() + classTime.getClass_hours() * 3600 > new Date().getTime() / 1000) {
                     begin_time = classTime.getClass_time() - 600;
-                    end_time = classTime.getClass_time() + classTime.getClass_hours()*3600;
+                    end_time = classTime.getClass_time() + classTime.getClass_hours() * 3600;
                     class_num = classTime.getClass_number();
                     begin_time_wirte = classTime.getClass_time();
                     break;
@@ -400,15 +486,15 @@ public class ClassRoomController extends BaseController {
             }
         }
         int current_time = (int) (new Date().getTime() / 1000);
-        if(current_time < begin_time || current_time > end_time) {
+        if (current_time < begin_time || current_time > end_time) {
             return JSONResult.errorMsg("还未到上课时间");
         }
 
         Ret ret = new Ret();
         List<TeacherEnterInfo> teacherEnterInfos = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id), class_num);
-        if(classRoom.getUser_id() == getCurrentUserId()) { //老师
+        if (classRoom.getUser_id() == getCurrentUserId()) { //老师
 
-           teacherEnterInfos = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id), class_num);
+            teacherEnterInfos = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id), class_num);
             if (teacherEnterInfos.size() == 0) {
                 iOrder.setTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), class_num, (int) (new Date().getTime() / 1000), 1);
             } else {
@@ -423,14 +509,16 @@ public class ClassRoomController extends BaseController {
             for (StudentClass item : s_list) {
                 ids.add(item.getUser_id());
             }
-            List<UserInfo> users = iUser.getUserByIds(ids);
-            for (UserInfo item : users) {
-                TlsSigTest.SendMessage(item.getIm_id(), "你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！");
-                log.info("进入课堂通知已发送 im_id = {} content = {}", item.getIm_id(), "test...");
-                if (!item.getPhone().equals("")) {
-                    String content = "【导音教育】你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！";
-                    String ret_info = ToolsFunction.sendSMS(item.getPhone(), content);
-                    log.info("进入课堂短信已发送 phone = {} content = {} ret = {}", item.getPhone(), content, ret);
+            if(ids.size() > 0) {
+                List<UserInfo> users = iUser.getUserByIds(ids);
+                for (UserInfo item : users) {
+                    TlsSigTest.SendMessage(item.getIm_id(), "你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！");
+                    log.info("进入课堂通知已发送 im_id = {} content = {}", item.getIm_id(), "test...");
+                    if (!item.getPhone().equals("")) {
+                        String content = "【导音教育】你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！";
+                        String ret_info = ToolsFunction.sendSMS(item.getPhone(), content);
+                        log.info("进入课堂短信已发送 phone = {} content = {} ret = {}", item.getPhone(), content, ret);
+                    }
                 }
             }
 
@@ -448,12 +536,17 @@ public class ClassRoomController extends BaseController {
     @RequestMapping("/leave_class_room")
     @ResponseBody
     JSONResult leaveClassRoom(String class_id) {
+        log.info("退出房间：user_id{},class_id",getCurrentUserId(),class_id);
         if (class_id == null) {
             return JSONResult.errorMsg("缺少 class_id 参数");
         }
         ClassRoom classRoom = iOrder.getClassRoomById(Integer.parseInt(class_id));
-        if (classRoom.getUser_id() == getCurrentUserId()) {
+        if (classRoom.getUser_id() == getCurrentUserId()) { //老师
             iOrder.updateAllTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), 0);
+        } else {
+            if(classRoom.getIstest() == 1) { //学生
+                iOrder.reduceTestClassPerson(Integer.parseInt(class_id));
+            }
         }
 
         return JSONResult.ok();
@@ -631,47 +724,6 @@ public class ClassRoomController extends BaseController {
     @RequestMapping("/my_class_room")
     @ResponseBody
     JSONResult myClassRoom() {
-        class Student {
-            int order_id;
-            int order_status;
-
-            public int getOrder_id() {
-                return order_id;
-            }
-
-            public void setOrder_id(int order_id) {
-                this.order_id = order_id;
-            }
-
-            public int getOrder_status() {
-                return order_status;
-            }
-
-            public void setOrder_status(int order_status) {
-                this.order_status = order_status;
-            }
-        }
-
-        class Teacher {
-            int class_info_status;
-            int istest;
-
-            public int getClass_info_status() {
-                return class_info_status;
-            }
-
-            public void setClass_info_status(int class_info_status) {
-                this.class_info_status = class_info_status;
-            }
-
-            public int getIstest() {
-                return istest;
-            }
-
-            public void setIstest(int istest) {
-                this.istest = istest;
-            }
-        }
 
         int user_id = getCurrentUserId();
         List<ClassInfo> classInfoList = new ArrayList<>();
@@ -759,11 +811,13 @@ public class ClassRoomController extends BaseController {
                 teacherClass1.setTeacher(teacher);
             }
             ClassInfo classInfo = new ClassInfo();
+
             classInfo.setTeacher_class(teacherClass1);
             classInfo.setVideo_class(null);
+
             classInfoList.add(classInfo);
         }
-        return JSONResult.ok(classInfoList);
+        return JSONResult.ok(sortClassInfo(classInfoList));
     }
 
     @RequestMapping("/test_listen")

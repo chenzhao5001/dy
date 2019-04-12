@@ -131,12 +131,6 @@ public class RecordCourseController extends BaseController {
             System.out.println(temp);
             JavaType javaType = getCollectionType(ArrayList.class, RecordVideo.class);
             recordVideoList = mapper_temp.readValue((String) record.getVideos(), javaType);
-
-//
-//            ObjectMapper mapper = new ObjectMapper();
-//            JsonNode node = mapper.readTree(temp);
-//            String resultJson = node.get("result").toString();
-
             record.setVideos(recordVideoList);
         } catch (IOException e) {
             e.printStackTrace();

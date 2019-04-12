@@ -41,6 +41,8 @@ public class ManagerController extends BaseController {
     private IExamine iExamine;
     @Autowired
     private IOrder iOrder;
+    @Autowired
+    private IRecord iRecord;
     @RequestMapping(value = "/login")
     @ResponseBody
     JSONResult logIn(HttpServletRequest request, HttpServletResponse response) {
@@ -796,6 +798,29 @@ public class ManagerController extends BaseController {
     @ResponseBody
     JSONResult getCourseExamine() {
         List<CourseExamine> list = iExamine.getCourseExamine();
+        return JSONResult.ok(list);
+    }
+
+    @RequestMapping("/record_examine")
+    @ResponseBody
+    JSONResult getRecordExamine() {
+
+        List<Record> records = iRecord.getRecordByStatus(0);
+        List<RecordExamine> list = new ArrayList<>();
+        for(Record item : records) {
+            RecordExamine temp = new RecordExamine();
+            temp.setGrade_id((Integer)item.getGrade());
+            temp.setGrade(SignMap.getGradeTypeByID((Integer)item.getGrade()));
+            temp.setSubject_id((Integer)item.getSubject());
+            temp.setSubject(SignMap.getGradeTypeByID((Integer)item.getSubject()));
+            temp.setPrice(item.getPrice());
+            temp.setRecord_course_id(item.getRecord_course_id());
+            temp.setRecord_course_name(item.getRecord_course_name());
+            temp.setRecord_course_pic(item.getRecord_course_pic());
+            temp.setRecord_course_status(item.getRecord_course_status());
+            temp.setVideo_count(item.getVideo_count());
+            list.add(temp);
+        }
         return JSONResult.ok(list);
     }
 }

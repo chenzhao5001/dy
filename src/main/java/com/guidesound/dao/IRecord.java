@@ -74,4 +74,7 @@ public interface IRecord {
     @Update("update record_course set last_class_no = #{arg1},last_class_pos = #{arg2} where record_course_id = #{arg0}")
     void report(int id,int last_class_no,int last_class_pos);
 
+    @Select("select * from record_course where record_course_status = #{arg1}")
+    List<Record> getRecordByStatus(int status);
+
 }

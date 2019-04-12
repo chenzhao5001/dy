@@ -272,4 +272,7 @@ public interface IOrder {
     @Update("update class_room set test_count = test_count + 1 where class_id = #{arg0} ")
     void updateTestClassPerson(int class_id);
 
+    @Update("update class_room set test_count = test_count - 1 where class_id = #{arg0} ")
+    void reduceTestClassPerson(int class_id);
+
 }
