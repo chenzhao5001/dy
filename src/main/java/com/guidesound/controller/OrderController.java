@@ -1,9 +1,7 @@
 package com.guidesound.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.TempStruct.ClassTime;
 import com.guidesound.TempStruct.ClassUseInfo;
@@ -19,9 +17,6 @@ import com.guidesound.ret.Order1V1;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.TlsSigTest;
 import com.guidesound.util.ToolsFunction;
-import com.sun.javafx.image.impl.IntArgbPre;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -44,19 +39,12 @@ public class OrderController extends BaseController {
     @Autowired
     IUser iUser;
 
-    //0待上课，1已完成，2缺课
-    public int getCourseState(List<ClassTime> iClassTime) {
-
-
-        return 0;
-    }
-
-
     int getCurrentCount() {
         int count = iOrder.getCurrentCount();
         iOrder.setCurrentCount(count + 1);
         return count;
     }
+    
     @RequestMapping("/current_time")
     @ResponseBody
     JSONResult currentTime() {
@@ -416,7 +404,7 @@ public class OrderController extends BaseController {
 
                 String group_id = null;
                 if (orderInfo.getType() == 1) { //创建群
-                    int currentCount = getCurrentCount();
+                    int currentCount =  getCurrentCount();
                     group_id = TlsSigTest.createGroup(userInfo.getIm_id(), "班课群 " + course.getId(),String.valueOf(currentCount));
                     if (!group_id.equals(String.valueOf(currentCount))) {
                         log.info("创建群失败 im_id = userInfo.getIm_id ={} ,group_name = {} ,ret = {}",userInfo.getIm_id(),"班课群 " + course.getCourse_name(),group_id);

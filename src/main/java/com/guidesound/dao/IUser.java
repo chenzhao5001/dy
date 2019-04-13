@@ -388,5 +388,14 @@ public interface IUser {
     @Select("select im_id from user where id = #{arg0}")
     Integer getImIdByUserId(int user_id);
 
+    @Insert("insert into user_black_list (user_id,uid) value (#{arg0},#{arg1})")
+    void addBlackList(int user_id,String uid);
+
+    @Select("select count(*) from user_black_list where user_id = #{arg0} and uid = #{arg1}")
+    int getBlackListCount(int user_id,String uid);
+
+    @Delete("delete from user_black_list where user_id = #{arg0} and uid = #{arg1}")
+    void removeBlackList(int user_id,String uid);
+
 }
 
