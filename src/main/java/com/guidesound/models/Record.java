@@ -12,6 +12,7 @@ public class Record {
     int grade_id;
     int video_count;
     int price;
+    int user_id;
 
     String intro_teacher_text;
     Object intro_teacher_pic;
@@ -19,6 +20,14 @@ public class Record {
     Object intro_course_pic;
     Object videos;
     int save;
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
 
     public int getRecord_course_id() {
         return record_course_id;

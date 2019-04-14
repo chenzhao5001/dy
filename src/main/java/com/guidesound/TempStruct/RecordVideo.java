@@ -1,6 +1,7 @@
 package com.guidesound.TempStruct;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.guidesound.ret.WonderfulPart;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RecordVideo   {
@@ -9,14 +10,14 @@ public class RecordVideo   {
     int class_length;
     String class_url;
     int charge_type;
-    Object wonderful_part;
+    WonderfulPart wonderful_part;
 
 
-    public Object getWonderful_part() {
+    public WonderfulPart getWonderful_part() {
         return wonderful_part;
     }
 
-    public void setWonderful_part(Object wonderful_part) {
+    public void setWonderful_part(WonderfulPart wonderful_part) {
         this.wonderful_part = wonderful_part;
     }
 

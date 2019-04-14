@@ -2,11 +2,9 @@ package com.guidesound.dao;
 
 import com.guidesound.dto.RecordDTO;
 import com.guidesound.models.Record;
+import com.guidesound.models.TestRecordCourse;
 import com.guidesound.models.UserRecordCourse;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -69,8 +67,18 @@ public interface IRecord {
     @Select("select * from record_course where user_id = #{arg0}")
     List<Record> list(int user_id);
 
+    @Select("<script>"
+            + "SELECT * FROM record_course WHERE record_course_id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    List<Record> listByIds(@Param("iList") List<Integer> iList);
+
     @Select("select * from record_course where record_course_id = #{arg0}")
     Record get(int id);
+
+
 
     @Update("update record_course set last_class_no = #{arg1},last_class_pos = #{arg2} where record_course_id = #{arg0}")
     void report(int id,int last_class_no,int last_class_pos);
@@ -86,5 +94,18 @@ public interface IRecord {
 
     @Insert("insert into user_record_course (user_id,user_record_course_id) values (#{user_id},#{user_record_course_id})")
     void insertRecordCourse(UserRecordCourse userRecordCourse);
+
+    @Select("select * from user_record_course where user_id = #{arg0}")
+    List<UserRecordCourse> getRecordByUserId(int user_id);
+
+    @Insert("insert into test_record_course (user_id,record_course_id,class_NO,class_url,class_name,time_start,time_end,picture) " +
+            "values (#{user_id},#{record_course_id},#{class_NO},#{class_url},#{class_name},#{time_start},#{time_end},#{picture})")
+    void addTestRecordCourse(TestRecordCourse testRecordCourse);
+
+    @Select("select * from test_record_course")
+    List<TestRecordCourse> getAllTestRecordCourse();
+
+
+
 
 }

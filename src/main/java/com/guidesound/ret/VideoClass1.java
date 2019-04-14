@@ -10,8 +10,8 @@ public class VideoClass1 {
     String record_owner_head;
     String subject;
     int subject_id;
-    int grade;
-    String grade_id;
+    String grade;
+    int grade_id;
     int video_count;
     int price;
     int last_class_NO;
@@ -89,19 +89,19 @@ public class VideoClass1 {
         this.subject_id = subject_id;
     }
 
-    public int getGrade() {
+    public String getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(String grade) {
         this.grade = grade;
     }
 
-    public String getGrade_id() {
+    public int getGrade_id() {
         return grade_id;
     }
 
-    public void setGrade_id(String grade_id) {
+    public void setGrade_id(int grade_id) {
         this.grade_id = grade_id;
     }
 

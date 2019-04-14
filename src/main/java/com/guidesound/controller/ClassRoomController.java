@@ -9,10 +9,7 @@ import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.TempStruct.StudentOrderTemp;
 import com.guidesound.dao.*;
 import com.guidesound.models.*;
-import com.guidesound.ret.ClassInfo;
-import com.guidesound.ret.ClassRoomRet;
-import com.guidesound.ret.TeacherClass1;
-import com.guidesound.ret.TeacherClass2;
+import com.guidesound.ret.*;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
 import com.guidesound.util.TlsSigTest;
@@ -613,46 +610,6 @@ public class ClassRoomController extends BaseController {
 
         int state = getTeacherClassState(classRoom);
         classRoomRet.setClass_info_status(state);
-        //课程状态
-//        if (classRoom.getType() == 0) { //1v1
-//            if (iOrder.getReturnOrderByClassId(Integer.parseInt(class_id)) > 0) {
-//                classRoomRet.setClass_info_status(4); //退费
-//            } else {
-//                int all_hours = 0;
-//                int last_time = 0;
-//                int last_hour = 0;
-//                for (CourseOutline item : beanList) {
-//                    all_hours += item.getClass_hours();
-//                    last_time = item.getClass_time();
-//                    last_hour = item.getClass_hours();
-//                }
-//                if (all_hours >= classRoomRet.getAll_hours() && (last_time + 3600 * last_hour) < new Date().getTime() / 1000) {
-//                    classRoomRet.setClass_info_status(3); //已完成
-//                } else {
-//                    classRoomRet.setClass_info_status(1); //上课中
-//                }
-//
-//                List<StudentClass> studentClasses = iOrder.getStudentClassByClassId(Integer.parseInt(class_id));
-//                if (studentClasses.size() > 0) {
-//                    OrderInfo orderInfo = iOrder.getOrderById(studentClasses.get(0).getOrder_id());
-//                    if (orderInfo != null && orderInfo.getRefund_amount() != 0) {
-//                        classRoomRet.setClass_info_status(4); //退费完成
-//                    }
-//                }
-//            }
-//
-//        } else { //班课
-//            CourseOutline courseOutline = beanList.get(beanList.size() - 1);
-//            if (courseOutline.getClass_time() < new Date().getTime() / 1000) {
-//                classRoomRet.setClass_info_status(3); //已完成
-//            } else {
-//                if (iOrder.getNoReturnOrderByClassId(Integer.parseInt(class_id)) > 0) {
-//                    classRoomRet.setClass_info_status(1); //上课中
-//                } else {
-//                    classRoomRet.setClass_info_status(3);
-//                }
-//            }
-//        }
         //学生id  1v1 使用
         int student_id = 0;
         List<StudentClass> list_students = iOrder.getStudentClassByUserId(Integer.parseInt(class_id));
@@ -742,6 +699,7 @@ public class ClassRoomController extends BaseController {
             rooms.add(item);
         }
 
+        ///正式课
         for (ClassRoom item : rooms) {
             TeacherClass1 teacherClass1 = new TeacherClass1();
             teacherClass1.setClass_id(item.getClass_id());
@@ -817,7 +775,64 @@ public class ClassRoomController extends BaseController {
 
             classInfoList.add(classInfo);
         }
-        return JSONResult.ok(sortClassInfo(classInfoList));
+        //正式课排序
+        classInfoList = sortClassInfo(classInfoList);
+
+        ///录播课
+        List<UserRecordCourse> record_list = iRecord.getRecordByUserId(getCurrentUserId());
+        Map<Integer,UserRecordCourse> mUserRecordCourse = new HashMap<>();
+        for(UserRecordCourse userRecordCourse : record_list) {
+            mUserRecordCourse.put(userRecordCourse.getUser_record_course_id(),userRecordCourse);
+        }
+
+        List<Integer> ids = new ArrayList<>();
+        for(UserRecordCourse item : record_list) {
+            ids.add(item.getUser_record_course_id());
+        }
+        if(ids.size() > 0) {
+            List<Record> records = iRecord.listByIds(ids);
+            List<Integer> user_ids = new ArrayList<>();
+            for(Record record : records) {
+                user_ids.add(record.getUser_id());
+            }
+            List<UserInfo> userInfos = iUser.getUserByIds(user_ids);
+            Map<Integer,UserInfo> user_maps = new HashMap<>();
+            for(UserInfo userInfo : userInfos) {
+                user_maps.put(userInfo.getId(),userInfo);
+
+            }
+            for(Record record : records) {
+                VideoClass1 videoClass1 = new VideoClass1();
+                videoClass1.setRecord_course_id(record.getRecord_course_id());
+                videoClass1.setRecord_course_status(record.getRecord_course_status());
+                videoClass1.setRecord_course_pic(record.getRecord_course_pic());
+                videoClass1.setRecord_course_name(record.getRecord_course_name());
+                videoClass1.setRecord_owner_id(record.getUser_id());
+                if(user_maps.containsKey(record.getUser_id())) {
+                    videoClass1.setRecord_owner_head(user_maps.get(record.getUser_id()).getHead());
+                    videoClass1.setRecord_owner_name(user_maps.get(record.getUser_id()).getName());
+                }
+                videoClass1.setSubject_id((Integer)record.getSubject());
+                videoClass1.setSubject(SignMap.getSubjectTypeById((Integer)record.getSubject()));
+                videoClass1.setGrade_id((Integer)record.getGrade());
+                videoClass1.setGrade(SignMap.getSubjectTypeById((Integer)record.getGrade()));
+                videoClass1.setVideo_count(record.getVideo_count());
+                videoClass1.setPrice(record.getPrice());
+
+                if(mUserRecordCourse.containsKey(record.getRecord_course_id())) {
+                    videoClass1.setLast_class_NO(mUserRecordCourse.get(record.getRecord_course_id()).getLast_class_NO());
+                    videoClass1.setLast_class_name(mUserRecordCourse.get(record.getRecord_course_id()).getLast_class_name());
+                    videoClass1.setLast_class_pos(mUserRecordCourse.get(record.getRecord_course_id()).getLast_class_pos());
+                }
+
+                ClassInfo classInfo = new ClassInfo();
+                classInfo.setTeacher_class(null);
+                classInfo.setVideo_class(videoClass1);
+                classInfoList.add(classInfo);
+            }
+
+        }
+        return JSONResult.ok(classInfoList);
     }
 
     @RequestMapping("/test_listen")
@@ -865,6 +880,45 @@ public class ClassRoomController extends BaseController {
             classInfo.setTeacher_class(teacherClass2);
             classInfo.setVideo_class(null);
             classInfo_list.add(classInfo);
+        }
+
+        List<TestRecordCourse> lists = iRecord.getAllTestRecordCourse();
+        if(lists.size() > 0) {
+            List<Integer> course_ids = new ArrayList<>();
+            for (TestRecordCourse testRecordCourse : lists) {
+                if(!course_ids.contains(testRecordCourse.getRecord_course_id())) {
+                    course_ids.add(testRecordCourse.getRecord_course_id());
+                }
+            }
+            List<Record> records = iRecord.listByIds(course_ids);
+            Map<Integer,Record> mRecord = new HashMap<>();
+            for(Record record : records) {
+                mRecord.put(record.getRecord_course_id(),record);
+            }
+            for (TestRecordCourse testRecordCourse : lists) {
+                VideoClass2 videoClass = new VideoClass2();
+                videoClass.setRecord_course_id(testRecordCourse.getRecord_course_id());
+                if(mRecord.containsKey(testRecordCourse.getRecord_course_id())) {
+                    videoClass.setRecord_course_pic(mRecord.get(testRecordCourse.getRecord_course_id()).getRecord_course_pic());
+                    videoClass.setRecord_course_name(mRecord.get(testRecordCourse.getRecord_course_id()).getRecord_course_name());
+                    videoClass.setSubject(SignMap.getSubjectTypeById((Integer)mRecord.get(testRecordCourse.getRecord_course_id()).getSubject()));
+                    videoClass.setGrade(SignMap.getGradeTypeByID((Integer)mRecord.get(testRecordCourse.getRecord_course_id()).getGrade()));
+                    videoClass.setVideo_count(mRecord.get(testRecordCourse.getRecord_course_id()).getVideo_count());
+                    videoClass.setClass_NO(testRecordCourse.getClass_NO());
+                    videoClass.setClass_url(testRecordCourse.getClass_url());
+                    videoClass.setClass_name(testRecordCourse.getClass_name());
+                    videoClass.setTime_start(testRecordCourse.getTime_start());
+                    videoClass.setTime_end(testRecordCourse.getTime_end());
+                    videoClass.setPicture(testRecordCourse.getPicture());
+
+                    ClassInfo classInfo = new ClassInfo();
+                    classInfo.setTeacher_class(null);
+                    classInfo.setVideo_class(videoClass);
+                    classInfo_list.add(classInfo);
+                }
+            }
+
+
         }
 
         return JSONResult.ok(classInfo_list);
