@@ -8,6 +8,7 @@ import com.guidesound.TempStruct.ClassUseInfo;
 import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.TempStruct.RefundInfo;
 import com.guidesound.dao.IOrder;
+import com.guidesound.dao.IRecord;
 import com.guidesound.dao.IUser;
 import com.guidesound.dto.Order1V1DTO;
 import com.guidesound.dto.OrderClassDTO;
@@ -38,6 +39,8 @@ public class OrderController extends BaseController {
     IOrder iOrder;
     @Autowired
     IUser iUser;
+    @Autowired
+    IRecord iRecord;
 
     int getCurrentCount() {
         int count = iOrder.getCurrentCount();
@@ -338,20 +341,19 @@ public class OrderController extends BaseController {
         if (type == null || order_id == null || pay_way == null) {
             return JSONResult.errorMsg("缺少参数");
         }
-        OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), getCurrentUserId());
-        if (orderInfo == null) {
-            return JSONResult.errorMsg("订单不存在");
-        }
-        if (orderInfo.getOrder_status() != 0) {
-            return JSONResult.errorMsg("此状态不能支付");
-        }
-
-        List<StudentClass> student = iOrder.getStudentClassByOrder(Integer.parseInt(order_id));
-        if (student.size() > 0) {
-            return JSONResult.errorMsg("此订单已经支付过");
-        }
-
         if (type.equals("0")) { //课堂
+            OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), getCurrentUserId());
+            if (orderInfo == null) {
+                return JSONResult.errorMsg("订单不存在");
+            }
+            if (orderInfo.getOrder_status() != 0) {
+                return JSONResult.errorMsg("此状态不能支付");
+            }
+
+            List<StudentClass> student = iOrder.getStudentClassByOrder(Integer.parseInt(order_id));
+            if (student.size() > 0) {
+                return JSONResult.errorMsg("此订单已经支付过");
+            }
 
             if(orderInfo.getType() == 1) {
                 String order_outLine = orderInfo.getOutline();
@@ -524,6 +526,18 @@ public class OrderController extends BaseController {
             }
 
         } else { //录播课
+            Record record = iRecord.get(Integer.parseInt(order_id));
+            if(record == null || record.getRecord_course_status() != 3) {
+                return JSONResult.errorMsg("录播课信息不存在");
+            }
+            List<UserRecordCourse> lists = iRecord.getRecordByUserAndId(getCurrentUserId(),Integer.parseInt(order_id));
+            if(lists.size() > 0) {
+                return JSONResult.errorMsg("此录播课已经购买过");
+            }
+            UserRecordCourse userRecordCourse = new UserRecordCourse();
+            userRecordCourse.setUser_id(getCurrentUserId());
+            userRecordCourse.setUser_record_course_id(Integer.parseInt(order_id));
+            iRecord.insertRecordCourse(userRecordCourse);
 
         }
         class Ret {

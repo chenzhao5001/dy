@@ -54,11 +54,11 @@ public class ImController extends BaseController{
 
     @RequestMapping("/in_black_list")
     @ResponseBody
-    JSONResult inBlackList(String uid) {
-        if(uid == null || uid.equals("")) {
-            return JSONResult.errorMsg("缺少 uid 参数");
+    JSONResult inBlackList(String user_id,String uid) {
+        if( user_id == null || uid == null ) {
+            return JSONResult.errorMsg("缺少参数");
         }
-        int count = iUser.getBlackListCount(getCurrentUserId(),uid);
+        int count = iUser.getBlackListCount(Integer.parseInt(user_id),uid);
         boolean flag = true;
         if(count == 0) {
             flag = false;

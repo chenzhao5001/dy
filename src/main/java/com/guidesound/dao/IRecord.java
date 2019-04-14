@@ -2,6 +2,7 @@ package com.guidesound.dao;
 
 import com.guidesound.dto.RecordDTO;
 import com.guidesound.models.Record;
+import com.guidesound.models.UserRecordCourse;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
@@ -79,5 +80,11 @@ public interface IRecord {
 
     @Update("update record_course set record_course_status = #{arg1} where record_course_id = #{arg0}")
     void setRecordCourseStatue(int record_course_id,int record_course_status);
+
+    @Select("select * from user_record_course where user_id = #{arg0} and user_record_course_id = #{arg1}")
+    List<UserRecordCourse> getRecordByUserAndId(int user_id, int user_record_course_id );
+
+    @Insert("insert into user_record_course (user_id,user_record_course_id) values (#{user_id},#{user_record_course_id})")
+    void insertRecordCourse(UserRecordCourse userRecordCourse);
 
 }
