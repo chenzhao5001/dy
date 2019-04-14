@@ -8,8 +8,10 @@ import com.guidesound.TempStruct.ClassTime;
 import com.guidesound.TempStruct.RecordCoursePic;
 import com.guidesound.TempStruct.RecordTeacherPic;
 import com.guidesound.TempStruct.RecordVideo;
+import com.guidesound.dao.IExamine;
 import com.guidesound.dao.IRecord;
 import com.guidesound.dto.RecordDTO;
+import com.guidesound.models.CourseExamine;
 import com.guidesound.models.Record;
 import com.guidesound.ret.RecordItem;
 import com.guidesound.util.JSONResult;
@@ -33,6 +35,8 @@ public class RecordCourseController extends BaseController {
 
     @Autowired
     IRecord iRecord;
+    @Autowired
+    IExamine iExamine;
 
     @RequestMapping("/add")
     @ResponseBody
@@ -47,6 +51,7 @@ public class RecordCourseController extends BaseController {
         } else {
             recordDTO.setRecord_course_status(1);
         }
+
 
         if (recordDTO.getRecord_course_id().equals("0")) {
             recordDTO.setCreate_time((int) (new Date().getTime() / 1000));

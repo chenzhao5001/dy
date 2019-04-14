@@ -752,6 +752,19 @@ public class ManagerController extends BaseController {
                 }
             }
             iExamine.deleteCourseExamine(Integer.parseInt(item_id),7);
+        } else if(type.equals("9")) {
+            Record record = iRecord.get(Integer.parseInt(item_id));
+            if(record == null) {
+                return JSONResult.errorMsg("辅导课不存在");
+            }
+            if(Integer.parseInt(result) == 0) {
+                TlsSigTest.SendMessage(uid,"您发布的录播课“" + record.getRecord_course_name() + "”已经通过系统审核，快努力发高质量的视频展示您自己吧！");
+                iRecord.setRecordCourseStatue(Integer.parseInt(item_id),3);
+            } else {
+                TlsSigTest.SendMessage(uid,"您发布的录播课“" + record.getRecord_course_name() + "”没有通过系统审核");
+                iRecord.setRecordCourseStatue(Integer.parseInt(item_id),2);
+            }
+
         }
         return JSONResult.ok();
     }
@@ -805,7 +818,7 @@ public class ManagerController extends BaseController {
     @ResponseBody
     JSONResult getRecordExamine() {
 
-        List<Record> records = iRecord.getRecordByStatus(0);
+        List<Record> records = iRecord.getRecordByStatus(1);
         List<RecordExamine> list = new ArrayList<>();
         for(Record item : records) {
             RecordExamine temp = new RecordExamine();

@@ -7,6 +7,7 @@ import com.guidesound.models.UserExamine;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -76,5 +77,6 @@ public interface IExamine {
 
     @Delete("delete from course_examine where item_id = #{arg0} and type = #{arg1}")
     void deleteCourseExamine(int item_id,int type);
+
 
 }

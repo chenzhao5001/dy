@@ -44,7 +44,7 @@ public class OrderController extends BaseController {
         iOrder.setCurrentCount(count + 1);
         return count;
     }
-    
+
     @RequestMapping("/current_time")
     @ResponseBody
     JSONResult currentTime() {

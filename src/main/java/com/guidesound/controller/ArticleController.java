@@ -530,9 +530,12 @@ public class ArticleController extends BaseController {
 
     @RequestMapping("/add_ask")
     @ResponseBody
-    JSONResult addAsk(String title,String pic1_url,String pic2_url,String pic3_url) {
+    JSONResult addAsk(String title,String pic1_url,String pic2_url,String pic3_url,String subject,String grade) {
         if(title == null || title.equals("")) {
             return JSONResult.errorMsg("缺少参数");
+        }
+        if(subject == null || grade == null) {
+            return JSONResult.errorMsg("缺少 subject 或 grade 参数");
         }
 
         pic1_url = pic1_url == null ? "" : pic1_url;
@@ -542,7 +545,7 @@ public class ArticleController extends BaseController {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User)request.getAttribute("user_info");
 
-        iArticle.addAsk(title,currentUser.getId(),pic1_url,pic2_url,pic3_url,time);
+        iArticle.addAsk(title,currentUser.getId(),pic1_url,pic2_url,pic3_url,time,Integer.parseInt(subject),Integer.parseInt(grade));
         return JSONResult.ok();
     }
 

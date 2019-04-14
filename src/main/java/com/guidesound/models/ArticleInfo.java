@@ -1,5 +1,9 @@
 package com.guidesound.models;
 
+import com.guidesound.ret.CommodityInfo;
+import com.guidesound.ret.TeacherClass;
+import com.guidesound.ret.VideoClass;
+
 public class ArticleInfo {
 
     int id;
@@ -33,6 +37,71 @@ public class ArticleInfo {
     private int praise_count;
     private boolean praise;
     private int examine_status;
+
+    private int attachment_type;
+    private int attachment_id;
+    private String attachment_name;
+    private int attachment_subtype;
+
+    VideoClass video_class;
+    TeacherClass teacher_class;
+    CommodityInfo commodity;
+
+    public VideoClass getVideo_class() {
+        return video_class;
+    }
+
+    public void setVideo_class(VideoClass video_class) {
+        this.video_class = video_class;
+    }
+
+    public TeacherClass getTeacher_class() {
+        return teacher_class;
+    }
+
+    public void setTeacher_class(TeacherClass teacher_class) {
+        this.teacher_class = teacher_class;
+    }
+
+    public CommodityInfo getCommodity() {
+        return commodity;
+    }
+
+    public void setCommodity(CommodityInfo commodity) {
+        this.commodity = commodity;
+    }
+
+    public int getAttachment_type() {
+        return attachment_type;
+    }
+
+    public void setAttachment_type(int attachment_type) {
+        this.attachment_type = attachment_type;
+    }
+
+    public int getAttachment_id() {
+        return attachment_id;
+    }
+
+    public void setAttachment_id(int attachment_id) {
+        this.attachment_id = attachment_id;
+    }
+
+    public String getAttachment_name() {
+        return attachment_name;
+    }
+
+    public void setAttachment_name(String attachment_name) {
+        this.attachment_name = attachment_name;
+    }
+
+    public int getAttachment_subtype() {
+        return attachment_subtype;
+    }
+
+    public void setAttachment_subtype(int attachment_subtype) {
+        this.attachment_subtype = attachment_subtype;
+    }
 
     public int getExamine_status() {
         return examine_status;

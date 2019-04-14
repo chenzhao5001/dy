@@ -77,4 +77,7 @@ public interface IRecord {
     @Select("select * from record_course where record_course_status = #{arg1}")
     List<Record> getRecordByStatus(int status);
 
+    @Update("update record_course set record_course_status = #{arg1} where record_course_id = #{arg0}")
+    void setRecordCourseStatue(int record_course_id,int record_course_status);
+
 }
