@@ -407,7 +407,7 @@ public class OrderController extends BaseController {
                 String group_id = null;
                 if (orderInfo.getType() == 1) { //创建群
                     int currentCount =  getCurrentCount();
-                    group_id = TlsSigTest.createGroup(userInfo.getIm_id(), "班课群 " + course.getId(),String.valueOf(currentCount));
+                    group_id = TlsSigTest.createGroup(userInfo.getIm_id(), "班课群 " + course.getId(),String.valueOf(currentCount),course.getCourse_pic());
                     if (!group_id.equals(String.valueOf(currentCount))) {
                         log.info("创建群失败 im_id = userInfo.getIm_id ={} ,group_name = {} ,ret = {}",userInfo.getIm_id(),"班课群 " + course.getCourse_name(),group_id);
                         return JSONResult.errorMsg("创建im群失败");

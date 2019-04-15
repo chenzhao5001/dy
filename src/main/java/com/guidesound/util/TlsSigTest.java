@@ -32,13 +32,13 @@ public class TlsSigTest {
 
     private static String importUrl = "https://console.tim.qq.com/v4/im_open_login_svc/account_import?usersig="  +  control_usersig + "&apn=1&identifier=" + user_control + "&sdkappid=1400158534&contenttype=json";
     private static String controlUrl = "https://console.tim.qq.com/v4/openim/sendmsg?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=99999999&contenttype=json";
-    public static String createGroup(String im_id,String GroupName,String GroupId) throws IOException {
+    public static String createGroup(String im_id,String GroupName,String GroupId,String pic_url) throws IOException {
         Random random = new Random();
         int randomInt = random.nextInt();
 //        String strRandomInt = String.valueOf(randomInt);
         String addGroupUrl = "https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + randomInt+ "&contenttype=json";
 
-        String reqJson = "{\"Name\":\"" +GroupName + "\",\"GroupId\":\"" + GroupId + "\",\"Type\":\"Public\",\"Owner_Account\": \"" + im_id + "\",\"FaceUrl\":\"https://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg\"}";
+        String reqJson = "{\"Name\":\"" +GroupName + "\",\"GroupId\":\"" + GroupId + "\",\"Type\":\"Public\",\"Owner_Account\": \"" + im_id + "\",\"FaceUrl\":" + pic_url + "}";
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, reqJson);
         Request req = new Request.Builder()
