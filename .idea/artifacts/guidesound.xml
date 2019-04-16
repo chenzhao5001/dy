@@ -69,6 +69,7 @@
           <element id="library" level="project" name="Maven: org.apache.commons:commons-lang3:3.4" />
           <element id="library" level="project" name="Maven: com.github.tencentyun:tls-sig-api:1.0" />
           <element id="library" level="project" name="Maven: org.bouncycastle:bcpkix-jdk15on:1.59" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.5" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="guide_sound/web/Web" />

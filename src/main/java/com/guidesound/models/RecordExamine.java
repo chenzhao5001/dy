@@ -11,6 +11,15 @@ public class RecordExamine {
     int grade_id;
     int video_count;
     int price;
+    int uid;
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
 
     public int getRecord_course_id() {
         return record_course_id;

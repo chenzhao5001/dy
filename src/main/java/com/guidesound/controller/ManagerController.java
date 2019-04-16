@@ -866,6 +866,7 @@ public class ManagerController extends BaseController {
     @ResponseBody
     JSONResult getRecordExamine() {
 
+        TlsSigTest.sendGroupMsg("1000000129","test123");
         List<Record> records = iRecord.getRecordByStatus(1);
         List<RecordExamine> list = new ArrayList<>();
         for(Record item : records) {
@@ -880,6 +881,7 @@ public class ManagerController extends BaseController {
             temp.setRecord_course_pic(item.getRecord_course_pic());
             temp.setRecord_course_status(item.getRecord_course_status());
             temp.setVideo_count(item.getVideo_count());
+            temp.setUid(item.getUser_id());
             list.add(temp);
         }
         return JSONResult.ok(list);

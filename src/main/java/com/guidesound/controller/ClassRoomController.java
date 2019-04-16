@@ -717,7 +717,7 @@ public class ClassRoomController extends BaseController {
             teacherClass1.setMax_person(item.getMax_person());
             teacherClass1.setSubject(SignMap.getSubjectTypeById(item.getSubject()));
             teacherClass1.setGrade(SignMap.getGradeTypeByID(item.getGrade()));
-            teacherClass1.setForm(SignMap.getCourseFormById(item.getForm()));
+            teacherClass1.setForm(SignMap.getCourseTypeNameById(item.getForm()));
             teacherClass1.setForm_id(item.getForm());
             teacherClass1.setWay(item.getWay());
             if (item.getType() == 0) {

@@ -1,5 +1,10 @@
 package com.guidesound.util;
 
+import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.guidesound.TempStruct.ImGroupMsg;
+import com.guidesound.TempStruct.ImGroupMsgInfo;
+import com.guidesound.TempStruct.ImGroupMsgMsgContent;
 import okhttp3.*;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -258,5 +263,45 @@ public class TlsSigTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+    public static void sendGroupMsg(String groupId, String msg) {
+        String rand = ToolsFunction.getNumRandomString(10);
+        String controlUrl = "https://console.tim.qq.com/v4/group_open_http_svc/send_group_msg?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + rand + "&contenttype=json";
+        ImGroupMsg imGroupMsg = new ImGroupMsg();
+        imGroupMsg.setGroupId(groupId);
+        imGroupMsg.setRandom(ToolsFunction.getNumRandomString(10));
+        List<ImGroupMsgInfo> imGroupMsgInfos = new ArrayList<>();
+        ImGroupMsgInfo imGroupMsgInfo = new ImGroupMsgInfo();
+        imGroupMsgInfo.setMsgType("TIMTextElem");
+        ImGroupMsgMsgContent imGroupMsgMsgContent = new ImGroupMsgMsgContent();
+        imGroupMsgMsgContent.setText(msg);
+        imGroupMsgInfo.setMsgContent(imGroupMsgMsgContent);
+        imGroupMsgInfos.add(imGroupMsgInfo);
+        imGroupMsg.setMsgBody(imGroupMsgInfos);
+        Gson gson = new Gson();
+        String sendMsg = gson.toJson(imGroupMsg);
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, sendMsg);
+        Request req = new Request.Builder()
+                .url(controlUrl)
+                .post(body)
+                .build();
+        Response resp;
+        OkHttpClient client_temp = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+        try {
+            resp = client_temp.newCall(req).execute();
+            String jsonString = resp.body().string();
+            System.out.println(jsonString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 }
