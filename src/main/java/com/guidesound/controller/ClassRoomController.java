@@ -725,8 +725,9 @@ public class ClassRoomController extends BaseController {
                 if (listClass.size() > 0) {
                     StudentClass studentClass = listClass.get(0);
                     UserInfo userInfo1 = iUser.getUser(studentClass.getUser_id());
+                    teacherClass1.setStudent_id(studentClass.getUser_id());
                     if(userInfo1 != null) {
-                        teacherClass1.setStudent_id(userInfo1.getId());
+//                        teacherClass1.setStudent_id(userInfo1.getId());
                         teacherClass1.setStudent_head(userInfo1.getHead());
                         teacherClass1.setStudent_name(userInfo1.getName());
                     }
