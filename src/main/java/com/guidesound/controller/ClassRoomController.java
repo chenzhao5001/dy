@@ -538,6 +538,9 @@ public class ClassRoomController extends BaseController {
             return JSONResult.errorMsg("缺少 class_id 参数");
         }
         ClassRoom classRoom = iOrder.getClassRoomById(Integer.parseInt(class_id));
+        if(classRoom == null) {
+            return JSONResult.errorMsg("课堂不存在");
+        }
         if (classRoom.getUser_id() == getCurrentUserId()) { //老师
             iOrder.updateAllTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), 0);
         } else {
@@ -722,10 +725,11 @@ public class ClassRoomController extends BaseController {
                 if (listClass.size() > 0) {
                     StudentClass studentClass = listClass.get(0);
                     UserInfo userInfo1 = iUser.getUser(studentClass.getUser_id());
-                    teacherClass1.setStudent_id(userInfo1.getId());
-                    teacherClass1.setStudent_head(userInfo1.getHead());
-                    teacherClass1.setStudent_name(userInfo1.getName());
-
+                    if(userInfo1 != null) {
+                        teacherClass1.setStudent_id(userInfo1.getId());
+                        teacherClass1.setStudent_head(userInfo1.getHead());
+                        teacherClass1.setStudent_name(userInfo1.getName());
+                    }
                 }
 
             }
