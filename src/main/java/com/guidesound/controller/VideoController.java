@@ -144,6 +144,7 @@ public class VideoController extends BaseController {
             other_grade1 = grade/100 *100 + 99;
         }
         Collections.shuffle(video_list);
+        String select_param = "";
         if (channel.equals("1")) { //推荐
             String pool_grade =  "," + grade;
             String pool_other_grade = ",";
@@ -151,37 +152,56 @@ public class VideoController extends BaseController {
                 pool_other_grade = "," +  other_grade1;
             }
             String pool_other_comment = ",999";
+            select_param = pool_grade + "-" + pool_other_grade + "-" + pool_other_comment;
             all_list = iVideo.getRecommendVideo(pool_grade,pool_other_grade,pool_other_comment);
-            Collections.shuffle(all_list);
-            video_list = getRecVideos(all_list,user_guid);
         } else { //频道
             List<String> list = Arrays.asList(channel.split(","));
-
             String pool_other_grade = ",";
             String pool_grade =  "," + grade;
             if(other_grade1 != -1) {
                 pool_other_grade  +=  other_grade1;
             }
-//            pool_other_grade = "," +  other_grade1;
             String pool_other_comment = ",999";
-
+            select_param = channel + "-" + pool_grade + "-" + pool_other_grade + "-" + pool_other_comment;
             all_list = iVideo.getVideoByChannel(list,pool_grade,pool_other_grade,pool_other_comment);
-            Collections.shuffle(all_list);
-            video_list = getRecVideos(all_list,user_guid);
+        }
+
+
+        List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid,select_param);
+        if(videoIndex.size() == 0) {
+            int video_end = 0;
+            if(20 < all_list.size()) {
+                video_end = 20;
+            } else {
+                video_end = all_list.size();
+            }
+            video_list = all_list.subList(0,video_end);
+            iVideo.insertVideoIndex(user_guid,select_param,20);
+        } else {
+            int video_end = 0;
+            if(videoIndex.get(0).getIndex_count() >= all_list.size()) {
+                if(20 < all_list.size()) {
+                    video_end = 20;
+                } else {
+                    video_end = all_list.size();
+                }
+                video_list = all_list.subList(0,video_end);
+                iVideo.updateVideoIndex(user_guid,select_param,20);
+            } else {
+                if(videoIndex.get(0).getIndex_count() + 20 < all_list.size()) {
+                    video_end = videoIndex.get(0).getIndex_count();
+                } else {
+                    video_end = all_list.size();
+                }
+                video_list = all_list.subList(videoIndex.get(0).getIndex_count(),video_end);
+                iVideo.updateVideoIndex(user_guid,select_param,video_end);
+            }
         }
 
         improveVideoList(video_list);
-        List<Integer> videoIDs = new ArrayList<>();
-        for(VideoShow item : video_list) {
-            videoIDs.add(item.getId());
-        }
-        if(videoIDs.size() > 0) {
-            iVideo.addRecommend(videoIDs);
-        }
         ListResp ret = new ListResp();
         ret.setCount(video_list.size());
         ret.setList(video_list);
-
         return JSONResult.ok(ret);
     }
 

@@ -112,6 +112,7 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and pools != \"\" "
             + "AND ( pools like CONCAT('%',#{arg1},'%')  or pools like CONCAT('%',#{arg2},'%') or pools like CONCAT('%',#{arg3},'%')) "
             + " and examine_status = 1"
             + " and type_list like '%1%'"
@@ -149,7 +150,8 @@ public interface IVideo {
 
     @Select("<script>"
             + "SELECT * FROM video WHERE 1 = 1"
-            + " AND ( pools like CONCAT('%',#{arg0},'%') or pools like CONCAT('%',#{arg1},'%') or pools like CONCAT('%',#{arg2},'%')) "
+            + " and pools != \"\" "
+            + " and ( pools like CONCAT('%',#{arg0},'%') or pools like CONCAT('%',#{arg1},'%') or pools like CONCAT('%',#{arg2},'%')) "
             + " and examine_status = 1"
             + " and type_list like '%1%'"
             + "</script>")
@@ -245,4 +247,13 @@ public interface IVideo {
 
     @Update("update video set pools = #{arg1} where id = #{arg0}")
     void setPoolByVideoId(String video_id,String pools);
+
+    @Select("select * from video_index where user_guid = #{arg0} and param = #{arg1}")
+    List<VideoIndex> getVideoIndexCount(String user_guid,String param);
+
+    @Insert("insert into video_index (user_guid,param,index_count) value (#{arg0},#{arg1},#{arg2})")
+    void insertVideoIndex(String user_guid,String param,int index_count);
+
+    @Update("update video_index set index_count = #{arg2} where user_guid = #{arg0} and param = #{arg1} ")
+    void updateVideoIndex(String user_guid,String param,int index_count);
 }

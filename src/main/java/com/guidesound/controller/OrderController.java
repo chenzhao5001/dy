@@ -415,8 +415,9 @@ public class OrderController extends BaseController {
                     String info_ret = TlsSigTest.addGroupPerson(group_id, String.valueOf(course.getUser_id()));
                     log.info("加入群拥有者 group_id = {},user_id = {},ret = {}",group_id,String.valueOf(course.getUser_id()),info_ret);
                     info_ret = TlsSigTest.addGroupPerson(group_id, String.valueOf(getCurrentUserId()));
+                    UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
+                    TlsSigTest.sendGroupMsg(group_id,"欢迎新同学：" + userInfo1.getName());
                     log.info("加入支付用户 group_id = {},user_id = {},ret = {}",group_id,String.valueOf(getCurrentUserId()),info_ret);
-
                 }
 
                 //创建课堂
@@ -471,7 +472,8 @@ public class OrderController extends BaseController {
                 }
                 String info_ret = TlsSigTest.addGroupPerson(classRoom.getIm_group_id(), String.valueOf(getCurrentUserId()));
                 log.info("班课群增加成员 group_id = {},user_id = {},ret = {}",classRoom.getIm_group_id(),String.valueOf(getCurrentUserId()),info_ret);
-
+                UserInfo userInfo = iUser.getUser(getCurrentUserId());
+                TlsSigTest.sendGroupMsg(classRoom.getIm_group_id(),"欢迎新同学：" + userInfo.getName());
                 class_id = classRoom.getClass_id();
                 teacher_id = classRoom.getUser_id();
                 outLine = classRoom.getOutline();

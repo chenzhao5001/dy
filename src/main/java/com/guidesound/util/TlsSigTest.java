@@ -43,7 +43,7 @@ public class TlsSigTest {
 //        String strRandomInt = String.valueOf(randomInt);
         String addGroupUrl = "https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + randomInt+ "&contenttype=json";
 
-        String reqJson = "{\"Name\":\"" +GroupName + "\",\"GroupId\":\"" + GroupId + "\",\"Type\":\"Public\",\"Owner_Account\": \"" + im_id + "\",\"FaceUrl\":\"" + pic_url + "\"}";
+        String reqJson = "{\"Name\":\"" +GroupName + "\",\"GroupId\":\"" + GroupId + "\",\"Type\":\"Private\",\"Owner_Account\": \"" + im_id + "\",\"FaceUrl\":\"" + pic_url + "\"}";
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, reqJson);
         Request req = new Request.Builder()
@@ -300,8 +300,5 @@ public class TlsSigTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
     }
 }
