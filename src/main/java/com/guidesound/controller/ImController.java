@@ -48,8 +48,12 @@ public class ImController extends BaseController{
         if(uid == null || uid.equals("")) {
             return JSONResult.errorMsg("缺少 uid 参数");
         }
+        int count = iUser.getBlackListCount(getCurrentUserId(),uid);
+        if(count == 0) {
+            return JSONResult.ok(false);
+        }
         iUser.removeBlackList(getCurrentUserId(),uid);
-        return JSONResult.ok();
+        return JSONResult.ok(true);
     }
 
     @RequestMapping("/in_black_list")

@@ -865,8 +865,7 @@ public class ManagerController extends BaseController {
     @RequestMapping("/record_examine")
     @ResponseBody
     JSONResult getRecordExamine() {
-
-        TlsSigTest.sendGroupMsg("1000000129","test123");
+//        TlsSigTest.sendGroupMsg("1000000129","test123");
         List<Record> records = iRecord.getRecordByStatus(1);
         List<RecordExamine> list = new ArrayList<>();
         for(Record item : records) {
