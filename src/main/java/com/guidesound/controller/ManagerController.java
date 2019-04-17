@@ -185,6 +185,8 @@ public class ManagerController extends BaseController {
                 }
                 connection.close();
                 iVideo.setExamineLoading(Integer.parseInt(video_id),type_list);
+                VideoShow video = iVideo.getVideoById(video_id);
+                iVideo.setPoolByVideoId(video_id,","+ video.getWatch_type());
 
             } catch (JMSException e) {
                 e.printStackTrace();
