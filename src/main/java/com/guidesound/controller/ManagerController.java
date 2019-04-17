@@ -187,7 +187,15 @@ public class ManagerController extends BaseController {
                 iVideo.setExamineLoading(Integer.parseInt(video_id),type_list);
                 VideoShow video = iVideo.getVideoById(video_id);
                 iVideo.setPoolByVideoId(video_id,","+ video.getWatch_type());
-
+                UserInfo userInfo = iUser.getUser(video.getUser_id());
+                if(type_list.contains("1")) {
+                    if(userInfo != null) {
+                        TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + video.getTitle()+ "”已经通过系统审核，由于视频质量很高，已被系统推荐。");
+                    }
+                } else {
+                    TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + video.getTitle()+ "”已经通过系统审核。");
+                }
+                
             } catch (JMSException e) {
                 e.printStackTrace();
             }
@@ -196,6 +204,14 @@ public class ManagerController extends BaseController {
                 return JSONResult.errorMsg("缺少fail_reason或fail_content");
             }
             iVideo.setExamineFail(Integer.parseInt(video_id),fail_reason,fail_content);
+            VideoShow video = iVideo.getVideoById(video_id);
+            UserInfo userInfo = iUser.getUser(video.getUser_id());
+            if(userInfo != null) {
+                Map<Integer,String> reason = VideoExamine.getReason();
+                if(reason.containsKey(Integer.parseInt(fail_reason))) {
+                    TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + video.getTitle()+ "”未通过系统审核，未通过原因是" + reason.get(Integer.parseInt(fail_reason)));
+                }
+            }
         }
         return JSONResult.ok();
     }

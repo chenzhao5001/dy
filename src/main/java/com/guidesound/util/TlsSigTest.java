@@ -174,6 +174,11 @@ public class TlsSigTest {
         List<JSONObject> arr = new ArrayList<>();
         arr.add(cell);
 
+//        JSONObject offlinePushInfo = new JSONObject();
+//        offlinePushInfo.put("PushFlag",0);
+//        offlinePushInfo.put("Desc",info);
+//        offlinePushInfo.put("Ext",info);
+
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("SyncOtherMachine", 2);
         jsonSend.put("From_Account", from_im_id);
@@ -182,6 +187,7 @@ public class TlsSigTest {
         jsonSend.put("MsgRandom", 1234);
         jsonSend.put("MsgTimeStamp", new Date().getTime() / 1000);
         jsonSend.put("MsgBody",arr);
+//        jsonSend.put("OfflinePushInfo",offlinePushInfo);
         String send = jsonSend.toString();
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, send);
@@ -213,6 +219,12 @@ public class TlsSigTest {
         List<JSONObject> arr = new ArrayList<>();
         arr.add(cell);
 
+        JSONObject offlinePushInfo = new JSONObject();
+        offlinePushInfo.put("PushFlag",0);
+        offlinePushInfo.put("Desc",info);
+        offlinePushInfo.put("Ext",info);
+
+
         JSONObject jsonSend = new JSONObject();
         jsonSend.put("SyncOtherMachine", 2);
         jsonSend.put("From_Account", "397");
@@ -221,6 +233,7 @@ public class TlsSigTest {
         jsonSend.put("MsgRandom", 1234);
         jsonSend.put("MsgTimeStamp", new Date().getTime() / 1000);
         jsonSend.put("MsgBody",arr);
+        jsonSend.put("OfflinePushInfo",offlinePushInfo);
         String send = jsonSend.toString();
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         RequestBody body = RequestBody.create(JSON, send);
