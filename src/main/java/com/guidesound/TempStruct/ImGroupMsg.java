@@ -8,7 +8,16 @@ import java.util.List;
 public class ImGroupMsg {
     String GroupId;
     String Random;
+    String From_Account;
     List<ImGroupMsgInfo> MsgBody;
+
+    public String getFrom_Account() {
+        return From_Account;
+    }
+
+    public void setFrom_Account(String from_Account) {
+        From_Account = from_Account;
+    }
 
     public String getGroupId() {
         return GroupId;

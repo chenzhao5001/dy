@@ -412,11 +412,13 @@ public class OrderController extends BaseController {
                         log.info("创建群失败 im_id = userInfo.getIm_id ={} ,group_name = {} ,ret = {}",userInfo.getIm_id(),"班课群 " + course.getCourse_name(),group_id);
                         return JSONResult.errorMsg("创建im群失败");
                     }
-                    String info_ret = TlsSigTest.addGroupPerson(group_id, String.valueOf(course.getUser_id()));
-                    log.info("加入群拥有者 group_id = {},user_id = {},ret = {}",group_id,String.valueOf(course.getUser_id()),info_ret);
-                    info_ret = TlsSigTest.addGroupPerson(group_id, String.valueOf(getCurrentUserId()));
+                    UserInfo user_temp = iUser.getUser(course.getUser_id());
+                    String info_ret = TlsSigTest.addGroupPerson(group_id, String.valueOf(user_temp.getIm_id()));
+                    log.info("加入群拥有者 group_id = {},user_id = {},ret = {}",group_id,String.valueOf(user_temp.getIm_id()),info_ret);
+                    UserInfo user_temp2 = iUser.getUser(getCurrentUserId());
+                    info_ret = TlsSigTest.addGroupPerson(group_id, user_temp2.getIm_id());
                     UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
-                    TlsSigTest.sendGroupMsg(group_id,"欢迎新同学：" + userInfo1.getName());
+                    TlsSigTest.sendGroupMsg(group_id,"欢迎新同学：" + userInfo1.getName(),user_temp.getIm_id());
                     log.info("加入支付用户 group_id = {},user_id = {},ret = {}",group_id,String.valueOf(getCurrentUserId()),info_ret);
                 }
 
@@ -473,7 +475,8 @@ public class OrderController extends BaseController {
                 String info_ret = TlsSigTest.addGroupPerson(classRoom.getIm_group_id(), String.valueOf(getCurrentUserId()));
                 log.info("班课群增加成员 group_id = {},user_id = {},ret = {}",classRoom.getIm_group_id(),String.valueOf(getCurrentUserId()),info_ret);
                 UserInfo userInfo = iUser.getUser(getCurrentUserId());
-                TlsSigTest.sendGroupMsg(classRoom.getIm_group_id(),"欢迎新同学：" + userInfo.getName());
+                UserInfo userInfo2 = iUser.getUser(classRoom.getUser_id());
+                TlsSigTest.sendGroupMsg(classRoom.getIm_group_id(),"欢迎新同学：" + userInfo.getName(),userInfo2.getIm_id());
                 class_id = classRoom.getClass_id();
                 teacher_id = classRoom.getUser_id();
                 outLine = classRoom.getOutline();

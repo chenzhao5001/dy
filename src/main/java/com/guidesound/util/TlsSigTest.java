@@ -265,12 +265,13 @@ public class TlsSigTest {
         }
 
     }
-    public static void sendGroupMsg(String groupId, String msg) {
+    public static void sendGroupMsg(String groupId, String msg,String From_Account) {
         String rand = ToolsFunction.getNumRandomString(10);
         String controlUrl = "https://console.tim.qq.com/v4/group_open_http_svc/send_group_msg?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + rand + "&contenttype=json";
         ImGroupMsg imGroupMsg = new ImGroupMsg();
         imGroupMsg.setGroupId(groupId);
         imGroupMsg.setRandom(ToolsFunction.getNumRandomString(10));
+        imGroupMsg.setFrom_Account(From_Account);
         List<ImGroupMsgInfo> imGroupMsgInfos = new ArrayList<>();
         ImGroupMsgInfo imGroupMsgInfo = new ImGroupMsgInfo();
         imGroupMsgInfo.setMsgType("TIMTextElem");
