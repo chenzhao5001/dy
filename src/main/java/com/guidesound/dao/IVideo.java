@@ -308,6 +308,11 @@ public interface IVideo {
             + "</script>")
     List<VideoShow> getVideobyIds(@Param("iList") List<Integer> iList);
 
+    @Delete("delete from video_pools where video_id = #{arg0} and video_pool = #{arg1}")
+    void removeVideoFromPools(int video_id,int pool);
+    @Select("select * from video_pools where video_id = #{arg0} and video_pool = #{arg1}")
+    List<VideoPool> getVideoPoolByInfo(int video_id,int pool);
+
 
 
 

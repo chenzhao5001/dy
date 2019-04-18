@@ -189,6 +189,14 @@ public class ManagerController extends BaseController {
                 iVideo.setPoolByVideoId(video_id,","+ video.getWatch_type());
                 UserInfo userInfo = iUser.getUser(video.getUser_id());
                 if(type_list.contains("1")) {
+                    VideoPool videoPool = new VideoPool();
+                    videoPool.setUser_id(video.getUser_id());
+                    videoPool.setSubject(video.getSubject());
+                    videoPool.setUser_id(video.getUser_id());
+                    videoPool.setVideo_pool(video.getWatch_type());
+                    videoPool.setVideo_id(video.getId());
+                    videoPool.setCreate_time((int) (new Date().getTime() / 1000));
+                    iVideo.insertVideoPool(videoPool);
                     if(userInfo != null) {
                         TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + video.getTitle()+ "”已经通过系统审核，由于视频质量很高，已被系统推荐。");
                     }
@@ -603,6 +611,21 @@ public class ManagerController extends BaseController {
         }
         String temp = StringUtils.join(lists, ",");
         iVideo.setPoolByVideoId(video_id,temp);
+
+        List<VideoPool> list = iVideo.getVideoPoolByInfo(Integer.parseInt(video_id),Integer.parseInt(pool_id));
+        if(list.size() == 0) {
+            VideoShow videoShow = iVideo.getVideoById(video_id);
+            if(videoShow != null) {
+                VideoPool videoPool = new VideoPool();
+                videoPool.setVideo_id(videoShow.getId());
+                videoPool.setVideo_pool(Integer.parseInt(pool_id));
+                videoPool.setSubject(videoShow.getSubject());
+                videoPool.setUser_id(videoShow.getUser_id());
+                videoPool.setCreate_time((int) (new Date().getTime() / 1000));
+                iVideo.insertVideoPool(videoPool);
+            }
+        }
+
         return JSONResult.ok();
     }
 
@@ -624,6 +647,8 @@ public class ManagerController extends BaseController {
         }
         String temp = StringUtils.join(lists, ",");
         iVideo.setPoolByVideoId(video_id,temp);
+        iVideo.removeVideoFromPools(Integer.parseInt(video_id),Integer.parseInt(pool_id));
+
         return JSONResult.ok();
     }
 
