@@ -118,10 +118,106 @@ public class VideoController extends BaseController {
     }
 
 
+    List<Integer> getAllPoolVideo(String user_id, String key, boolean is_new, List<Integer> pools_list) {
+
+        List<Integer> video_ids = new ArrayList<>();
+        List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_id, key);
+        long nowTime = System.currentTimeMillis();
+        int todayStartTime = (int) ((nowTime - (nowTime + TimeZone.getDefault().getRawOffset()) % (1000 * 3600 * 24)) / 1000);
+
+        if (pools_list.size() == 0) {
+            if (videoIndex.size() == 0) {
+                if (is_new) {
+                    video_ids = iVideo.videoAllIdsInVideoPoolsToday(0, 20, todayStartTime);
+                } else {
+                    video_ids = iVideo.videoAllIdsInVideoPools(0, 20);
+                }
+                iVideo.insertVideoIndex(user_id, key, video_ids.size());
+            } else {
+                if (is_new) {
+                    video_ids = iVideo.videoAllIdsInVideoPoolsToday(videoIndex.get(0).getIndex_count(), 20, todayStartTime);
+                } else {
+                    video_ids = iVideo.videoAllIdsInVideoPools(videoIndex.get(0).getIndex_count(), 20);
+                }
+                iVideo.updateVideoIndex(user_id, key, videoIndex.get(0).getIndex_count() + video_ids.size());
+            }
+        } else {
+            if (videoIndex.size() == 0) {
+                if (is_new) {
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPoolsToday(pools_list, 0, 20, todayStartTime);
+                } else {
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPools(pools_list, 0, 20);
+                }
+                iVideo.insertVideoIndex(user_id, key, video_ids.size());
+            } else {
+                if (is_new) {
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPoolsToday(pools_list, videoIndex.get(0).getIndex_count(), 20, todayStartTime);
+                } else {
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPools(pools_list, videoIndex.get(0).getIndex_count(), 20);
+                }
+                iVideo.updateVideoIndex(user_id, key, videoIndex.get(0).getIndex_count() + video_ids.size());
+            }
+        }
+        if (!is_new) {
+            if (video_ids.size() < 20) {
+                iVideo.updateVideoIndex(user_id, key, 0);
+            }
+        }
+        return video_ids;
+    }
+
+    List<Integer> getAllSubjectPoolVideo(String user_id, String key, boolean is_new, List<Integer> pools_list, List<Integer> subject_list) {
+
+        List<Integer> video_ids = new ArrayList<>();
+        List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_id, key);
+        long nowTime = System.currentTimeMillis();
+        int todayStartTime = (int) ((nowTime - (nowTime + TimeZone.getDefault().getRawOffset()) % (1000 * 3600 * 24)) / 1000);
+
+        if (pools_list.size() == 0) {
+            if (videoIndex.size() == 0) {
+                if (is_new) {
+                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubjectToday(subject_list, 0, 20, todayStartTime);
+                } else {
+                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subject_list, 0, 20);
+                }
+                iVideo.insertVideoIndex(user_id, key, video_ids.size());
+            } else {
+                if (is_new) {
+                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubjectToday(subject_list, videoIndex.get(0).getIndex_count(), 20, todayStartTime);
+                } else {
+                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subject_list, videoIndex.get(0).getIndex_count(), 20);
+                }
+                iVideo.updateVideoIndex(user_id, key, videoIndex.get(0).getIndex_count() + video_ids.size());
+            }
+        } else {
+            if (videoIndex.size() == 0) {
+                if (is_new) {
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPoolsBySubjectToday(subject_list, pools_list, 0, 20, todayStartTime);
+                } else {
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPoolsBySubject(subject_list, pools_list, 0, 20);
+                }
+                iVideo.insertVideoIndex(user_id, key, video_ids.size());
+            } else {
+                if (is_new) {
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPoolsBySubjectToday(subject_list, pools_list, videoIndex.get(0).getIndex_count(), 20, todayStartTime);
+                } else {
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPoolsBySubject(subject_list, pools_list, videoIndex.get(0).getIndex_count(), 20);
+                }
+                iVideo.updateVideoIndex(user_id, key, videoIndex.get(0).getIndex_count() + video_ids.size());
+            }
+        }
+        if (!is_new) {
+            if (video_ids.size() < 20) {
+                iVideo.updateVideoIndex(user_id, key, 0);
+            }
+        }
+        return video_ids;
+    }
+
+
     @RequestMapping(value = "/list_by_channel")
     public @ResponseBody
     JSONResult selectVideoByChannel(String channel, String user_guid, String page, String size) throws JsonProcessingException {
-
         if (channel == null || user_guid == null) {
             return JSONResult.errorMsg("缺少channel 或 user_guid");
         }
@@ -129,13 +225,12 @@ public class VideoController extends BaseController {
         List<Integer> video_ids = new ArrayList<>();
         int grade = 0;
 
-        if(isNumeric(user_guid)) {
+        if (isNumeric(user_guid)) {
             UserInfo userInfo = iUser.getUser(Integer.parseInt(user_guid));
             if (userInfo != null) {
                 grade = userInfo.getChannel_stage();
             }
         }
-
         int other_grade1 = 0;
         if (grade != 0) {
             other_grade1 = grade / 100 * 100 + 99;
@@ -149,34 +244,24 @@ public class VideoController extends BaseController {
         }
         videos_pool_ids.add(999);
 
+        String param = "";
+        long nowTime = System.currentTimeMillis();
+        int todayStartTime = (int) ((nowTime - (nowTime + TimeZone.getDefault().getRawOffset()) % (1000 * 3600 * 24)) / 1000);
         if (channel.equals("1")) { //推荐
             if (grade == 0) {
-                List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid, "all");
-                if (videoIndex.size() == 0) {
-                    video_ids = iVideo.videoAllIdsInVideoPools(0, 20);
-                    iVideo.insertVideoIndex(user_guid, "all", video_ids.size());
-                } else {
-                    video_ids = iVideo.videoAllIdsInVideoPools(videoIndex.get(0).getIndex_count(), 20);
-                    iVideo.updateVideoIndex(user_guid, "all", videoIndex.get(0).getIndex_count() + video_ids.size());
+                video_ids = getAllPoolVideo(user_guid, "all" + todayStartTime, true, new ArrayList<>());
+                if (video_ids.size() == 0) {
+                    video_ids = getAllPoolVideo(user_guid, "all", false, new ArrayList<>());
                 }
             } else {
-                String param = "";
                 for (int id : videos_pool_ids) {
                     param += (id + ",");
                 }
-                List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid, param);
-                if (videoIndex.size() == 0) {
-                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPools(videos_pool_ids, 0, 20);
-                    iVideo.insertVideoIndex(user_guid, param, video_ids.size());
-                } else {
-                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPools(videos_pool_ids, videoIndex.get(0).getIndex_count(), 20);
-                    iVideo.updateVideoIndex(user_guid, param, videoIndex.get(0).getIndex_count() + video_ids.size());
-                }
-                if (video_ids.size() < 20) {
-                    iVideo.updateVideoIndex(user_guid, param, 0);
+                video_ids = getAllPoolVideo(user_guid, param + todayStartTime, true, videos_pool_ids);
+                if (video_ids.size() == 0) {
+                    video_ids = getAllPoolVideo(user_guid, param, false, videos_pool_ids);
                 }
             }
-
         } else { //频道
             List<String> list = Arrays.asList(channel.split(","));
             List<Integer> subjectList = new ArrayList<>();
@@ -185,42 +270,22 @@ public class VideoController extends BaseController {
                     subjectList.add(Integer.parseInt(id));
                 }
             }
-            String param = "";
-            if (grade == 0) {
-                for (int subject : subjectList) {
-                    param += (subject + ",");
-                }
-                List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid, param);
-
-                if (videoIndex.size() == 0) {
-                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subjectList, 0, 20);
-                    iVideo.insertVideoIndex(user_guid, param, video_ids.size());
-                } else {
-                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subjectList, videoIndex.get(0).getIndex_count(), 20);
-                    iVideo.updateVideoIndex(user_guid, param, videoIndex.get(0).getIndex_count() + video_ids.size());
-                }
-            } else {
-                for (int subject : subjectList) {
-                    param += (subject + ",");
-                }
+            for (int subject : subjectList) {
+                param += (subject + ",");
+            }
+            if (grade != 0) {
                 for (int id : videos_pool_ids) {
                     param += (id + ",");
                 }
-
-                List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid, param);
-                if (videoIndex.size() == 0) {
-                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subjectList, 0, 20);
-                    iVideo.insertVideoIndex(user_guid, param, video_ids.size());
-                } else {
-                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPoolsBySubject(subjectList, videos_pool_ids, videoIndex.get(0).getIndex_count(), 20);
-                    iVideo.updateVideoIndex(user_guid, param, videoIndex.get(0).getIndex_count() + video_ids.size());
-                }
+            } else {
+                videos_pool_ids = new ArrayList<>();
             }
-            if (video_ids.size() < 20) {
-                iVideo.updateVideoIndex(user_guid, param, 0);
+
+            video_ids = getAllSubjectPoolVideo(user_guid, param + todayStartTime, true, videos_pool_ids, subjectList);
+            if (video_ids.size() == 0) {
+                video_ids = getAllSubjectPoolVideo(user_guid, param, false, videos_pool_ids, subjectList);
             }
         }
-
 
         ListResp ret = new ListResp();
         if (video_ids.size() > 0) {
@@ -242,7 +307,6 @@ public class VideoController extends BaseController {
 
         List<VideoShow> video_list = new ArrayList<>();
         List<String> videoList = iVideo.getPushVideoByUserGuid(user_guid);
-
 
         String videoTemp;
         ArrayList<String> arrVidoe = new ArrayList<>();
@@ -1040,6 +1104,10 @@ public class VideoController extends BaseController {
     @ResponseBody
     JSONResult upPool() {
         List<VideoShow> lists = iVideo.getVideoPoolsNotNull();
+        for (int i = 0; i < 100; i++) {
+            Collections.shuffle(lists);
+        }
+
         for (VideoShow item : lists) {
             String pools = (String) item.getPools();
             String[] strarray = pools.split(",");
@@ -1050,7 +1118,7 @@ public class VideoController extends BaseController {
                     videoPool.setVideo_pool(Integer.parseInt(str));
                     videoPool.setUser_id(item.getUser_id());
                     videoPool.setSubject(item.getSubject());
-                    videoPool.setCreate_time((int) (new Date().getTime() / 1000));
+//                    videoPool.setCreate_time((int) (new Date().getTime() / 1000));
                     iVideo.insertVideoPool(videoPool);
                 }
             }

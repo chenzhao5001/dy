@@ -273,8 +273,22 @@ public interface IVideo {
             + " limit #{arg1},#{arg2}"
             + "</script>")
     List<Integer> videoIdsByPoolsIdsInVideoPools(@Param("iList") List<Integer> iList,int begin,int end);
+
+    @Select("<script>"
+            + "SELECT distinct video_id FROM video_pools WHERE video_pool IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and create_time > #{arg3}"
+            + " limit #{arg1},#{arg2}"
+            + "</script>")
+    List<Integer> videoIdsByPoolsIdsInVideoPoolsToday(@Param("iList") List<Integer> iList,int begin,int end,int time);
+
     @Select("select distinct video_id from video_pools limit #{arg0},#{arg1}")
     List<Integer> videoAllIdsInVideoPools(int begin,int end);
+
+    @Select("select distinct video_id from video_pools where create_time > #{arg2} limit #{arg0},#{arg1}")
+    List<Integer> videoAllIdsInVideoPoolsToday(int begin,int end,int time);
 
 
     @Select("<script>"
@@ -295,9 +309,35 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and video_pool in"
+            + "<foreach item='item' index='index' collection='iPoolList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and create_time > #{arg4}"
+            + " limit #{arg2},#{arg3}"
+            + "</script>")
+    List<Integer> videoIdsByPoolsIdsInVideoPoolsBySubjectToday(@Param("iSubjectList") List<Integer> iSubjectList,@Param("iPoolList") List<Integer> iPoolList,int begin,int end,int time);
+
+
+    @Select("<script>"
+            + "SELECT distinct video_id FROM video_pools WHERE subject IN "
+            + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
             + " limit #{arg1},#{arg2}"
             + "</script>")
     List<Integer> videoAllIdsInVideoPoolsBySubject(@Param("iSubjectList") List<Integer> iSubjectList,int begin,int end);
+
+    @Select("<script>"
+            + "SELECT distinct video_id FROM video_pools WHERE subject IN "
+            + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and create_time > #{arg3}"
+            + " limit #{arg1},#{arg2}"
+            + "</script>")
+    List<Integer> videoAllIdsInVideoPoolsBySubjectToday(@Param("iSubjectList") List<Integer> iSubjectList,int begin,int end,int time);
+
 
 
     @Select("<script>"
