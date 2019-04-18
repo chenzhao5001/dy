@@ -195,7 +195,7 @@ public class ManagerController extends BaseController {
                 } else {
                     TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + video.getTitle()+ "”已经通过系统审核。");
                 }
-                
+
             } catch (JMSException e) {
                 e.printStackTrace();
             }

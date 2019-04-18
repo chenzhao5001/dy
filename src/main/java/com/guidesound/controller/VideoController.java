@@ -1005,6 +1005,26 @@ public class VideoController extends BaseController {
         }
         return JSONResult.ok();
     }
+
+    @RequestMapping("/up_pool")
+    @ResponseBody
+    void upPool() {
+        List<VideoShow> lists = iVideo.getVideoPoolsNotNull();
+        for(VideoShow item : lists) {
+            String pools = (String)item.getPools();
+            String[] strarray=pools.split(",");
+            for(String str : strarray) {
+                if(str != null && !str.equals("")) {
+                    VideoPool videoPool = new VideoPool();
+                    videoPool.setVideo_id(item.getId());
+                    videoPool.setVideo_pool(Integer.parseInt(str));
+                    videoPool.setUser_id(item.getUser_id());
+                    videoPool.setCreate_time((int) (new Date().getTime() / 1000));
+                    iVideo.insertVideoPool(videoPool);
+                }
+            }
+        }
+    }
 }
 
 class RepList {

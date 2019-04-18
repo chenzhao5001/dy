@@ -256,4 +256,11 @@ public interface IVideo {
 
     @Update("update video_index set index_count = #{arg2} where user_guid = #{arg0} and param = #{arg1} ")
     void updateVideoIndex(String user_guid,String param,int index_count);
+
+    @Select("select * from video where pools != \"\" "  )
+    List<VideoShow> getVideoPoolsNotNull();
+
+    @Insert("insert into video_pools (video_id,user_id,video_pool,create_time) " +
+            "value (#{video_id},#{user_id},#{video_pool},#{create_time})")
+    void insertVideoPool(VideoPool videoPool);
 }
