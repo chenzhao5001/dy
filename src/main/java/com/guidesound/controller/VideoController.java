@@ -1,6 +1,7 @@
 package com.guidesound.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.guidesound.Service.ILogService;
 import com.guidesound.Service.IVideoService;
 import com.guidesound.TempStruct.ItemInfo;
 import com.guidesound.dao.*;
@@ -28,8 +29,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.guidesound.util.ToolsFunction.URLDecoderString;
-import static com.guidesound.util.ToolsFunction.getURLEncoderString;
+import static com.guidesound.util.ToolsFunction.*;
 
 
 /**
@@ -55,6 +55,8 @@ public class VideoController extends BaseController {
     @Autowired
     private IUser iUser;
 
+    @Autowired
+    private ILogService iLogService;
 
     /**
      * 视频上传
@@ -119,16 +121,19 @@ public class VideoController extends BaseController {
     @RequestMapping(value = "/list_by_channel")
     public @ResponseBody
     JSONResult selectVideoByChannel(String channel, String user_guid, String page, String size) throws JsonProcessingException {
+
         if (channel == null || user_guid == null) {
             return JSONResult.errorMsg("缺少channel 或 user_guid");
         }
-
+        iLogService.addLog(user_guid, "/list_by_channel", channel);
         List<Integer> video_ids = new ArrayList<>();
         int grade = 0;
-        int user_id = getCurrentUserId();
-        if (user_id != 0) {
-            UserInfo userInfo = iUser.getUser(user_id);
-            grade = userInfo.getChannel_stage();
+
+        if(isNumeric(user_guid)) {
+            UserInfo userInfo = iUser.getUser(Integer.parseInt(user_guid));
+            if (userInfo != null) {
+                grade = userInfo.getChannel_stage();
+            }
         }
 
         int other_grade1 = 0;
@@ -147,78 +152,78 @@ public class VideoController extends BaseController {
         if (channel.equals("1")) { //推荐
             if (grade == 0) {
                 List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid, "all");
-                if(videoIndex.size() == 0) {
-                    video_ids = iVideo.videoAllIdsInVideoPools(0,20);
-                    iVideo.insertVideoIndex(user_guid, "all",video_ids.size());
+                if (videoIndex.size() == 0) {
+                    video_ids = iVideo.videoAllIdsInVideoPools(0, 20);
+                    iVideo.insertVideoIndex(user_guid, "all", video_ids.size());
                 } else {
-                    video_ids = iVideo.videoAllIdsInVideoPools(videoIndex.get(0).getIndex_count(),20);
-                    iVideo.updateVideoIndex(user_guid, "all",videoIndex.get(0).getIndex_count() + video_ids.size());
+                    video_ids = iVideo.videoAllIdsInVideoPools(videoIndex.get(0).getIndex_count(), 20);
+                    iVideo.updateVideoIndex(user_guid, "all", videoIndex.get(0).getIndex_count() + video_ids.size());
                 }
             } else {
                 String param = "";
-                for(int id : videos_pool_ids) {
+                for (int id : videos_pool_ids) {
                     param += (id + ",");
                 }
                 List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid, param);
-                if(videoIndex.size() == 0) {
-                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPools(videos_pool_ids,0,20);
-                    iVideo.insertVideoIndex(user_guid, param,video_ids.size());
+                if (videoIndex.size() == 0) {
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPools(videos_pool_ids, 0, 20);
+                    iVideo.insertVideoIndex(user_guid, param, video_ids.size());
                 } else {
-                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPools(videos_pool_ids,videoIndex.get(0).getIndex_count(),20);
-                    iVideo.updateVideoIndex(user_guid, param,videoIndex.get(0).getIndex_count() + video_ids.size());
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPools(videos_pool_ids, videoIndex.get(0).getIndex_count(), 20);
+                    iVideo.updateVideoIndex(user_guid, param, videoIndex.get(0).getIndex_count() + video_ids.size());
                 }
-                if(video_ids.size() < 20) {
-                    iVideo.updateVideoIndex(user_guid, param,0);
+                if (video_ids.size() < 20) {
+                    iVideo.updateVideoIndex(user_guid, param, 0);
                 }
             }
 
         } else { //频道
             List<String> list = Arrays.asList(channel.split(","));
             List<Integer> subjectList = new ArrayList<>();
-            for(String id : list) {
-                if(id != null && !id.equals("")) {
+            for (String id : list) {
+                if (id != null && !id.equals("")) {
                     subjectList.add(Integer.parseInt(id));
                 }
             }
             String param = "";
             if (grade == 0) {
-                for(int subject : subjectList) {
+                for (int subject : subjectList) {
                     param += (subject + ",");
                 }
                 List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid, param);
 
-                if(videoIndex.size() == 0) {
-                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subjectList,0,20);
-                    iVideo.insertVideoIndex(user_guid, param,video_ids.size());
+                if (videoIndex.size() == 0) {
+                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subjectList, 0, 20);
+                    iVideo.insertVideoIndex(user_guid, param, video_ids.size());
                 } else {
-                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subjectList,videoIndex.get(0).getIndex_count(),20);
-                    iVideo.updateVideoIndex(user_guid, param,videoIndex.get(0).getIndex_count() + video_ids.size());
+                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subjectList, videoIndex.get(0).getIndex_count(), 20);
+                    iVideo.updateVideoIndex(user_guid, param, videoIndex.get(0).getIndex_count() + video_ids.size());
                 }
             } else {
-                for(int subject : subjectList) {
+                for (int subject : subjectList) {
                     param += (subject + ",");
                 }
-                for(int id : videos_pool_ids) {
+                for (int id : videos_pool_ids) {
                     param += (id + ",");
                 }
 
                 List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid, param);
-                if(videoIndex.size() == 0) {
-                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subjectList,0,20);
-                    iVideo.insertVideoIndex(user_guid, param,video_ids.size());
+                if (videoIndex.size() == 0) {
+                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subjectList, 0, 20);
+                    iVideo.insertVideoIndex(user_guid, param, video_ids.size());
                 } else {
-                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPoolsBySubject(subjectList,videos_pool_ids,videoIndex.get(0).getIndex_count(),20);
-                    iVideo.updateVideoIndex(user_guid, param,videoIndex.get(0).getIndex_count() + video_ids.size());
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPoolsBySubject(subjectList, videos_pool_ids, videoIndex.get(0).getIndex_count(), 20);
+                    iVideo.updateVideoIndex(user_guid, param, videoIndex.get(0).getIndex_count() + video_ids.size());
                 }
             }
-            if(video_ids.size() < 20) {
-                iVideo.updateVideoIndex(user_guid, param,0);
+            if (video_ids.size() < 20) {
+                iVideo.updateVideoIndex(user_guid, param, 0);
             }
         }
 
 
         ListResp ret = new ListResp();
-        if(video_ids.size() > 0) {
+        if (video_ids.size() > 0) {
             List<VideoShow> videos = iVideo.getVideobyIds(video_ids);
             improveVideoList(videos);
             ret.setCount(videos.size());

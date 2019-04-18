@@ -397,5 +397,8 @@ public interface IUser {
     @Delete("delete from user_black_list where user_id = #{arg0} and uid = #{arg1}")
     void removeBlackList(int user_id,String uid);
 
+    @Insert("insert into log_tmp (type_info,user_id,container,create_time) " +
+            "value (#{type_info},#{user_id},#{container},#{create_time})")
+    void AddLog(LogTmp logTmp);
 }
 
