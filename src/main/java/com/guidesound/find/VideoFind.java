@@ -10,17 +10,17 @@ public class VideoFind {
     int end;
     String user_id;
     String video_id;
-    String pools;
+    List<String> pools;
 
     List<String> subject_list;
     List<String> grade_class_list;
     List<Integer> user_ids;
 
-    public String getPools() {
+    public List<String> getPools() {
         return pools;
     }
 
-    public void setPools(String pools) {
+    public void setPools(List<String> pools) {
         this.pools = pools;
     }
 

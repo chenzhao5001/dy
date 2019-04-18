@@ -391,7 +391,17 @@ public class VideoController extends BaseController {
         videoFind.setUser_id(user_id);
         videoFind.setVideo_id(video_id);
         videoFind.setUser_ids(user_ids);
-        videoFind.setPools(pools);
+
+        List<String> poolList = new ArrayList<>();
+        if(pools != null && !pools.equals("")) {
+            String[] strarray = pools.split(",");
+            for(String id: strarray) {
+                if(!id.equals("")) {
+                    poolList.add(id);
+                }
+            }
+            videoFind.setPools(poolList);
+        }
         int count_temp = iVideo.findVideoCount(videoFind);
         if (count_temp == 0) {
             ret.setCount(0);

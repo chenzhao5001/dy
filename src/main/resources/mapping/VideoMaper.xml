@@ -69,6 +69,9 @@
             resultType="int">
         SELECT  count(*)
         FROM video
+        <if test="pools != null" >
+            inner join video_pools on video.id = video_pools.video_id
+        </if>
         WHERE 1 =1
         <if test="title != null ">
             and  title LIKE CONCAT('%',#{title},'%')
@@ -79,25 +82,24 @@
         </if>
 
         <if test="video_id != null ">
-            and  id =  #{video_id}
+            and  video.id =  #{video_id}
         </if>
 
         <if test="user_id != null ">
-            and  user_id =  #{user_id}
+            and  video.user_id =  #{user_id}
         </if>
 
-        <choose>
-            <when test="pools == 1000">
-                and  pools = ""
-            </when>
-            <when test="pools !=null">
-                and  pools LIKE CONCAT('%',#{pools},'%')
-            </when>
-        </choose>
+        <if test="pools != null" >
+            and  video_pool IN
+            <foreach collection="pools" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+
+        </if>
 
 
         <if test="subject_list != null ">
-            and  subject IN
+            and  video.subject IN
             <foreach collection="subject_list" item="id" index="index" open="(" close=")" separator=",">
                 #{id}
             </foreach>
@@ -111,7 +113,7 @@
         </if>
 
         <if test="user_ids != null ">
-            and  user_id IN
+            and  video.user_id IN
             <foreach collection="user_ids" item="id" index="index" open="(" close=")" separator=",">
                 #{id}
             </foreach>
@@ -125,7 +127,9 @@
             resultType="com.guidesound.models.VideoShow">
         SELECT *
         FROM video
-
+        <if test="pools != null" >
+            inner join video_pools on video.id = video_pools.video_id
+        </if>
         WHERE 1 =1
         <if test="title != null ">
             and  title LIKE CONCAT('%',#{title},'%')
@@ -136,25 +140,23 @@
         </if>
 
         <if test="video_id != null ">
-            and  id =  #{video_id}
+            and  video.id =  #{video_id}
         </if>
 
         <if test="user_id != null ">
-            and  user_id =  #{user_id}
+            and  video.user_id =  #{user_id}
         </if>
 
-        <choose>
-            <when test="pools == 1000">
-                and  pools = ""
-            </when>
-            <when test="pools !=null">
-                and  pools LIKE CONCAT('%',#{pools},'%')
-            </when>
-        </choose>
+        <if test="pools != null" >
+            and  video_pool IN
+            <foreach collection="pools" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
 
+        </if>
 
         <if test="subject_list != null ">
-            and  subject IN
+            and  video.subject IN
             <foreach collection="subject_list" item="id" index="index" open="(" close=")" separator=",">
                 #{id}
             </foreach>
@@ -169,7 +171,7 @@
         </if>
 
         <if test="user_ids != null ">
-            and  user_id IN
+            and  video.user_id IN
             <foreach collection="user_ids" item="id" index="index" open="(" close=")" separator=",">
                 #{id}
             </foreach>
