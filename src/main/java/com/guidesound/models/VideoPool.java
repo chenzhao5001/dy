@@ -4,6 +4,7 @@ public class VideoPool {
     int id;
     int video_id;
     int user_id;
+    int subject;
     int video_pool;
     int create_time;
     int update_time;
@@ -22,6 +23,14 @@ public class VideoPool {
 
     public void setUser_id(int user_id) {
         this.user_id = user_id;
+    }
+
+    public int getSubject() {
+        return subject;
+    }
+
+    public void setSubject(int subject) {
+        this.subject = subject;
     }
 
     public int getVideo_id() {

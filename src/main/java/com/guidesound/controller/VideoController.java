@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -60,7 +61,7 @@ public class VideoController extends BaseController {
      */
     @RequestMapping(value = "/add")
     public @ResponseBody
-    JSONResult addVideo(@Valid VideoDTO videoDTO,BindingResult result) throws IOException {
+    JSONResult addVideo(@Valid VideoDTO videoDTO, BindingResult result) throws IOException {
 
         if (result.hasErrors()) {
             List<ObjectError> errors = result.getAllErrors();
@@ -73,7 +74,7 @@ public class VideoController extends BaseController {
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
         Video video = new Video();
-        User user = (User)req.getAttribute("user_info");
+        User user = (User) req.getAttribute("user_info");
         video.setUser_id(user.getId());
         video.setTitle(videoDTO.getTitle());
 
@@ -117,96 +118,120 @@ public class VideoController extends BaseController {
 
     @RequestMapping(value = "/list_by_channel")
     public @ResponseBody
-    JSONResult selectVideoByChannel(String channel,String user_guid,String page, String size) throws JsonProcessingException {
-        if(channel == null || user_guid == null) {
+    JSONResult selectVideoByChannel(String channel, String user_guid, String page, String size) throws JsonProcessingException {
+        if (channel == null || user_guid == null) {
             return JSONResult.errorMsg("缺少channel 或 user_guid");
         }
-        int iPage = (page == null ? 1:Integer.parseInt(page));
-        int iSize = (size == null ? 20:Integer.parseInt(size));
-        int begin = (iPage -1)*iSize;
-        int end =  iSize;
 
-//        String videoTemp = iVideo.getFinishVideoByUserGuid(user_guid);
-//        if(videoTemp == null) {
-//            videoTemp = "";
-//        }
-        List<VideoShow> video_list = new ArrayList<>();
-        List<VideoShow> all_list = new ArrayList<>();
+        List<Integer> video_ids = new ArrayList<>();
         int grade = 0;
         int user_id = getCurrentUserId();
-        if(user_id != 0) {
+        if (user_id != 0) {
             UserInfo userInfo = iUser.getUser(user_id);
             grade = userInfo.getChannel_stage();
         }
 
-        int other_grade1 = -1;
-        if(grade != 0) {
-            other_grade1 = grade/100 *100 + 99;
+        int other_grade1 = 0;
+        if (grade != 0) {
+            other_grade1 = grade / 100 * 100 + 99;
         }
-        Collections.shuffle(video_list);
-        String select_param = "";
+        List<Integer> videos_pool_ids = new ArrayList<>();
+        if (grade != 0) {
+            videos_pool_ids.add(grade);
+        }
+        if (other_grade1 != 0) {
+            videos_pool_ids.add(other_grade1);
+        }
+        videos_pool_ids.add(999);
+
         if (channel.equals("1")) { //推荐
-            String pool_grade =  "," + grade;
-            String pool_other_grade = ",";
-            if(other_grade1 != -1) {
-                pool_other_grade = "," +  other_grade1;
+            if (grade == 0) {
+                List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid, "all");
+                if(videoIndex.size() == 0) {
+                    video_ids = iVideo.videoAllIdsInVideoPools(0,20);
+                    iVideo.insertVideoIndex(user_guid, "all",video_ids.size());
+                } else {
+                    video_ids = iVideo.videoAllIdsInVideoPools(videoIndex.get(0).getIndex_count(),20);
+                    iVideo.updateVideoIndex(user_guid, "all",videoIndex.get(0).getIndex_count() + video_ids.size());
+                }
+            } else {
+                String param = "";
+                for(int id : videos_pool_ids) {
+                    param += (id + ",");
+                }
+                List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid, param);
+                if(videoIndex.size() == 0) {
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPools(videos_pool_ids,0,20);
+                    iVideo.insertVideoIndex(user_guid, param,video_ids.size());
+                } else {
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPools(videos_pool_ids,videoIndex.get(0).getIndex_count(),20);
+                    iVideo.updateVideoIndex(user_guid, param,videoIndex.get(0).getIndex_count() + video_ids.size());
+                }
+                if(video_ids.size() < 20) {
+                    iVideo.updateVideoIndex(user_guid, param,0);
+                }
             }
-            String pool_other_comment = ",999";
-            select_param = pool_grade + "-" + pool_other_grade + "-" + pool_other_comment;
-            all_list = iVideo.getRecommendVideo(pool_grade,pool_other_grade,pool_other_comment);
+
         } else { //频道
             List<String> list = Arrays.asList(channel.split(","));
-            String pool_other_grade = ",";
-            String pool_grade =  "," + grade;
-            if(other_grade1 != -1) {
-                pool_other_grade  +=  other_grade1;
+            List<Integer> subjectList = new ArrayList<>();
+            for(String id : list) {
+                if(id != null && !id.equals("")) {
+                    subjectList.add(Integer.parseInt(id));
+                }
             }
-            String pool_other_comment = ",999";
-            select_param = channel + "-" + pool_grade + "-" + pool_other_grade + "-" + pool_other_comment;
-            all_list = iVideo.getVideoByChannel(list,pool_grade,pool_other_grade,pool_other_comment);
+            String param = "";
+            if (grade == 0) {
+                for(int subject : subjectList) {
+                    param += (subject + ",");
+                }
+                List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid, param);
+
+                if(videoIndex.size() == 0) {
+                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subjectList,0,20);
+                    iVideo.insertVideoIndex(user_guid, param,video_ids.size());
+                } else {
+                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subjectList,videoIndex.get(0).getIndex_count(),20);
+                    iVideo.updateVideoIndex(user_guid, param,videoIndex.get(0).getIndex_count() + video_ids.size());
+                }
+            } else {
+                for(int subject : subjectList) {
+                    param += (subject + ",");
+                }
+                for(int id : videos_pool_ids) {
+                    param += (id + ",");
+                }
+
+                List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid, param);
+                if(videoIndex.size() == 0) {
+                    video_ids = iVideo.videoAllIdsInVideoPoolsBySubject(subjectList,0,20);
+                    iVideo.insertVideoIndex(user_guid, param,video_ids.size());
+                } else {
+                    video_ids = iVideo.videoIdsByPoolsIdsInVideoPoolsBySubject(subjectList,videos_pool_ids,videoIndex.get(0).getIndex_count(),20);
+                    iVideo.updateVideoIndex(user_guid, param,videoIndex.get(0).getIndex_count() + video_ids.size());
+                }
+            }
+            if(video_ids.size() < 20) {
+                iVideo.updateVideoIndex(user_guid, param,0);
+            }
         }
 
 
-        List<VideoIndex> videoIndex = iVideo.getVideoIndexCount(user_guid,select_param);
-        if(videoIndex.size() == 0) {
-            int video_end = 0;
-            if(20 < all_list.size()) {
-                video_end = 20;
-            } else {
-                video_end = all_list.size();
-            }
-            video_list = all_list.subList(0,video_end);
-            iVideo.insertVideoIndex(user_guid,select_param,20);
-        } else {
-            int video_end = 0;
-            if(videoIndex.get(0).getIndex_count() >= all_list.size()) {
-                if(20 < all_list.size()) {
-                    video_end = 20;
-                } else {
-                    video_end = all_list.size();
-                }
-                video_list = all_list.subList(0,video_end);
-                iVideo.updateVideoIndex(user_guid,select_param,20);
-            } else {
-                if(videoIndex.get(0).getIndex_count() + 20 < all_list.size()) {
-                    video_end = videoIndex.get(0).getIndex_count();
-                } else {
-                    video_end = all_list.size();
-                }
-                video_list = all_list.subList(videoIndex.get(0).getIndex_count(),video_end);
-                iVideo.updateVideoIndex(user_guid,select_param,video_end);
-            }
-        }
-
-        improveVideoList(video_list);
         ListResp ret = new ListResp();
-        ret.setCount(video_list.size());
-        ret.setList(video_list);
+        if(video_ids.size() > 0) {
+            List<VideoShow> videos = iVideo.getVideobyIds(video_ids);
+            improveVideoList(videos);
+            ret.setCount(videos.size());
+            ret.setList(videos);
+        } else {
+            ret.setCount(0);
+            ret.setList(video_ids);
+        }
         return JSONResult.ok(ret);
     }
 
-    List<VideoShow> getRecVideos(List<VideoShow> all_list,String user_guid) {
-        if(all_list.size() < 1) {
+    List<VideoShow> getRecVideos(List<VideoShow> all_list, String user_guid) {
+        if (all_list.size() < 1) {
             return new ArrayList<>();
         }
 
@@ -216,27 +241,26 @@ public class VideoController extends BaseController {
 
         String videoTemp;
         ArrayList<String> arrVidoe = new ArrayList<>();
-        if(videoList.size() > 0  && !videoList.get(0).equals("")) {
+        if (videoList.size() > 0 && !videoList.get(0).equals("")) {
             videoTemp = videoList.get(0);
-            arrVidoe =  new ArrayList<String>(Arrays.asList(videoList.get(0).split(",")));
+            arrVidoe = new ArrayList<String>(Arrays.asList(videoList.get(0).split(",")));
         } else {
             videoTemp = "";
         }
         List<VideoShow> retList = new ArrayList<>();
         for (VideoShow item : all_list) {
-            if(!arrVidoe.contains(String.valueOf(item.getId()))) {
+            if (!arrVidoe.contains(String.valueOf(item.getId()))) {
                 retList.add(item);
                 videoTemp += "," + item.getId();
-                if(retList.size() >= 20) {
+                if (retList.size() >= 20) {
                     break;
                 }
             }
         }
-
-        if(iVideo.getPushVideoCountByUserGuid(user_guid) == 0) {
-            iVideo.insertPushVideo(user_guid,videoTemp);
+        if (iVideo.getPushVideoCountByUserGuid(user_guid) == 0) {
+            iVideo.insertPushVideo(user_guid, videoTemp);
         } else {
-            iVideo.updatePushVidoe(user_guid,videoTemp);
+            iVideo.updatePushVidoe(user_guid, videoTemp);
         }
 
         return retList;
@@ -259,31 +283,31 @@ public class VideoController extends BaseController {
             String user_id,
             String pools,
             String user_name) throws JsonProcessingException {
-        status = (status == null || status.equals("")) ? null:status;
-        String title = (content == null || content.equals("")) ? null:ToolsFunction.getURLEncoderString(content);
-        int iPage = page == null ? 1:Integer.parseInt(page);
-        int iSize = size == null ? 20:Integer.parseInt(size);
-        int sType = s_type == null ? 0:Integer.parseInt(s_type);
+        status = (status == null || status.equals("")) ? null : status;
+        String title = (content == null || content.equals("")) ? null : ToolsFunction.getURLEncoderString(content);
+        int iPage = page == null ? 1 : Integer.parseInt(page);
+        int iSize = size == null ? 20 : Integer.parseInt(size);
+        int sType = s_type == null ? 0 : Integer.parseInt(s_type);
         List<String> subject_list = null;
         List<String> grade_class_list = null;
-        if(subject != null && !subject.equals("")) {
+        if (subject != null && !subject.equals("")) {
             subject_list = Arrays.asList(subject.split(","));
         }
-        if(grade_class != null && !grade_class.equals("")) {
+        if (grade_class != null && !grade_class.equals("")) {
             grade_class_list = Arrays.asList(grade_class.split(","));
         }
         ListResp ret = new ListResp();
 
         List<Integer> user_ids = null;
-        if(user_name != null) {
+        if (user_name != null) {
             user_ids = iUser.getUserIdsByName2(user_name);
-            if(user_ids.size() < 1) {
+            if (user_ids.size() < 1) {
                 ret.setCount(0);
                 ret.setList(new ArrayList<>());
                 return JSONResult.ok(ret);
             }
         }
-        int begin = (iPage -1)*iSize;
+        int begin = (iPage - 1) * iSize;
         int end = iSize;
 
         VideoFind videoFind = new VideoFind();
@@ -305,7 +329,7 @@ public class VideoController extends BaseController {
             ret.setList(new ArrayList<>());
             return JSONResult.ok(ret);
         }
-        List<VideoShow> list_temp  = iVideo.findVideo(videoFind);
+        List<VideoShow> list_temp = iVideo.findVideo(videoFind);
         improveVideoList(list_temp);
         ret.setCount(count_temp);
         ret.setList(list_temp);
@@ -316,37 +340,37 @@ public class VideoController extends BaseController {
     @RequestMapping(value = "/add_play")
     @ResponseBody
     public JSONResult addPlay(String video_id) {
-        if(video_id == null) {
+        if (video_id == null) {
             return JSONResult.errorMsg("缺少参数 video_id");
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User)request.getAttribute("user_info");
+        User currentUser = (User) request.getAttribute("user_info");
 
         iVideoPlay.addMainPlay(Integer.parseInt(video_id));
-        iVideoPlay.addPlay(currentUser.getId(),Integer.parseInt(video_id),(int)(new Date().getTime() /1000),(int)(new Date().getTime() /1000));
+        iVideoPlay.addPlay(currentUser.getId(), Integer.parseInt(video_id), (int) (new Date().getTime() / 1000), (int) (new Date().getTime() / 1000));
         return JSONResult.ok();
     }
 
     @RequestMapping(value = "/add_praise")
     @ResponseBody
-    public JSONResult addPraise(String video_id,String type) throws IOException {
-        if(video_id == null || type == null) {
+    public JSONResult addPraise(String video_id, String type) throws IOException {
+        if (video_id == null || type == null) {
             return JSONResult.errorMsg("缺少参数");
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User)request.getAttribute("user_info");
-        int count = iVideoPraise.getVideoPraise(Integer.parseInt(video_id),currentUser.getId());
+        User currentUser = (User) request.getAttribute("user_info");
+        int count = iVideoPraise.getVideoPraise(Integer.parseInt(video_id), currentUser.getId());
 
-        if(type.equals("1")) {
-            if(count > 0) {
+        if (type.equals("1")) {
+            if (count > 0) {
                 return JSONResult.errorMsg("此用户已经赞过该视频");
             }
             Video video = iVideo.getVideo(Integer.parseInt(video_id));
-            TlsSigTest.PushMessage(String.valueOf(video.getUser_id()),"1");
+            TlsSigTest.PushMessage(String.valueOf(video.getUser_id()), "1");
             iVideoPraise.addMainPraise(Integer.parseInt(video_id));
-            iVideoPraise.addPraise(currentUser.getId(),Integer.parseInt(video_id),(int)(new Date().getTime() /1000),(int)(new Date().getTime() /1000));
+            iVideoPraise.addPraise(currentUser.getId(), Integer.parseInt(video_id), (int) (new Date().getTime() / 1000), (int) (new Date().getTime() / 1000));
 
             UserAction userAction = new UserAction();
             userAction.setFrom_user_id(currentUser.getId());
@@ -354,14 +378,14 @@ public class VideoController extends BaseController {
             userAction.setType(102);
             userAction.setContent_id(Integer.parseInt(video_id));
             userAction.setFlag(2);
-            userAction.setCreate_time((int) (new Date().getTime() /1000));
+            userAction.setCreate_time((int) (new Date().getTime() / 1000));
 
             iUser.addUserAction(userAction);
 
-        } else if(type.equals("2")){
-            if(count > 0) {
+        } else if (type.equals("2")) {
+            if (count > 0) {
                 iVideoPraise.reduceMainPraise(Integer.parseInt(video_id));
-                iVideoPraise.reducePraise(currentUser.getId(),Integer.parseInt(video_id));
+                iVideoPraise.reducePraise(currentUser.getId(), Integer.parseInt(video_id));
             }
         }
         return JSONResult.ok();
@@ -370,33 +394,34 @@ public class VideoController extends BaseController {
 
     @RequestMapping(value = "/chat_video")
     @ResponseBody
-    public JSONResult chatVideo(String video_id,String content) throws IOException {
+    public JSONResult chatVideo(String video_id, String content) throws IOException {
 
-        if(video_id == null || content == null) {
+        if (video_id == null || content == null) {
             return JSONResult.errorMsg("缺少参数");
         }
 
         System.out.println(iVideoChat);
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User)request.getAttribute("user_info");
+        User currentUser = (User) request.getAttribute("user_info");
         Video video = iVideo.getVideo(Integer.parseInt(video_id));
-        TlsSigTest.PushMessage(String.valueOf(video.getUser_id()),"3");
+        TlsSigTest.PushMessage(String.valueOf(video.getUser_id()), "3");
 
         iVideoChat.chatMainVideo(Integer.parseInt(video_id));
         iVideoChat.chatVideo(currentUser.getId()
-                ,Integer.parseInt(video_id)
-                ,content
-                ,(int)(new Date().getTime()/1000) );
+                , Integer.parseInt(video_id)
+                , content
+                , (int) (new Date().getTime() / 1000));
         return JSONResult.ok();
     }
 
 
     /**
-     *获取用户上传视频列表
+     * 获取用户上传视频列表
      */
     @RequestMapping(value = "/get_list")
-    public @ResponseBody RepList  getVideoList(HttpServletRequest request) {
+    public @ResponseBody
+    RepList getVideoList(HttpServletRequest request) {
         String userId = request.getParameter("user_id");
         RepList rep = new RepList();
         if (userId == null) {
@@ -413,15 +438,14 @@ public class VideoController extends BaseController {
     }
 
 
-
     @RequestMapping(value = "/video_by_id")
     @ResponseBody
     public JSONResult getVideoById(String video_id) throws JsonProcessingException {
-        if(video_id == null) {
+        if (video_id == null) {
             return JSONResult.errorMsg("缺少video_id");
         }
         VideoShow videoShow = iVideo.getVideoById(video_id);
-        if(videoShow == null) {
+        if (videoShow == null) {
             return JSONResult.errorMsg("视频不存在");
         }
         List<VideoShow> list = new ArrayList<>();
@@ -437,18 +461,18 @@ public class VideoController extends BaseController {
     @RequestMapping(value = "/collection")
     @ResponseBody
     public JSONResult collectionVideo(String video_id) {
-        if ( video_id == null ) {
+        if (video_id == null) {
             return JSONResult.errorMsg("缺少参数video_id ");
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User)request.getAttribute("user_info");
-        int count = iVideoCollection.getVideoCollection(Integer.parseInt(video_id),currentUser.getId());
-        if(count > 0) {
+        User currentUser = (User) request.getAttribute("user_info");
+        int count = iVideoCollection.getVideoCollection(Integer.parseInt(video_id), currentUser.getId());
+        if (count > 0) {
             return JSONResult.errorMsg("此视频已经收藏过了 ");
         }
-        if ( count == 0) {
-            iVideoCollection.addCollection(currentUser.getId(),Integer.parseInt(video_id),(int) (new Date().getTime() / 1000),0);
+        if (count == 0) {
+            iVideoCollection.addCollection(currentUser.getId(), Integer.parseInt(video_id), (int) (new Date().getTime() / 1000), 0);
             iVideoCollection.addMainCollection(Integer.parseInt(video_id));
         }
 
@@ -462,14 +486,14 @@ public class VideoController extends BaseController {
     @ResponseBody
     public JSONResult deleteCollection(String video_id) {
 
-        if ( video_id == null ) {
+        if (video_id == null) {
             return JSONResult.errorMsg("缺少参数 video_id");
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User)request.getAttribute("user_info");
-        int count = iVideoCollection.getVideoCollection(Integer.parseInt(video_id),currentUser.getId());
-        if(count > 0) {
-            iVideoCollection.deleteCollection(currentUser.getId(),Integer.parseInt(video_id));
+        User currentUser = (User) request.getAttribute("user_info");
+        int count = iVideoCollection.getVideoCollection(Integer.parseInt(video_id), currentUser.getId());
+        if (count > 0) {
+            iVideoCollection.deleteCollection(currentUser.getId(), Integer.parseInt(video_id));
             iVideoCollection.deleteMainCollection(Integer.parseInt(video_id));
         }
 
@@ -477,18 +501,19 @@ public class VideoController extends BaseController {
     }
 
     @RequestMapping(value = "/set_status")
-    public @ResponseBody ServiceResponse setVideoStatus(HttpServletRequest request) {
+    public @ResponseBody
+    ServiceResponse setVideoStatus(HttpServletRequest request) {
         System.out.println("setVideoStatus");
         String id = request.getParameter("id");
         String status = request.getParameter("status");
         ServiceResponse rsp = new ServiceResponse();
-        if(id == null || status == null) {
+        if (id == null || status == null) {
             rsp.msg = "缺少参数";
             rsp.code = 204;
             return rsp;
         }
 
-        if(status.equals("1")) {
+        if (status.equals("1")) {
             String savePath = request.getServletContext().getRealPath("");
             System.out.println(savePath);
             File file = new File(savePath);
@@ -505,10 +530,10 @@ public class VideoController extends BaseController {
                         + video.getVideo_temp_path() + " " + savePath + videoName);
 
                 String videoShowPath = "http://" + request.getServerName()
-                        + ":"+ request.getServerPort()
+                        + ":" + request.getServerPort()
                         + "/video_show/"
                         + videoName;
-                iVideo.setVideoShowPath(Integer.parseInt(id),videoShowPath);
+                iVideo.setVideoShowPath(Integer.parseInt(id), videoShowPath);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 rsp.msg = "视频转存失败";
@@ -517,7 +542,7 @@ public class VideoController extends BaseController {
             }
         }
 
-        videoService.setVideoStatus(Integer.parseInt(id),Integer.parseInt(status));
+        videoService.setVideoStatus(Integer.parseInt(id), Integer.parseInt(status));
         rsp.msg = "OK";
         rsp.code = 200;
         return rsp;
@@ -528,13 +553,13 @@ public class VideoController extends BaseController {
     public ServiceResponse delete(HttpServletRequest request) {
         String id = request.getParameter("id");
         ServiceResponse rsp = new ServiceResponse();
-        if(id == null) {
+        if (id == null) {
             rsp.msg = "缺少视频id参数";
             rsp.code = 203;
             return rsp;
         }
-        User user = (User)request.getAttribute("user_info");
-        videoService.deleteVideo(Integer.parseInt(id),user.getId());
+        User user = (User) request.getAttribute("user_info");
+        videoService.deleteVideo(Integer.parseInt(id), user.getId());
         rsp.msg = "OK";
         rsp.code = 200;
         return rsp;
@@ -565,9 +590,9 @@ public class VideoController extends BaseController {
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User)request.getAttribute("user_info");
+        User currentUser = (User) request.getAttribute("user_info");
         int time = (int) (new Date().getTime() / 1000);
-        iVideo.shareVideo(currentUser.getId(),Integer.parseInt(video_id),time);
+        iVideo.shareVideo(currentUser.getId(), Integer.parseInt(video_id), time);
         iVideo.addShareCount(Integer.parseInt(video_id));
         return JSONResult.ok();
     }
@@ -577,23 +602,23 @@ public class VideoController extends BaseController {
      */
     @RequestMapping(value = "/collection_video")
     @ResponseBody
-    public JSONResult getMyCollectionVideo(String user_id,String page,String size) throws JsonProcessingException {
-        if(user_id == null) {
+    public JSONResult getMyCollectionVideo(String user_id, String page, String size) throws JsonProcessingException {
+        if (user_id == null) {
             return JSONResult.errorMsg("缺少user_id");
         }
-        int iPage = page == null ? 1:Integer.parseInt(page);
-        int iSize = size == null ? 20:Integer.parseInt(size);
-        int begin = (iPage -1)*iSize;
+        int iPage = page == null ? 1 : Integer.parseInt(page);
+        int iSize = size == null ? 20 : Integer.parseInt(size);
+        int begin = (iPage - 1) * iSize;
         int end = iSize;
         List<Integer> vidoe_ids = iVideo.getMyCollectionIds(Integer.parseInt(user_id));
         ListResp ret = new ListResp();
-        if(vidoe_ids.size() == 0) {
+        if (vidoe_ids.size() == 0) {
             ret.setCount(0);
             ret.setList(new ArrayList<>());
             return JSONResult.ok(ret);
         }
-        List<VideoShow> list = iVideo.myCollection(vidoe_ids,begin,end);
-        if(list.size() == 0) {
+        List<VideoShow> list = iVideo.myCollection(vidoe_ids, begin, end);
+        if (list.size() == 0) {
             ret.setCount(0);
             ret.setList(new ArrayList<>());
             return JSONResult.ok(ret);
@@ -612,36 +637,36 @@ public class VideoController extends BaseController {
      */
     @RequestMapping(value = "/publish_video")
     @ResponseBody
-    public JSONResult getPublishVideo(String user_id,String page,String size) throws JsonProcessingException {
+    public JSONResult getPublishVideo(String user_id, String page, String size) throws JsonProcessingException {
 
-        if(user_id == null ) {
+        if (user_id == null) {
             return JSONResult.errorMsg("缺少user_id 获 state");
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         int currentUserID = getCurrentUserId();
         boolean flag = currentUserID == Integer.parseInt(user_id);
-        int iPage = page == null ? 1:Integer.parseInt(page);
-        int iSize = size == null ? 20:Integer.parseInt(size);
-        int begin = (iPage -1)*iSize;
+        int iPage = page == null ? 1 : Integer.parseInt(page);
+        int iSize = size == null ? 20 : Integer.parseInt(size);
+        int begin = (iPage - 1) * iSize;
         int end = iSize;
         ListResp ret = new ListResp();
         int count = 0;
-        if(flag) {
+        if (flag) {
             count = iVideo.getPublishVidoeCountByUserId_2(Integer.parseInt(user_id));
         } else {
             count = iVideo.getPublishVidoeCountByUserId(Integer.parseInt(user_id));
         }
-        if(count == 0) {
+        if (count == 0) {
             ret.setCount(0);
             ret.setList(new ArrayList<>());
             return JSONResult.ok(ret);
         }
         List<VideoShow> list = null;
-        if(flag) {
-            list = iVideo.getPublishVidoeByUserId_2(Integer.parseInt(user_id),begin,end);
+        if (flag) {
+            list = iVideo.getPublishVidoeByUserId_2(Integer.parseInt(user_id), begin, end);
         } else {
-            list = iVideo.getPublishVidoeByUserId(Integer.parseInt(user_id),begin,end);
+            list = iVideo.getPublishVidoeByUserId(Integer.parseInt(user_id), begin, end);
         }
 
         improveVideoList(list);
@@ -661,7 +686,7 @@ public class VideoController extends BaseController {
         StorageSts storageSts = new StorageSts();
         JSONObject credential = storageSts.getCredential(config);
         int code = credential.getInt("code");
-        if ( code != 0 ) {
+        if (code != 0) {
             return JSONResult.errorMsg(credential.getString("codeDesc"));
         }
 
@@ -716,28 +741,28 @@ public class VideoController extends BaseController {
 
     @RequestMapping(value = "/video_play_finish")
     @ResponseBody
-    JSONResult videoPlayFinish(String user_guid,String video_id) {
-        if(user_guid == null || video_id == null) {
+    JSONResult videoPlayFinish(String user_guid, String video_id) {
+        if (user_guid == null || video_id == null) {
             return JSONResult.errorMsg("缺少 user_guid 或 video_id");
         }
         List<UserPlayFinish> list = iVideo.getUserPlayInfo(user_guid);
-        if(list.size() > 0) {
+        if (list.size() > 0) {
             UserPlayFinish userPlayFinish = list.get(0);
             String videos = userPlayFinish.getFinish_videos();
             ArrayList<String> arrVidoe = new ArrayList<>();
-            if(!videos.equals("")) {
-                arrVidoe =  new ArrayList<String>(Arrays.asList(videos.split(",")));
-                if(!arrVidoe.contains(video_id)) {
+            if (!videos.equals("")) {
+                arrVidoe = new ArrayList<String>(Arrays.asList(videos.split(",")));
+                if (!arrVidoe.contains(video_id)) {
                     arrVidoe.add(video_id);
                 }
             } else {
                 arrVidoe.add(video_id);
             }
             String strVideos = StringUtils.join(arrVidoe, ",");
-            iVideo.upPlayFinish(userPlayFinish.getId(),strVideos);
+            iVideo.upPlayFinish(userPlayFinish.getId(), strVideos);
 
         } else {
-            iVideo.createPlayFinish(user_guid,video_id, (int) (new Date().getTime()/1000));
+            iVideo.createPlayFinish(user_guid, video_id, (int) (new Date().getTime() / 1000));
         }
         return JSONResult.ok();
     }
@@ -746,21 +771,21 @@ public class VideoController extends BaseController {
 
         int user_id = getCurrentUserId();
         List<Integer> idList = new ArrayList<>();
-        for(VideoShow item:list_temp) {
+        for (VideoShow item : list_temp) {
             item.setVideo_state(SignMap.getVideoState(item.getExamine_status()));
             item.setWatch_type_name(SignMap.getGradeTypeByID(item.getWatch_type()));
             item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
-            String video_temp = item.getVideo_show_path().replace("cos.ap-beijing","file");
+            String video_temp = item.getVideo_show_path().replace("cos.ap-beijing", "file");
 //            String pic_temp = item.getPic_up_path().replace("cos.ap-beijing","file");
-            String pic_temp = item.getPic_up_path().replace("cos.ap-beijing","image");
+            String pic_temp = item.getPic_up_path().replace("cos.ap-beijing", "image");
             item.setVideo_show_path(video_temp);
             item.setPic_up_path(pic_temp);
 
 
-            String[] temps = ((String)item.getPools()).split(",");
+            String[] temps = ((String) item.getPools()).split(",");
             List<ItemInfo> poolList = new ArrayList<>();
             for (String cell : temps) {
-                if(cell.equals("")) {
+                if (cell.equals("")) {
                     continue;
                 }
                 ItemInfo itemInfo = new ItemInfo();
@@ -769,37 +794,37 @@ public class VideoController extends BaseController {
                 poolList.add(itemInfo);
 
             }
-            if(poolList.size() > 0) {
+            if (poolList.size() > 0) {
                 item.setPools(poolList);
             }
-            if(item.getExamine_status() == 3) {
+            if (item.getExamine_status() == 3) {
                 item.setExamine_status(0);
             }
             idList.add(item.getUser_id());
         }
 
-        if(user_id != 0) {
+        if (user_id != 0) {
             List<Integer> videoIds = iVideo.getCollectionVideoById(user_id);
-            if(videoIds != null) {
-                for(VideoShow item:list_temp) {
-                    if(videoIds.contains(item.getId())) {
+            if (videoIds != null) {
+                for (VideoShow item : list_temp) {
+                    if (videoIds.contains(item.getId())) {
                         item.setCollection(true);
                     }
                 }
             }
             videoIds = iVideo.getPraiseVideoById(user_id);
-            if(videoIds != null) {
-                for(VideoShow item:list_temp) {
-                    if(videoIds.contains(item.getId())) {
+            if (videoIds != null) {
+                for (VideoShow item : list_temp) {
+                    if (videoIds.contains(item.getId())) {
                         item.setPraise(true);
                     }
                 }
             }
 
             List<Integer> userIds = iUser.getFollowUsers(user_id);
-            if(userIds != null) {
-                for(VideoShow item:list_temp) {
-                    if(userIds.contains(item.getUser_id())) {
+            if (userIds != null) {
+                for (VideoShow item : list_temp) {
+                    if (userIds.contains(item.getUser_id())) {
                         item.setFollow(true);
                     }
                 }
@@ -808,12 +833,12 @@ public class VideoController extends BaseController {
 
         if (idList != null && idList.size() > 0) {
             List<User> userList = iVideo.getUserHeadByIds(idList);
-            Map<Integer,User> userMap = new HashMap<>();
+            Map<Integer, User> userMap = new HashMap<>();
             for (User user : userList) {
-                userMap.put(user.getId(),user);
+                userMap.put(user.getId(), user);
             }
-            for(VideoShow item:list_temp) {
-                if(userMap.containsKey(item.getUser_id())) {
+            for (VideoShow item : list_temp) {
+                if (userMap.containsKey(item.getUser_id())) {
                     item.setUser_head(userMap.get(item.getUser_id()).getHead());
                     item.setUser_name(userMap.get(item.getUser_id()).getName());
                     item.setUser_type(userMap.get(item.getUser_id()).getType());
@@ -828,11 +853,11 @@ public class VideoController extends BaseController {
     }
 
     float getRecUser() {
-        int time = (int) (new Date().getTime() / 1000) - 3600*24*5;
+        int time = (int) (new Date().getTime() / 1000) - 3600 * 24 * 5;
         int activeCount = iUser.getActiveUserByTime(time);
         int upVideoCount = iVideo.getVideoCountByTime(time);
-        if(upVideoCount != 0) {
-            return (float) (upVideoCount*1.0 / upVideoCount);
+        if (upVideoCount != 0) {
+            return (float) (upVideoCount * 1.0 / upVideoCount);
         }
         return 0;
     }
@@ -842,9 +867,9 @@ public class VideoController extends BaseController {
      */
     @RequestMapping("/comment")
     @ResponseBody
-    JSONResult Comment(String video_id,String first_user_id,
-                       String first_comment,String second_user_id,String second_comment) throws IOException {
-        if(video_id == null || first_user_id == null || first_comment == null) {
+    JSONResult Comment(String video_id, String first_user_id,
+                       String first_comment, String second_user_id, String second_comment) throws IOException {
+        if (video_id == null || first_user_id == null || first_comment == null) {
             return JSONResult.errorMsg("缺少参数");
         }
 
@@ -852,12 +877,12 @@ public class VideoController extends BaseController {
         second_user_id = second_user_id == null ? "0" : second_user_id;
         second_comment = second_comment == null ? "" : second_comment;
         int to_user_id = 0;
-        if(second_user_id.equals("0")) {
+        if (second_user_id.equals("0")) {
             to_user_id = video.getUser_id();
-            TlsSigTest.PushMessage(String.valueOf(to_user_id),"3");
+            TlsSigTest.PushMessage(String.valueOf(to_user_id), "3");
         } else {
             to_user_id = Integer.parseInt(second_user_id);
-            TlsSigTest.PushMessage(String.valueOf(to_user_id),"5");
+            TlsSigTest.PushMessage(String.valueOf(to_user_id), "5");
         }
 
 
@@ -871,12 +896,12 @@ public class VideoController extends BaseController {
         videoComment.setFirst_comment(first_comment);
         videoComment.setSecond_user_id(Integer.parseInt(second_user_id));
         videoComment.setSecond_comment(second_comment);
-        videoComment.setCreate_time((int)(new Date().getTime() / 1000));
+        videoComment.setCreate_time((int) (new Date().getTime() / 1000));
 
 
         UserAction userAction = new UserAction();
         userAction.setFrom_user_id(Integer.parseInt(first_user_id));
-        if(Integer.parseInt(second_user_id) == 0) {
+        if (Integer.parseInt(second_user_id) == 0) {
             userAction.setTo_user_id(video.getUser_id());
             userAction.setType(101);
         } else {
@@ -885,7 +910,7 @@ public class VideoController extends BaseController {
         }
 
         userAction.setContent_id(Integer.parseInt(video_id));
-        userAction.setCreate_time((int) (new Date().getTime() /1000));
+        userAction.setCreate_time((int) (new Date().getTime() / 1000));
         userAction.setContent_url(video.getPic_up_path());
         userAction.setFirst_comment(first_comment);
         userAction.setSecond_comment(second_comment);
@@ -900,33 +925,33 @@ public class VideoController extends BaseController {
     }
 
     /**
-     *获得评论列表
+     * 获得评论列表
      */
     @RequestMapping("/comment_list")
     @ResponseBody
-    JSONResult getCommentList(String video_id,String page,String size) {
+    JSONResult getCommentList(String video_id, String page, String size) {
 
         if (video_id == null) {
             return JSONResult.errorMsg("缺少 video_id");
         }
 
-        int iPage = (page == null || page.equals("")) ?1:Integer.parseInt(page);
-        int iSize = (size == null || size.equals("")) ? 20:Integer.parseInt(size);
-        int begin = (iPage - 1)*iSize;
+        int iPage = (page == null || page.equals("")) ? 1 : Integer.parseInt(page);
+        int iSize = (size == null || size.equals("")) ? 20 : Integer.parseInt(size);
+        int begin = (iPage - 1) * iSize;
         int end = iSize;
 
         int count = iVideo.CommentCount(Integer.parseInt(video_id));
 
-        List<VideoComment> list = iVideo.getCommentList(Integer.parseInt(video_id),begin,end);
+        List<VideoComment> list = iVideo.getCommentList(Integer.parseInt(video_id), begin, end);
         if (list.size() > 0) {
             List<Integer> user_ids = new ArrayList<>();
             for (VideoComment videoComment : list) {
                 videoComment.setFirst_comment(URLDecoderString(videoComment.getFirst_comment()));
                 videoComment.setSecond_comment(URLDecoderString(videoComment.getSecond_comment()));
-                if(!user_ids.contains(videoComment.getFirst_user_id())){
+                if (!user_ids.contains(videoComment.getFirst_user_id())) {
                     user_ids.add(videoComment.getFirst_user_id());
                 }
-                if(!user_ids.contains(videoComment.getSecond_user_id())){
+                if (!user_ids.contains(videoComment.getSecond_user_id())) {
                     user_ids.add(videoComment.getSecond_user_id());
                 }
             }
@@ -937,16 +962,16 @@ public class VideoController extends BaseController {
             if (currentUserID != 0) {
                 comment_ids = iVideo.getPraiseComment(currentUserID);
             }
-            Map<Integer,UserInfo> usersMap = new HashMap<>();
-            for (UserInfo userInfo :user_list) {
-                usersMap.put(userInfo.getId(),userInfo);
+            Map<Integer, UserInfo> usersMap = new HashMap<>();
+            for (UserInfo userInfo : user_list) {
+                usersMap.put(userInfo.getId(), userInfo);
             }
 
             for (VideoComment videoComment : list) {
-                if( comment_ids.contains(videoComment.getId())) {
+                if (comment_ids.contains(videoComment.getId())) {
                     videoComment.setPraise(true);
                 }
-                if(usersMap.get(videoComment.getFirst_user_id()) != null) {
+                if (usersMap.get(videoComment.getFirst_user_id()) != null) {
                     videoComment.setFirst_user_head(usersMap.get(videoComment.getFirst_user_id()).getHead());
                     videoComment.setFirst_user_name(usersMap.get(videoComment.getFirst_user_id()).getName());
                 } else {
@@ -954,7 +979,7 @@ public class VideoController extends BaseController {
                     videoComment.setFirst_user_name("");
                 }
 
-                if(usersMap.get(videoComment.getSecond_user_id()) != null) {
+                if (usersMap.get(videoComment.getSecond_user_id()) != null) {
                     videoComment.setSecond_user_head(usersMap.get(videoComment.getSecond_user_id()).getHead());
                     videoComment.setSecond_user_name(usersMap.get(videoComment.getSecond_user_id()).getName());
                 } else {
@@ -982,11 +1007,11 @@ public class VideoController extends BaseController {
             return JSONResult.errorMsg("缺少 comment_id 参数");
         }
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        User currentUser = (User)request.getAttribute("user_info");
+        User currentUser = (User) request.getAttribute("user_info");
 
-        if(null == iVideo.findVideoCommentPraise(currentUser.getId(),Integer.parseInt(comment_id))) {
+        if (null == iVideo.findVideoCommentPraise(currentUser.getId(), Integer.parseInt(comment_id))) {
             String first_user_id = iVideo.getUserIdByCommentId(Integer.valueOf(comment_id));
-            TlsSigTest.PushMessage(first_user_id,"7");
+            TlsSigTest.PushMessage(first_user_id, "7");
 
             UserAction userAction = new UserAction();
             userAction.setFrom_user_id(Integer.parseInt(first_user_id));
@@ -995,10 +1020,10 @@ public class VideoController extends BaseController {
             userAction.setFlag(2);
             userAction.setContent_id(Integer.parseInt(comment_id));
             userAction.setContent_url("");
-            userAction.setCreate_time((int) (new Date().getTime() /1000));
+            userAction.setCreate_time((int) (new Date().getTime() / 1000));
             iUser.addUserAction(userAction);
 
-            iVideo.praiseVideoComment(currentUser.getId(),Integer.parseInt(comment_id), (int) (new Date().getTime() /1000));
+            iVideo.praiseVideoComment(currentUser.getId(), Integer.parseInt(comment_id), (int) (new Date().getTime() / 1000));
             iVideo.praiseMainVideoComment(Integer.parseInt(comment_id));
         } else {
             return JSONResult.errorMsg("已经点过赞了");
@@ -1008,23 +1033,26 @@ public class VideoController extends BaseController {
 
     @RequestMapping("/up_pool")
     @ResponseBody
-    void upPool() {
+    JSONResult upPool() {
         List<VideoShow> lists = iVideo.getVideoPoolsNotNull();
-        for(VideoShow item : lists) {
-            String pools = (String)item.getPools();
-            String[] strarray=pools.split(",");
-            for(String str : strarray) {
-                if(str != null && !str.equals("")) {
+        for (VideoShow item : lists) {
+            String pools = (String) item.getPools();
+            String[] strarray = pools.split(",");
+            for (String str : strarray) {
+                if (str != null && !str.equals("")) {
                     VideoPool videoPool = new VideoPool();
                     videoPool.setVideo_id(item.getId());
                     videoPool.setVideo_pool(Integer.parseInt(str));
                     videoPool.setUser_id(item.getUser_id());
+                    videoPool.setSubject(item.getSubject());
                     videoPool.setCreate_time((int) (new Date().getTime() / 1000));
                     iVideo.insertVideoPool(videoPool);
                 }
             }
         }
+        return JSONResult.ok();
     }
+
 }
 
 class RepList {

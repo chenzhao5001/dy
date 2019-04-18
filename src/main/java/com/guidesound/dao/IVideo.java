@@ -260,7 +260,55 @@ public interface IVideo {
     @Select("select * from video where pools != \"\" "  )
     List<VideoShow> getVideoPoolsNotNull();
 
-    @Insert("insert into video_pools (video_id,user_id,video_pool,create_time) " +
-            "value (#{video_id},#{user_id},#{video_pool},#{create_time})")
+    @Insert("insert into video_pools (video_id,user_id,subject,video_pool,create_time) " +
+            "value (#{video_id},#{user_id},#{subject},#{video_pool},#{create_time})")
     void insertVideoPool(VideoPool videoPool);
+
+
+    @Select("<script>"
+            + "SELECT distinct video_id FROM video_pools WHERE video_pool IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " limit #{arg1},#{arg2}"
+            + "</script>")
+    List<Integer> videoIdsByPoolsIdsInVideoPools(@Param("iList") List<Integer> iList,int begin,int end);
+    @Select("select distinct video_id from video_pools limit #{arg0},#{arg1}")
+    List<Integer> videoAllIdsInVideoPools(int begin,int end);
+
+
+    @Select("<script>"
+            + "SELECT distinct video_id FROM video_pools WHERE subject IN "
+            + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and video_pool in"
+            + "<foreach item='item' index='index' collection='iPoolList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " limit #{arg2},#{arg3}"
+            + "</script>")
+    List<Integer> videoIdsByPoolsIdsInVideoPoolsBySubject(@Param("iSubjectList") List<Integer> iSubjectList,@Param("iPoolList") List<Integer> iPoolList,int begin,int end);
+
+    @Select("<script>"
+            + "SELECT distinct video_id FROM video_pools WHERE subject IN "
+            + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " limit #{arg1},#{arg2}"
+            + "</script>")
+    List<Integer> videoAllIdsInVideoPoolsBySubject(@Param("iSubjectList") List<Integer> iSubjectList,int begin,int end);
+
+
+    @Select("<script>"
+            + "SELECT * FROM video WHERE id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    List<VideoShow> getVideobyIds(@Param("iList") List<Integer> iList);
+
+
+
+
 }
