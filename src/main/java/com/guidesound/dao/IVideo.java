@@ -300,6 +300,7 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iPoolList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and examine_status = 1"
             + " limit #{arg2},#{arg3}"
             + "</script>")
     List<Integer> videoIdsByPoolsIdsInVideoPoolsBySubject(@Param("iSubjectList") List<Integer> iSubjectList,@Param("iPoolList") List<Integer> iPoolList,int begin,int end);
@@ -313,6 +314,7 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iPoolList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and examine_status = 1"
             + " and create_time > #{arg4}"
             + " limit #{arg2},#{arg3}"
             + "</script>")
@@ -324,6 +326,7 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and examine_status = 1"
             + " limit #{arg1},#{arg2}"
             + "</script>")
     List<Integer> videoAllIdsInVideoPoolsBySubject(@Param("iSubjectList") List<Integer> iSubjectList,int begin,int end);
@@ -333,6 +336,7 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and examine_status = 1"
             + " and create_time > #{arg3}"
             + " limit #{arg1},#{arg2}"
             + "</script>")

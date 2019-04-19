@@ -250,16 +250,22 @@ public class VideoController extends BaseController {
         if (channel.equals("1")) { //推荐
             if (grade == 0) {
                 video_ids = getAllPoolVideo(user_guid, "all" + todayStartTime, true, new ArrayList<>());
-                if (video_ids.size() == 0) {
-                    video_ids = getAllPoolVideo(user_guid, "all", false, new ArrayList<>());
+                if (video_ids.size() < 6) {
+                    List<Integer> video_ids_temp = getAllPoolVideo(user_guid, "all", false, new ArrayList<>());
+                    for(int id : video_ids_temp) {
+                        video_ids.add(id);
+                    }
                 }
             } else {
                 for (int id : videos_pool_ids) {
                     param += (id + ",");
                 }
                 video_ids = getAllPoolVideo(user_guid, param + todayStartTime, true, videos_pool_ids);
-                if (video_ids.size() == 0) {
-                    video_ids = getAllPoolVideo(user_guid, param, false, videos_pool_ids);
+                if (video_ids.size() < 6 ) {
+                    List<Integer> video_ids_temp = getAllPoolVideo(user_guid, param, false, videos_pool_ids);
+                    for(int id : video_ids_temp) {
+                        video_ids.add(id);
+                    }
                 }
             }
         } else { //频道
@@ -282,8 +288,11 @@ public class VideoController extends BaseController {
             }
 
             video_ids = getAllSubjectPoolVideo(user_guid, param + todayStartTime, true, videos_pool_ids, subjectList);
-            if (video_ids.size() == 0) {
-                video_ids = getAllSubjectPoolVideo(user_guid, param, false, videos_pool_ids, subjectList);
+            if (video_ids.size() < 6) {
+                List<Integer> video_ids_temp = getAllSubjectPoolVideo(user_guid, param, false, videos_pool_ids, subjectList);
+                for(int id : video_ids_temp) {
+                    video_ids.add(id);
+                }
             }
         }
 
