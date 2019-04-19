@@ -73,7 +73,7 @@ public interface IVideo {
     @Select("select * from video where id = #{arg0}")
     VideoShow getVideoById(String id);
 
-    int findVideoCount(VideoFind videoFind);
+    List<Integer> findVideoCount(VideoFind videoFind);
 
     @Select("select * from video where examine_pesron = #{arg0} and deleted = 0 and examine_status = 0")
     List<VideoInfo> getVideoByAdminId(int admin_id);

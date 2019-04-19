@@ -67,10 +67,13 @@
 
     <select id="findVideoCount"
             resultType="int">
-        SELECT  count(*)
+        SELECT   distinct video.id
         FROM video
         <if test="pools != null" >
-            inner join video_pools on video.id = video_pools.video_id
+            left join video_pools on video.id = video_pools.video_id
+        </if>
+        <if test="course_type != null" >
+            left join course on video.user_id = course.user_id
         </if>
         WHERE 1 =1
         <if test="title != null ">
@@ -105,6 +108,13 @@
             </foreach>
         </if>
 
+        <if test="course_type != null" >
+            and  course.type IN
+            <foreach collection="course_type" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
         <if test="grade_class_list != null ">
             and  watch_type IN
             <foreach collection="grade_class_list" item="id" index="index" open="(" close=")" separator=",">
@@ -118,8 +128,6 @@
                 #{id}
             </foreach>
         </if>
-
-
         and deleted = 0
     </select>
 
@@ -128,7 +136,10 @@
         SELECT *
         FROM video
         <if test="pools != null" >
-            inner join video_pools on video.id = video_pools.video_id
+            left join video_pools on video.id = video_pools.video_id
+        </if>
+        <if test="course_type != null" >
+            left join course on video.user_id = course.user_id
         </if>
         WHERE 1 =1
         <if test="title != null ">
@@ -162,6 +173,13 @@
             </foreach>
         </if>
 
+        <if test="course_type != null" >
+            and  course.type IN
+            <foreach collection="course_type" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
 
         <if test="grade_class_list != null ">
             and  watch_type IN
@@ -176,8 +194,8 @@
                 #{id}
             </foreach>
         </if>
-
         and deleted = 0
+        group by video.id
         <if test="sType != null and sType == 101">
             ORDER BY praise_count DESC
         </if>
@@ -203,6 +221,7 @@
             ORDER BY group DESC
         </if>
         limit #{begin},#{end}
+
 
 
     </select>

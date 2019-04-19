@@ -360,6 +360,7 @@ public class VideoController extends BaseController {
             String video_id,
             String user_id,
             String pools,
+            String course,
             String user_name) throws JsonProcessingException {
         status = (status == null || status.equals("")) ? null : status;
         String title = (content == null || content.equals("")) ? null : ToolsFunction.getURLEncoderString(content);
@@ -411,7 +412,17 @@ public class VideoController extends BaseController {
             }
             videoFind.setPools(poolList);
         }
-        int count_temp = iVideo.findVideoCount(videoFind);
+        List<Integer> course_type = new ArrayList<>();
+        if(course != null && !course.equals("")) {
+            String[] strarray = course.split(",");
+            for(String id: strarray) {
+                if(!id.equals("")) {
+                    course_type.add(Integer.parseInt(id) -1);
+                }
+            }
+            videoFind.setCourse_type(course_type);
+        }
+        int count_temp = iVideo.findVideoCount(videoFind).size();
         if (count_temp == 0) {
             ret.setCount(0);
             ret.setList(new ArrayList<>());

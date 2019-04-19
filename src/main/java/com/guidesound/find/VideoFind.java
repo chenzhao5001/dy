@@ -15,6 +15,15 @@ public class VideoFind {
     List<String> subject_list;
     List<String> grade_class_list;
     List<Integer> user_ids;
+    List<Integer> course_type;
+
+    public List<Integer> getCourse_type() {
+        return course_type;
+    }
+
+    public void setCourse_type(List<Integer> course_type) {
+        this.course_type = course_type;
+    }
 
     public List<String> getPools() {
         return pools;
