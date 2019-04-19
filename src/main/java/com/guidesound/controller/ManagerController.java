@@ -186,22 +186,26 @@ public class ManagerController extends BaseController {
                 connection.close();
                 iVideo.setExamineLoading(Integer.parseInt(video_id),type_list);
                 VideoShow video = iVideo.getVideoById(video_id);
-                iVideo.setPoolByVideoId(video_id,","+ video.getWatch_type());
                 UserInfo userInfo = iUser.getUser(video.getUser_id());
-                if(type_list.contains("1")) {
-                    VideoPool videoPool = new VideoPool();
-                    videoPool.setUser_id(video.getUser_id());
-                    videoPool.setSubject(video.getSubject());
-                    videoPool.setUser_id(video.getUser_id());
-                    videoPool.setVideo_pool(video.getWatch_type());
-                    videoPool.setVideo_id(video.getId());
-                    videoPool.setCreate_time((int) (new Date().getTime() / 1000));
-                    iVideo.insertVideoPool(videoPool);
-                    if(userInfo != null) {
-                        TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + video.getTitle()+ "”已经通过系统审核，由于视频质量很高，已被系统推荐。");
+                if(status.equals("1")) {
+                    if(type_list.contains("1")) {
+                        iVideo.setPoolByVideoId(video_id,","+ video.getWatch_type());
+                        VideoPool videoPool = new VideoPool();
+                        videoPool.setUser_id(video.getUser_id());
+                        videoPool.setSubject(video.getSubject());
+                        videoPool.setUser_id(video.getUser_id());
+                        videoPool.setVideo_pool(video.getWatch_type());
+                        videoPool.setVideo_id(video.getId());
+                        videoPool.setCreate_time((int) (new Date().getTime() / 1000));
+                        iVideo.insertVideoPool(videoPool);
+                        if(userInfo != null) {
+                            TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + video.getTitle()+ "”已经通过系统审核，由于视频质量很高，已被系统推荐。");
+                        }
+                    } else {
+                        if(userInfo != null){
+                            TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + video.getTitle()+ "”已经通过系统审核。");
+                        }
                     }
-                } else {
-                    TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + video.getTitle()+ "”已经通过系统审核。");
                 }
 
             } catch (JMSException e) {
