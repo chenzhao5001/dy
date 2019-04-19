@@ -113,6 +113,7 @@
             <foreach collection="course_type" item="id" index="index" open="(" close=")" separator=",">
                 #{id}
             </foreach>
+            and course.course_status = 3
         </if>
 
         <if test="grade_class_list != null ">
@@ -178,6 +179,7 @@
             <foreach collection="course_type" item="id" index="index" open="(" close=")" separator=",">
                 #{id}
             </foreach>
+            and course.course_status = 3
         </if>
 
 

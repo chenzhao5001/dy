@@ -8,9 +8,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b7c7c742-9c4d-41b3-a82e-f22b8938a7fb" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IVideo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IVideo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/find/VideoFind.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/find/VideoFind.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/mapping/VideoMaper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapping/VideoMaper.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
@@ -57,7 +54,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="510">
-              <caret line="421" column="13" lean-forward="true" selection-start-line="421" selection-start-column="13" selection-end-line="421" selection-end-column="13" />
+              <caret line="421" column="13" selection-start-line="421" selection-start-column="13" selection-end-line="421" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -123,8 +120,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/resources/mapping/VideoMaper.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="76" column="13" selection-start-line="76" selection-start-column="13" selection-end-line="76" selection-end-column="13" />
+            <state relative-caret-position="575">
+              <caret line="181" column="40" lean-forward="true" selection-start-line="181" selection-start-column="40" selection-end-line="181" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -464,7 +461,7 @@
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="guide_sound" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555660965408" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1555663301154" />
     <property name="editor.config.ad.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path" value="node" />
@@ -715,12 +712,12 @@
       <workItem from="1554905908931" duration="47116000" />
       <workItem from="1555074087299" duration="1173000" />
       <workItem from="1555075615597" duration="50322000" />
-      <workItem from="1555429516869" duration="64702000" />
+      <workItem from="1555429516869" duration="66026000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1429446000" />
+    <option name="totallyTimeSpent" value="1430770000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1527,7 +1524,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
-          <caret line="421" column="13" lean-forward="true" selection-start-line="421" selection-start-column="13" selection-end-line="421" selection-end-column="13" />
+          <caret line="421" column="13" selection-start-line="421" selection-start-column="13" selection-end-line="421" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1550,8 +1547,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/mapping/VideoMaper.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="76" column="13" selection-start-line="76" selection-start-column="13" selection-end-line="76" selection-end-column="13" />
+        <state relative-caret-position="575">
+          <caret line="181" column="40" lean-forward="true" selection-start-line="181" selection-start-column="40" selection-end-line="181" selection-end-column="40" />
         </state>
       </provider>
     </entry>
