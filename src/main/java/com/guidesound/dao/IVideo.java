@@ -290,33 +290,35 @@ public interface IVideo {
 
 /////////////////////////////////////////////////////////
     ///推荐查询相关接口
-    @Select("select distinct video_id from video_pools left join video on video_id = video.id and  examine_status = 1 limit #{arg0},#{arg1}")
+    @Select("select distinct video_id from video_pools left join video on video_id = video.id where  examine_status = 1 limit #{arg0},#{arg1}")
     List<Integer> videoAllIdsInVideoPools(int begin,int end);
 
-    @Select("select distinct video_id from video_pools left join video on video_id = video.id and  examine_status = 1 where video_pools.create_time > #{arg2} limit #{arg0},#{arg1}")
+    @Select("select distinct video_id from video_pools left join video on video_id = video.id  where examine_status = 1 and video_pools.create_time > #{arg2} limit #{arg0},#{arg1}")
     List<Integer> videoAllIdsInVideoPoolsToday(int begin,int end,int time);
 
     @Select("<script>"
-            + "SELECT distinct video_id FROM video_pools left join video on video_id = video.id and  examine_status = 1 WHERE video_pool IN "
+            + "SELECT distinct video_id FROM video_pools left join video on video_id = video.id  WHERE video_pool IN "
             + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and examine_status = 1 "
             + " limit #{arg1},#{arg2}"
             + "</script>")
     List<Integer> videoIdsByPoolsIdsInVideoPools(@Param("iList") List<Integer> iList,int begin,int end);
 
     @Select("<script>"
-            + "SELECT distinct video_id FROM video_pools left join video on video_id = video.id and  examine_status = 1 WHERE video_pool IN "
+            + "SELECT distinct video_id FROM video_pools left join video on video_id = video.id  WHERE video_pool IN "
             + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
             + " and video_pools.create_time > #{arg3}"
+            + " and  examine_status = 1"
             + " limit #{arg1},#{arg2}"
             + "</script>")
     List<Integer> videoIdsByPoolsIdsInVideoPoolsToday(@Param("iList") List<Integer> iList,int begin,int end,int time);
 
     @Select("<script>"
-            + "SELECT distinct video_id FROM video_pools left join video on video_id = video.id and  examine_status = 1 WHERE video_pools.subject IN "
+            + "SELECT distinct video_id FROM video_pools left join video on video_id = video.id  WHERE video_pools.subject IN "
             + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
@@ -324,12 +326,13 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iPoolList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and  examine_status = 1 "
             + " limit #{arg2},#{arg3}"
             + "</script>")
     List<Integer> videoIdsByPoolsIdsInVideoPoolsBySubject(@Param("iSubjectList") List<Integer> iSubjectList,@Param("iPoolList") List<Integer> iPoolList,int begin,int end);
 
     @Select("<script>"
-            + "SELECT distinct video_id FROM video_pools left join video on video_id = video.id and  examine_status = 1 WHERE video_pools.subject IN "
+            + "SELECT distinct video_id FROM video_pools left join video on video_id = video.id  WHERE video_pools.subject IN "
             + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
@@ -337,6 +340,7 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iPoolList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and examine_status = 1 "
             + " and video_pools.create_time > #{arg4}"
             + " limit #{arg2},#{arg3}"
             + "</script>")
@@ -344,20 +348,22 @@ public interface IVideo {
 
 
     @Select("<script>"
-            + "SELECT distinct video_id FROM video_pools left join video on video_id = video.id and  examine_status = 1 WHERE video_pools.subject IN "
+            + "SELECT distinct video_id FROM video_pools left join video on video_id = video.id  WHERE video_pools.subject IN "
             + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and examine_status = 1 "
             + " limit #{arg1},#{arg2}"
             + "</script>")
     List<Integer> videoAllIdsInVideoPoolsBySubject(@Param("iSubjectList") List<Integer> iSubjectList,int begin,int end);
 
     @Select("<script>"
-            + "SELECT distinct video_id FROM video_pools left join video on video_id = video.id and  examine_status = 1 WHERE video_pools.subject IN "
+            + "SELECT distinct video_id FROM video_pools left join video on video_id = video.id  WHERE video_pools.subject IN "
             + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
             + " and video_pools.create_time > #{arg3}"
+            + " and  examine_status = 1 "
             + " limit #{arg1},#{arg2}"
             + "</script>")
     List<Integer> videoAllIdsInVideoPoolsBySubjectToday(@Param("iSubjectList") List<Integer> iSubjectList,int begin,int end,int time);

@@ -68,6 +68,12 @@ public class ClassRoomController extends BaseController {
         }
     }
 
+    int getCurrentCount() {
+        int count = iOrder.getCurrentCount();
+        iOrder.setCurrentCount(count + 1);
+        return count;
+    }
+
 
     List<ClassInfo> sortClassInfo(List<ClassInfo> list) {
 

@@ -424,7 +424,7 @@ public class OrderController extends BaseController {
 
                 //创建课堂
                 iOrder.addClassRoom(classRoom);
-                int class_number = 1000000000 + classRoom.getClass_id();
+                int class_number = getCurrentCount();
                 iOrder.addRoomNumber(classRoom.getClass_id(), class_number);
                 course.setId(classRoom.getClass_id());
                 if(orderInfo.getType() == 0) {
