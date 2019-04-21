@@ -49,6 +49,11 @@ public class ManagerController extends BaseController {
     private IOrder iOrder;
     @Autowired
     private IRecord iRecord;
+    int getCurrentCount() {
+        int count = iOrder.getCurrentCount();
+        iOrder.setCurrentCount(count + 1);
+        return count;
+    }
     @RequestMapping(value = "/login")
     @ResponseBody
     JSONResult logIn(HttpServletRequest request, HttpServletResponse response) {
@@ -795,7 +800,7 @@ public class ManagerController extends BaseController {
                         course.setWay("线上");
                         iOrder.ClassRoomCourse(course);
                         iOrder.setClassRoomIsTest(1,classRoom.getClass_id());
-                        int class_number = 1000000000 + classRoom.getClass_id();
+                        int class_number = getCurrentCount();
                         iOrder.addRoomNumber(classRoom.getClass_id(), class_number);
                     }
                 } else {
