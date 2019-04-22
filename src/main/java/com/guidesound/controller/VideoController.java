@@ -9,6 +9,9 @@ import com.guidesound.dto.VideoDTO;
 import com.guidesound.find.VideoFind;
 import com.guidesound.models.*;
 import com.guidesound.resp.ListResp;
+import com.guidesound.ret.CommodityInfo;
+import com.guidesound.ret.TeacherClass;
+import com.guidesound.ret.VideoClass;
 import com.guidesound.util.*;
 import com.qcloud.Utilities.Json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -57,6 +60,9 @@ public class VideoController extends BaseController {
 
     @Autowired
     private ILogService iLogService;
+
+    @Autowired
+    private IRecord iRecord;
 
     /**
      * 视频上传
@@ -559,6 +565,45 @@ public class VideoController extends BaseController {
         List<VideoShow> list = new ArrayList<>();
         list.add(videoShow);
         improveVideoList(list);
+
+
+        VideoShow retVideoShow =  list.get(0);
+        if(retVideoShow.getAttachment_id() != 0) {
+            if(retVideoShow.getAttachment_type() == 0) { // 商品
+                CommodityInfo commodityInfo = iUser.getCommodityInfoByid(retVideoShow.getAttachment_id());
+                if(commodityInfo != null) {
+                    retVideoShow.setCommodity(commodityInfo);
+                }
+
+            } else if(retVideoShow.getAttachment_type() == 1) {  //录播课
+                VideoClass videoClass = iRecord.getVideoClass(retVideoShow.getAttachment_id());
+                if(videoClass != null) {
+                    videoClass.setSubject_id(Integer.parseInt(videoClass.getSubject()));
+                    videoClass.setSubject(SignMap.getSubjectTypeById(Integer.parseInt(videoClass.getSubject())));
+                    videoClass.setGrade_id(Integer.parseInt(videoClass.getGrade()));
+                    videoClass.setGrade(SignMap.getGradeTypeByID(Integer.parseInt(videoClass.getGrade())));
+                }
+                retVideoShow.setVideo_class(videoClass);
+
+            } else if(retVideoShow.getAttachment_type() == 2) { // 辅导课
+                Course course = iCourse.getCouresByid(retVideoShow.getAttachment_id());
+                if(course != null) {
+                    TeacherClass teacherClass = new TeacherClass();
+                    teacherClass.setCourse_id(course.getId());
+                    teacherClass.setCourse_name(course.getCourse_name());
+                    teacherClass.setCourse_pic(course.getCourse_pic());
+                    teacherClass.setCourse_status(course.getCourse_status());
+                    teacherClass.setCourse_type(course.getType());
+                    teacherClass.setCourse_type_name(SignMap.getCourseTypeNameById(course.getType()));
+                    teacherClass.setForm(SignMap.getCourseFormById(course.getForm()));
+                    teacherClass.setGrade(SignMap.getGradeTypeByID(course.getGrade()));
+                    teacherClass.setPrice(course.getAll_charge());
+                    teacherClass.setStudent_count(course.getMax_person());
+                    teacherClass.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
+                    retVideoShow.setTeacher_class(teacherClass);
+                }
+            }
+        }
         return JSONResult.ok(list.get(0));
 
     }

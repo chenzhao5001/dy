@@ -1,5 +1,9 @@
 package com.guidesound.models;
 
+import com.guidesound.ret.CommodityInfo;
+import com.guidesound.ret.TeacherClass;
+import com.guidesound.ret.VideoClass;
+
 public class VideoShow {
 
     int id;
@@ -52,6 +56,34 @@ public class VideoShow {
     int attachment_id;
     String attachment_name;
     int attachment_subtype;
+
+    VideoClass video_class;
+    TeacherClass teacher_class;
+    CommodityInfo commodity;
+
+    public VideoClass getVideo_class() {
+        return video_class;
+    }
+
+    public void setVideo_class(VideoClass video_class) {
+        this.video_class = video_class;
+    }
+
+    public TeacherClass getTeacher_class() {
+        return teacher_class;
+    }
+
+    public void setTeacher_class(TeacherClass teacher_class) {
+        this.teacher_class = teacher_class;
+    }
+
+    public CommodityInfo getCommodity() {
+        return commodity;
+    }
+
+    public void setCommodity(CommodityInfo commodity) {
+        this.commodity = commodity;
+    }
 
     public int getAttachment_subtype() {
         return attachment_subtype;

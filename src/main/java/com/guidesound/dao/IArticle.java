@@ -105,10 +105,11 @@ public interface IArticle {
     @Insert("insert into article (head,user_id,head_pic1,head_pic2,head_pic3,create_time,subject,grade,type) value (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},#{arg6},#{arg7},2)")
     void addAsk(String title,int user_id,String pic1,String pic2,String pic3,int create_tile,int subject,int grade);
 
-    @Insert("insert into articleAnswer (user_id,ask_id,abstract_info,pic1_url,pic2_url,pic3_url,content_url,create_time) value (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},#{arg6},#{arg7})")
+    @Insert("insert into articleAnswer (user_id,ask_id,abstract_info,pic1_url,pic2_url,pic3_url,content_url,attachment_type,attachment_id,attachment_name,attachment_subtype,create_time)" +
+            " value (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},#{arg6},#{arg7},#{arg8},#{arg9},#{arg10},#{arg11})")
     void addAnswer(int user_id,int ask_id,String t_abstract,
                    String pic1_url,String pic2_url,String pic3_url,
-                   String content_url,int create_time);
+                   String content_url,int attachment_type,int attachment_id,String attachment_name,int attachment_subtype, int create_time);
 
     @Update("update article set answer_count = answer_count + 1 where id = #{arg0}")
     void addAnswerMainCount(int article_id);
@@ -154,11 +155,17 @@ public interface IArticle {
     @Select("select count(*) from articleAnswer where ask_id = #{arg0} and examine_status = 1")
     int answerCount(int ask_id);
 
+    @Select("select count(*) from articleAnswer where user_id = #{arg0}")
+    int myAnswerCount(int user_id);
+
     @Select("select * from articleAnswer where user_id = #{arg0} and examine_status = 1")
     List<ArticleAnswer>  getAnswerByUser(int user_id);
 
     @Select("select * from articleAnswer where ask_id = #{arg0} and examine_status = 1 order by create_time desc limit #{arg1},#{arg2}")
     List<ArticleAnswer> answerList(int ask_id,int begin,int end);
+
+    @Select("select * from articleAnswer where user_id = #{arg0} order by create_time desc limit #{arg1},#{arg2}")
+    List<ArticleAnswer> myAnswerList(int user_id,int begin,int end);
 
     @Select("select answer_id from articleAnswerPraise where user_id = #{arg0} and deleted = 0")
     List<Integer> getAnswerPraise(int user_id);

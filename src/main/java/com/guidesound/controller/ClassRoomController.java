@@ -494,11 +494,13 @@ public class ClassRoomController extends BaseController {
         }
 
         Ret ret = new Ret();
+        boolean teacherFirstEnter = false;
         List<TeacherEnterInfo> teacherEnterInfos = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id), class_num);
         if (classRoom.getUser_id() == getCurrentUserId()) { //老师
 
             teacherEnterInfos = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id), class_num);
             if (teacherEnterInfos.size() == 0) {
+                teacherFirstEnter = true;
                 iOrder.setTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), class_num, (int) (new Date().getTime() / 1000), 1);
             } else {
                 iOrder.updateTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), class_num, 1);
@@ -512,7 +514,7 @@ public class ClassRoomController extends BaseController {
             for (StudentClass item : s_list) {
                 ids.add(item.getUser_id());
             }
-            if(ids.size() > 0) {
+            if(ids.size() > 0 && teacherFirstEnter) {
                 List<UserInfo> users = iUser.getUserByIds(ids);
                 for (UserInfo item : users) {
                     TlsSigTest.SendMessage(item.getIm_id(), "你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！");

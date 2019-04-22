@@ -357,7 +357,7 @@ public interface IUser {
     @Select("select * from user_commodity where user_id = #{arg0}")
     List<UserCommodity> commodityList(int user_id);
 
-    @Select("select * from user_commodity where user_id = #{arg0}")
+    @Select("select * from user_commodity where id = #{arg0}")
     CommodityInfo getCommodityInfoByid(int id);
 
     @Update("update user_shop set shop_url = #{arg1} where user_id = #{arg0}")

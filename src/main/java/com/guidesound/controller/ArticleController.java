@@ -295,7 +295,7 @@ public class ArticleController extends BaseController {
                 if(commodityInfo != null) {
                     retArticleInfo.setCommodity(commodityInfo);
                 }
-                
+
             } else if(retArticleInfo.getAttachment_type() == 1) {  //录播课
                 VideoClass videoClass = iRecord.getVideoClass(retArticleInfo.getAttachment_id());
                 if(videoClass != null) {
@@ -608,10 +608,17 @@ public class ArticleController extends BaseController {
 
     @RequestMapping("/add_answer")
     @ResponseBody
-    JSONResult addAnswer(String ask_id,String answer_html) throws IOException {
+    JSONResult addAnswer(String ask_id,String answer_html,
+                         String attachment_type,String attachment_id, String attachment_name,String attachment_subtype) throws IOException {
         if(ask_id == null || answer_html == null) {
             return JSONResult.errorMsg("缺少参数");
         }
+
+
+        attachment_type = attachment_type == null ? "0":attachment_type;
+        attachment_id = attachment_id == null ? "0":attachment_id;
+        attachment_name = attachment_name == null ? "":attachment_name;
+        attachment_subtype = attachment_subtype == null ? "0":attachment_subtype;
         Document doc = Jsoup.parse(answer_html);
         String content = "";
         if(doc.text().length() < 100) {
@@ -641,7 +648,8 @@ public class ArticleController extends BaseController {
         User currentUser = (User)request.getAttribute("user_info");
         iArticle.addAnswer(currentUser.getId(),Integer.parseInt(ask_id),
                 content,pic1_url,pic2_url,pic3_url,
-                url, (int) (new Date().getTime() / 1000));
+                url, Integer.parseInt(attachment_type),Integer.parseInt(attachment_id),attachment_name,Integer.parseInt(attachment_subtype),
+                (int) (new Date().getTime() / 1000));
         iArticle.addAnswerMainCount(Integer.parseInt(ask_id));
         return JSONResult.ok();
     }
@@ -998,6 +1006,55 @@ public class ArticleController extends BaseController {
         listResp.setCount(count);
         listResp.setList(list);
         return JSONResult.ok(listResp);
+    }
+
+
+    @RequestMapping("/my_answer")
+    @ResponseBody
+    JSONResult myAnswer(String page,String size) {
+
+        int iPage = page == null || page.equals("") ? 1:Integer.parseInt(page);
+        int iSize = size == null || size.equals("") ? 20:Integer.parseInt(size);
+        int begin = (iPage - 1)*iSize;
+        int end = iSize;
+
+        int user_id = getCurrentUserId();
+
+        int count = iArticle.myAnswerCount(user_id);
+        List<ArticleAnswer> list  = new ArrayList<>();
+        if(count > 0) {
+            list = iArticle.myAnswerList(user_id,begin,end);
+        }
+        getAnswerExtendInfo(list);
+        List<Integer> answerList = new ArrayList<>();
+        List<Integer> collectionList = new ArrayList<>();
+        List<Integer> followList = new ArrayList<>();
+        if (user_id != 0) {
+            answerList = iArticle.getAnswerPraise(user_id);
+            collectionList = iArticle.getUserCollection(user_id);
+            followList = iUser.getFollowUsers(user_id);
+        }
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        for (ArticleAnswer item : list) {
+            item.setContent_url(request.getScheme() +"://" + request.getServerName()  + ":"
+                    + request.getServerPort() + "/guidesound/article/answer_preview?answer_id=" + item.getId());
+            if(answerList.contains(item.getId())) {
+                item.setPraise(true);
+            }
+            if(collectionList.contains(item.getId())) {
+                item.setCollection(true);
+            }
+            if(followList.contains(item.getUser_id())) {
+                item.setFollow(true);
+            }
+        }
+
+        ListResp listResp = new ListResp();
+        listResp.setCount(count);
+        listResp.setList(list);
+        return JSONResult.ok(listResp);
+
     }
 
 }
