@@ -3,6 +3,7 @@ package com.guidesound.dao;
 import com.guidesound.models.Course;
 import com.guidesound.models.Subject;
 import com.guidesound.models.Teacher;
+import com.guidesound.ret.TeacherClass;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -193,4 +194,6 @@ public interface ICourse {
 
     @Select("select * from course")
     List<Course> getAll();
+
+
 }

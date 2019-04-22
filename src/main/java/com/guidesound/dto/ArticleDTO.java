@@ -14,11 +14,11 @@ public class ArticleDTO {
     String content;
 
 //    @NotNull(message = "subject_class:不能为空;")
-    String subject_class;
+    public String subject_class;
     @NotNull(message = "subject:不能为空;")
     String subject;
 //    @NotNull(message = "grade_class:不能为空;")
-    String grade_class;
+    public String grade_class;
     @NotNull(message = "grade:不能为空;")
     String grade;
 
@@ -27,10 +27,10 @@ public class ArticleDTO {
     int create_time;
     int article_id;
 
-    int attachment_type;
-    int attachment_id;
-    String attachment_name;
-    int attachment_subtype;
+    public Integer attachment_type;
+    public Integer attachment_id;
+    public String attachment_name;
+    public Integer attachment_subtype;
 
     public int getAttachment_type() {
         return attachment_type;

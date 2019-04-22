@@ -1,11 +1,13 @@
 package com.guidesound.controller;
 
-import com.guidesound.dao.IArticle;
-import com.guidesound.dao.IUser;
+import com.guidesound.dao.*;
 import com.guidesound.dto.ArticleDTO;
 import com.guidesound.find.ArticleFind;
 import com.guidesound.models.*;
 import com.guidesound.resp.ListResp;
+import com.guidesound.ret.CommodityInfo;
+import com.guidesound.ret.TeacherClass;
+import com.guidesound.ret.VideoClass;
 import com.guidesound.util.*;
 import com.qcloud.Common.Sign;
 import com.qcloud.cos.model.PutObjectRequest;
@@ -46,6 +48,12 @@ public class ArticleController extends BaseController {
     @Autowired
     private IUser iUser;
 
+    @Autowired
+    private IRecord iRecord;
+
+    @Autowired
+    private ICourse iCourse;
+
     @RequestMapping(value = "/add")
     @ResponseBody
     JSONResult add(@Valid ArticleDTO articleDTO, BindingResult result,HttpServletRequest request) throws IOException {
@@ -57,6 +65,17 @@ public class ArticleController extends BaseController {
         articleDTO.head_pic1 = articleDTO.head_pic1 == null ? "":articleDTO.head_pic1;
         articleDTO.head_pic2 = articleDTO.head_pic2 == null ? "":articleDTO.head_pic2;
         articleDTO.head_pic3 = articleDTO.head_pic3 == null ? "":articleDTO.head_pic3;
+        articleDTO.grade_class = articleDTO.grade_class == null ? "0":articleDTO.grade_class;
+        articleDTO.subject_class = articleDTO.subject_class == null ? "0":articleDTO.subject_class;
+
+
+
+        articleDTO.attachment_type = articleDTO.attachment_type == null ? 0:articleDTO.attachment_type;
+        articleDTO.attachment_id = articleDTO.attachment_id == null ? 0:articleDTO.attachment_id;
+        articleDTO.attachment_name = articleDTO.attachment_name == null ? "":articleDTO.attachment_name;
+        articleDTO.attachment_subtype = articleDTO.attachment_subtype == null ? 0:articleDTO.attachment_subtype;
+
+
         User currentUser = (User)request.getAttribute("user_info");
         articleDTO.setSubject(String.valueOf(articleDTO.getSubject()));
         articleDTO.setContent(upStringToCloud(articleDTO.getContent()));
@@ -268,6 +287,44 @@ public class ArticleController extends BaseController {
         List<ArticleInfo> list = new ArrayList<>();
         list.add(articleInfo);
         getExtendInfo(list);
+
+        ArticleInfo retArticleInfo =  list.get(0);
+        if(retArticleInfo.getAttachment_id() != 0) {
+            if(retArticleInfo.getAttachment_type() == 0) { // 商品
+                CommodityInfo commodityInfo = iUser.getCommodityInfoByid(retArticleInfo.getAttachment_id());
+                if(commodityInfo != null) {
+                    retArticleInfo.setCommodity(commodityInfo);
+                }
+                
+            } else if(retArticleInfo.getAttachment_type() == 1) {  //录播课
+                VideoClass videoClass = iRecord.getVideoClass(retArticleInfo.getAttachment_id());
+                if(videoClass != null) {
+                    videoClass.setSubject_id(Integer.parseInt(videoClass.getSubject()));
+                    videoClass.setSubject(SignMap.getSubjectTypeById(Integer.parseInt(videoClass.getSubject())));
+                    videoClass.setGrade_id(Integer.parseInt(videoClass.getGrade()));
+                    videoClass.setGrade(SignMap.getGradeTypeByID(Integer.parseInt(videoClass.getGrade())));
+                }
+                retArticleInfo.setVideo_class(videoClass);
+
+            } else if(retArticleInfo.getAttachment_type() == 2) { // 辅导课
+                Course course = iCourse.getCouresByid(retArticleInfo.getAttachment_id());
+                if(course != null) {
+                    TeacherClass teacherClass = new TeacherClass();
+                    teacherClass.setCourse_id(course.getId());
+                    teacherClass.setCourse_name(course.getCourse_name());
+                    teacherClass.setCourse_pic(course.getCourse_pic());
+                    teacherClass.setCourse_status(course.getCourse_status());
+                    teacherClass.setCourse_type(course.getType());
+                    teacherClass.setCourse_type_name(SignMap.getCourseTypeNameById(course.getType()));
+                    teacherClass.setForm(SignMap.getCourseFormById(course.getForm()));
+                    teacherClass.setGrade(SignMap.getGradeTypeByID(course.getGrade()));
+                    teacherClass.setPrice(course.getAll_charge());
+                    teacherClass.setStudent_count(course.getMax_person());
+                    teacherClass.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
+                    retArticleInfo.setTeacher_class(teacherClass);
+                }
+            }
+        }
         return JSONResult.ok(list.get(0));
     }
     /**

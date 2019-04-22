@@ -4,6 +4,7 @@ import com.guidesound.dto.RecordDTO;
 import com.guidesound.models.Record;
 import com.guidesound.models.TestRecordCourse;
 import com.guidesound.models.UserRecordCourse;
+import com.guidesound.ret.VideoClass;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -104,6 +105,9 @@ public interface IRecord {
 
     @Select("select * from test_record_course")
     List<TestRecordCourse> getAllTestRecordCourse();
+
+    @Select("select * from record_course where record_course_id = #{arg0}")
+    VideoClass getVideoClass(int id);
 
 
 

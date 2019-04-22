@@ -2,6 +2,7 @@ package com.guidesound.dao;
 
 import com.guidesound.find.IntroductionInfo;
 import com.guidesound.models.*;
+import com.guidesound.ret.CommodityInfo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -355,6 +356,9 @@ public interface IUser {
 
     @Select("select * from user_commodity where user_id = #{arg0}")
     List<UserCommodity> commodityList(int user_id);
+
+    @Select("select * from user_commodity where user_id = #{arg0}")
+    CommodityInfo getCommodityInfoByid(int id);
 
     @Update("update user_shop set shop_url = #{arg1} where user_id = #{arg0}")
     void updateShopbyUserId(int user_id,String shop_url);
