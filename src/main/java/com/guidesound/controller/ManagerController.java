@@ -836,7 +836,7 @@ public class ManagerController extends BaseController {
                                 testRecordCourse.setUser_id(record.getUser_id());
                                 testRecordCourse.setRecord_course_id(record.getRecord_course_id());
                                 testRecordCourse.setClass_NO(recordVideo.getClass_number());
-                                testRecordCourse.setClass_name("");
+                                testRecordCourse.setClass_name(recordVideo.getClass_title());
                                 testRecordCourse.setClass_url(recordVideo.getClass_url());
                                 testRecordCourse.setTime_start(wonderfulPart.getTime_start());
                                 testRecordCourse.setTime_end(wonderfulPart.getTime_end());

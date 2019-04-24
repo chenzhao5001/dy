@@ -13,6 +13,8 @@ public class Record {
     int video_count;
     int price;
     int user_id;
+    int student_count;
+
 
     String intro_teacher_text;
     Object intro_teacher_pic;
@@ -20,6 +22,15 @@ public class Record {
     Object intro_course_pic;
     Object videos;
     int save;
+
+
+    public int getStudent_count() {
+        return student_count;
+    }
+
+    public void setStudent_count(int student_count) {
+        this.student_count = student_count;
+    }
 
     public int getUser_id() {
         return user_id;

@@ -13,6 +13,7 @@ import com.guidesound.dao.IRecord;
 import com.guidesound.dto.RecordDTO;
 import com.guidesound.models.CourseExamine;
 import com.guidesound.models.Record;
+import com.guidesound.models.UserRecordCourse;
 import com.guidesound.ret.RecordItem;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
@@ -109,6 +110,15 @@ public class RecordCourseController extends BaseController {
             return JSONResult.ok();
         }
 
+        record.setGrade_id((Integer)record.getGrade());
+        record.setGrade(SignMap.getGradeTypeByID(record.getGrade_id()));
+        record.setSubject_id((Integer)record.getSubject());
+        record.setSubject(SignMap.getSubjectTypeById(record.getSubject_id()));
+
+        int count = iRecord.getUserRecordCountByCourseId(record.getRecord_course_id());
+        record.setStudent_count(count);
+
+
         List<RecordTeacherPic> recordTeacherPicList = null;
         ObjectMapper mapper_temp = new ObjectMapper();
         try {
@@ -131,11 +141,22 @@ public class RecordCourseController extends BaseController {
 
         mapper_temp = new ObjectMapper();
         List<RecordVideo> recordVideoList = null;
+        List<UserRecordCourse> userRecords = iRecord.getUserRecordByCourseId(Integer.parseInt(record_course_id));
+        List<Integer> user_ids = new ArrayList<>();
+        user_ids.add(record.getUser_id());
+        for(UserRecordCourse userRecordCourse : userRecords) {
+            user_ids.add(userRecordCourse.getUser_id());
+        }
         try {
             String temp = (String) record.getVideos();
             System.out.println(temp);
             JavaType javaType = getCollectionType(ArrayList.class, RecordVideo.class);
             recordVideoList = mapper_temp.readValue((String) record.getVideos(), javaType);
+            for(RecordVideo recordVideo : recordVideoList) {
+                if(!recordVideoList.contains(getCurrentUserId())) {
+                    recordVideo.setClass_url("");
+                }
+            }
             record.setVideos(recordVideoList);
         } catch (IOException e) {
             e.printStackTrace();

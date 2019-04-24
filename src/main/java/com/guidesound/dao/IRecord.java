@@ -99,6 +99,12 @@ public interface IRecord {
     @Select("select * from user_record_course where user_id = #{arg0}")
     List<UserRecordCourse> getRecordByUserId(int user_id);
 
+    @Select("select count(*) from user_record_course where user_record_course_id = #{arg0}")
+    int getUserRecordCountByCourseId(int record_course_id);
+
+    @Select("select * from user_record_course where user_record_course_id = #{arg0}")
+    List<UserRecordCourse> getUserRecordByCourseId(int record_course_id);
+
     @Insert("insert into test_record_course (user_id,record_course_id,class_NO,class_url,class_name,time_start,time_end,picture) " +
             "values (#{user_id},#{record_course_id},#{class_NO},#{class_url},#{class_name},#{time_start},#{time_end},#{picture})")
     void addTestRecordCourse(TestRecordCourse testRecordCourse);
