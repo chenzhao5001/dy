@@ -153,7 +153,7 @@ public class RecordCourseController extends BaseController {
             JavaType javaType = getCollectionType(ArrayList.class, RecordVideo.class);
             recordVideoList = mapper_temp.readValue((String) record.getVideos(), javaType);
             for(RecordVideo recordVideo : recordVideoList) {
-                if(!recordVideoList.contains(getCurrentUserId())) {
+                if(!user_ids.contains(getCurrentUserId()) && recordVideo.getCharge_type() == 1) {
                     recordVideo.setClass_url("");
                 }
             }
