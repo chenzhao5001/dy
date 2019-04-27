@@ -110,6 +110,8 @@ public class RecordCourseController extends BaseController {
             return JSONResult.ok();
         }
 
+
+
         record.setGrade_id((Integer)record.getGrade());
         record.setGrade(SignMap.getGradeTypeByID(record.getGrade_id()));
         record.setSubject_id((Integer)record.getSubject());
@@ -118,6 +120,12 @@ public class RecordCourseController extends BaseController {
         int count = iRecord.getUserRecordCountByCourseId(record.getRecord_course_id());
         record.setStudent_count(count);
 
+        List<UserRecordCourse> lists_temp = iRecord.getUserRecordByUserIdAndCourseId(getCurrentUserId(),record.getRecord_course_id());
+        if(lists_temp.size() == 0) {
+            record.setIs_pay(false);
+        } else {
+            record.setIs_pay(true);
+        }
 
         List<RecordTeacherPic> recordTeacherPicList = null;
         ObjectMapper mapper_temp = new ObjectMapper();

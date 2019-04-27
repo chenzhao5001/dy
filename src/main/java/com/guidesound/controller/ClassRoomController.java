@@ -2,13 +2,12 @@ package com.guidesound.controller;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.guidesound.TempStruct.ClassTime;
-import com.guidesound.TempStruct.ClassUseInfo;
-import com.guidesound.TempStruct.CourseOutline;
-import com.guidesound.TempStruct.StudentOrderTemp;
+import com.guidesound.TempStruct.*;
 import com.guidesound.dao.*;
 import com.guidesound.models.*;
+import com.guidesound.models.ClassTimeInfo;
 import com.guidesound.ret.*;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
@@ -571,7 +570,7 @@ public class ClassRoomController extends BaseController {
             return JSONResult.ok("录播课不存在");
         }
 
-        iRecord.report(Integer.parseInt(record_course_id), Integer.parseInt(last_class_no), Integer.parseInt(last_class_pos));
+        iRecord.report(Integer.parseInt(record_course_id), Integer.parseInt(last_class_no), Integer.parseInt(last_class_pos),getCurrentUserId());
         return JSONResult.ok();
     }
 
@@ -793,28 +792,48 @@ public class ClassRoomController extends BaseController {
 
         ///录播课
         List<UserRecordCourse> record_list = iRecord.getRecordByUserId(getCurrentUserId());
+//        List<Integer> record_lists = new ArrayList<>();
         Map<Integer,UserRecordCourse> mUserRecordCourse = new HashMap<>();
         for(UserRecordCourse userRecordCourse : record_list) {
             mUserRecordCourse.put(userRecordCourse.getUser_record_course_id(),userRecordCourse);
         }
 
+
         List<Integer> ids = new ArrayList<>();
+
         for(UserRecordCourse item : record_list) {
             ids.add(item.getUser_record_course_id());
         }
         if(ids.size() > 0) {
-            List<Record> records = iRecord.listByIds(ids);
             List<Integer> user_ids = new ArrayList<>();
+            List<Record> records = iRecord.listByIds(ids);
             for(Record record : records) {
-                user_ids.add(record.getUser_id());
+                if(!user_ids.contains(record.getUser_id())) {
+                    user_ids.add(record.getUser_id());
+                }
             }
             List<UserInfo> userInfos = iUser.getUserByIds(user_ids);
             Map<Integer,UserInfo> user_maps = new HashMap<>();
             for(UserInfo userInfo : userInfos) {
                 user_maps.put(userInfo.getId(),userInfo);
-
             }
             for(Record record : records) {
+                List<RecordVideo> recordVideoList = new ArrayList<>();
+                ObjectMapper mapper_temp = new ObjectMapper();
+                JavaType javaType = new ObjectMapper().getTypeFactory().constructParametricType(ArrayList.class, RecordVideo.class);
+                try {
+                    recordVideoList =  mapper_temp.readValue((String) record.getVideos(), javaType);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Map<Integer,RecordVideo> mRecordVideo = new HashMap<>();
+                if(recordVideoList.size() > 0) {
+                    for(RecordVideo recordVideo : recordVideoList) {
+                        mRecordVideo.put(recordVideo.getClass_number(),recordVideo);
+                    }
+                }
+
                 VideoClass1 videoClass1 = new VideoClass1();
                 videoClass1.setRecord_course_id(record.getRecord_course_id());
                 videoClass1.setRecord_course_status(record.getRecord_course_status());
@@ -834,7 +853,12 @@ public class ClassRoomController extends BaseController {
 
                 if(mUserRecordCourse.containsKey(record.getRecord_course_id())) {
                     videoClass1.setLast_class_NO(mUserRecordCourse.get(record.getRecord_course_id()).getLast_class_NO());
-                    videoClass1.setLast_class_name(mUserRecordCourse.get(record.getRecord_course_id()).getLast_class_name());
+                    int class_no = mUserRecordCourse.get(record.getRecord_course_id()).getLast_class_NO();
+                    if(mRecordVideo.get(class_no) != null) {
+                        videoClass1.setLast_class_name(mRecordVideo.get(class_no).getClass_title());
+                    } else {
+                        videoClass1.setLast_class_name("");
+                    }
                     videoClass1.setLast_class_pos(mUserRecordCourse.get(record.getRecord_course_id()).getLast_class_pos());
                 }
 

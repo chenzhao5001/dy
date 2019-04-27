@@ -81,8 +81,8 @@ public interface IRecord {
 
 
 
-    @Update("update record_course set last_class_no = #{arg1},last_class_pos = #{arg2} where record_course_id = #{arg0}")
-    void report(int id,int last_class_no,int last_class_pos);
+    @Update("update user_record_course set last_class_no = #{arg1},last_class_pos = #{arg2} where user_record_course_id = #{arg0} and user_id = #{arg3}")
+    void report(int record_course_id,int last_class_no,int last_class_pos,int user_id);
 
     @Select("select * from record_course where record_course_status = #{arg1}")
     List<Record> getRecordByStatus(int status);
@@ -105,6 +105,12 @@ public interface IRecord {
     @Select("select * from user_record_course where user_record_course_id = #{arg0}")
     List<UserRecordCourse> getUserRecordByCourseId(int record_course_id);
 
+    @Select("select * from user_record_course where user_id = #{arg0}")
+    List<UserRecordCourse> getUserRecordByUserId(int user_id);
+
+    @Select("select * from user_record_course where user_id = #{arg0}")
+    List<UserRecordCourse> getUserRecordByUserIdAndCourseId(int user_id,int course_id);
+
     @Insert("insert into test_record_course (user_id,record_course_id,class_NO,class_url,class_name,time_start,time_end,picture) " +
             "values (#{user_id},#{record_course_id},#{class_NO},#{class_url},#{class_name},#{time_start},#{time_end},#{picture})")
     void addTestRecordCourse(TestRecordCourse testRecordCourse);
@@ -114,6 +120,9 @@ public interface IRecord {
 
     @Select("select * from record_course where record_course_id = #{arg0}")
     VideoClass getVideoClass(int id);
+
+    @Update("update record_course set group_id = #{arg0} where record_course_id = #{arg1}")
+    void setGroupId(int groupId,int record_id);
 
 
 

@@ -14,6 +14,7 @@ public class Record {
     int price;
     int user_id;
     int student_count;
+    int group_id;
 
 
     String intro_teacher_text;
@@ -22,7 +23,23 @@ public class Record {
     Object intro_course_pic;
     Object videos;
     int save;
+    boolean is_pay;
 
+    public int getGroup_id() {
+        return group_id;
+    }
+
+    public void setGroup_id(int group_id) {
+        this.group_id = group_id;
+    }
+
+    public boolean isIs_pay() {
+        return is_pay;
+    }
+
+    public void setIs_pay(boolean is_pay) {
+        this.is_pay = is_pay;
+    }
 
     public int getStudent_count() {
         return student_count;
