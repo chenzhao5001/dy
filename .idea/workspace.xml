@@ -7,10 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b7c7c742-9c4d-41b3-a82e-f22b8938a7fb" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ClassRoomController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ClassRoomController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/OrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IRecord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IRecord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/models/UserRecordCourse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/models/UserRecordCourse.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -25,8 +24,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ClassRoomController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="838" column="51" selection-start-line="838" selection-start-column="28" selection-end-line="838" selection-end-column="51" />
+            <state relative-caret-position="231">
+              <caret line="668" column="53" selection-start-line="668" selection-start-column="53" selection-end-line="668" selection-end-column="53" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -52,11 +51,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/OrderController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="562" column="38" selection-start-line="562" selection-start-column="20" selection-end-line="562" selection-end-column="38" />
+            <state relative-caret-position="135">
+              <caret line="558" column="16" selection-start-line="558" selection-start-column="16" selection-end-line="558" selection-end-column="16" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -65,19 +64,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_202/src.zip!/java/util/Map.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/TlsSigTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4625">
-              <caret line="211" column="6" selection-start-line="211" selection-start-column="6" selection-end-line="211" selection-end-column="6" />
+            <state relative-caret-position="140">
+              <caret line="280" column="23" selection-start-line="280" selection-start-column="23" selection-end-line="280" selection-end-column="23" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IRecord.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="193">
-              <caret line="95" column="145" selection-start-line="95" selection-start-column="145" selection-end-line="95" selection-end-column="145" />
+            <state relative-caret-position="115">
+              <caret line="110" column="104" selection-start-line="110" selection-start-column="104" selection-end-line="110" selection-end-column="104" />
             </state>
           </provider>
         </entry>
@@ -129,8 +131,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/RecordCourseController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1304">
-              <caret line="121" selection-start-line="121" selection-end-line="121" />
+            <state relative-caret-position="1854">
+              <caret line="122" column="84" selection-start-line="122" selection-start-column="52" selection-end-line="122" selection-end-column="84" />
             </state>
           </provider>
         </entry>
@@ -149,7 +151,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>pools</find>
       <find>findVideo</find>
       <find>user_id</find>
       <find>video_state</find>
@@ -179,6 +180,7 @@
       <find>user_maps</find>
       <find>/get_by_id</find>
       <find>/pay</find>
+      <find>sendGroupMsg</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -254,8 +256,8 @@
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/RecordCourseController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ClassRoomController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/UserRecordCourse.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/OrderController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IRecord.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/OrderController.java" />
       </list>
     </option>
   </component>
@@ -500,7 +502,7 @@
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="guide_sound" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556369390236" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556374451368" />
     <property name="editor.config.ad.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path" value="node" />
@@ -755,12 +757,12 @@
       <workItem from="1556094301351" duration="2306000" />
       <workItem from="1556111459272" duration="16487000" />
       <workItem from="1556369592338" duration="124000" />
-      <workItem from="1556370087681" duration="969000" />
+      <workItem from="1556370087681" duration="3199000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1474760000" />
+    <option name="totallyTimeSpent" value="1476990000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -775,7 +777,7 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48867315" visible="true" weight="0.27345845" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48867315" visible="true" weight="0.27345845" />
       <window_info id="Structure" order="1" weight="0.24932976" />
       <window_info id="Designer" order="2" />
       <window_info id="JRebel" order="3" sideWeight="0.51132685" side_tool="true" weight="0.2730711" />
@@ -787,7 +789,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.38101983" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.42776203" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.48592493" visible="true" weight="0.33427763" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.48592493" weight="0.33427763" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3286119" />
@@ -795,7 +797,7 @@
       <window_info anchor="bottom" id="Spring" order="8" weight="0.3286119" />
       <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.49463806" weight="0.1388102" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5053619" side_tool="true" weight="0.2917847" />
-      <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.43040848" weight="0.31161472" />
+      <window_info active="true" anchor="bottom" id="Messages" order="11" sideWeight="0.43040848" visible="true" weight="0.31161472" />
       <window_info anchor="bottom" id="Problems" order="12" weight="0.3286119" />
       <window_info anchor="bottom" id="Version Control" order="13" weight="0.3286119" />
       <window_info anchor="bottom" id="JRebel Executor" order="14" weight="0.32894737" />
@@ -857,6 +859,18 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/OrderController.java</url>
+          <line>532</line>
+          <properties />
+          <option name="timeStamp" value="142" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -1189,16 +1203,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/TlsSigTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="280" column="23" selection-start-line="280" selection-start-column="23" selection-end-line="280" selection-end-column="23" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/ret/VideoClass.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="775">
@@ -1280,23 +1284,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/RecordCourseController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1304">
-          <caret line="121" selection-start-line="121" selection-end-line="121" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ClassRoomController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="838" column="51" selection-start-line="838" selection-start-column="28" selection-end-line="838" selection-end-column="51" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/UserRecordCourse.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -1313,10 +1300,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/OrderController.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ClassRoomController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="562" column="38" selection-start-line="562" selection-start-column="20" selection-end-line="562" selection-end-column="38" />
+        <state relative-caret-position="231">
+          <caret line="668" column="53" selection-start-line="668" selection-start-column="53" selection-end-line="668" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1325,8 +1312,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IRecord.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="95" column="145" selection-start-line="95" selection-start-column="145" selection-end-line="95" selection-end-column="145" />
+        <state relative-caret-position="115">
+          <caret line="110" column="104" selection-start-line="110" selection-start-column="104" selection-end-line="110" selection-end-column="104" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/RecordCourseController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1854">
+          <caret line="122" column="84" selection-start-line="122" selection-start-column="52" selection-end-line="122" selection-end-column="84" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/TlsSigTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="280" column="23" selection-start-line="280" selection-start-column="23" selection-end-line="280" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/OrderController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="558" column="16" selection-start-line="558" selection-start-column="16" selection-end-line="558" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

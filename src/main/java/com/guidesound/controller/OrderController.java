@@ -539,22 +539,25 @@ public class OrderController extends BaseController {
                 return JSONResult.errorMsg("此录播课已经购买过");
             }
 
-            if(record.getGrade_id() != 0) { //创建群
+            UserInfo userInfo = iUser.getUser(record.getUser_id());
+            if(record.getGrade_id() == 0) { //创建群
                 int currentCount =  getCurrentCount();
-                UserInfo userInfo = iUser.getUser(record.getUser_id());
+
                 if(userInfo != null) {
                     TlsSigTest.createGroup(String.valueOf(userInfo.getIm_id()), "录播课群： " + record.getRecord_course_id(),String.valueOf(currentCount),record.getRecord_course_pic());
                     TlsSigTest.addGroupPerson(String.valueOf(currentCount), String.valueOf(String.valueOf(userInfo.getIm_id())));
                     UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
                     TlsSigTest.addGroupPerson(String.valueOf(currentCount), String.valueOf(String.valueOf(userInfo1.getIm_id())));
                     iRecord.setGroupId(currentCount,record.getRecord_course_id());
-                    TlsSigTest.sendGroupMsg(String.valueOf(currentCount),"欢迎新同学：" + userInfo1.getName(),userInfo1.getIm_id());
+                    TlsSigTest.sendGroupMsg(String.valueOf(currentCount),"欢迎新同学：" + userInfo1.getName(),userInfo.getIm_id());
                 }
 
             } else { //加入群
-                UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
-                TlsSigTest.addGroupPerson(String.valueOf(record.getGroup_id()), String.valueOf(String.valueOf(userInfo1.getIm_id())));
-                TlsSigTest.sendGroupMsg(String.valueOf(record.getGroup_id()),"欢迎新同学：" + userInfo1.getName(),userInfo1.getIm_id());
+                if(userInfo != null) {
+                    UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
+                    TlsSigTest.addGroupPerson(String.valueOf(record.getGroup_id()), String.valueOf(String.valueOf(userInfo1.getIm_id())));
+                    TlsSigTest.sendGroupMsg(String.valueOf(record.getGroup_id()),"欢迎新同学：" + userInfo1.getName(),userInfo.getIm_id());
+                }
             }
             UserRecordCourse userRecordCourse = new UserRecordCourse();
             userRecordCourse.setUser_id(getCurrentUserId());

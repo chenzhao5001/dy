@@ -108,7 +108,7 @@ public interface IRecord {
     @Select("select * from user_record_course where user_id = #{arg0}")
     List<UserRecordCourse> getUserRecordByUserId(int user_id);
 
-    @Select("select * from user_record_course where user_id = #{arg0}")
+    @Select("select * from user_record_course where user_id = #{arg0} and user_record_course_id = #{arg1}")
     List<UserRecordCourse> getUserRecordByUserIdAndCourseId(int user_id,int course_id);
 
     @Insert("insert into test_record_course (user_id,record_course_id,class_NO,class_url,class_name,time_start,time_end,picture) " +
