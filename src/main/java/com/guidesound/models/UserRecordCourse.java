@@ -7,6 +7,24 @@ public class UserRecordCourse {
     int last_class_NO;
     String last_class_name;
     int last_class_pos;
+    int create_time;
+    int update_time;
+
+    public int getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(int create_time) {
+        this.create_time = create_time;
+    }
+
+    public int getUpdate_time() {
+        return update_time;
+    }
+
+    public void setUpdate_time(int update_time) {
+        this.update_time = update_time;
+    }
 
     public int getId() {
         return id;

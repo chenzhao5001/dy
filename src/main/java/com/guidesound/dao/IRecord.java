@@ -93,7 +93,7 @@ public interface IRecord {
     @Select("select * from user_record_course where user_id = #{arg0} and user_record_course_id = #{arg1}")
     List<UserRecordCourse> getRecordByUserAndId(int user_id, int user_record_course_id );
 
-    @Insert("insert into user_record_course (user_id,user_record_course_id) values (#{user_id},#{user_record_course_id})")
+    @Insert("insert into user_record_course (user_id,user_record_course_id,create_time) values (#{user_id},#{user_record_course_id},#{create_time})")
     void insertRecordCourse(UserRecordCourse userRecordCourse);
 
     @Select("select * from user_record_course where user_id = #{arg0}")

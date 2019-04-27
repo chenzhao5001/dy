@@ -836,7 +836,7 @@ public class ClassRoomController extends BaseController {
 
                 VideoClass1 videoClass1 = new VideoClass1();
                 videoClass1.setRecord_course_id(record.getRecord_course_id());
-                videoClass1.setRecord_course_status(record.getRecord_course_status());
+                videoClass1.setRecord_course_status(0);
                 videoClass1.setRecord_course_pic(record.getRecord_course_pic());
                 videoClass1.setRecord_course_name(record.getRecord_course_name());
                 videoClass1.setRecord_owner_id(record.getUser_id());

@@ -559,6 +559,7 @@ public class OrderController extends BaseController {
             UserRecordCourse userRecordCourse = new UserRecordCourse();
             userRecordCourse.setUser_id(getCurrentUserId());
             userRecordCourse.setUser_record_course_id(Integer.parseInt(order_id));
+            userRecordCourse.setCreate_time((int) (new Date().getTime() / 1000));
             iRecord.insertRecordCourse(userRecordCourse);
         }
         class Ret {
