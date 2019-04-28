@@ -191,6 +191,11 @@ public interface IArticle {
     @Update("update articleAnswer set examine_status = 1,type_list = #{arg1} where id = #{arg0}")
     void setAnswerExamineSuccess(int id, String type_list);
 
+    @Select("select * from articleAnswer where id = #{arg0}")
+    ArticleAnswer getAnswerById(int id);
+
+
+
     @Update("update article set examine_status = 2,examine_reason = #{arg1},fail_content = #{arg2} where id = #{arg0}")
     void setExamineFail(int id, String fail_reson, String fail_content);
 

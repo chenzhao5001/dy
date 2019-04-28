@@ -10,9 +10,11 @@ import com.guidesound.TempStruct.RecordTeacherPic;
 import com.guidesound.TempStruct.RecordVideo;
 import com.guidesound.dao.IExamine;
 import com.guidesound.dao.IRecord;
+import com.guidesound.dao.IUser;
 import com.guidesound.dto.RecordDTO;
 import com.guidesound.models.CourseExamine;
 import com.guidesound.models.Record;
+import com.guidesound.models.UserInfo;
 import com.guidesound.models.UserRecordCourse;
 import com.guidesound.ret.RecordItem;
 import com.guidesound.util.JSONResult;
@@ -38,6 +40,8 @@ public class RecordCourseController extends BaseController {
     IRecord iRecord;
     @Autowired
     IExamine iExamine;
+    @Autowired
+    IUser iUser;
 
     @RequestMapping("/add")
     @ResponseBody
@@ -110,7 +114,12 @@ public class RecordCourseController extends BaseController {
             return JSONResult.ok();
         }
 
-
+        record.setRecord_owner_id(record.getUser_id());
+        UserInfo userInfo = iUser.getUser(record.getUser_id());
+        if(userInfo != null) {
+            record.setRecord_owner_name(userInfo.getName());
+            record.setRecord_owner_head(userInfo.getHead());
+        }
 
         record.setGrade_id((Integer)record.getGrade());
         record.setGrade(SignMap.getGradeTypeByID(record.getGrade_id()));

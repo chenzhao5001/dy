@@ -25,6 +25,35 @@ public class Record {
     int save;
     boolean is_pay;
 
+
+    int record_owner_id;
+    String record_owner_name;
+    String record_owner_head;
+
+    public int getRecord_owner_id() {
+        return record_owner_id;
+    }
+
+    public void setRecord_owner_id(int record_owner_id) {
+        this.record_owner_id = record_owner_id;
+    }
+
+    public String getRecord_owner_name() {
+        return record_owner_name;
+    }
+
+    public void setRecord_owner_name(String record_owner_name) {
+        this.record_owner_name = record_owner_name;
+    }
+
+    public String getRecord_owner_head() {
+        return record_owner_head;
+    }
+
+    public void setRecord_owner_head(String record_owner_head) {
+        this.record_owner_head = record_owner_head;
+    }
+
     public int getGroup_id() {
         return group_id;
     }
