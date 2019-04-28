@@ -161,8 +161,11 @@ public class RecordCourseController extends BaseController {
             JavaType javaType = getCollectionType(ArrayList.class, RecordVideo.class);
             recordVideoList = mapper_temp.readValue((String) record.getVideos(), javaType);
             for(RecordVideo recordVideo : recordVideoList) {
+                String cdnClassUrl = recordVideo.getClass_url().replace("cos.ap-beijing", "file");
                 if(!user_ids.contains(getCurrentUserId()) && recordVideo.getCharge_type() == 1) {
                     recordVideo.setClass_url("");
+                } else {
+                    recordVideo.setClass_url(cdnClassUrl);
                 }
             }
             record.setVideos(recordVideoList);
