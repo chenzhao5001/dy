@@ -732,7 +732,7 @@ public class ManagerController extends BaseController {
                     TlsSigTest.SendMessage(uid,"您修改的新头像已经通过系统审核。");
                     iUser.updateHead(Integer.parseInt(uid),head);
                 } else {
-                    TlsSigTest.SendMessage(uid,"您修改的新昵称未通过系统审核，未通过原因是" +  failure_content + "”。");
+                    TlsSigTest.SendMessage(uid,"您修改的新头像未通过系统审核，未通过原因是" +  failure_content + "”。");
                 }
                 iUser.updateUserHeadFlag(Integer.parseInt(uid),1);
             }
@@ -744,6 +744,9 @@ public class ManagerController extends BaseController {
                 String name = userExamine.get(0).getText();
                 if(Integer.parseInt(result) == 0) {
                     iUser.updateName(Integer.parseInt(uid),name);
+                    TlsSigTest.SendMessage(uid,"您修改的新昵称：“" + name + "”已经通过系统审核。");
+                } else {
+                    TlsSigTest.SendMessage(uid,"您修改的新头像未通过系统审核，未通过原因是" +  failure_content + "”。");
                 }
                 iUser.updateUserNameFlag(Integer.parseInt(uid),1);
             }
