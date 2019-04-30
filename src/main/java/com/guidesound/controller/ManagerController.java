@@ -512,6 +512,14 @@ public class ManagerController extends BaseController {
                 return JSONResult.errorMsg("缺少type_list");
             }
             if(type_list.contains("1")) {
+                ArticlePool articlePool = new ArticlePool();
+                articlePool.setUser_id(articleInfo.getUser_id());
+                articlePool.setSubject(articleInfo.getSubject());
+                articlePool.setArticle_pool(articleInfo.getGrade());
+                articlePool.setArticle_id(articleInfo.getId());
+                articlePool.setCreate_time((int) (new Date().getTime() / 1000));
+                iArticle.insertArticlePool(articlePool);
+
                 if(type.equals("1")) {
                     iArticle.setExamineSuccess(Integer.parseInt(article_id),type_list);
                     TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的文章“" + articleInfo.getHead()+ "”已经通过系统审核，由于文章质量很高已被系统推荐！");

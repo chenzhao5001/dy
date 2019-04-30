@@ -98,8 +98,8 @@ public interface IArticle {
     @Select("select content_url from articleAnswer where id = #{arg0}")
     String getAnswerContentById(int answer_id);
 
-    @Insert("insert into article (head,user_id,head_pic1,head_pic2,head_pic3,create_time,subject,grade,type) value (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},#{arg6},#{arg7},2)")
-    void addAsk(String title,int user_id,String pic1,String pic2,String pic3,int create_tile,int subject,int grade);
+    @Insert("insert into article (head,user_id,head_pic1,head_pic2,head_pic3,create_time,subject,grade,type) value (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},#{arg6},#{arg7},#{arg8},2)")
+    void addAsk(String title,int user_id,String pic1,String pic2,String pic3,int create_tile,int subject,int grade,int ask_subject);
 
     @Insert("insert into articleAnswer (user_id,ask_id,abstract_info,pic1_url,pic2_url,pic3_url,content_url,attachment_type,attachment_id,attachment_name,attachment_subtype,create_time)" +
             " value (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},#{arg6},#{arg7},#{arg8},#{arg9},#{arg10},#{arg11})")
@@ -273,18 +273,21 @@ public interface IArticle {
     @Select("select * from article_index where user_guid = #{arg0} and param = #{arg1}")
     List<ArticleIndex> getArticleIndexCount(String user_guid,String param);
 
-    @Select("select distinct article_id from article_pools left join article on article_id = article.id  where examine_status = 1 and article_pools.create_time > #{arg2} limit #{arg0},#{arg1}")
-    List<Integer> articleAllIdsInArticlePoolsToday(int begin,int end,int time);
-
-    @Select("select distinct article_id from article_pools left join article on article_id = article.id where  examine_status = 1 limit #{arg0},#{arg1}")
-    List<Integer> articleAllIdsInArticlePools(int begin,int end);
-
     @Insert("insert into article_index (user_guid,param,index_count) value (#{arg0},#{arg1},#{arg2})")
     void insertArticleIndex(String user_guid,String param,int index_count);
 
     @Update("update article_index set index_count = #{arg2} where user_guid = #{arg0} and param = #{arg1} ")
     void updateArticleIndex(String user_guid,String param,int index_count);
 
+
+
+
+
+    @Select("select distinct article_id from article_pools left join article on article_id = article.id  where type = 1 and examine_status = 1 and article_pools.create_time > #{arg2} limit #{arg0},#{arg1}")
+    List<Integer> articleAllIdsInArticlePoolsToday(int begin,int end,int time);
+
+    @Select("select distinct article_id from article_pools left join article on article_id = article.id  where type = 1 and examine_status = 1 limit #{arg0},#{arg1}")
+    List<Integer> articleAllIdsInArticlePools(int begin,int end);
 
     @Select("<script>"
             + "SELECT distinct article_id FROM article_pools left join article on article_id = article.id  WHERE article_pool IN "
@@ -293,6 +296,7 @@ public interface IArticle {
             + "</foreach>"
             + " and article_pools.create_time > #{arg3}"
             + " and  examine_status = 1"
+            + " and  type = 1 "
             + " limit #{arg1},#{arg2}"
             + "</script>")
     List<Integer> articleIdsByPoolsIdsInArticlePoolsToday(@Param("iList") List<Integer> iList,int begin,int end,int time);
@@ -304,10 +308,14 @@ public interface IArticle {
             + "#{item}"
             + "</foreach>"
             + " and examine_status = 1 "
+            + " and  type = 1 "
             + " limit #{arg1},#{arg2}"
             + "</script>")
     List<Integer> articleIdsByPoolsIdsInArticlePools(@Param("iList") List<Integer> iList,int begin,int end);
 
+
+
+    ///学科推荐
     @Select("<script>"
             + "SELECT distinct article_id FROM article_pools left join article on article_id = article.id  WHERE article_pools.subject IN "
             + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"

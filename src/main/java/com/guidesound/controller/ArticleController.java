@@ -604,7 +604,7 @@ public class ArticleController extends BaseController {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User) request.getAttribute("user_info");
 
-        iArticle.addAsk(title, currentUser.getId(), pic1_url, pic2_url, pic3_url, time, Integer.parseInt(subject), Integer.parseInt(grade));
+        iArticle.addAsk(title, currentUser.getId(), pic1_url, pic2_url, pic3_url, time, 2, Integer.parseInt(grade),Integer.parseInt(subject));
         return JSONResult.ok();
     }
 
