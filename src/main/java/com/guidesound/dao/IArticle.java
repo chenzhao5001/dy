@@ -9,6 +9,9 @@ import java.util.List;
 
 public interface IArticle {
 
+    @Select("select * from article")
+    List<ArticleInfo> getAll();
+
     @Select("select count(*) from article where user_id = #{arg0}")
     int getCountByUserId(String user_id);
 

@@ -28,6 +28,7 @@ public class ArticleInfo {
     private int user_grade_level;
     private String user_grade_level_name;
     private String content_url;
+    private String type_list;
 
     private int collection_count;
     private boolean collection;
@@ -46,6 +47,14 @@ public class ArticleInfo {
     VideoClass video_class;
     TeacherClass teacher_class;
     CommodityInfo commodity;
+
+    public String getType_list() {
+        return type_list;
+    }
+
+    public void setType_list(String type_list) {
+        this.type_list = type_list;
+    }
 
     public VideoClass getVideo_class() {
         return video_class;
