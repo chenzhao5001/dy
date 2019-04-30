@@ -562,7 +562,11 @@ public class ArticleController extends BaseController {
             mode.addAttribute("content", "文章不存在");
             return "preview";
         }
+
         String url = iArticle.getContentById(Integer.parseInt(article_id));
+        if(url.equals("")) {
+            return "";
+        }
         Request request = new Request.Builder().url(url).build();
         Call call = okHttpClient.newCall(request);
         Response response = call.execute();

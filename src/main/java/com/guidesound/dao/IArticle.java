@@ -98,7 +98,7 @@ public interface IArticle {
     @Select("select content_url from articleAnswer where id = #{arg0}")
     String getAnswerContentById(int answer_id);
 
-    @Insert("insert into article (head,user_id,head_pic1,head_pic2,head_pic3,create_time,subject,grade,type) value (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},#{arg6},#{arg7},#{arg8},2)")
+    @Insert("insert into article (head,user_id,head_pic1,head_pic2,head_pic3,create_time,subject,grade,ask_subject,type) value (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4},#{arg5},#{arg6},#{arg7},#{arg8},2)")
     void addAsk(String title,int user_id,String pic1,String pic2,String pic3,int create_tile,int subject,int grade,int ask_subject);
 
     @Insert("insert into articleAnswer (user_id,ask_id,abstract_info,pic1_url,pic2_url,pic3_url,content_url,attachment_type,attachment_id,attachment_name,attachment_subtype,create_time)" +

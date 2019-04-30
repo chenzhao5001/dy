@@ -9,7 +9,6 @@
     <list default="true" id="b7c7c742-9c4d-41b3-a82e-f22b8938a7fb" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
@@ -22,27 +21,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/OpenController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="109" column="41" selection-start-line="109" selection-start-column="29" selection-end-line="109" selection-end-column="41" />
-              <folding>
-                <element signature="e#3566#3567#0" expanded="true" />
-                <element signature="e#3627#3628#0" expanded="true" />
-                <element signature="e#3850#3851#0" expanded="true" />
-                <element signature="e#3909#3910#0" expanded="true" />
-                <element signature="e#4122#4123#0" expanded="true" />
-                <element signature="e#4179#4180#0" expanded="true" />
-                <element signature="e#4379#4380#0" expanded="true" />
-                <element signature="e#4431#4432#0" expanded="true" />
-                <element signature="e#4497#4498#0" expanded="true" />
-                <element signature="e#4563#4564#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/WEB-INF/jsp/userPolicy.jsp">
           <provider selected="true" editor-type-id="text-editor">
@@ -64,8 +42,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="514" column="27" selection-start-line="514" selection-start-column="16" selection-end-line="514" selection-end-column="27" />
+            <state relative-caret-position="-3850">
+              <caret line="343" column="54" selection-start-line="343" selection-start-column="54" selection-end-line="343" selection-end-column="54" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -128,8 +106,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="310" column="30" selection-start-line="310" selection-start-column="30" selection-end-line="310" selection-end-column="30" />
+            <state relative-caret-position="169">
+              <caret line="95" column="11" selection-start-line="95" selection-start-column="11" selection-end-line="95" selection-end-column="11" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -140,8 +118,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="877" column="75" selection-start-line="877" selection-start-column="43" selection-end-line="877" selection-end-column="75" />
+            <state relative-caret-position="-1292">
+              <caret line="564" selection-start-line="564" selection-end-line="564" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.0.8.RELEASE/spring-web-5.0.8.RELEASE.jar!/org/springframework/web/method/support/InvocableHandlerMethod.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="103">
+              <caret line="126" selection-start-line="126" selection-end-line="126" />
             </state>
           </provider>
         </entry>
@@ -184,8 +171,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>chann</find>
-      <find>channel_article</find>
       <find>/list</find>
       <find>video</find>
       <find>findv</find>
@@ -214,6 +199,8 @@
       <find>/user_policy</find>
       <find>update_ph</find>
       <find>/add_ask</find>
+      <find>insert into article</find>
+      <find>/preview</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -288,9 +275,9 @@
         <option value="$PROJECT_DIR$/web/WEB-INF/jsp/userPolicy.jsp" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IUser.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" />
       </list>
     </option>
   </component>
@@ -501,7 +488,7 @@
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="guide_sound" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556618221932" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556620471260" />
     <property name="editor.config.ad.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path" value="node" />
@@ -757,12 +744,12 @@
       <workItem from="1556111459272" duration="16487000" />
       <workItem from="1556369592338" duration="124000" />
       <workItem from="1556370087681" duration="16822000" />
-      <workItem from="1556533491184" duration="27433000" />
+      <workItem from="1556533491184" duration="29454000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1518046000" />
+    <option name="totallyTimeSpent" value="1520067000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -789,7 +776,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.38101983" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.42776203" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.48592493" weight="0.16713881" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.48592493" visible="true" weight="0.16713881" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3286119" />
@@ -1178,13 +1165,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.0.8.RELEASE/spring-web-5.0.8.RELEASE.jar!/org/springframework/web/method/support/InvocableHandlerMethod.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="103">
-          <caret line="126" selection-start-line="126" selection-end-line="126" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IVideo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
@@ -1332,23 +1312,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="877" column="75" selection-start-line="877" selection-start-column="43" selection-end-line="877" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="310" column="30" selection-start-line="310" selection-start-column="30" selection-end-line="310" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/models/ArticlePool.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="50">
@@ -1386,10 +1349,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.0.8.RELEASE/spring-web-5.0.8.RELEASE.jar!/org/springframework/web/method/support/InvocableHandlerMethod.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="126" selection-start-line="126" selection-end-line="126" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="95" column="11" selection-start-line="95" selection-start-column="11" selection-end-line="95" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1292">
+          <caret line="564" selection-start-line="564" selection-end-line="564" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="514" column="27" selection-start-line="514" selection-start-column="16" selection-end-line="514" selection-end-column="27" />
+        <state relative-caret-position="-3850">
+          <caret line="343" column="54" selection-start-line="343" selection-start-column="54" selection-end-line="343" selection-end-column="54" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
