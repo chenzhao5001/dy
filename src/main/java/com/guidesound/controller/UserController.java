@@ -1325,7 +1325,7 @@ public class UserController extends BaseController{
 
         iExamine.addUserExamine(currentUser.getId(),2,introduce);
         iUser.updateUserIntroduceFlag(currentUser.getId(),0);
-        iUser.setUserIntroduce(currentUser.getId(),introduce);
+//        iUser.setUserIntroduce(currentUser.getId(),introduce);
 //        iUser.addVideoDuration(currentUser.getId(),60);
         return JSONResult.ok();
     }

@@ -794,6 +794,9 @@ public class ManagerController extends BaseController {
                 String introduction = userExamine.get(0).getText();
                 if(Integer.parseInt(result) == 0) {
                     iUser.upIntroduction(Integer.parseInt(uid),introduction);
+                    TlsSigTest.SendMessage(uid,"您修改的新用户介绍：“" + introduction + "”已经通过系统审核。");
+                } else {
+                    TlsSigTest.SendMessage(uid,"您修改的新用户介绍“" + introduction + "”未通过系统审核，未通过原因是" +  failure_content + "”。");
                 }
                 iUser.updateUserIntroduceFlag(Integer.parseInt(uid),1);
             }
@@ -805,7 +808,9 @@ public class ManagerController extends BaseController {
                 if(Integer.parseInt(result) == 0) {
                     iUser.updateAuthState(Integer.parseInt(uid),1);
                     iUser.addVideoDuration(Integer.parseInt(uid),60);
-                    TlsSigTest.SendMessage(uid,"您申请的认证“认证信息”已经通过系统审核，除真实身份体现外，同时您已经可以上传“x”分钟的短视频了。");
+                    UserInfo userInfo = iUser.getUser(Integer.parseInt(uid));
+                    int duration = userInfo.getVideo_duration() / 60;
+                    TlsSigTest.SendMessage(uid,"您申请的认证“认证信息”已经通过系统审核，除真实身份体现外，同时您已经可以上传“" + duration +"”分钟的短视频了。");
                 } else {
                     iUser.updateAuthState(Integer.parseInt(uid),3);
                     TlsSigTest.SendMessage(uid,"您申请的`认证“认证信息”未通过系统审核，未通过原因是“审核后台提交的结果”");
