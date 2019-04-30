@@ -648,6 +648,29 @@ public class ManagerController extends BaseController {
         return JSONResult.ok(list);
     }
 
+    @RequestMapping(value = "/add_pool_article")
+    @ResponseBody
+    JSONResult addArticlePool(String article_id,String pool_id) {
+        if(article_id == null || pool_id == null) {
+            return JSONResult.errorMsg("缺少article_id 或 pool_id");
+        }
+        ArticleInfo articleInfo = iArticle.getArticle(Integer.parseInt(article_id));
+        if( articleInfo == null ) {
+            return JSONResult.errorMsg("文章不存在");
+        }
+
+        List<ArticlePool> list = iArticle.getArticlePoolByInfo(Integer.parseInt(article_id),Integer.parseInt(pool_id));
+        if(list.size() == 0) {
+            ArticlePool articlePool = new ArticlePool();
+            articlePool.setArticle_id(Integer.parseInt(article_id));
+            articlePool.setUser_id(articleInfo.getUser_id());
+            articlePool.setSubject(articleInfo.getSubject());
+            articlePool.setArticle_pool(Integer.parseInt(pool_id));
+            articlePool.setCreate_time((int) (new Date().getTime() / 1000));
+            iArticle.insertArticlePool(articlePool);
+        }
+        return JSONResult.ok();
+    }
     @RequestMapping(value = "/add_pool")
     @ResponseBody
     JSONResult addPool(String video_id,String pool_id) {
@@ -681,6 +704,20 @@ public class ManagerController extends BaseController {
             }
         }
 
+        return JSONResult.ok();
+    }
+
+    @RequestMapping(value = "/remove_pool_article")
+    @ResponseBody
+    JSONResult removeArticlePool(String article_id,String pool_id) {
+        if(article_id == null || pool_id == null) {
+            return JSONResult.errorMsg("缺少article_id 或 pool_id");
+        }
+        ArticleInfo articleInfo = iArticle.getArticle(Integer.parseInt(article_id));
+        if(articleInfo == null) {
+            return JSONResult.errorMsg("文章不存在..");
+        }
+        iArticle.removeArticleFromPools(Integer.parseInt(article_id),Integer.parseInt(pool_id));
         return JSONResult.ok();
     }
 

@@ -911,12 +911,14 @@ public class ClassRoomController extends BaseController {
             teacherClass2.setWay(item.getWay());
 
             Course course = iCourse.getCourseById(item.getCourse_id());
-            teacherClass2.setNext_clsss_time(course.getTest_time());
-            teacherClass2.setNext_class_hour(1);
-            ClassInfo classInfo = new ClassInfo();
-            classInfo.setTeacher_class(teacherClass2);
-            classInfo.setVideo_class(null);
-            classInfo_list.add(classInfo);
+            if(course != null) {
+                teacherClass2.setNext_clsss_time(course.getTest_time());
+                teacherClass2.setNext_class_hour(1);
+                ClassInfo classInfo = new ClassInfo();
+                classInfo.setTeacher_class(teacherClass2);
+                classInfo.setVideo_class(null);
+                classInfo_list.add(classInfo);
+            }
         }
 
         List<TestRecordCourse> lists = iRecord.getAllTestRecordCourse();

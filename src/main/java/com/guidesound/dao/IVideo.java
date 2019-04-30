@@ -266,8 +266,6 @@ public interface IVideo {
 
 
 
-
-
     @Select("<script>"
             + "SELECT * FROM video WHERE id IN "
             + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
@@ -280,11 +278,6 @@ public interface IVideo {
     void removeVideoFromPools(int video_id,int pool);
     @Select("select * from video_pools where video_id = #{arg0} and video_pool = #{arg1}")
     List<VideoPool> getVideoPoolByInfo(int video_id,int pool);
-
-
-
-
-
 
 
 

@@ -223,9 +223,6 @@
             ORDER BY group DESC
         </if>
         limit #{begin},#{end}
-
-
-
     </select>
 
     <!--<update id="setVideoStatus">-->

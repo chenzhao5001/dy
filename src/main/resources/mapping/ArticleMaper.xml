@@ -61,4 +61,166 @@
     </select>
 
 
+    <select id="findArticleCount"
+            resultType="int">
+        SELECT   distinct article.id
+        FROM article
+        <if test="pools != null" >
+            left join article_pools on article.id = article_pools.article_id
+        </if>
+        <if test="course_type != null" >
+            left join course on article.user_id = course.user_id
+        </if>
+        WHERE 1 =1
+        <if test="head != null ">
+            and  head LIKE CONCAT('%',#{head},'%')
+        </if>
+
+        <if test="status != null  ">
+            and  examine_status =  #{status}
+        </if>
+
+        <if test="article_id != null ">
+            and  article.id =  #{article_id}
+        </if>
+
+        <if test="user_id != null ">
+            and  article.user_id =  #{user_id}
+        </if>
+
+        <if test="pools != null" >
+            and  article_pool IN
+            <foreach collection="pools" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+
+        </if>
+
+
+        <if test="subject_list != null ">
+            and  article.subject IN
+            <foreach collection="subject_list" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
+        <if test="course_type != null" >
+            and  course.type IN
+            <foreach collection="course_type" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+            and course.course_status = 3
+        </if>
+
+        <if test="grade_class_list != null ">
+            and  grade IN
+            <foreach collection="grade_class_list" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
+        <if test="user_ids != null ">
+            and  article.user_id IN
+            <foreach collection="user_ids" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        and deleted = 0
+    </select>
+
+
+    <select id="findArticle"
+            resultType="com.guidesound.models.ArticleInfo">
+        SELECT *
+        FROM article
+        <if test="pools != null" >
+            left join article_pools on article.id = article_pools.article_id
+        </if>
+        <if test="course_type != null" >
+            left join course on article.user_id = course.user_id
+        </if>
+        WHERE 1 =1
+        <if test="head != null ">
+            and  head LIKE CONCAT('%',#{head},'%')
+        </if>
+
+        <if test="status != null ">
+            and  examine_status =  #{status}
+        </if>
+
+        <if test="article_id != null ">
+            and  article.id =  #{article_id}
+        </if>
+
+        <if test="user_id != null ">
+            and  article.user_id =  #{user_id}
+        </if>
+
+        <if test="pools != null" >
+            and  article_pool IN
+            <foreach collection="pools" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+
+        </if>
+
+        <if test="subject_list != null ">
+            and  article.subject IN
+            <foreach collection="subject_list" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
+        <if test="course_type != null" >
+            and  course.type IN
+            <foreach collection="course_type" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+            and course.course_status = 3
+        </if>
+
+
+        <if test="grade_class_list != null ">
+            and  grade IN
+            <foreach collection="grade_class_list" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
+        <if test="user_ids != null ">
+            and  article.user_id IN
+            <foreach collection="user_ids" item="id" index="index" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        and deleted = 0
+        group by article.id
+        <if test="sType != null and sType == 101">
+            ORDER BY praise_count DESC
+        </if>
+        <if test="sType != null and sType == 102">
+            ORDER BY comment_count DESC
+        </if>
+        <!--<if test="sType != null and sType == 103">-->
+            <!--ORDER BY out_relay DESC-->
+        <!--</if>-->
+        <!--<if test="sType != null and sType == 104">-->
+            <!--ORDER BY inner_relay DESC-->
+        <!--</if>-->
+        <if test="sType != null and sType == 105">
+            ORDER BY collection_count DESC
+        </if>
+        <!--<if test="sType != null and sType == 106">-->
+            <!--ORDER BY play_count DESC-->
+        <!--</if>-->
+        <!--<if test="sType != null and sType == 107">-->
+            <!--ORDER BY rec_count DESC-->
+        <!--</if>-->
+        <!--<if test="sType != null and sType == 108">-->
+            <!--ORDER BY group DESC-->
+        <!--</if>-->
+        limit #{begin},#{end}
+    </select>
+
+
 </mapper>

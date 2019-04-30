@@ -174,8 +174,6 @@ public class TypeMapController extends BaseController {
         } else {
             return JSONResult.ok(SignMap.getChannelList(channel_stage/100,false));
         }
-
-//        return SignMap.getChannelList();
     }
 
 

@@ -36,8 +36,7 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.guidesound.util.ToolsFunction.URLDecoderString;
-import static com.guidesound.util.ToolsFunction.getURLEncoderString;
+import static com.guidesound.util.ToolsFunction.*;
 
 @Controller
 @RequestMapping("/article")
@@ -333,37 +332,38 @@ public class ArticleController extends BaseController {
     @RequestMapping("/list")
     @ResponseBody
     JSONResult getList(String page,String size,String subject,String head,String type,String user_id) {
+        return JSONResult.errorMsg("接口已经废弃");
 
-        int iPage = (page == null || page.equals(""))  ? 1:Integer.parseInt(page);
-        int iSize = (size == null || size.equals(""))  ? 20:Integer.parseInt(size);
-
-        int begin = (iPage - 1)*iSize;
-        int end = iSize;
-        subject = subject == null ? "0":subject;
-        type = type == null ? "0":type;
-
-        ArticleFind articleFind = new ArticleFind();
-        articleFind.setHead(head);
-        articleFind.setSubject(Integer.parseInt(subject));
-        articleFind.setBegin(begin);
-        articleFind.setEnd(end);
-        articleFind.setType(Integer.parseInt(type));
-        articleFind.setUser_id(user_id);
-        if(user_id != null && getCurrentUserId() == Integer.parseInt(user_id)) {
-            articleFind.setOwer_flag(true);
-        }
-
-        int count = iArticle.count(articleFind);
-        List<ArticleInfo> list = new ArrayList<>();
-        if(count > 0) {
-            list = iArticle.getList(articleFind);
-            getExtendInfo(list);
-        }
-
-        ListResp listResp = new ListResp();
-        listResp.setCount(count);
-        listResp.setList(list);
-        return JSONResult.ok(listResp);
+//        int iPage = (page == null || page.equals(""))  ? 1:Integer.parseInt(page);
+//        int iSize = (size == null || size.equals(""))  ? 20:Integer.parseInt(size);
+//
+//        int begin = (iPage - 1)*iSize;
+//        int end = iSize;
+//        subject = subject == null ? "0":subject;
+//        type = type == null ? "0":type;
+//
+//        ArticleFind articleFind = new ArticleFind();
+//        articleFind.setHead(head);
+//        articleFind.setSubject(Integer.parseInt(subject));
+//        articleFind.setBegin(begin);
+//        articleFind.setEnd(end);
+//        articleFind.setType(Integer.parseInt(type));
+//        articleFind.setUser_id(user_id);
+//        if(user_id != null && getCurrentUserId() == Integer.parseInt(user_id)) {
+//            articleFind.setOwer_flag(true);
+//        }
+//
+//        int count = iArticle.count(articleFind);
+//        List<ArticleInfo> list = new ArrayList<>();
+//        if(count > 0) {
+//            list = iArticle.getList(articleFind);
+//            getExtendInfo(list);
+//        }
+//
+//        ListResp listResp = new ListResp();
+//        listResp.setCount(count);
+//        listResp.setList(list);
+//        return JSONResult.ok(listResp);
     }
 
     void getExtendInfo(List<ArticleInfo> list) {
@@ -848,23 +848,117 @@ public class ArticleController extends BaseController {
     @RequestMapping("/article_channel")
     @ResponseBody
     JSONResult articleChannel() {
-
         int user_id = getCurrentUserId();
         if(user_id == 0) {
-            return JSONResult.ok(SignMap.getChannelList(1,true));
+            return JSONResult.ok(SignMap.getChannelList(1,false));
         }
         int channel_stage = iUser.getChannelStage(user_id);
-        int temp = 0;
-
         if(channel_stage == 101) {
-            temp = 101;
+            return JSONResult.ok(SignMap.getChannelList(101,false));
         } else if(channel_stage == 102){
-            temp = 102;
+            return JSONResult.ok(SignMap.getChannelList(102,false));
         } else {
-            temp = channel_stage/100;
+            return JSONResult.ok(SignMap.getChannelList(channel_stage/100,false));
         }
-        return JSONResult.ok(SignMap.getChannelList(temp,true));
     }
+
+    List<Integer> getAllPoolArticle(String user_id, String key, boolean is_new, List<Integer> pools_list) {
+
+        List<Integer> article_ids = new ArrayList<>();
+        List<ArticleIndex> videoIndex = iArticle.getArticleIndexCount(user_id, key);
+        long nowTime = System.currentTimeMillis();
+        int todayStartTime = (int) ((nowTime - (nowTime + TimeZone.getDefault().getRawOffset()) % (1000 * 3600 * 24)) / 1000);
+
+        if (pools_list.size() == 0) {
+            if (videoIndex.size() == 0) {
+                if (is_new) {
+                    article_ids = iArticle.articleAllIdsInArticlePoolsToday(0, 20, todayStartTime);
+                } else {
+                    article_ids = iArticle.articleAllIdsInArticlePools(0, 20);
+                }
+                iArticle.insertArticleIndex(user_id, key, article_ids.size());
+            } else {
+                if (is_new) {
+                    article_ids = iArticle.articleAllIdsInArticlePoolsToday(videoIndex.get(0).getIndex_count(), 20, todayStartTime);
+                } else {
+                    article_ids = iArticle.articleAllIdsInArticlePools(videoIndex.get(0).getIndex_count(), 20);
+                }
+                iArticle.updateArticleIndex(user_id, key, videoIndex.get(0).getIndex_count() + article_ids.size());
+            }
+        } else {
+            if (videoIndex.size() == 0) {
+                if (is_new) {
+                    article_ids = iArticle.articleIdsByPoolsIdsInArticlePoolsToday(pools_list, 0, 20, todayStartTime);
+                } else {
+                    article_ids = iArticle.articleIdsByPoolsIdsInArticlePools(pools_list, 0, 20);
+                }
+                iArticle.insertArticleIndex(user_id, key, article_ids.size());
+            } else {
+                if (is_new) {
+                    article_ids = iArticle.articleIdsByPoolsIdsInArticlePoolsToday(pools_list, videoIndex.get(0).getIndex_count(), 20, todayStartTime);
+                } else {
+                    article_ids = iArticle.articleIdsByPoolsIdsInArticlePools(pools_list, videoIndex.get(0).getIndex_count(), 20);
+                }
+                iArticle.updateArticleIndex(user_id, key, videoIndex.get(0).getIndex_count() + article_ids.size());
+            }
+        }
+        if (!is_new) {
+            if (article_ids.size() < 20) {
+                iArticle.updateArticleIndex(user_id, key, 0);
+            }
+        }
+        return article_ids;
+    }
+
+    List<Integer> getAllSubjectPoolArticle(String user_id, String key, boolean is_new, List<Integer> pools_list, List<Integer> subject_list) {
+
+        List<Integer> article_ids = new ArrayList<>();
+        List<ArticleIndex> articleIndex = iArticle.getArticleIndexCount(user_id, key);
+        long nowTime = System.currentTimeMillis();
+        int todayStartTime = (int) ((nowTime - (nowTime + TimeZone.getDefault().getRawOffset()) % (1000 * 3600 * 24)) / 1000);
+
+        if (pools_list.size() == 0) {
+            if (articleIndex.size() == 0) {
+                if (is_new) {
+                    article_ids = iArticle.articleAllIdsInArticlePoolsBySubjectToday(subject_list, 0, 20, todayStartTime);
+                } else {
+                    article_ids = iArticle.articleAllIdsInArticlePoolsBySubject(subject_list, 0, 20);
+                }
+                iArticle.insertArticleIndex(user_id, key, article_ids.size());
+            } else {
+                if (is_new) {
+                    article_ids = iArticle.articleAllIdsInArticlePoolsBySubjectToday(subject_list, articleIndex.get(0).getIndex_count(), 20, todayStartTime);
+                } else {
+                    article_ids = iArticle.articleAllIdsInArticlePoolsBySubject(subject_list, articleIndex.get(0).getIndex_count(), 20);
+                }
+                iArticle.updateArticleIndex(user_id, key, articleIndex.get(0).getIndex_count() + article_ids.size());
+            }
+        } else {
+            if (articleIndex.size() == 0) {
+                if (is_new) {
+                    article_ids = iArticle.articleIdsByPoolsIdsInArticlePoolsBySubjectToday(subject_list, pools_list, 0, 20, todayStartTime);
+                } else {
+                    article_ids = iArticle.articleIdsByPoolsIdsInArticlePoolsBySubject(subject_list, pools_list, 0, 20);
+                }
+                iArticle.insertArticleIndex(user_id, key, article_ids.size());
+            } else {
+                if (is_new) {
+                    article_ids = iArticle.articleIdsByPoolsIdsInArticlePoolsBySubjectToday(subject_list, pools_list, articleIndex.get(0).getIndex_count(), 20, todayStartTime);
+                } else {
+                    article_ids = iArticle.articleIdsByPoolsIdsInArticlePoolsBySubject(subject_list, pools_list, articleIndex.get(0).getIndex_count(), 20);
+                }
+                iArticle.updateArticleIndex(user_id, key, articleIndex.get(0).getIndex_count() + article_ids.size());
+            }
+        }
+        if (!is_new) {
+            if (article_ids.size() < 20) {
+                iArticle.updateArticleIndex(user_id, key, 0);
+            }
+        }
+        return article_ids;
+    }
+
+
     /**
      * 获取频道文章
      */
@@ -876,18 +970,100 @@ public class ArticleController extends BaseController {
             return JSONResult.errorMsg("缺少 channel_id 或 user_guid 参数");
         }
 
-        JSONResult ret = null;
-        if(channel_id.equals("1")) {
-            ret =  getList("1","20",null,null,null,null);
+        List<Integer> article_ids = new ArrayList<>();
+        int grade = 0;
+
+        if (isNumeric(user_guid)) {
+            UserInfo userInfo = iUser.getUser(Integer.parseInt(user_guid));
+            if (userInfo != null) {
+                grade = userInfo.getChannel_stage();
+            }
         }
-        else if(channel_id.equals("2")) {
-            ret =  getList("1","20",null,null,"2",null);
+        int other_grade1 = 0;
+        if (grade != 0) {
+            other_grade1 = grade / 100 * 100 + 99;
         }
-        else {
-            ret =  getList("1","20",channel_id,null,null,null);
+        List<Integer> videos_pool_ids = new ArrayList<>();
+        if (grade != 0) {
+            videos_pool_ids.add(grade);
+        }
+        if (other_grade1 != 0) {
+            videos_pool_ids.add(other_grade1);
+        }
+        videos_pool_ids.add(999);
+
+        String param = "";
+        long nowTime = System.currentTimeMillis();
+        int todayStartTime = (int) ((nowTime - (nowTime + TimeZone.getDefault().getRawOffset()) % (1000 * 3600 * 24)) / 1000);
+        if (channel_id.equals("1")) { //推荐
+            if (grade == 0) {
+                article_ids = getAllPoolArticle(user_guid, "all" + todayStartTime, true, new ArrayList<>());
+                if (article_ids.size() < 6) {
+                    List<Integer> article_ids_temp = getAllPoolArticle(user_guid, "all", false, new ArrayList<>());
+                    if(article_ids_temp.size() == 0) {
+                        article_ids_temp = getAllPoolArticle(user_guid, "all", false, new ArrayList<>());
+                    }
+                    for(int id : article_ids_temp) {
+                        article_ids.add(id);
+                    }
+                }
+            } else {
+                for (int id : videos_pool_ids) {
+                    param += (id + ",");
+                }
+                article_ids = getAllPoolArticle(user_guid, param + todayStartTime, true, videos_pool_ids);
+                if (article_ids.size() < 6 ) {
+                    List<Integer> video_ids_temp = getAllPoolArticle(user_guid, param, false, videos_pool_ids);
+                    if(video_ids_temp.size() == 0) {
+                        video_ids_temp = getAllPoolArticle(user_guid, param, false, videos_pool_ids);
+                    }
+                    for(int id : video_ids_temp) {
+                        article_ids.add(id);
+                    }
+                }
+            }
+        } else { //频道
+            List<String> list = Arrays.asList(channel_id.split(","));
+            List<Integer> subjectList = new ArrayList<>();
+            for (String id : list) {
+                if (id != null && !id.equals("")) {
+                    subjectList.add(Integer.parseInt(id));
+                }
+            }
+            for (int subject : subjectList) {
+                param += (subject + ",");
+            }
+            if (grade != 0) {
+                for (int id : videos_pool_ids) {
+                    param += (id + ",");
+                }
+            } else {
+                videos_pool_ids = new ArrayList<>();
+            }
+
+            article_ids = getAllSubjectPoolArticle(user_guid, param + todayStartTime, true, videos_pool_ids, subjectList);
+            if (article_ids.size() < 6) {
+                List<Integer> video_ids_temp = getAllSubjectPoolArticle(user_guid, param, false, videos_pool_ids, subjectList);
+                if(video_ids_temp.size() == 0) {
+                    video_ids_temp = getAllSubjectPoolArticle(user_guid, param, false, videos_pool_ids, subjectList);
+                }
+                for(int id : video_ids_temp) {
+                    article_ids.add(id);
+                }
+            }
         }
 
-        return ret;
+        ListResp ret = new ListResp();
+        if (article_ids.size() > 0) {
+            List<ArticleInfo> articles = iArticle.getArticlebyIds(article_ids);
+            getExtendInfo(articles);
+            ret.setCount(articles.size());
+            ret.setList(articles);
+        } else {
+            ret.setCount(0);
+            ret.setList(article_ids);
+        }
+        return JSONResult.ok(ret);
     }
 
     @RequestMapping("/comment_answer")
@@ -1054,7 +1230,95 @@ public class ArticleController extends BaseController {
         listResp.setCount(count);
         listResp.setList(list);
         return JSONResult.ok(listResp);
-
     }
 
+    @RequestMapping("/article_list")
+    @ResponseBody
+    JSONResult getArticleList(  String status,
+                                String content,
+                                String page,
+                                String size,
+                                String s_type,
+                                String subject,
+                                String grade_class,
+                                String article_id,
+                                String user_id,
+                                String pools,
+                                String course,
+                                String user_name) {
+
+        status = (status == null || status.equals("")) ? null : status;
+        String title = (content == null || content.equals("")) ? null : content;
+        int iPage = page == null ? 1 : Integer.parseInt(page);
+        int iSize = size == null ? 20 : Integer.parseInt(size);
+        int sType = s_type == null ? 0 : Integer.parseInt(s_type);
+        List<String> subject_list = null;
+        List<String> grade_class_list = null;
+        if (subject != null && !subject.equals("")) {
+            subject_list = Arrays.asList(subject.split(","));
+        }
+        if (grade_class != null && !grade_class.equals("")) {
+            grade_class_list = Arrays.asList(grade_class.split(","));
+        }
+        ListResp ret = new ListResp();
+
+        List<Integer> user_ids = null;
+        if (user_name != null) {
+            user_ids = iUser.getUserIdsByName2(user_name);
+            if (user_ids.size() < 1) {
+                ret.setCount(0);
+                ret.setList(new ArrayList<>());
+                return JSONResult.ok(ret);
+            }
+        }
+        int begin = (iPage - 1) * iSize;
+        int end = iSize;
+
+        ArticleFind articleFind = new ArticleFind();
+        articleFind.setHead(title);
+        articleFind.setStatus(status);
+        articleFind.setsType(1);
+        articleFind.setBegin(begin);
+        articleFind.setEnd(end);
+        articleFind.setSubject_list(subject_list);
+        articleFind.setGrade_class_list(grade_class_list);
+        articleFind.setsType(sType);
+        articleFind.setUser_id(user_id);
+        articleFind.setArticle_id(article_id);
+        articleFind.setUser_ids(user_ids);
+
+        List<String> poolList = new ArrayList<>();
+        if(pools != null && !pools.equals("")) {
+            String[] strarray = pools.split(",");
+            for(String id: strarray) {
+                if(!id.equals("")) {
+                    poolList.add(id);
+                }
+            }
+            articleFind.setPools(poolList);
+        }
+
+        List<Integer> course_type = new ArrayList<>();
+        if(course != null && !course.equals("")) {
+            String[] strarray = course.split(",");
+            for(String id: strarray) {
+                if(!id.equals("")) {
+                    course_type.add(Integer.parseInt(id) -1);
+                }
+            }
+            articleFind.setCourse_type(course_type);
+        }
+
+        int count_temp = iArticle.findArticleCount(articleFind).size();
+        if (count_temp == 0) {
+            ret.setCount(0);
+            ret.setList(new ArrayList<>());
+            return JSONResult.ok(ret);
+        }
+        List<ArticleInfo> list_temp = iArticle.findArticle(articleFind);
+        getExtendInfo(list_temp);
+        ret.setCount(count_temp);
+        ret.setList(list_temp);
+        return JSONResult.ok(ret);
+    }
 }

@@ -1,12 +1,5 @@
 package com.guidesound.dao;
 
-
-
-
-
-
-
-
 import com.guidesound.dto.ArticleDTO;
 import com.guidesound.find.ArticleFind;
 import com.guidesound.models.*;
@@ -246,4 +239,120 @@ public interface IArticle {
     List<ArticleInfo> getArticleByid(@Param("iList") List<Integer> iList);
     @Select("select * from article where id = #{arg0}")
     ArticleInfo getArticle(int id);
+
+    @Select("select * from article_pools where article_id = #{arg0} and article_pool = #{arg1}")
+    List<ArticlePool> getArticlePoolByInfo(int articleID,int poolID);
+
+    @Insert("insert into article_pools (article_id,user_id,subject,article_pool,create_time) " +
+            "value (#{article_id},#{user_id},#{subject},#{article_pool},#{create_time})")
+    void insertArticlePool(ArticlePool articlePool);
+
+    @Delete("delete from article_pools where article_id = #{arg0} and article_pool = #{arg1}")
+    void removeArticleFromPools(int article_id,int pool);
+
+    List<Integer> findArticleCount(ArticleFind articleFind);
+
+    List<ArticleInfo> findArticle(ArticleFind articleFind);
+
+
+
+    @Select("<script>"
+            + "SELECT * FROM article WHERE id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    List<ArticleInfo> getArticlebyIds(@Param("iList") List<Integer> iList);
+
+
+
+    ////文章推荐相关
+    @Select("select * from article_index where user_guid = #{arg0} and param = #{arg1}")
+    List<ArticleIndex> getArticleIndexCount(String user_guid,String param);
+
+    @Select("select distinct article_id from article_pools left join article on article_id = article.id  where examine_status = 1 and article_pools.create_time > #{arg2} limit #{arg0},#{arg1}")
+    List<Integer> articleAllIdsInArticlePoolsToday(int begin,int end,int time);
+
+    @Select("select distinct article_id from article_pools left join article on article_id = article.id where  examine_status = 1 limit #{arg0},#{arg1}")
+    List<Integer> articleAllIdsInArticlePools(int begin,int end);
+
+    @Insert("insert into article_index (user_guid,param,index_count) value (#{arg0},#{arg1},#{arg2})")
+    void insertArticleIndex(String user_guid,String param,int index_count);
+
+    @Update("update article_index set index_count = #{arg2} where user_guid = #{arg0} and param = #{arg1} ")
+    void updateArticleIndex(String user_guid,String param,int index_count);
+
+
+    @Select("<script>"
+            + "SELECT distinct article_id FROM article_pools left join article on article_id = article.id  WHERE article_pool IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and article_pools.create_time > #{arg3}"
+            + " and  examine_status = 1"
+            + " limit #{arg1},#{arg2}"
+            + "</script>")
+    List<Integer> articleIdsByPoolsIdsInArticlePoolsToday(@Param("iList") List<Integer> iList,int begin,int end,int time);
+
+
+    @Select("<script>"
+            + "SELECT distinct article_id FROM article_pools left join article on article_id = article.id  WHERE article_pool IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and examine_status = 1 "
+            + " limit #{arg1},#{arg2}"
+            + "</script>")
+    List<Integer> articleIdsByPoolsIdsInArticlePools(@Param("iList") List<Integer> iList,int begin,int end);
+
+    @Select("<script>"
+            + "SELECT distinct article_id FROM article_pools left join article on article_id = article.id  WHERE article_pools.subject IN "
+            + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and article_pools.create_time > #{arg3}"
+            + " and  examine_status = 1 "
+            + " limit #{arg1},#{arg2}"
+            + "</script>")
+    List<Integer> articleAllIdsInArticlePoolsBySubjectToday(@Param("iSubjectList") List<Integer> iSubjectList,int begin,int end,int time);
+
+    @Select("<script>"
+            + "SELECT distinct article_id FROM article_pools left join article on article_id = article.id  WHERE article_pools.subject IN "
+            + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and examine_status = 1 "
+            + " limit #{arg1},#{arg2}"
+            + "</script>")
+    List<Integer> articleAllIdsInArticlePoolsBySubject(@Param("iSubjectList") List<Integer> iSubjectList,int begin,int end);
+
+
+    @Select("<script>"
+            + "SELECT distinct article_id FROM article_pools left join article on article_id = article.id  WHERE article_pools.subject IN "
+            + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and article_pool in"
+            + "<foreach item='item' index='index' collection='iPoolList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and examine_status = 1 "
+            + " and article_pools.create_time > #{arg4}"
+            + " limit #{arg2},#{arg3}"
+            + "</script>")
+    List<Integer> articleIdsByPoolsIdsInArticlePoolsBySubjectToday(@Param("iSubjectList") List<Integer> iSubjectList,@Param("iPoolList") List<Integer> iPoolList,int begin,int end,int time);
+
+    @Select("<script>"
+            + "SELECT distinct article_id FROM article_pools left join article on article_id = article.id  WHERE article_pools.subject IN "
+            + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and article_pool in"
+            + "<foreach item='item' index='index' collection='iPoolList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and  examine_status = 1 "
+            + " limit #{arg2},#{arg3}"
+            + "</script>")
+    List<Integer> articleIdsByPoolsIdsInArticlePoolsBySubject(@Param("iSubjectList") List<Integer> iSubjectList,@Param("iPoolList") List<Integer> iPoolList,int begin,int end);
 }
