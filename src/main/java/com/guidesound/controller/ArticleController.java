@@ -983,7 +983,7 @@ public class ArticleController extends BaseController {
         if (isNumeric(user_guid)) {
             UserInfo userInfo = iUser.getUser(Integer.parseInt(user_guid));
             if (userInfo != null) {
-                grade = userInfo.getChannel_stage();
+                grade = userInfo.getChannel_article_stage();
             }
         }
         int other_grade1 = 0;

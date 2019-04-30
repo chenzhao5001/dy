@@ -217,8 +217,11 @@ public interface IUser {
     @Delete("delete from user where id = #{arg0}")
     void deleteUser(int user);
 
-    @Update("update user set channel_stage = #{arg1} where id = #{arg0}")
-    void setUserGradeStage(int user_id,int grade_stage);
+    @Update("update user set channel_video_stage = #{arg1} where id = #{arg0}")
+    void setUserVideoGradeStage(int user_id,int grade_stage);
+
+    @Update("update user set channel_article_stage = #{arg1} where id = #{arg0}")
+    void setUserArticleGradeStage(int user_id,int grade_stage);
 
     @Select("select channel_stage from user where id = #{arg0}")
     int getChannelStage(int user_id);
@@ -337,6 +340,9 @@ public interface IUser {
 
     @Select("select * from user_shop where user_id = #{arg0}")
     List<UserShop> shopList(int user_id);
+
+    @Select("select * from user_shop where user_id = #{arg0} and state = #{arg1}")
+    List<UserShop> shopListByState(int user_id,int state);
 
     @Insert("insert into user_commodity (user_id,commodity_name,commodity_pic,commodity_url,commodity_price,create_time,update_time) values(#{user_id},#{commodity_name},#{commodity_pic},#{commodity_url},#{commodity_price},#{create_time},#{update_time})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")

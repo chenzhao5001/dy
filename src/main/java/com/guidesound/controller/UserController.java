@@ -523,7 +523,7 @@ public class UserController extends BaseController{
         userInfo.setVideo_count(videoCount);
         userInfo.setArticle_count(articleCount);
 
-        List<UserShop> shopList = iUser.shopList(Integer.parseInt(user_id));
+        List<UserShop> shopList = iUser.shopListByState(Integer.parseInt(user_id),1);
         if(shopList.size() > 0) {
             userInfo.setShop_url(shopList.get(0).getShop_url());
         } else {
@@ -1066,13 +1066,17 @@ public class UserController extends BaseController{
 
     @RequestMapping(value = "/set_channel_stage")
     @ResponseBody
-    JSONResult setChannelGradeStage(String stage) {
-        if(stage == null) {
-            return JSONResult.errorMsg("缺少参数");
+    JSONResult setChannelGradeStage(String stage,String type) {
+        if(stage == null || type == null) {
+            return JSONResult.errorMsg("缺少参数 stage 或 type");
         }
         int user_id = getCurrentUserId();
-        iVideo.deletePushVideoByUserGuid(String.valueOf(user_id));
-        iUser.setUserGradeStage(user_id,Integer.parseInt(stage));
+//        iVideo.deletePushVideoByUserGuid(String.valueOf(user_id));
+        if(type.equals("1")) {
+            iUser.setUserVideoGradeStage(user_id,Integer.parseInt(stage));
+        } else if (type.equals("2")){
+            iUser.setUserArticleGradeStage(user_id,Integer.parseInt(stage));
+        }
         return JSONResult.ok();
     }
 

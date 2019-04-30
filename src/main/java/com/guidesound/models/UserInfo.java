@@ -58,12 +58,30 @@ public class UserInfo {
     private String im_id_2;
     private String im_sig_2;
     private int pwd_state;
-    private int channel_stage;
+    private int channel_video_stage;
+    private int channel_article_stage;
     public String im_appid = "1400158534";
     public String friend_state = "0";
 
     public int name_flag;
     public int head_flag;
+
+
+    public int getChannel_video_stage() {
+        return channel_video_stage;
+    }
+
+    public void setChannel_video_stage(int channel_video_stage) {
+        this.channel_video_stage = channel_video_stage;
+    }
+
+    public int getChannel_article_stage() {
+        return channel_article_stage;
+    }
+
+    public void setChannel_article_stage(int channel_article_stage) {
+        this.channel_article_stage = channel_article_stage;
+    }
 
     public String getIm_id_2() {
         return im_id_2;
@@ -145,13 +163,6 @@ public class UserInfo {
         this.im_appid = im_appid;
     }
 
-    public int getChannel_stage() {
-        return channel_stage;
-    }
-
-    public void setChannel_stage(int channel_stage) {
-        this.channel_stage = channel_stage;
-    }
 
     public String getIm_id() {
         return im_id;
