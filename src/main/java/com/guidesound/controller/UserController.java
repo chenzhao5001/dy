@@ -240,6 +240,8 @@ public class UserController extends BaseController{
         return JSONResult.ok();
     }
 
+    @RequestMapping(value = "/verify_phone_code")
+    @ResponseBody
     JSONResult verifyPhoneCode(String phone,String verify_code) {
         if(phone == null || verify_code == null || !ToolsFunction.isNumeric(phone) || phone.length() != 11) {
             return JSONResult.build(500,"参数错误",null);
@@ -1480,4 +1482,22 @@ public class UserController extends BaseController{
     String Treaty() {
         return "treaty";
     }
+
+
+    @RequestMapping("/report_question")
+    @ResponseBody
+    JSONResult reportQuestion(String question,String phone_number,String verify_code) {
+        if(question == null || phone_number == null || verify_code == null) {
+            return JSONResult.errorMsg("缺少 question, verify_code 或 phone_number 参数");
+        }
+        int time = (int) (new Date().getTime() / 1000) - 300;
+        int count = iVerifyCode.selectCode(phone_number,verify_code,time);
+        if(count <= 0) {
+            return JSONResult.errorMsg("验证码错误");
+        }
+        iUser.reportQusetion(question,phone_number, (int) (new Date().getTime() / 1000));
+        return JSONResult.ok();
+    }
+
+
 }

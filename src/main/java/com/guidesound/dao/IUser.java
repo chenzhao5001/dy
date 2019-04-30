@@ -404,5 +404,9 @@ public interface IUser {
     @Insert("insert into log_tmp (type_info,user_id,container,create_time) " +
             "value (#{type_info},#{user_id},#{container},#{create_time})")
     void AddLog(LogTmp logTmp);
+
+    @Insert("insert into question_report (question,phone,create_time) " +
+            "value (#{arg0},#{arg1},#{arg2})")
+    void reportQusetion(String question,String phone_number,int create_time);
 }
 
