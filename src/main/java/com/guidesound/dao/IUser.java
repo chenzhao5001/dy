@@ -197,7 +197,7 @@ public interface IUser {
     @Update("update user set introduction_pic = #{arg1} where id = #{arg0}")
     void upIntroductionPic(int user_id,String pic);
 
-    @Update("update user set introduction = #{arg1} where id = #{arg0}")
+    @Update("update user set user_introduce = #{arg1} where id = #{arg0}")
     void upIntroduction(int user_id,String introduction);
     @Select("select * from user where id = #{arg0}")
     IntroductionInfo getIntroductionInfo(int user_id);
