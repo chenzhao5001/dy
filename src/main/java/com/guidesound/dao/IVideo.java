@@ -211,7 +211,7 @@ public interface IVideo {
     @Delete("delete from video where user_id = #{arg0}")
     void deleteVideoByUser(int user);
 
-    @Update("update video set examine_status = 6 where id = #{arg0}")
+    @Update("update video set examine_status = 1 where id = #{arg0}")
     void UpVideo(int video_id);
     @Update("update video set examine_status = 7 where id = #{arg0}")
     void downVideo(int video_id);

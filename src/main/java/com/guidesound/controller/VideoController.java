@@ -950,6 +950,7 @@ public class VideoController extends BaseController {
             if (poolList.size() > 0) {
                 item.setPools(poolList);
             }
+
             if (item.getExamine_status() == 3) {
                 item.setExamine_status(0);
             }

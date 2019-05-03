@@ -268,6 +268,14 @@ public interface IArticle {
     List<ArticleInfo> getArticlebyIds(@Param("iList") List<Integer> iList);
 
 
+    @Update("update article set examine_status = 1 where id = #{arg0}")
+    void upArticle(int video_id);
+    @Update("update article set examine_status = 7 where id = #{arg0}")
+    void downArticle(int video_id);
+
+    @Update("update article set pools = #{arg1} where id = #{arg0}")
+    void setPoolByArticleId(String article_id,String pools);
+
 
     ////文章推荐相关
     @Select("select * from article_index where user_guid = #{arg0} and param = #{arg1}")
@@ -366,4 +374,6 @@ public interface IArticle {
             + " limit #{arg2},#{arg3}"
             + "</script>")
     List<Integer> articleIdsByPoolsIdsInArticlePoolsBySubject(@Param("iSubjectList") List<Integer> iSubjectList,@Param("iPoolList") List<Integer> iPoolList,int begin,int end);
+
+
 }

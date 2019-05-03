@@ -1,5 +1,6 @@
 package com.guidesound.controller;
 
+import com.guidesound.TempStruct.ItemInfo;
 import com.guidesound.dao.*;
 import com.guidesound.dto.ArticleDTO;
 import com.guidesound.find.ArticleFind;
@@ -402,7 +403,26 @@ public class ArticleController extends BaseController {
             if (!user_ids.contains(item.getUser_id())) {
                 user_ids.add(item.getUser_id());
             }
+
+            //推荐池解析
+            String[] temps = ((String) item.getPools()).split(",");
+            List<ItemInfo> poolList = new ArrayList<>();
+            for (String cell : temps) {
+                if (cell.equals("")) {
+                    continue;
+                }
+                ItemInfo itemInfo = new ItemInfo();
+                itemInfo.setId(Integer.parseInt(cell));
+                itemInfo.setInfo(SignMap.getPoolById(Integer.parseInt(cell)));
+                poolList.add(itemInfo);
+
+            }
+            if (poolList.size() > 0) {
+                item.setPools(poolList);
+            }
+
         }
+
 
         if (user_ids.size() > 0) {
             List<UserInfo> userList = iUser.getUserByIds(user_ids);

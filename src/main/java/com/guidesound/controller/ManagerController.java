@@ -512,6 +512,8 @@ public class ManagerController extends BaseController {
                 return JSONResult.errorMsg("缺少type_list");
             }
             if(type_list.contains("1")) {
+
+                iArticle.setPoolByArticleId(article_id,","+ articleInfo.getGrade());
                 ArticlePool articlePool = new ArticlePool();
                 articlePool.setUser_id(articleInfo.getUser_id());
                 articlePool.setSubject(articleInfo.getSubject());
@@ -596,6 +598,36 @@ public class ManagerController extends BaseController {
         return returnString;
     }
 
+    @RequestMapping(value = "/up_article")
+    @ResponseBody
+    public JSONResult upArticle(String article_id) {
+
+        Integer userId = getUserId();
+        if ( userId == null ) {
+            return JSONResult.errorMsg("缺少m_token");
+        }
+        if(article_id == null) {
+            return JSONResult.errorMsg("缺少article_id");
+        }
+        iArticle.upArticle(Integer.parseInt(article_id));
+        return JSONResult.ok("已完成");
+    }
+
+    @RequestMapping(value = "/down_article")
+    @ResponseBody
+    public JSONResult downArticle(String article_id) {
+        Integer userId = getUserId();
+        if ( userId == null ) {
+            return JSONResult.errorMsg("缺少m_token");
+        }
+        if(article_id == null) {
+            return JSONResult.errorMsg("缺少article_id");
+        }
+        iArticle.downArticle(Integer.parseInt(article_id));
+        return JSONResult.ok("已下架");
+    }
+
+
     @RequestMapping(value = "/up_video")
     @ResponseBody
     public JSONResult upVideo(String video_id) {
@@ -667,6 +699,15 @@ public class ManagerController extends BaseController {
             return JSONResult.errorMsg("文章不存在");
         }
 
+        String pools = (String)articleInfo.getPools();
+        List<String> lists = new ArrayList<>(Arrays.asList(pools.split(",")));
+        if(!lists.contains(pool_id)) {
+            lists.add(pool_id);
+        }
+        String temp = StringUtils.join(lists, ",");
+        iArticle.setPoolByArticleId(article_id,temp);
+
+
         List<ArticlePool> list = iArticle.getArticlePoolByInfo(Integer.parseInt(article_id),Integer.parseInt(pool_id));
         if(list.size() == 0) {
             ArticlePool articlePool = new ArticlePool();
@@ -725,6 +766,14 @@ public class ManagerController extends BaseController {
         if(articleInfo == null) {
             return JSONResult.errorMsg("文章不存在..");
         }
+
+        String pools = (String)articleInfo.getPools();
+        List<String> lists = new ArrayList<>(Arrays.asList(pools.split(",")));
+        if(lists.contains(pool_id)) {
+            lists.remove(pool_id);
+        }
+        String temp = StringUtils.join(lists, ",");
+        iArticle.setPoolByArticleId(article_id,temp);
         iArticle.removeArticleFromPools(Integer.parseInt(article_id),Integer.parseInt(pool_id));
         return JSONResult.ok();
     }
