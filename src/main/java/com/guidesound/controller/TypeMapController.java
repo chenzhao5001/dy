@@ -166,7 +166,7 @@ public class TypeMapController extends BaseController {
         if(user_id == 0) {
             return JSONResult.ok(SignMap.getChannelList(1,false));
         }
-        int channel_stage = iUser.getChannelStage(user_id);
+        int channel_stage = iUser.getVideoChannelStage(user_id);
         if(channel_stage == 101) {
             return JSONResult.ok(SignMap.getChannelList(101,false));
         } else if(channel_stage == 102){

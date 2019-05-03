@@ -39,6 +39,22 @@ public class ArticleInfo {
     private boolean praise;
     private int examine_status;
 
+
+    int out_relay;
+    int inner_relay;
+    int group;
+    String article_state;
+    int rec_count;
+    int play_count;
+
+    public int getPlay_count() {
+        return play_count;
+    }
+
+    public void setPlay_count(int play_count) {
+        this.play_count = play_count;
+    }
+
     private int attachment_type;
     private int attachment_id;
     private String attachment_name;
@@ -47,6 +63,47 @@ public class ArticleInfo {
     VideoClass video_class;
     TeacherClass teacher_class;
     CommodityInfo commodity;
+
+
+    public int getOut_relay() {
+        return out_relay;
+    }
+
+    public void setOut_relay(int out_relay) {
+        this.out_relay = out_relay;
+    }
+
+    public int getInner_relay() {
+        return inner_relay;
+    }
+
+    public void setInner_relay(int inner_relay) {
+        this.inner_relay = inner_relay;
+    }
+
+    public int getGroup() {
+        return group;
+    }
+
+    public void setGroup(int group) {
+        this.group = group;
+    }
+
+    public String getArticle_state() {
+        return article_state;
+    }
+
+    public void setArticle_state(String article_state) {
+        this.article_state = article_state;
+    }
+
+    public int getRec_count() {
+        return rec_count;
+    }
+
+    public void setRec_count(int rec_count) {
+        this.rec_count = rec_count;
+    }
 
     public String getType_list() {
         return type_list;

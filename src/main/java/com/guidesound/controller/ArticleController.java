@@ -859,7 +859,7 @@ public class ArticleController extends BaseController {
         if (user_id == 0) {
             return JSONResult.ok(SignMap.getChannelList(1, true));
         }
-        int channel_stage = iUser.getChannelStage(user_id);
+        int channel_stage = iUser.getArticleChannelStage(user_id);
         if (channel_stage == 101) {
             return JSONResult.ok(SignMap.getChannelList(101, true));
         } else if (channel_stage == 102) {

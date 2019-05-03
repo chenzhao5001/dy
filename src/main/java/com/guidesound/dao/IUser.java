@@ -223,8 +223,11 @@ public interface IUser {
     @Update("update user set channel_article_stage = #{arg1} where id = #{arg0}")
     void setUserArticleGradeStage(int user_id,int grade_stage);
 
-    @Select("select channel_stage from user where id = #{arg0}")
-    int getChannelStage(int user_id);
+    @Select("select channel_article_stage from user where id = #{arg0}")
+    int getArticleChannelStage(int user_id);
+
+    @Select("select channel_video_stage from user where id = #{arg0}")
+    int getVideoChannelStage(int user_id);
 
     @Select("select user_id from userFuns where funs_user_id = #{arg0} and deleted = 0")
     public List<Integer> getMeFollow(int user_id);
