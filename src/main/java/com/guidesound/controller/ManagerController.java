@@ -602,10 +602,10 @@ public class ManagerController extends BaseController {
     @ResponseBody
     public JSONResult upArticle(String article_id) {
 
-        Integer userId = getUserId();
-        if ( userId == null ) {
-            return JSONResult.errorMsg("缺少m_token");
-        }
+//        Integer userId = getUserId();
+//        if ( userId == null ) {
+//            return JSONResult.errorMsg("缺少m_token");
+//        }
         if(article_id == null) {
             return JSONResult.errorMsg("缺少article_id");
         }
@@ -616,10 +616,10 @@ public class ManagerController extends BaseController {
     @RequestMapping(value = "/down_article")
     @ResponseBody
     public JSONResult downArticle(String article_id) {
-        Integer userId = getUserId();
-        if ( userId == null ) {
-            return JSONResult.errorMsg("缺少m_token");
-        }
+//        Integer userId = getUserId();
+//        if ( userId == null ) {
+//            return JSONResult.errorMsg("缺少m_token");
+//        }
         if(article_id == null) {
             return JSONResult.errorMsg("缺少article_id");
         }
