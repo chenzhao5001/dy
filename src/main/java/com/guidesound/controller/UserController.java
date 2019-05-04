@@ -1,6 +1,9 @@
 package com.guidesound.controller;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.dao.*;
 import com.guidesound.dao.UserCommodity;
 import com.guidesound.models.*;
@@ -530,9 +533,33 @@ public class UserController extends BaseController{
             userInfo.setShop_url("");
         }
 
+
         List<Course> coursesList = iCourse.getCourseList(Integer.parseInt(user_id));
         if(coursesList.size() > 0) {
-            userInfo.setCourse_flag(true);
+            for(Course course : coursesList) {
+                if(course.getType() == 1) {
+                    String outLine = course.getOutline();
+                    ObjectMapper mapper = new ObjectMapper();
+                    try {
+                        List<CourseOutline> beanList = mapper.readValue(outLine, new TypeReference<List<CourseOutline>>() {
+                        });
+                        if(beanList.size() > 0) {
+                            CourseOutline lastClassTime = beanList.get(beanList.size() -1);
+                            if(lastClassTime.getClass_time() + lastClassTime.getClass_hours()*3600 > new Date().getTime()/1000) {
+                                if(course.getCourse_status() == 3) {
+                                    userInfo.setCourse_flag(true);
+                                    break;
+                                }
+                            }
+
+                        }
+                    } catch (IOException e) {
+                    }
+                } else if(course.getType() == 0 && course.getCourse_status() == 3) {
+                    userInfo.setCourse_flag(true);
+                    break;
+                }
+            }
         }
 
 
