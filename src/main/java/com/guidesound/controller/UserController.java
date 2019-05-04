@@ -200,8 +200,8 @@ public class UserController extends BaseController{
         cookie.setPath("/");//设置作用域
         response.addCookie(cookie);//将cookie添加到response的cookie数组中返回给客户端
 
-        String im_id2 = String.valueOf(user.getIm_id_2());
-        if(im_id2.equals("") || im_id2 == null) {
+        String im_id2 = user.getIm_id_2();
+        if(im_id2 == null || im_id2.equals("")) {
             im_id2 = "dy" + String.valueOf(user.getId());
             String im_sig_2 = TlsSigTest.getUrlSig(String.valueOf(im_id2));
             iUser.setIm2Info(user.getId(),im_id2,im_sig_2);

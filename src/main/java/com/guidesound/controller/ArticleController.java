@@ -421,6 +421,8 @@ public class ArticleController extends BaseController {
                 item.setPools(poolList);
             }
 
+            item.setArticle_state(SignMap.getVideoState(item.getExamine_status()));
+
         }
 
 

@@ -277,7 +277,7 @@ public class SignMap {
 
         video_state = new HashMap<>();
         video_state.put(0,"待审核");
-        video_state.put(1,"推荐中");
+        video_state.put(1,"已完成");
         video_state.put(2,"审核失败");
         video_state.put(3,"转码中");
         video_state.put(4,"转码失败");
