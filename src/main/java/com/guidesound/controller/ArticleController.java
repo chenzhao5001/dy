@@ -410,13 +410,13 @@ public class ArticleController extends BaseController {
 
 
                     if (item.getAttachment_id() != 0) {
-                        if (item.getAttachment_type() == 0) { // 商品
+                        if (item.getAttachment_type() == 1) { // 商品
                             CommodityInfo commodityInfo = iUser.getCommodityInfoByid(item.getAttachment_id());
                             if (commodityInfo != null) {
                                 item.setCommodity(commodityInfo);
                             }
 
-                        } else if (item.getAttachment_type() == 1) {  //录播课
+                        } else if (item.getAttachment_type() == 2) {  //录播课
                             VideoClass videoClass = iRecord.getVideoClass(item.getAttachment_id());
                             if (videoClass != null) {
                                 videoClass.setSubject_id(Integer.parseInt(videoClass.getSubject()));
@@ -426,7 +426,7 @@ public class ArticleController extends BaseController {
                             }
                             item.setVideo_class(videoClass);
 
-                        } else if (item.getAttachment_type() == 2) { // 辅导课
+                        } else if (item.getAttachment_type() == 3) { // 辅导课
                             Course course = iCourse.getCouresByid(item.getAttachment_id());
                             if (course != null) {
                                 TeacherClass teacherClass = new TeacherClass();
