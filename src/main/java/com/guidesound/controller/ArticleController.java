@@ -288,43 +288,6 @@ public class ArticleController extends BaseController {
         list.add(articleInfo);
         getExtendInfo(list);
 
-        ArticleInfo retArticleInfo = list.get(0);
-        if (retArticleInfo.getAttachment_id() != 0) {
-            if (retArticleInfo.getAttachment_type() == 0) { // 商品
-                CommodityInfo commodityInfo = iUser.getCommodityInfoByid(retArticleInfo.getAttachment_id());
-                if (commodityInfo != null) {
-                    retArticleInfo.setCommodity(commodityInfo);
-                }
-
-            } else if (retArticleInfo.getAttachment_type() == 1) {  //录播课
-                VideoClass videoClass = iRecord.getVideoClass(retArticleInfo.getAttachment_id());
-                if (videoClass != null) {
-                    videoClass.setSubject_id(Integer.parseInt(videoClass.getSubject()));
-                    videoClass.setSubject(SignMap.getSubjectTypeById(Integer.parseInt(videoClass.getSubject())));
-                    videoClass.setGrade_id(Integer.parseInt(videoClass.getGrade()));
-                    videoClass.setGrade(SignMap.getGradeTypeByID(Integer.parseInt(videoClass.getGrade())));
-                }
-                retArticleInfo.setVideo_class(videoClass);
-
-            } else if (retArticleInfo.getAttachment_type() == 2) { // 辅导课
-                Course course = iCourse.getCouresByid(retArticleInfo.getAttachment_id());
-                if (course != null) {
-                    TeacherClass teacherClass = new TeacherClass();
-                    teacherClass.setCourse_id(course.getId());
-                    teacherClass.setCourse_name(course.getCourse_name());
-                    teacherClass.setCourse_pic(course.getCourse_pic());
-                    teacherClass.setCourse_status(course.getCourse_status());
-                    teacherClass.setCourse_type(course.getType());
-                    teacherClass.setCourse_type_name(SignMap.getCourseTypeNameById(course.getType()));
-                    teacherClass.setForm(SignMap.getCourseFormById(course.getForm()));
-                    teacherClass.setGrade(SignMap.getGradeTypeByID(course.getGrade()));
-                    teacherClass.setPrice(course.getAll_charge());
-                    teacherClass.setStudent_count(course.getMax_person());
-                    teacherClass.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
-                    retArticleInfo.setTeacher_class(teacherClass);
-                }
-            }
-        }
         return JSONResult.ok(list.get(0));
     }
 
@@ -444,6 +407,44 @@ public class ArticleController extends BaseController {
 
                     item.setUser_grade_level(userMap.get(item.getUser_id()).getGrade_level());
                     item.setUser_grade_level_name(SignMap.getWatchById(userMap.get(item.getUser_id()).getGrade_level()));
+
+
+                    if (item.getAttachment_id() != 0) {
+                        if (item.getAttachment_type() == 0) { // 商品
+                            CommodityInfo commodityInfo = iUser.getCommodityInfoByid(item.getAttachment_id());
+                            if (commodityInfo != null) {
+                                item.setCommodity(commodityInfo);
+                            }
+
+                        } else if (item.getAttachment_type() == 1) {  //录播课
+                            VideoClass videoClass = iRecord.getVideoClass(item.getAttachment_id());
+                            if (videoClass != null) {
+                                videoClass.setSubject_id(Integer.parseInt(videoClass.getSubject()));
+                                videoClass.setSubject(SignMap.getSubjectTypeById(Integer.parseInt(videoClass.getSubject())));
+                                videoClass.setGrade_id(Integer.parseInt(videoClass.getGrade()));
+                                videoClass.setGrade(SignMap.getGradeTypeByID(Integer.parseInt(videoClass.getGrade())));
+                            }
+                            item.setVideo_class(videoClass);
+
+                        } else if (item.getAttachment_type() == 2) { // 辅导课
+                            Course course = iCourse.getCouresByid(item.getAttachment_id());
+                            if (course != null) {
+                                TeacherClass teacherClass = new TeacherClass();
+                                teacherClass.setCourse_id(course.getId());
+                                teacherClass.setCourse_name(course.getCourse_name());
+                                teacherClass.setCourse_pic(course.getCourse_pic());
+                                teacherClass.setCourse_status(course.getCourse_status());
+                                teacherClass.setCourse_type(course.getType());
+                                teacherClass.setCourse_type_name(SignMap.getCourseTypeNameById(course.getType()));
+                                teacherClass.setForm(SignMap.getCourseFormById(course.getForm()));
+                                teacherClass.setGrade(SignMap.getGradeTypeByID(course.getGrade()));
+                                teacherClass.setPrice(course.getAll_charge());
+                                teacherClass.setStudent_count(course.getMax_person());
+                                teacherClass.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
+                                item.setTeacher_class(teacherClass);
+                            }
+                        }
+                    }
                 }
             }
         }

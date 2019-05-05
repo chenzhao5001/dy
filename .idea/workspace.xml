@@ -7,10 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b7c7c742-9c4d-41b3-a82e-f22b8938a7fb" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/guide_sound.iml" beforeDir="false" afterPath="$PROJECT_DIR$/guide_sound.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -22,20 +19,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/RecordCourseController.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1550">
-              <caret line="92" column="43" selection-start-line="92" selection-start-column="43" selection-end-line="92" selection-end-column="43" />
+            <state relative-caret-position="25">
+              <caret line="289" column="8" selection-start-line="289" selection-start-column="8" selection-end-line="289" selection-end-column="8" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="208">
-              <caret line="616" column="30" selection-start-line="616" selection-start-column="19" selection-end-line="616" selection-end-column="30" />
+            <state relative-caret-position="-3017">
+              <caret line="619" column="48" lean-forward="true" selection-start-line="619" selection-start-column="48" selection-end-line="619" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -145,7 +142,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>/add_shop</find>
       <find>shopList</find>
       <find>set_channel_stage</find>
       <find>/preview</find>
@@ -175,6 +171,7 @@
       <find>deleteUserExamine</find>
       <find>/fo</find>
       <find>PushMessage</find>
+      <find>/article_by_id</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -247,11 +244,11 @@
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/models/ArticleInfo.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/ICourse.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/VideoController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" />
       </list>
     </option>
   </component>
@@ -716,12 +713,12 @@
       <workItem from="1556369592338" duration="124000" />
       <workItem from="1556370087681" duration="16822000" />
       <workItem from="1556533491184" duration="53255000" />
-      <workItem from="1557040431626" duration="2723000" />
+      <workItem from="1557040431626" duration="4814000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1546591000" />
+    <option name="totallyTimeSpent" value="1548682000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1268,13 +1265,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9650">
-          <caret line="423" column="55" selection-start-line="423" selection-start-column="42" selection-end-line="423" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/util/SignMap.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5250">
@@ -1372,8 +1362,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="616" column="30" selection-start-line="616" selection-start-column="19" selection-end-line="616" selection-end-column="30" />
+        <state relative-caret-position="-3017">
+          <caret line="619" column="48" lean-forward="true" selection-start-line="619" selection-start-column="48" selection-end-line="619" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="289" column="8" selection-start-line="289" selection-start-column="8" selection-end-line="289" selection-end-column="8" />
         </state>
       </provider>
     </entry>
