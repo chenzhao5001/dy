@@ -614,7 +614,7 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("此用户已经关注过");
         }
 
-//        TlsSigTest.PushMessage(user_id,"9");
+        TlsSigTest.PushMessage(user_id,"9");
         iUser.followUser(currentUser.getId(),
                 Integer.parseInt(user_id),
                 (int)(new Date().getTime() /1000));
