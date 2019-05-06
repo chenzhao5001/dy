@@ -438,7 +438,12 @@ public class ArticleController extends BaseController {
                                 teacherClass.setCourse_type_name(SignMap.getCourseTypeNameById(course.getType()));
                                 teacherClass.setForm(SignMap.getCourseFormById(course.getForm()));
                                 teacherClass.setGrade(SignMap.getGradeTypeByID(course.getGrade()));
-                                teacherClass.setPrice(course.getAll_charge());
+                                if(course.getType() == 0) {
+                                    teacherClass.setPrice(course.getPrice_one_hour());
+                                } else {
+                                    teacherClass.setPrice(course.getAll_charge());
+                                }
+
                                 teacherClass.setStudent_count(course.getMax_person());
                                 teacherClass.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
                                 item.setTeacher_class(teacherClass);

@@ -155,6 +155,7 @@ the initial render, otherwise it would start transitioning from opacity 1 to 0.x
 
 #cke_editor1 {
 	height: 100%;
+    padding-top: 25px;
 }
 #cke_1_contents {
 	height: 100%;
@@ -167,12 +168,9 @@ the initial render, otherwise it would start transitioning from opacity 1 to 0.x
 .cke_inner {
 	position: relative !important
 }
-#cke_1_top {
-	position: fixed;
-	width: 635px;
-	margin-top: -30px;
 
-}
-#cke_1_contents{
-	margin-top:30px;
+#cke_1_top{
+	position: fixed;
+    top: 92px;
+    width:882px;
 }
