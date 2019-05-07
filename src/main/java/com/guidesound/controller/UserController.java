@@ -526,6 +526,15 @@ public class UserController extends BaseController{
         userInfo.setVideo_count(videoCount);
         userInfo.setArticle_count(articleCount);
 
+        int rec_video = iUser.getCountFromContentMessage(Integer.parseInt(user_id),getCurrentUserId(),1);
+        if(rec_video > 0) {
+            userInfo.setRev_video(true);
+        }
+        int rec_article = iUser.getCountFromContentMessage(Integer.parseInt(user_id),getCurrentUserId(),2);
+        if(rec_article > 0 ) {
+            userInfo.setRev_audio(true);
+        }
+
         List<UserShop> shopList = iUser.shopListByState(Integer.parseInt(user_id),1);
         if(shopList.size() > 0) {
             userInfo.setShop_url(shopList.get(0).getShop_url());
@@ -1528,5 +1537,21 @@ public class UserController extends BaseController{
         return JSONResult.ok();
     }
 
+    @RequestMapping("/accept_content_message")
+    @ResponseBody
+    JSONResult acceptContentMessage(String user_id,String type,String accept) {
+        if(user_id == null || type == null || accept == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+        if(accept.equals("1")) {
+            int count = iUser.getCountFromContentMessage(Integer.parseInt(user_id),getCurrentUserId(),Integer.parseInt(type));
+            if(count == 0) {
+                iUser.InsertContentMessage(Integer.parseInt(user_id),getCurrentUserId(),Integer.parseInt(type), (int) (new Date().getTime() / 1000));
+            }
+        } else {
+            iUser.deleteContentMessage(Integer.parseInt(user_id),getCurrentUserId(),Integer.parseInt(type));
+        }
+        return JSONResult.ok();
+    }
 
 }

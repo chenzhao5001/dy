@@ -51,8 +51,6 @@ public class UserInfo {
     boolean course_flag;
 
 
-
-
     private String im_id;
     private String im_sig;
     private String im_id_2;
@@ -66,6 +64,25 @@ public class UserInfo {
     public int name_flag;
     public int head_flag;
 
+
+    public boolean rev_video;
+    public boolean rev_audio;
+
+    public boolean isRev_video() {
+        return rev_video;
+    }
+
+    public void setRev_video(boolean rev_video) {
+        this.rev_video = rev_video;
+    }
+
+    public boolean isRev_audio() {
+        return rev_audio;
+    }
+
+    public void setRev_audio(boolean rev_audio) {
+        this.rev_audio = rev_audio;
+    }
 
     public int getChannel_video_stage() {
         return channel_video_stage;

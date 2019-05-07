@@ -417,5 +417,17 @@ public interface IUser {
     @Insert("insert into question_report (question,phone,create_time) " +
             "value (#{arg0},#{arg1},#{arg2})")
     void reportQusetion(String question,String phone_number,int create_time);
+
+    @Select("select count(*) from contentMessage where user_id = #{arg0} and accept_user_id = #{arg1} and type = #{arg2}")
+    int getCountFromContentMessage(int user_id,int accept_user_id,int type);
+
+    @Insert("insert into contentMessage (user_id,accept_user_id,type,create_time) values (#{arg0},#{arg1},#{arg2},#{arg3})")
+    void InsertContentMessage(int user_id,int accept_user_id,int type,int create_time);
+
+    @Delete("delete from contentMessage where user_id = #{arg0} and accept_user_id = #{arg1} and type = #{arg2}")
+    void deleteContentMessage(int user_id,int accept_user_id,int type);
+
+    @Select("select * from contentMessage where user_id = #{arg0} and type = #{arg1}")
+    List<Integer> getAllAcceptUserIds(int user_id,int type);
 }
 

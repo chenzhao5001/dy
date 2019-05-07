@@ -227,7 +227,7 @@ public class VideoController extends BaseController {
         if (channel == null || user_guid == null) {
             return JSONResult.errorMsg("缺少channel 或 user_guid");
         }
-        iLogService.addLog(user_guid, "/list_by_channel", channel);
+//        iLogService.addLog(user_guid, "/list_by_channel", channel);
         List<Integer> video_ids = new ArrayList<>();
         int grade = 0;
 
@@ -1209,6 +1209,16 @@ public class VideoController extends BaseController {
                 }
             }
         }
+        return JSONResult.ok();
+    }
+
+    @RequestMapping("/video_finish")
+    @ResponseBody
+    JSONResult videoFinish(String video_id) {
+        if(video_id == null) {
+            return JSONResult.errorMsg("缺少参数video_id");
+        }
+        iLogService.addLog("99999", "/video_finish", video_id);
         return JSONResult.ok();
     }
 
