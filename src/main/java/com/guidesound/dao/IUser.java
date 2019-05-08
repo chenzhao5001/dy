@@ -429,5 +429,10 @@ public interface IUser {
 
     @Select("select * from contentMessage where user_id = #{arg0} and type = #{arg1}")
     List<Integer> getAllAcceptUserIds(int user_id,int type);
+
+    @Select("select * from userFuns where user_id = #{arg0} and deleted = 0")
+    List<Integer> getAllFuns(int user_id);
+
+
 }
 

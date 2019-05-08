@@ -3,6 +3,7 @@ package com.guidesound.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.guidesound.Service.ILogService;
 import com.guidesound.Service.IVideoService;
+import com.guidesound.TempStruct.InfoMsg;
 import com.guidesound.TempStruct.ItemInfo;
 import com.guidesound.dao.*;
 import com.guidesound.dto.VideoDTO;
@@ -13,6 +14,7 @@ import com.guidesound.ret.CommodityInfo;
 import com.guidesound.ret.TeacherClass;
 import com.guidesound.ret.VideoClass;
 import com.guidesound.util.*;
+import com.qcloud.Common.Sign;
 import com.qcloud.Utilities.Json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1214,11 +1216,39 @@ public class VideoController extends BaseController {
 
     @RequestMapping("/video_finish")
     @ResponseBody
-    JSONResult videoFinish(String video_id) {
+    JSONResult videoFinish(String video_id) throws IOException {
         if(video_id == null) {
             return JSONResult.errorMsg("缺少参数video_id");
         }
-        iLogService.addLog("99999", "/video_finish", video_id);
+
+        VideoShow videoShow = iVideo.getVideoById(video_id);
+        if(videoShow == null) {
+            return JSONResult.errorMsg("视频不存在");
+        }
+
+        InfoMsg infoMsg = new InfoMsg();
+        infoMsg.setMsg_type(7);
+        infoMsg.setType(2);
+        infoMsg.setId(videoShow.getId());
+        infoMsg.setGrade(SignMap.getGradeTypeByID(videoShow.getWatch_type()));
+        infoMsg.setSubject(SignMap.getSubjectTypeById(videoShow.getSubject()));
+        infoMsg.setName(ToolsFunction.URLDecoderString(videoShow.getTitle()));
+        UserInfo userInfo = iUser.getUser(videoShow.getUser_id());
+        if(userInfo != null) {
+            infoMsg.setHead(userInfo.getHead());
+            infoMsg.setUser_name(userInfo.getName());
+        }
+
+        List<Integer> follows = iUser.getAllFuns(videoShow.getUser_id());
+        List<Integer> no_send = iUser.getAllAcceptUserIds(videoShow.getUser_id(),1);
+
+        for(Integer user_id : follows) {
+            if(!no_send.contains(user_id)) {
+                TlsSigTest.PushMessage(String.valueOf(user_id),infoMsg.toString());
+                iLogService.addLog("99999", "/video_finish", infoMsg.toString());
+            }
+        }
+
         return JSONResult.ok();
     }
 

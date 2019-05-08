@@ -528,7 +528,7 @@ public class UserController extends BaseController{
 
         int rec_video = iUser.getCountFromContentMessage(Integer.parseInt(user_id),getCurrentUserId(),1);
         if(rec_video > 0) {
-            userInfo.setRev_video(true);
+            userInfo.setRev_video(false);
         }
         int rec_article = iUser.getCountFromContentMessage(Integer.parseInt(user_id),getCurrentUserId(),2);
         if(rec_article > 0 ) {
@@ -1544,12 +1544,12 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("缺少参数");
         }
         if(accept.equals("1")) {
+            iUser.deleteContentMessage(Integer.parseInt(user_id),getCurrentUserId(),Integer.parseInt(type));
+        } else {
             int count = iUser.getCountFromContentMessage(Integer.parseInt(user_id),getCurrentUserId(),Integer.parseInt(type));
             if(count == 0) {
                 iUser.InsertContentMessage(Integer.parseInt(user_id),getCurrentUserId(),Integer.parseInt(type), (int) (new Date().getTime() / 1000));
             }
-        } else {
-            iUser.deleteContentMessage(Integer.parseInt(user_id),getCurrentUserId(),Integer.parseInt(type));
         }
         return JSONResult.ok();
     }

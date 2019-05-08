@@ -34,6 +34,7 @@ public class UserInfo {
     private String area;
 
 
+
     int video_time;
     String user_introduce;
     String identity_card;

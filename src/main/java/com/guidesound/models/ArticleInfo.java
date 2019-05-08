@@ -47,7 +47,15 @@ public class ArticleInfo {
     String article_state;
     int rec_count;
     int play_count;
+    String auth_info;
 
+    public String getAuth_info() {
+        return auth_info;
+    }
+
+    public void setAuth_info(String auth_info) {
+        this.auth_info = auth_info;
+    }
 
     public Object getPools() {
         return pools;

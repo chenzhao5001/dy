@@ -2,6 +2,8 @@ package com.guidesound.controller;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.guidesound.Service.ILogService;
+import com.guidesound.TempStruct.InfoMsg;
 import com.guidesound.TempStruct.RecordVideo;
 import com.guidesound.dao.*;
 import com.guidesound.dao.UserCommodity;
@@ -47,6 +49,8 @@ public class ManagerController extends BaseController {
     private IOrder iOrder;
     @Autowired
     private IRecord iRecord;
+    @Autowired
+    private ILogService iLogService;
     int getCurrentCount() {
         int count = iOrder.getCurrentCount();
         iOrder.setCurrentCount(count + 1);
@@ -539,8 +543,29 @@ public class ManagerController extends BaseController {
                     TlsSigTest.SendMessage(userInfo.getIm_id(),"您回答的问题“" + articleInfo.getHead()+ "”已经通过系统审核。");
                 }
 
-            }
+                if(type.equals("1")) {
+                    InfoMsg infoMsg = new InfoMsg();
+                    infoMsg.setMsg_type(7);
+                    infoMsg.setType(1);
+                    infoMsg.setId(articleInfo.getId());
+                    infoMsg.setGrade(SignMap.getGradeTypeByID(articleInfo.getGrade()));
+                    infoMsg.setSubject(SignMap.getSubjectTypeById(articleInfo.getSubject()));
+                    infoMsg.setName(ToolsFunction.URLDecoderString(articleInfo.getHead()));
+                    if(userInfo != null) {
+                        infoMsg.setHead(userInfo.getHead());
+                        infoMsg.setUser_name(userInfo.getName());
+                    }
 
+                    List<Integer> follows = iUser.getAllFuns(articleInfo.getUser_id());
+                    List<Integer> no_send = iUser.getAllAcceptUserIds(articleInfo.getUser_id(),1);
+                    for(Integer user_id : follows) {
+                        if(!no_send.contains(user_id)) {
+                            TlsSigTest.PushMessage(String.valueOf(user_id),infoMsg.toString());
+                            iLogService.addLog("99999", "/examine_article", infoMsg.toString());
+                        }
+                    }
+                }
+            }
 
         } else {
             if(fail_reason == null || fail_content == null) {

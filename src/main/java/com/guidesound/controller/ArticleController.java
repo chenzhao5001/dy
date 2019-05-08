@@ -400,6 +400,7 @@ public class ArticleController extends BaseController {
                     item.setUser_head(userMap.get(item.getUser_id()).getHead());
                     item.setUser_name(userMap.get(item.getUser_id()).getName());
                     item.setUser_type(userMap.get(item.getUser_id()).getType());
+                    item.setAuth_info(userMap.get(item.getUser_id()).getAuth_info());
                     item.setUser_subject(userMap.get(item.getUser_id()).getSubject());
                     item.setUser_subject_name(SignMap.getSubjectTypeById(userMap.get(item.getUser_id()).getSubject()));
                     item.setUser_grade(userMap.get(item.getUser_id()).getGrade());
