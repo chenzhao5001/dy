@@ -427,10 +427,10 @@ public interface IUser {
     @Delete("delete from contentMessage where user_id = #{arg0} and accept_user_id = #{arg1} and type = #{arg2}")
     void deleteContentMessage(int user_id,int accept_user_id,int type);
 
-    @Select("select * from contentMessage where user_id = #{arg0} and type = #{arg1}")
+    @Select("select accept_user_id from contentMessage where user_id = #{arg0} and type = #{arg1}")
     List<Integer> getAllAcceptUserIds(int user_id,int type);
 
-    @Select("select * from userFuns where user_id = #{arg0} and deleted = 0")
+    @Select("select funs_user_id from userFuns where user_id = #{arg0} and deleted = 0")
     List<Integer> getAllFuns(int user_id);
 
 

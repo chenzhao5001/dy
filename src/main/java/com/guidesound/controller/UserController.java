@@ -526,13 +526,24 @@ public class UserController extends BaseController{
         userInfo.setVideo_count(videoCount);
         userInfo.setArticle_count(articleCount);
 
+        List<Integer> follows = iUser.getAllFuns(Integer.parseInt(user_id));
+
         int rec_video = iUser.getCountFromContentMessage(Integer.parseInt(user_id),getCurrentUserId(),1);
         if(rec_video > 0) {
             userInfo.setRev_video(false);
+        } else {
+            if(follows.contains(getCurrentUserId())) {
+                userInfo.setRev_video(true);
+            }
+
         }
         int rec_article = iUser.getCountFromContentMessage(Integer.parseInt(user_id),getCurrentUserId(),2);
         if(rec_article > 0 ) {
-            userInfo.setRev_audio(true);
+            userInfo.setRev_article(false);
+        } else {
+            if(follows.contains(getCurrentUserId())) {
+                userInfo.setRev_article(true);
+            }
         }
 
         List<UserShop> shopList = iUser.shopListByState(Integer.parseInt(user_id),1);

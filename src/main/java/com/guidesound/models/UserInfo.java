@@ -67,7 +67,7 @@ public class UserInfo {
 
 
     public boolean rev_video;
-    public boolean rev_audio;
+    public boolean rev_article;
 
     public boolean isRev_video() {
         return rev_video;
@@ -77,12 +77,12 @@ public class UserInfo {
         this.rev_video = rev_video;
     }
 
-    public boolean isRev_audio() {
-        return rev_audio;
+    public boolean isRev_article() {
+        return rev_article;
     }
 
-    public void setRev_audio(boolean rev_audio) {
-        this.rev_audio = rev_audio;
+    public void setRev_article(boolean rev_article) {
+        this.rev_article = rev_article;
     }
 
     public int getChannel_video_stage() {
