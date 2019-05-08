@@ -166,11 +166,13 @@ the initial render, otherwise it would start transitioning from opacity 1 to 0.x
 }
 
 .cke_inner {
-	position: relative !important
+	position: relative !important;
+
 }
 
-#cke_1_top{
+.cke_top{
 	position: fixed;
-    top: 92px;
-    width:882px;
+    top: 91px;
+	box-sizing: border-box;
+	width:898px;
 }
