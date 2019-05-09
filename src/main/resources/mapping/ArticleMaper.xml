@@ -12,6 +12,9 @@
         <if test="head != null ">
             and  head LIKE CONCAT('%',#{head},'%')
         </if>
+        <if test="type != null ">
+            and  type = #{type}
+        </if>
         <if test="subject != 0 ">
             and  subject = #{subject}
         </if>
@@ -42,6 +45,9 @@
         </if>
         <if test="subject != 0 ">
             and  subject = #{subject}
+        </if>
+        <if test="type != null ">
+            and  type = #{type}
         </if>
         <if test="type != 0 ">
             and  type = #{type}

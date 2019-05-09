@@ -1,5 +1,9 @@
 package com.guidesound.models;
 
+import com.guidesound.ret.CommodityInfo;
+import com.guidesound.ret.TeacherClass;
+import com.guidesound.ret.VideoClass;
+
 public class ArticleAnswer {
 
     int id;
@@ -20,6 +24,79 @@ public class ArticleAnswer {
     private int user_type;
     private String user_grade_level_name;
     private int comment_count;
+    private String auth_info;
+    private int attachment_type;
+    private int attachment_id;
+    private String attachment_name;
+    private int attachment_subtype;
+
+    private VideoClass video_class;
+    private TeacherClass teacher_class;
+    private CommodityInfo commodity;
+
+    public VideoClass getVideo_class() {
+        return video_class;
+    }
+
+    public void setVideo_class(VideoClass video_class) {
+        this.video_class = video_class;
+    }
+
+    public TeacherClass getTeacher_class() {
+        return teacher_class;
+    }
+
+    public void setTeacher_class(TeacherClass teacher_class) {
+        this.teacher_class = teacher_class;
+    }
+
+    public CommodityInfo getCommodity() {
+        return commodity;
+    }
+
+    public void setCommodity(CommodityInfo commodity) {
+        this.commodity = commodity;
+    }
+
+    public int getAttachment_type() {
+        return attachment_type;
+    }
+
+    public void setAttachment_type(int attachment_type) {
+        this.attachment_type = attachment_type;
+    }
+
+    public int getAttachment_id() {
+        return attachment_id;
+    }
+
+    public void setAttachment_id(int attachment_id) {
+        this.attachment_id = attachment_id;
+    }
+
+    public String getAttachment_name() {
+        return attachment_name;
+    }
+
+    public void setAttachment_name(String attachment_name) {
+        this.attachment_name = attachment_name;
+    }
+
+    public int getAttachment_subtype() {
+        return attachment_subtype;
+    }
+
+    public void setAttachment_subtype(int attachment_subtype) {
+        this.attachment_subtype = attachment_subtype;
+    }
+
+    public String getAuth_info() {
+        return auth_info;
+    }
+
+    public void setAuth_info(String auth_info) {
+        this.auth_info = auth_info;
+    }
 
     public boolean isFollow() {
         return follow;

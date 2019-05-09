@@ -739,6 +739,7 @@ public class ArticleController extends BaseController {
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        List<Integer> user_ids = new ArrayList<>();
         for (ArticleAnswer item : list) {
             item.setContent_url(request.getScheme() + "://" + request.getServerName() + ":"
                     + request.getServerPort() + "/guidesound/article/answer_preview?answer_id=" + item.getId());
@@ -751,7 +752,73 @@ public class ArticleController extends BaseController {
             if (followList.contains(item.getUser_id())) {
                 item.setFollow(true);
             }
+
+            user_ids.add(item.getUser_id());
         }
+
+
+        if (user_ids.size() > 0) {
+            List<UserInfo> userList = iUser.getUserByIds(user_ids);
+            Map<Integer, UserInfo> userMap = new HashMap<>();
+            for (UserInfo user : userList) {
+                userMap.put(user.getId(), user);
+            }
+
+            for (ArticleAnswer item : list) {
+                if (userMap.containsKey(item.getUser_id())) {
+                    item.setUser_head(userMap.get(item.getUser_id()).getHead());
+                    item.setUser_name(userMap.get(item.getUser_id()).getName());
+                    item.setUser_type(userMap.get(item.getUser_id()).getType());
+                    item.setAuth_info(userMap.get(item.getUser_id()).getAuth_info());
+                    item.setUser_grade_level_name(SignMap.getWatchById(userMap.get(item.getUser_id()).getGrade_level()));
+
+
+                    if (item.getAttachment_id() != 0) {
+                        if (item.getAttachment_type() == 1) { // 商品
+                            CommodityInfo commodityInfo = iUser.getCommodityInfoByid(item.getAttachment_id());
+                            if (commodityInfo != null) {
+                                item.setCommodity(commodityInfo);
+                            }
+
+                        } else if (item.getAttachment_type() == 2) {  //录播课
+                            VideoClass videoClass = iRecord.getVideoClass(item.getAttachment_id());
+                            if (videoClass != null) {
+                                videoClass.setSubject_id(Integer.parseInt(videoClass.getSubject()));
+                                videoClass.setSubject(SignMap.getSubjectTypeById(Integer.parseInt(videoClass.getSubject())));
+                                videoClass.setGrade_id(Integer.parseInt(videoClass.getGrade()));
+                                videoClass.setGrade(SignMap.getGradeTypeByID(Integer.parseInt(videoClass.getGrade())));
+                            }
+                            item.setVideo_class(videoClass);
+
+                        } else if (item.getAttachment_type() == 3) { // 辅导课
+                            Course course = iCourse.getCouresByid(item.getAttachment_id());
+                            if (course != null) {
+                                TeacherClass teacherClass = new TeacherClass();
+                                teacherClass.setCourse_id(course.getId());
+                                teacherClass.setCourse_name(course.getCourse_name());
+                                teacherClass.setCourse_pic(course.getCourse_pic());
+                                teacherClass.setCourse_status(course.getCourse_status());
+                                teacherClass.setCourse_type(course.getType());
+                                teacherClass.setCourse_type_name(SignMap.getCourseTypeNameById(course.getType()));
+                                teacherClass.setForm(SignMap.getCourseFormById(course.getForm()));
+                                teacherClass.setGrade(SignMap.getGradeTypeByID(course.getGrade()));
+                                if(course.getType() == 0) {
+                                    teacherClass.setPrice(course.getPrice_one_hour());
+                                } else {
+                                    teacherClass.setPrice(course.getAll_charge());
+                                }
+
+                                teacherClass.setStudent_count(course.getMax_person());
+                                teacherClass.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
+                                item.setTeacher_class(teacherClass);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
 
         ListResp listResp = new ListResp();
         listResp.setCount(count);
@@ -1281,6 +1348,7 @@ public class ArticleController extends BaseController {
                               String user_id,
                               String pools,
                               String course,
+                              String type,
                               String user_name) {
 
         status = (status == null || status.equals("")) ? null : status;
@@ -1322,6 +1390,7 @@ public class ArticleController extends BaseController {
         articleFind.setUser_id(user_id);
         articleFind.setArticle_id(article_id);
         articleFind.setUser_ids(user_ids);
+        articleFind.setType(type);
 
         List<String> poolList = new ArrayList<>();
         if (pools != null && !pools.equals("")) {

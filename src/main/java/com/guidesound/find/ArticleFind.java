@@ -12,11 +12,21 @@ public class ArticleFind {
     String user_id;
     String article_id;
     List<String> pools;
+    String type;
 
     List<String> subject_list;
     List<String> grade_class_list;
     List<Integer> user_ids;
     List<Integer> course_type;
+
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getHead() {
         return head;
