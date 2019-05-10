@@ -382,9 +382,27 @@ public class UserController extends BaseController{
             user.setBackground_url("http://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg");
             iUser.addUserByName(user);
             iUser.setDyId(user.getId(),10000000 + user.getId());
-            iUser.setCreate_type(user.getId(),1);
+//            iUser.setCreate_type(user.getId(),1);
             user.setToken(TockenUtil.makeTocken(user.getId()));
             user.setDy_id(String.valueOf(10000000 + user.getId()));
+
+            String im_id = String.valueOf(user.getId());
+            String im_sig = TlsSigTest.getUrlSig(String.valueOf(im_id));
+            iUser.setImInfo(user.getId(),im_id,im_sig);
+
+            String im_id_2 = "dy" + String.valueOf(user.getId());
+            String im_sig_2 = TlsSigTest.getUrlSig(im_id_2);
+            iUser.setIm2Info(user.getId(),im_id_2,im_sig_2);
+
+            user.setIm_id(im_id);
+            user.setIm_sig(im_sig);
+
+            user.setIm_id_2(im_id_2);
+            user.setIm_sig_2(im_sig_2);
+
+            String info = TlsSigTest.SendMessageByUser(im_id,"403","欢迎您成为导音用户，有任何问题随时咨询我！");
+            log.info("发送注册消息 info = {}",info);
+
         } else {
             user = userList.get(0);
         }
@@ -403,22 +421,6 @@ public class UserController extends BaseController{
         user.setArticle_count(articleCount);
         user.setCreate_time(user.getCreate_time());
 
-        String im_id = String.valueOf(user.getId());
-        String im_sig = TlsSigTest.getUrlSig(String.valueOf(im_id));
-        iUser.setImInfo(user.getId(),im_id,im_sig);
-
-        String im_id_2 = "dy" + String.valueOf(user.getId());
-        String im_sig_2 = TlsSigTest.getUrlSig(im_id_2);
-        iUser.setIm2Info(user.getId(),im_id_2,im_sig_2);
-
-        user.setIm_id(im_id);
-        user.setIm_sig(im_sig);
-
-        user.setIm_id_2(im_id_2);
-        user.setIm_sig_2(im_sig_2);
-
-        String info = TlsSigTest.SendMessageByUser(im_id,"403","欢迎您成为导音用户，有任何问题随时咨询我！");
-        log.info("发送注册消息 info = {}",info);
 
         //种cookie
         Cookie cookie = new Cookie("token",TockenUtil.makeTocken(user.getId()));//创建新cookie
