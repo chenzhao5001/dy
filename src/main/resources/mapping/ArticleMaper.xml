@@ -18,9 +18,7 @@
         <if test="subject != 0 ">
             and  subject = #{subject}
         </if>
-        <if test="type != 0 ">
-            and  type = #{type}
-        </if>
+
         <if test="user_id != null ">
             and  user_id = #{user_id}
         </if>
@@ -49,9 +47,7 @@
         <if test="type != null ">
             and  type = #{type}
         </if>
-        <if test="type != 0 ">
-            and  type = #{type}
-        </if>
+
         <if test="user_id != null ">
             and  user_id = #{user_id}
         </if>
@@ -84,6 +80,10 @@
 
         <if test="status != null  ">
             and  examine_status =  #{status}
+        </if>
+
+        <if test="type != null  ">
+            and  type =  #{type}
         </if>
 
         <if test="article_id != null ">
@@ -152,6 +152,10 @@
 
         <if test="status != null ">
             and  examine_status =  #{status}
+        </if>
+
+        <if test="type != null ">
+            and  type =  #{type}
         </if>
 
         <if test="article_id != null ">

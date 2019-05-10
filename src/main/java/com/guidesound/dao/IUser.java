@@ -15,6 +15,9 @@ public interface IUser {
     @Select("select * from user where id = #{arg0}")
     public UserInfo getUser(int id);
 
+    @Select("select * from user")
+    public List<UserInfo> getAllUser();
+
     @Select("select * from user where id = #{arg0}")
     public User getUserById(int id);
 

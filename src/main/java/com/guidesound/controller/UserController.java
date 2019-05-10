@@ -406,8 +406,19 @@ public class UserController extends BaseController{
         String im_id = String.valueOf(user.getId());
         String im_sig = TlsSigTest.getUrlSig(String.valueOf(im_id));
         iUser.setImInfo(user.getId(),im_id,im_sig);
+
+        String im_id_2 = "dy" + String.valueOf(user.getId());
+        String im_sig_2 = TlsSigTest.getUrlSig(im_id_2);
+        iUser.setIm2Info(user.getId(),im_id_2,im_sig_2);
+
         user.setIm_id(im_id);
         user.setIm_sig(im_sig);
+
+        user.setIm_id_2(im_id_2);
+        user.setIm_sig_2(im_sig_2);
+
+        String info = TlsSigTest.SendMessageByUser(im_id,"403","欢迎您成为导音用户，有任何问题随时咨询我！");
+        log.info("发送注册消息 info = {}",info);
 
         //种cookie
         Cookie cookie = new Cookie("token",TockenUtil.makeTocken(user.getId()));//创建新cookie
@@ -1564,5 +1575,36 @@ public class UserController extends BaseController{
         }
         return JSONResult.ok();
     }
+
+
+    @RequestMapping("/user_update_data")
+    @ResponseBody
+    JSONResult userTemp() throws IOException {
+
+        List<UserInfo> list = iUser.getAllUser();
+
+        //刷新im_id
+        for (UserInfo userInfo : list) {
+            if(userInfo.getIm_id().equals("")) {
+                String im_id= String.valueOf(userInfo.getId());
+                String im_sig = TlsSigTest.getUrlSig(String.valueOf(userInfo.getId()));
+                iUser.setImInfo(userInfo.getId(),im_id,im_sig);
+            }
+        }
+
+        //刷新im_id2
+
+        for (UserInfo userInfo : list) {
+            if(userInfo.getIm_id_2().equals("")) {
+                String im_id_2= "dy" + String.valueOf(userInfo.getId());
+                String im_sig_2 = TlsSigTest.getUrlSig(im_id_2);
+                iUser.setIm2Info(userInfo.getId(),im_id_2,im_sig_2);
+            }
+        }
+        return JSONResult.ok();
+
+    }
+
+
 
 }
