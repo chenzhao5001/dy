@@ -15,7 +15,7 @@ public class ArticleInfo {
     private int subject;
     private String subject_name;
     private int grade_class;
-    private int grade;
+    private Object grade;
     private int type;
     private int answer_count;
     private String user_head;
@@ -195,11 +195,11 @@ public class ArticleInfo {
         this.examine_status = examine_status;
     }
 
-    public int getGrade() {
+    public Object getGrade() {
         return grade;
     }
 
-    public void setGrade(int grade) {
+    public void setGrade(Object grade) {
         this.grade = grade;
     }
 

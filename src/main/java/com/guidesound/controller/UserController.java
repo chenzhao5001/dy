@@ -53,12 +53,15 @@ public class UserController extends BaseController{
     @ResponseBody
     public JSONResult login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String unionid = request.getParameter("unionid");
-        String name = request.getParameter("name") == null? "" : request.getParameter("name");
+        String name = request.getParameter("name");
         String head = request.getParameter("head") == null? "" : request.getParameter("head");
         String type = request.getParameter("type");
         String platform = request.getParameter("platform");
-        if (unionid == null || type == null || platform == null) {
+        if (unionid == null || type == null || platform == null || name == null) {
             return JSONResult.errorMsg("缺少参数");
+        }
+        if(name.equals("")) {
+            return JSONResult.errorMsg("name 不能为空字符串");
         }
 
         if(type.equals("2") && platform.equals("1")) {
@@ -154,11 +157,13 @@ public class UserController extends BaseController{
         }
 
         List<UserInfo> userList = iUser.getUserByUnionid(unionid);
+        List<UserInfo> userList_2 = iUser.getUserByName("name");
         UserInfo user = null;
-        if(userList.isEmpty()) {
+        if(userList.isEmpty() && userList_2.isEmpty()) {
             if(!type.equals("1")) {
                 return JSONResult.errorMsg("非移动端无法创建用户");
             }
+
             user = new UserInfo();
             user.setUnionid(unionid);
 //            user.setName(ToolsFunction.getURLEncoderString(name));
@@ -178,6 +183,10 @@ public class UserController extends BaseController{
 
             String info = TlsSigTest.SendMessageByUser(im_id,"403","欢迎您成为导音用户，有任何问题随时咨询我！");
             log.info("发送注册消息 info = {}",info);
+        } else if(!userList_2.isEmpty()){
+            iUser.updateUserUnionid(userList.get(0).getId(),unionid);
+            user = userList.get(0);
+
         } else {
             user = userList.get(0);
         }

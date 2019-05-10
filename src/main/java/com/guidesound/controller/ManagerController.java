@@ -315,7 +315,7 @@ public class ManagerController extends BaseController {
                 articleVerify.setType(1);
                 articleVerify.setArticle_id(item.getId());
                 articleVerify.setArticleAid(item.getId());
-                articleVerify.setArticleGrade_class(SignMap.getGradeTypeByID(item.getGrade()));
+                articleVerify.setArticleGrade_class(SignMap.getGradeTypeByID((Integer)item.getGrade()));
                 articleVerify.setArticleLength(0);
                 articleVerify.setArticleSubject(SignMap.getSubjectTypeById(item.getSubject()));
                 articleVerify.setArticleTitle(item.getHead());
@@ -521,7 +521,7 @@ public class ManagerController extends BaseController {
                 ArticlePool articlePool = new ArticlePool();
                 articlePool.setUser_id(articleInfo.getUser_id());
                 articlePool.setSubject(articleInfo.getSubject());
-                articlePool.setArticle_pool(articleInfo.getGrade());
+                articlePool.setArticle_pool((Integer)articleInfo.getGrade());
                 articlePool.setArticle_id(articleInfo.getId());
                 articlePool.setCreate_time((int) (new Date().getTime() / 1000));
                 iArticle.insertArticlePool(articlePool);
@@ -548,7 +548,7 @@ public class ManagerController extends BaseController {
                     infoMsg.setMsg_type(7);
                     infoMsg.setType(1);
                     infoMsg.setId(articleInfo.getId());
-                    infoMsg.setGrade(SignMap.getGradeTypeByID(articleInfo.getGrade()));
+                    infoMsg.setGrade(SignMap.getGradeTypeByID((Integer)articleInfo.getGrade()));
                     infoMsg.setSubject(SignMap.getSubjectTypeById(articleInfo.getSubject()));
                     infoMsg.setName(ToolsFunction.URLDecoderString(articleInfo.getHead()));
                     if(userInfo != null) {

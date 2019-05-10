@@ -413,6 +413,7 @@ public class ArticleController extends BaseController {
                     item.setUser_grade_level(userMap.get(item.getUser_id()).getGrade_level());
                     item.setUser_grade_level_name(SignMap.getWatchById(userMap.get(item.getUser_id()).getGrade_level()));
 
+                    item.setGrade(SignMap.getGradeTypeByID((Integer)item.getGrade()));
 
                     if (item.getAttachment_id() != 0) {
                         if (item.getAttachment_type() == 1) { // 商品
@@ -1517,7 +1518,7 @@ public class ArticleController extends BaseController {
             }
             ArticlePool articlePool = new ArticlePool();
             articlePool.setArticle_id(item.getId());
-            articlePool.setArticle_pool(item.getGrade());
+            articlePool.setArticle_pool((Integer)item.getGrade());
             articlePool.setUser_id(item.getUser_id());
             articlePool.setSubject(item.getSubject());
             iArticle.insertArticlePool(articlePool);
