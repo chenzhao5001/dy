@@ -157,7 +157,7 @@ public class UserController extends BaseController{
         }
 
         List<UserInfo> userList = iUser.getUserByUnionid(unionid);
-        List<UserInfo> userList_2 = iUser.getUserByName("name");
+        List<UserInfo> userList_2 = iUser.getUserByName(name);
         UserInfo user = null;
         if(userList.isEmpty() && userList_2.isEmpty()) {
             if(!type.equals("1")) {
@@ -182,10 +182,12 @@ public class UserController extends BaseController{
             user.setIm_sig(im_sig);
 
             String info = TlsSigTest.SendMessageByUser(im_id,"403","欢迎您成为导音用户，有任何问题随时咨询我！");
-            log.info("发送注册消息 info = {}",info);
-        } else if(!userList_2.isEmpty()){
-            iUser.updateUserUnionid(userList.get(0).getId(),unionid);
-            user = userList.get(0);
+            log.info("发送注册消息1 info = {}",info);
+        } else if(!userList_2.isEmpty() && userList_2.get(0).getUnionid() == ""){
+            iUser.updateUserUnionid(userList_2.get(0).getId(),unionid,head);
+            user = userList_2.get(0);
+            String info = TlsSigTest.SendMessageByUser(user.getIm_id(),"403","欢迎您成为导音用户，有任何问题随时咨询我！");
+            log.info("发送注册消息2 info = {}",info);
 
         } else {
             user = userList.get(0);
