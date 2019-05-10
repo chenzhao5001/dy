@@ -183,7 +183,7 @@ public class UserController extends BaseController{
 
             String info = TlsSigTest.SendMessageByUser(im_id,"403","欢迎您成为导音用户，有任何问题随时咨询我！");
             log.info("发送注册消息1 info = {}",info);
-        } else if(!userList_2.isEmpty() && userList_2.get(0).getUnionid() == ""){
+        } else if(userList.isEmpty() && !userList_2.isEmpty() ){
             iUser.updateUserUnionid(userList_2.get(0).getId(),unionid,head);
             user = userList_2.get(0);
             String info = TlsSigTest.SendMessageByUser(user.getIm_id(),"403","欢迎您成为导音用户，有任何问题随时咨询我！");
