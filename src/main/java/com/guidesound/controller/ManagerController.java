@@ -8,9 +8,7 @@ import com.guidesound.TempStruct.RecordVideo;
 import com.guidesound.dao.*;
 import com.guidesound.dao.UserCommodity;
 import com.guidesound.models.*;
-import com.guidesound.ret.Authentication;
-import com.guidesound.ret.UserAudit;
-import com.guidesound.ret.WonderfulPart;
+import com.guidesound.ret.*;
 import com.guidesound.util.*;
 import com.guidesound.TempStruct.ItemInfo;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -264,6 +262,18 @@ public class ManagerController extends BaseController {
             for(VideoUser item : userList) {
                 mUser.put(item.getId(),item);
             }
+            List<Integer> ask_ids = new ArrayList<>();
+            for (ArticleAnswer item: answerList) {
+                ask_ids.add(item.getAsk_id());
+            }
+            Map<Integer,ArticleInfo> articleInfoMap = new HashMap<>();
+            if(ask_ids.size() > 0) {
+                List<ArticleInfo> list = iArticle.getArticlebyIds(ask_ids);
+                for(ArticleInfo articleInfo : list ) {
+                    articleInfoMap.put(articleInfo.getId(),articleInfo);
+                }
+
+            }
             List<ArticleVerify> articleVerifies = new ArrayList<>();
             for (ArticleAnswer item: answerList) {
                 ArticleVerify articleVerify = new ArticleVerify();
@@ -271,8 +281,20 @@ public class ManagerController extends BaseController {
                 articleVerify.setArticle_id(item.getId());
                 articleVerify.setArticleAid(item.getId());
                 articleVerify.setArticleGrade_class(SignMap.getGradeTypeByID(0));
-                articleVerify.setArticleLength(0);
-                articleVerify.setArticleSubject(SignMap.getSubjectTypeById(0));
+
+                String strSubject = "未知";
+                if(articleInfoMap.containsKey(item.getAsk_id())) {
+                    ArticleInfo articleInfo = articleInfoMap.get(item.getAsk_id());
+                    if(articleInfo != null) {
+
+                        if(articleInfo.getType() == 1) {
+                            strSubject = SignMap.getSubjectTypeById(articleInfo.getSubject());
+                        } else {
+                            strSubject = SignMap.getSubjectTypeById(articleInfo.getAsk_subject());
+                        }
+                    }
+                }
+                articleVerify.setArticleSubject(strSubject);
                 articleVerify.setArticleTitle(item.getAbstract_info());
                 articleVerify.setArticleXy("");
 
@@ -317,7 +339,12 @@ public class ManagerController extends BaseController {
                 articleVerify.setArticleAid(item.getId());
                 articleVerify.setArticleGrade_class(SignMap.getGradeTypeByID((Integer)item.getGrade()));
                 articleVerify.setArticleLength(0);
-                articleVerify.setArticleSubject(SignMap.getSubjectTypeById(item.getSubject()));
+                if(item.getType() == 1) {
+                    articleVerify.setArticleSubject(SignMap.getSubjectTypeById(item.getSubject()));
+                } else {
+                    articleVerify.setArticleSubject(SignMap.getSubjectTypeById(item.getAsk_subject()));
+                }
+
                 articleVerify.setArticleTitle(item.getHead());
                 articleVerify.setArticleXy("");
 

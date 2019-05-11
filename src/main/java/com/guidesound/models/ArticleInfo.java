@@ -22,6 +22,7 @@ public class ArticleInfo {
     private String user_name;
     private int user_type;
     private int user_subject;
+    private int ask_subject;
     private String user_subject_name;
     private int user_grade;
     private String user_grade_name;
@@ -48,6 +49,15 @@ public class ArticleInfo {
     int rec_count;
     int play_count;
     String auth_info;
+
+
+    public int getAsk_subject() {
+        return ask_subject;
+    }
+
+    public void setAsk_subject(int ask_subject) {
+        this.ask_subject = ask_subject;
+    }
 
     public String getAuth_info() {
         return auth_info;

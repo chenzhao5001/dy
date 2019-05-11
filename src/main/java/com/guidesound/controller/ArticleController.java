@@ -364,7 +364,12 @@ public class ArticleController extends BaseController {
                 item.setPraise(true);
             }
 
-            item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
+            if(item.getType() == 1) {
+                item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
+            } else {
+                item.setSubject_name(SignMap.getSubjectTypeById(item.getAsk_subject()));
+            }
+
             item.setContent_url(request.getScheme() + "://" + request.getServerName() + ":"
                     + request.getServerPort() + "/guidesound/article/preview?article_id=" + item.getId());
             if (!user_ids.contains(item.getUser_id())) {
@@ -407,13 +412,14 @@ public class ArticleController extends BaseController {
                     item.setAuth_info(userMap.get(item.getUser_id()).getAuth_info());
                     item.setUser_subject(userMap.get(item.getUser_id()).getSubject());
                     item.setUser_subject_name(SignMap.getSubjectTypeById(userMap.get(item.getUser_id()).getSubject()));
+
                     item.setUser_grade(userMap.get(item.getUser_id()).getGrade());
                     item.setUser_grade_name(SignMap.getGradeTypeByID(userMap.get(item.getUser_id()).getGrade()));
 
                     item.setUser_grade_level(userMap.get(item.getUser_id()).getGrade_level());
                     item.setUser_grade_level_name(SignMap.getWatchById(userMap.get(item.getUser_id()).getGrade_level()));
-
                     item.setGrade(SignMap.getGradeTypeByID((Integer)item.getGrade()));
+
 
                     if (item.getAttachment_id() != 0) {
                         if (item.getAttachment_type() == 1) { // 商品
