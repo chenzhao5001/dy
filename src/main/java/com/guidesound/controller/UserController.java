@@ -261,7 +261,7 @@ public class UserController extends BaseController{
             return JSONResult.build(500,"参数错误",null);
         }
 
-        int time = (int) (new Date().getTime() / 1000) - 600;
+        int time = (int) (new Date().getTime() / 1000) - 300;
         int count = iVerifyCode.selectCode(phone,verify_code,time);
         if(count <= 0) {
             return JSONResult.build(500,"验证码错误",null);
@@ -282,7 +282,7 @@ public class UserController extends BaseController{
             return JSONResult.build(201,"参数错误",null);
         }
 
-        int time = (int) (new Date().getTime() / 1000) - 600;
+        int time = (int) (new Date().getTime() / 1000) - 300;
         int count = iVerifyCode.selectCode(phone,code,time);
         if(count <= 0) {
             return JSONResult.build(201,"验证码错误",null);
@@ -364,7 +364,7 @@ public class UserController extends BaseController{
             return  JSONResult.errorMsg("密码不能为空");
         }
 
-        int time = (int) (new Date().getTime() / 1000) - 600;
+        int time = (int) (new Date().getTime() / 1000) - 300;
         int count = iVerifyCode.selectCode(phone,code,time);
         if(count <= 0) {
             return JSONResult.build(201,"验证码错误",null);
@@ -378,45 +378,64 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value = "/name_login")
     @ResponseBody
-    public JSONResult loginByName(HttpServletRequest request, HttpServletResponse response,String name,String pwd) throws IOException {
-        if(name == null || pwd == null || !pwd.equals("adminchenzhao111")) {
-            return JSONResult.errorMsg("参数错误");
+    public JSONResult loginByName(HttpServletRequest request, HttpServletResponse response,String name,String pwd,String type) throws IOException {
+        if(name == null || pwd == null || type == null) {
+            return JSONResult.errorMsg("缺少参数");
         }
 
-        List<UserInfo> userList = iUser.getSpecialUserByName(name);
+        int time = (int) (new Date().getTime() / 1000) - 300;
+        int count = iVerifyCode.selectCode("13301075732",pwd,time);
+        if(count <= 0) {
+            return JSONResult.errorMsg("验证码错误");
+        }
+
         UserInfo user = null;
-        if(userList.isEmpty()) {
-            user = new UserInfo();
-            user.setName(name);
-            user.setCreate_time((int) (new Date().getTime() / 1000));
-            user.setLevel(1);
-            user.setBackground_url("http://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg");
-            iUser.addUserByName(user);
-            iUser.setDyId(user.getId(),10000000 + user.getId());
+        if(type.equals("1")) {
+            List<UserInfo> userList = iUser.getSpecialUserByName(name);
+            if(userList.isEmpty()) {
+                user = new UserInfo();
+                user.setName(name);
+                user.setCreate_time((int) (new Date().getTime() / 1000));
+                user.setLevel(1);
+                user.setBackground_url("http://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg");
+                iUser.addUserByName(user);
+                iUser.setDyId(user.getId(),10000000 + user.getId());
 //            iUser.setCreate_type(user.getId(),1);
-            user.setToken(TockenUtil.makeTocken(user.getId()));
-            user.setDy_id(String.valueOf(10000000 + user.getId()));
+                user.setToken(TockenUtil.makeTocken(user.getId()));
+                user.setDy_id(String.valueOf(10000000 + user.getId()));
 
-            String im_id = String.valueOf(user.getId());
-            String im_sig = TlsSigTest.getUrlSig(String.valueOf(im_id));
-            iUser.setImInfo(user.getId(),im_id,im_sig);
+                String im_id = String.valueOf(user.getId());
+                String im_sig = TlsSigTest.getUrlSig(String.valueOf(im_id));
+                iUser.setImInfo(user.getId(),im_id,im_sig);
 
-            String im_id_2 = "dy" + String.valueOf(user.getId());
-            String im_sig_2 = TlsSigTest.getUrlSig(im_id_2);
-            iUser.setIm2Info(user.getId(),im_id_2,im_sig_2);
+                String im_id_2 = "dy" + String.valueOf(user.getId());
+                String im_sig_2 = TlsSigTest.getUrlSig(im_id_2);
+                iUser.setIm2Info(user.getId(),im_id_2,im_sig_2);
 
-            user.setIm_id(im_id);
-            user.setIm_sig(im_sig);
+                user.setIm_id(im_id);
+                user.setIm_sig(im_sig);
 
-            user.setIm_id_2(im_id_2);
-            user.setIm_sig_2(im_sig_2);
+                user.setIm_id_2(im_id_2);
+                user.setIm_sig_2(im_sig_2);
 
-            String info = TlsSigTest.SendMessageByUser(im_id,"403","欢迎您成为导音用户，有任何问题随时咨询我！");
-            log.info("发送注册消息 info = {}",info);
+                String info = TlsSigTest.SendMessageByUser(im_id,"403","欢迎您成为导音用户，有任何问题随时咨询我！");
+                log.info("发送注册消息 info = {}",info);
+
+            } else {
+                user = userList.get(0);
+            }
+        } else if(type.equals("2")){
+            List<UserInfo> list = iUser.getInfoByDyid(name);
+            if(list.size() == 0) {
+                return JSONResult.errorMsg("导音号不存在");
+            }
+            user = list.get(0);
 
         } else {
-            user = userList.get(0);
+            return JSONResult.errorMsg("type 类型错误");
         }
+
+
         user.setToken(TockenUtil.makeTocken(user.getId()));
 
         int funCount = iUser.getFunsById(String.valueOf(user.getId()));
