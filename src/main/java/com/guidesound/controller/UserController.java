@@ -157,7 +157,7 @@ public class UserController extends BaseController{
         }
 
         List<UserInfo> userList = iUser.getUserByUnionid(unionid);
-        List<UserInfo> userList_2 = iUser.getUserByName(name);
+        List<UserInfo> userList_2 = iUser.getSpecialUserByName(name);
         UserInfo user = null;
         if(userList.isEmpty() && userList_2.isEmpty()) {
             if(!type.equals("1")) {
@@ -383,7 +383,7 @@ public class UserController extends BaseController{
             return JSONResult.errorMsg("参数错误");
         }
 
-        List<UserInfo> userList = iUser.getUserByName(name);
+        List<UserInfo> userList = iUser.getSpecialUserByName(name);
         UserInfo user = null;
         if(userList.isEmpty()) {
             user = new UserInfo();

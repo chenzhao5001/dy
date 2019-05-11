@@ -39,6 +39,9 @@ public interface IUser {
     @Select("select * from user where name = #{arg0}")
     public List<UserInfo> getUserByName(String name);
 
+    @Select("select * from user where name = #{arg0} and unionid = \"\"")
+    public List<UserInfo> getSpecialUserByName(String name);
+
     @Select("select id from user where name = #{arg0}")
     public List<Integer> getUserIdsByName(String name);
 
