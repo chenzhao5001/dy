@@ -14,6 +14,7 @@ public class ArticleAnswer {
     String pic2_url;
     String pic3_url;
     String content_url;
+    String ask_info;
     int praise_count;
     boolean praise;
     boolean collection;
@@ -33,6 +34,14 @@ public class ArticleAnswer {
     private VideoClass video_class;
     private TeacherClass teacher_class;
     private CommodityInfo commodity;
+
+    public String getAsk_info() {
+        return ask_info;
+    }
+
+    public void setAsk_info(String ask_info) {
+        this.ask_info = ask_info;
+    }
 
     public VideoClass getVideo_class() {
         return video_class;

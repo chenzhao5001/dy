@@ -283,15 +283,16 @@ public class ManagerController extends BaseController {
                 articleVerify.setArticleGrade_class(SignMap.getGradeTypeByID(0));
 
                 String strSubject = "未知";
+                String strGrade = "未知";
                 if(articleInfoMap.containsKey(item.getAsk_id())) {
                     ArticleInfo articleInfo = articleInfoMap.get(item.getAsk_id());
                     if(articleInfo != null) {
-
                         if(articleInfo.getType() == 1) {
                             strSubject = SignMap.getSubjectTypeById(articleInfo.getSubject());
                         } else {
                             strSubject = SignMap.getSubjectTypeById(articleInfo.getAsk_subject());
                         }
+                        articleVerify.setArticleGrade_class(SignMap.getGradeTypeByID((Integer)articleInfo.getGrade()));
                     }
                 }
                 articleVerify.setArticleSubject(strSubject);

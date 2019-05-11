@@ -692,9 +692,12 @@ public class ArticleController extends BaseController {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         User currentUser = (User) request.getAttribute("user_info");
+        ArticleInfo articleInfo = iArticle.getArticleById(ask_id);
+
         iArticle.addAnswer(currentUser.getId(), Integer.parseInt(ask_id),
                 content, pic1_url, pic2_url, pic3_url,
                 url, Integer.parseInt(attachment_type), Integer.parseInt(attachment_id), attachment_name, Integer.parseInt(attachment_subtype),
+                articleInfo.getAsk_subject(),(Integer)articleInfo.getGrade(),
                 (int) (new Date().getTime() / 1000));
         iArticle.addAnswerMainCount(Integer.parseInt(ask_id));
         return JSONResult.ok();
@@ -723,11 +726,32 @@ public class ArticleController extends BaseController {
 
     List<ArticleAnswer> answerExtern(List<ArticleAnswer> list) {
         List<Integer> user_ids = new ArrayList<>();
+        List<Integer> ask_ids = new ArrayList<>();
         for(ArticleAnswer item : list) {
             if(!user_ids.contains(item.getUser_id())) {
                 user_ids.add(item.getUser_id());
             }
+            if(!ask_ids.contains(item.getAsk_id())) {
+                ask_ids.add(item.getAsk_id());
+            }
         }
+
+
+        if(ask_ids.size() > 0) {
+            Map<Integer,ArticleInfo> articleInfoMap = new HashMap<>();
+            List<ArticleInfo> articleInfos = iArticle.getArticlebyIds(ask_ids);
+            for(ArticleInfo info : articleInfos) {
+                articleInfoMap.put(info.getId(),info);
+            }
+
+            for (ArticleAnswer item : list) {
+                if(articleInfoMap.containsKey(item.getAsk_id())) {
+                    item.setAsk_info(articleInfoMap.get(item.getAsk_id()).getHead());
+                }
+            }
+        }
+
+
 
         if(user_ids.size() > 0) {
             List<UserInfo> userList = iUser.getUserByIds(user_ids);
