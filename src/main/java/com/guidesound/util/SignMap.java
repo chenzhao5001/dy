@@ -203,6 +203,9 @@ public class SignMap {
             }
             subject_type.put(901,new Content("家长分享",9));
             subject_type.put(902,new Content("学生分享",9));
+            subject_type.put(903,new Content("老师分享",9));
+            subject_type.put(904,new Content("校园生活",9));
+            subject_type.put(905,new Content("教育事件",9));
         }
 
     }
@@ -634,10 +637,10 @@ public class SignMap {
         ListInfo info3 = new ListInfo();//美术
         ListInfo info4 = new ListInfo();//舞蹈
         ListInfo info5 = new ListInfo();//武术
-        ListInfo info6 = new ListInfo();//其他
-        ListInfo info7 = new ListInfo();//其他
-        ListInfo info8 = new ListInfo();//其他
-        ListInfo info10 = new ListInfo();//其他
+        ListInfo info6 = new ListInfo();//
+        ListInfo info7 = new ListInfo();//
+        ListInfo info8 = new ListInfo();//
+        ListInfo info10 = new ListInfo();//
 
         info1.setId(1);
         info1.setLevel("文化课");
@@ -763,7 +766,7 @@ public class SignMap {
             content2.setChannel_name("育儿");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("101,102,103,104,105,106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,802,803,901,902");
+            content2.setChannel_info("101,102,103,104,105,106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,802,803,901,902,903,904,905,1001");
             content2.setChannel_name("其他");
             list.add(content2);
 
@@ -773,7 +776,7 @@ public class SignMap {
             content2.setChannel_name("学知识");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("201,202,203,204,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,104,105,106,107,108,109,601,602,701,702,801,802,803,901,902");
+            content2.setChannel_info("201,202,203,204,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,104,105,106,107,108,109,601,602,701,702,801,802,803,901,902,903,904,905,1001");
             content2.setChannel_name("其他");
             list.add(content2);
         } else if(grade_stage == 2){
@@ -782,7 +785,7 @@ public class SignMap {
             content2.setChannel_name("学知识");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("201,202,203,204,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,104,105,106,107,108,109,601,602,701,702,801,802,803,901,902");
+            content2.setChannel_info("201,202,203,204,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,104,105,106,107,108,109,601,602,701,702,801,802,803,901,902,903,904,905,1001");
             content2.setChannel_name("其他");
             list.add(content2);
 
@@ -808,7 +811,7 @@ public class SignMap {
             content2.setChannel_name("化学");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803,901,902");
+            content2.setChannel_info("106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803,901,902,903,904,905,1001");
             content2.setChannel_name("其他");
             list.add(content2);
 
@@ -834,7 +837,7 @@ public class SignMap {
             content2.setChannel_name("化学");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803,901,902");
+            content2.setChannel_info("106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803,901,902,903,904,905,1001");
             content2.setChannel_name("其他 ");
             list.add(content2);
         } else {
@@ -851,7 +854,7 @@ public class SignMap {
             content2.setChannel_name("英语");
             list.add(content2);
             content2 = new Content2();
-            content2.setChannel_info("104,105,106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803,901,902");
+            content2.setChannel_info("104,105,106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803,901,902,903,904,905,1001");
             content2.setChannel_name("其他");
             list.add(content2);
         }
