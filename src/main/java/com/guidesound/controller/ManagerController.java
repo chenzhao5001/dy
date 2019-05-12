@@ -2,6 +2,7 @@ package com.guidesound.controller;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.guidesound.Service.ILogService;
 import com.guidesound.TempStruct.InfoMsg;
 import com.guidesound.TempStruct.RecordVideo;
@@ -572,6 +573,16 @@ public class ManagerController extends BaseController {
                 }
 
                 if(type.equals("1")) {
+
+//                    Map<String,String> infoMsg = new HashMap<>();
+//                    infoMsg.put("msg_type","7");
+//                    infoMsg.put("type","1");
+//                    infoMsg.put("id",String.valueOf(articleInfo.getId()));
+//
+//                    infoMsg.put("name",ToolsFunction.URLDecoderString(articleInfo.getHead()));
+//                    infoMsg.put("grade",SignMap.getGradeTypeByID((Integer)articleInfo.getGrade()));
+//                    infoMsg.put("subject",SignMap.getSubjectTypeById(articleInfo.getSubject()));
+
                     InfoMsg infoMsg = new InfoMsg();
                     infoMsg.setMsg_type(7);
                     infoMsg.setType(1);
@@ -580,6 +591,8 @@ public class ManagerController extends BaseController {
                     infoMsg.setSubject(SignMap.getSubjectTypeById(articleInfo.getSubject()));
                     infoMsg.setName(ToolsFunction.URLDecoderString(articleInfo.getHead()));
                     if(userInfo != null) {
+//                        infoMsg.put("head",userInfo.getHead());
+//                        infoMsg.put("user_name",userInfo.getName());
                         infoMsg.setHead(userInfo.getHead());
                         infoMsg.setUser_name(userInfo.getName());
                     }
@@ -588,7 +601,7 @@ public class ManagerController extends BaseController {
                     List<Integer> no_send = iUser.getAllAcceptUserIds(articleInfo.getUser_id(),1);
                     for(Integer user_id : follows) {
                         if(!no_send.contains(user_id)) {
-                            TlsSigTest.PushMessage(String.valueOf(user_id),infoMsg.toString());
+                            TlsSigTest.SendMessage(String.valueOf(user_id),new Gson().toJson(infoMsg));
                             iLogService.addLog("99999", "/examine_article", infoMsg.toString());
                         }
                     }
@@ -877,6 +890,7 @@ public class ManagerController extends BaseController {
                 String head = userExamine.get(0).getText();
                 if(Integer.parseInt(result) == 0) {
                     TlsSigTest.SendMessage(uid,"您修改的新头像已经通过系统审核。");
+                    TlsSigTest.PushMessage(uid,"15");
                     iUser.updateHead(Integer.parseInt(uid),head);
                 } else {
                     TlsSigTest.SendMessage(uid,"您修改的新头像未通过系统审核，未通过原因是" +  failure_content + "”。");
@@ -892,6 +906,7 @@ public class ManagerController extends BaseController {
                 if(Integer.parseInt(result) == 0) {
                     iUser.updateName(Integer.parseInt(uid),name);
                     TlsSigTest.SendMessage(uid,"您修改的新昵称：“" + name + "”已经通过系统审核。");
+                    TlsSigTest.PushMessage(uid,"15");
                 } else {
                     TlsSigTest.SendMessage(uid,"您修改的新头像未通过系统审核，未通过原因是" +  failure_content + "”。");
                 }

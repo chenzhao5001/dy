@@ -1470,7 +1470,7 @@ public class UserController extends BaseController{
 
     @RequestMapping("/add_shop")
     @ResponseBody
-    JSONResult addShop(String shop_url) throws IOException {
+    JSONResult addShop(String shop_url)  {
         if(shop_url == null) {
             return JSONResult.errorMsg("缺少 shop_url ");
         }

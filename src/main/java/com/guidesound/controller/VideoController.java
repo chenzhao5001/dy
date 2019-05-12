@@ -1,6 +1,7 @@
 package com.guidesound.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.gson.Gson;
 import com.guidesound.Service.ILogService;
 import com.guidesound.Service.IVideoService;
 import com.guidesound.TempStruct.InfoMsg;
@@ -1225,6 +1226,15 @@ public class VideoController extends BaseController {
         if(videoShow == null) {
             return JSONResult.errorMsg("视频不存在");
         }
+//        Map<String,String> infoMsg = new HashMap<>();
+//        infoMsg.put("msg_type","7");
+//        infoMsg.put("type","2");
+//        infoMsg.put("id",String.valueOf(videoShow.getId()));
+//
+//        infoMsg.put("name",ToolsFunction.URLDecoderString(videoShow.getTitle()));
+//        infoMsg.put("grade",SignMap.getGradeTypeByID(videoShow.getWatch_type()));
+//        infoMsg.put("subject",SignMap.getSubjectTypeById(videoShow.getSubject()));
+
 
         InfoMsg infoMsg = new InfoMsg();
         infoMsg.setMsg_type(7);
@@ -1235,6 +1245,9 @@ public class VideoController extends BaseController {
         infoMsg.setName(ToolsFunction.URLDecoderString(videoShow.getTitle()));
         UserInfo userInfo = iUser.getUser(videoShow.getUser_id());
         if(userInfo != null) {
+
+//            infoMsg.put("head",userInfo.getHead());
+//            infoMsg.put("user_name",userInfo.getName());
             infoMsg.setHead(userInfo.getHead());
             infoMsg.setUser_name(userInfo.getName());
         }
@@ -1244,7 +1257,8 @@ public class VideoController extends BaseController {
 
         for(Integer user_id : follows) {
             if(!no_send.contains(user_id)) {
-                TlsSigTest.PushMessage(String.valueOf(user_id),infoMsg.toString());
+//                TlsSigTest.SendMessage(String.valueOf(user_id),infoMsg);
+                TlsSigTest.SendMessage(String.valueOf(user_id),new Gson().toJson(infoMsg));
                 iLogService.addLog("99999", "/video_finish", infoMsg.toString());
             }
         }

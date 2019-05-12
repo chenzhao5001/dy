@@ -207,7 +207,8 @@ public class TlsSigTest {
     }
 
 
-    public static String SendMessage(String user_id,String info) throws IOException {
+
+    public static String SendMessage(String user_id,Object info) throws IOException {
         String rand = ToolsFunction.getNumRandomString(10);
         String controlUrl = "https://console.tim.qq.com/v4/openim/sendmsg?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + rand + "&contenttype=json";
 
