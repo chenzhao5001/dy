@@ -5,11 +5,14 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.guidesound.Service.ILogService;
 import com.guidesound.TempStruct.ClassTime;
 import com.guidesound.TempStruct.ClassUseInfo;
 import com.guidesound.TempStruct.CourseOutline;
@@ -22,6 +25,7 @@ import com.guidesound.dto.OrderClassDTO;
 import com.guidesound.models.*;
 import com.guidesound.ret.ClassOrder;
 import com.guidesound.ret.Order1V1;
+import com.guidesound.ret.PayRet;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.TlsSigTest;
 import com.guidesound.util.ToolsFunction;
@@ -31,11 +35,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @Controller
@@ -48,6 +51,9 @@ public class OrderController extends BaseController {
     IUser iUser;
     @Autowired
     IRecord iRecord;
+
+    @Autowired
+    private ILogService iLogService;
 
     int getCurrentCount() {
         int count = iOrder.getCurrentCount();
@@ -293,7 +299,7 @@ public class OrderController extends BaseController {
                 hour_surplus_use = all_time - hour_actual_use;
                 last_time = item.getClass_time() + item.getClass_hours() * 3600;
 
-                if(last_time < new Date().getTime() / 1000) {
+                if (last_time < new Date().getTime() / 1000) {
                     List<ClassTimeInfo> classTimeInfo_student = iOrder.getClassTimeStatus(Integer.parseInt(order_id), order1V1.getStudent_id(), item.getClass_time());
                     if (classTimeInfo_student.size() > 0 && classTimeInfo_student.get(0).getStatus() == 1) {
                         item.setClass_status(1); //已完成
@@ -342,12 +348,23 @@ public class OrderController extends BaseController {
         return JSONResult.ok(order1V1);
     }
 
+
     @RequestMapping("/pay")
     @ResponseBody
     JSONResult pay(String type, String order_id, String pay_way) throws IOException {
         if (type == null || order_id == null || pay_way == null) {
             return JSONResult.errorMsg("缺少参数");
         }
+
+        if(true) {
+            String retTest = payOrder("我是测试数据", "App支付测试Java", "20170216test02", "0.01");
+            PayRet ret = new PayRet();
+            ret.setToken(retTest);
+            ret.setPrice(1);
+            ret.setOrder_sn("test_sn");
+            return JSONResult.ok(ret);
+        }
+        
         if (type.equals("0")) { //课堂
             OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), getCurrentUserId());
             if (orderInfo == null) {
@@ -362,16 +379,16 @@ public class OrderController extends BaseController {
                 return JSONResult.errorMsg("此订单已经支付过");
             }
 
-            if(orderInfo.getType() == 1) {
+            if (orderInfo.getType() == 1) {
                 String order_outLine = orderInfo.getOutline();
                 try {
                     ObjectMapper mapper_temp = new ObjectMapper();
                     List<ClassTime> class_item_list = mapper_temp.readValue(order_outLine, new TypeReference<List<ClassTime>>() {
                     });
-                    if(class_item_list.size() == 0) {
+                    if (class_item_list.size() == 0) {
                         return JSONResult.errorMsg("班课无内容");
                     }
-                    if(class_item_list.get(0).getClass_time() < new Date().getTime() / 1000) {
+                    if (class_item_list.get(0).getClass_time() < new Date().getTime() / 1000) {
                         return JSONResult.errorMsg("已经开课，不允许支付");
                     }
 
@@ -387,12 +404,12 @@ public class OrderController extends BaseController {
             List<ClassRoom> r_list = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id());
             boolean fitst_flag = true;
             for (ClassRoom item : r_list) {
-                if(item.getIstest() != 1) {
+                if (item.getIstest() != 1) {
                     fitst_flag = false;
                     break;
                 }
             }
-            log.info("fitst_flag 标志 " + fitst_flag );
+            log.info("fitst_flag 标志 " + fitst_flag);
             if (fitst_flag || orderInfo.getType() == 0) {
                 Course course = iCourse.getCourseById(orderInfo.getCourse_id());
                 if (course == null) {
@@ -413,20 +430,20 @@ public class OrderController extends BaseController {
 
                 String group_id = null;
                 if (orderInfo.getType() == 1) { //创建群
-                    int currentCount =  getCurrentCount();
-                    group_id = TlsSigTest.createGroup(userInfo.getIm_id(), "班课群 " + course.getId(),String.valueOf(currentCount),course.getCourse_pic());
+                    int currentCount = getCurrentCount();
+                    group_id = TlsSigTest.createGroup(userInfo.getIm_id(), "班课群 " + course.getId(), String.valueOf(currentCount), course.getCourse_pic());
                     if (!group_id.equals(String.valueOf(currentCount))) {
-                        log.info("创建群失败 im_id = userInfo.getIm_id ={} ,group_name = {} ,ret = {}",userInfo.getIm_id(),"班课群 " + course.getCourse_name(),group_id);
+                        log.info("创建群失败 im_id = userInfo.getIm_id ={} ,group_name = {} ,ret = {}", userInfo.getIm_id(), "班课群 " + course.getCourse_name(), group_id);
                         return JSONResult.errorMsg("创建im群失败");
                     }
                     UserInfo user_temp = iUser.getUser(course.getUser_id());
                     String info_ret = TlsSigTest.addGroupPerson(group_id, String.valueOf(user_temp.getIm_id()));
-                    log.info("加入群拥有者 group_id = {},user_id = {},ret = {}",group_id,String.valueOf(user_temp.getIm_id()),info_ret);
+                    log.info("加入群拥有者 group_id = {},user_id = {},ret = {}", group_id, String.valueOf(user_temp.getIm_id()), info_ret);
                     UserInfo user_temp2 = iUser.getUser(getCurrentUserId());
                     info_ret = TlsSigTest.addGroupPerson(group_id, user_temp2.getIm_id());
                     UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
-                    TlsSigTest.sendGroupMsg(group_id,"欢迎新同学：" + userInfo1.getName(),user_temp.getIm_id());
-                    log.info("加入支付用户 group_id = {},user_id = {},ret = {}",group_id,String.valueOf(getCurrentUserId()),info_ret);
+                    TlsSigTest.sendGroupMsg(group_id, "欢迎新同学：" + userInfo1.getName(), user_temp.getIm_id());
+                    log.info("加入支付用户 group_id = {},user_id = {},ret = {}", group_id, String.valueOf(getCurrentUserId()), info_ret);
                 }
 
                 //创建课堂
@@ -434,7 +451,7 @@ public class OrderController extends BaseController {
                 int class_number = getCurrentCount();
                 iOrder.addRoomNumber(classRoom.getClass_id(), class_number);
                 course.setId(classRoom.getClass_id());
-                if(orderInfo.getType() == 0) {
+                if (orderInfo.getType() == 0) {
                     course.setAll_hours(orderInfo.getAll_hours());
                     course.setPrice_one_hour(orderInfo.getPrice_one_hour());
                     course.setAll_charge(orderInfo.getAll_charge());
@@ -479,10 +496,10 @@ public class OrderController extends BaseController {
                     return JSONResult.errorMsg("超过最大上课人数，无法支付");
                 }
                 String info_ret = TlsSigTest.addGroupPerson(classRoom.getIm_group_id(), String.valueOf(getCurrentUserId()));
-                log.info("班课群增加成员 group_id = {},user_id = {},ret = {}",classRoom.getIm_group_id(),String.valueOf(getCurrentUserId()),info_ret);
+                log.info("班课群增加成员 group_id = {},user_id = {},ret = {}", classRoom.getIm_group_id(), String.valueOf(getCurrentUserId()), info_ret);
                 UserInfo userInfo = iUser.getUser(getCurrentUserId());
                 UserInfo userInfo2 = iUser.getUser(classRoom.getUser_id());
-                TlsSigTest.sendGroupMsg(classRoom.getIm_group_id(),"欢迎新同学：" + userInfo.getName(),userInfo2.getIm_id());
+                TlsSigTest.sendGroupMsg(classRoom.getIm_group_id(), "欢迎新同学：" + userInfo.getName(), userInfo2.getIm_id());
                 class_id = classRoom.getClass_id();
                 teacher_id = classRoom.getUser_id();
                 outLine = classRoom.getOutline();
@@ -528,42 +545,42 @@ public class OrderController extends BaseController {
 
 
             ///班课订单达到最大人数 下架课程
-            if(orderInfo.getType() == 1){
+            if (orderInfo.getType() == 1) {
                 ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(1);
                 List<StudentClass> student_list = iOrder.getStudentClassByCourseId(orderInfo.getCourse_id());
                 if (student_list.size() >= classRoom.getMax_person()) {
-                    iCourse.setCourseState(orderInfo.getCourse_id(),4);
+                    iCourse.setCourseState(orderInfo.getCourse_id(), 4);
                 }
             }
 
         } else { //录播课
             Record record = iRecord.get(Integer.parseInt(order_id));
-            if(record == null || record.getRecord_course_status() != 3) {
+            if (record == null || record.getRecord_course_status() != 3) {
                 return JSONResult.errorMsg("录播课信息不存在");
             }
-            List<UserRecordCourse> lists = iRecord.getRecordByUserAndId(getCurrentUserId(),Integer.parseInt(order_id));
-            if(lists.size() > 0) {
+            List<UserRecordCourse> lists = iRecord.getRecordByUserAndId(getCurrentUserId(), Integer.parseInt(order_id));
+            if (lists.size() > 0) {
                 return JSONResult.errorMsg("此录播课已经购买过");
             }
 
             UserInfo userInfo = iUser.getUser(record.getUser_id());
-            if(record.getGrade_id() == 0) { //创建群
-                int currentCount =  getCurrentCount();
+            if (record.getGrade_id() == 0) { //创建群
+                int currentCount = getCurrentCount();
 
-                if(userInfo != null) {
-                    TlsSigTest.createGroup(String.valueOf(userInfo.getIm_id()), "录播课群： " + record.getRecord_course_id(),String.valueOf(currentCount),record.getRecord_course_pic());
+                if (userInfo != null) {
+                    TlsSigTest.createGroup(String.valueOf(userInfo.getIm_id()), "录播课群： " + record.getRecord_course_id(), String.valueOf(currentCount), record.getRecord_course_pic());
                     TlsSigTest.addGroupPerson(String.valueOf(currentCount), String.valueOf(String.valueOf(userInfo.getIm_id())));
                     UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
                     TlsSigTest.addGroupPerson(String.valueOf(currentCount), String.valueOf(String.valueOf(userInfo1.getIm_id())));
-                    iRecord.setGroupId(currentCount,record.getRecord_course_id());
-                    TlsSigTest.sendGroupMsg(String.valueOf(currentCount),"欢迎新同学：" + userInfo1.getName(),userInfo.getIm_id());
+                    iRecord.setGroupId(currentCount, record.getRecord_course_id());
+                    TlsSigTest.sendGroupMsg(String.valueOf(currentCount), "欢迎新同学：" + userInfo1.getName(), userInfo.getIm_id());
                 }
 
             } else { //加入群
-                if(userInfo != null) {
+                if (userInfo != null) {
                     UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
                     TlsSigTest.addGroupPerson(String.valueOf(record.getGroup_id()), String.valueOf(String.valueOf(userInfo1.getIm_id())));
-                    TlsSigTest.sendGroupMsg(String.valueOf(record.getGroup_id()),"欢迎新同学：" + userInfo1.getName(),userInfo.getIm_id());
+                    TlsSigTest.sendGroupMsg(String.valueOf(record.getGroup_id()), "欢迎新同学：" + userInfo1.getName(), userInfo.getIm_id());
                 }
             }
             UserRecordCourse userRecordCourse = new UserRecordCourse();
@@ -572,37 +589,9 @@ public class OrderController extends BaseController {
             userRecordCourse.setCreate_time((int) (new Date().getTime() / 1000));
             iRecord.insertRecordCourse(userRecordCourse);
         }
-        class Ret {
-            String token;
-            int price;
-            String order_sn;
 
-            public String getToken() {
-                return token;
-            }
 
-            public void setToken(String token) {
-                this.token = token;
-            }
-
-            public int getPrice() {
-                return price;
-            }
-
-            public void setPrice(int price) {
-                this.price = price;
-            }
-
-            public String getOrder_sn() {
-                return order_sn;
-            }
-
-            public void setOrder_sn(String order_sn) {
-                this.order_sn = order_sn;
-            }
-        }
-
-        Ret ret = new Ret();
+        PayRet ret = new PayRet();
         ret.setToken("test");
         ret.setPrice(0);
         ret.setOrder_sn("test_sn");
@@ -759,11 +748,11 @@ public class OrderController extends BaseController {
             try {
                 class_item_list = mapper_temp.readValue(outLine, new TypeReference<List<ClassTime>>() {
                 });
-                for(ClassTime item : class_item_list) {
+                for (ClassTime item : class_item_list) {
                     int beginTime = item.getClass_time();
-                    int endTime = beginTime + 3600*item.getClass_hours();
+                    int endTime = beginTime + 3600 * item.getClass_hours();
                     int currentTime = (int) (new Date().getTime() / 1000);
-                    if(currentTime >= beginTime && currentTime <= endTime) {
+                    if (currentTime >= beginTime && currentTime <= endTime) {
                         return JSONResult.errorMsg("上课期间不允许退款");
                     }
                 }
@@ -773,7 +762,7 @@ public class OrderController extends BaseController {
         }
 
         int leaveMoney = 0;
-        if(order.getType() == 0) { //1v1
+        if (order.getType() == 0) { //1v1
             JSONResult result = get1v1Order(order_id);
             Order1V1 order1V1 = (Order1V1) result.getData();
             leaveMoney = (order1V1.getAll_hours() - order1V1.getClass_use_info().getHour_actual_use()) * order1V1.getPrice_one_hour();
@@ -782,9 +771,9 @@ public class OrderController extends BaseController {
         } else {  //班课
             JSONResult result = getClassOrder(order_id);
             ClassOrder classOrder = (ClassOrder) result.getData();
-            leaveMoney = (classOrder.getAll_hours() - classOrder.getClass_use_info().getHour_theory_use() )* classOrder.getPrice_one_hour();
+            leaveMoney = (classOrder.getAll_hours() - classOrder.getClass_use_info().getHour_theory_use()) * classOrder.getPrice_one_hour();
         }
-        if(leaveMoney != Integer.parseInt(refund_amount)) {
+        if (leaveMoney != Integer.parseInt(refund_amount)) {
             return JSONResult.errorMsg("金额不符");
         }
 
@@ -793,58 +782,69 @@ public class OrderController extends BaseController {
         return JSONResult.ok();
     }
 
-    @RequestMapping("/pay_")
+    @RequestMapping("/pay_callback")
     @ResponseBody
-    public JSONResult payCallBack() {
-        payOrder("body","subject","outTradeNo","0.01");
-        return null;
+    public JSONResult payCallBack(HttpServletRequest request) throws AlipayApiException {
+        Map<String,String> params = new HashMap<String,String>();
+        Map requestParams = request.getParameterMap();
+        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+            String name = (String) iter.next();
+            String[] values = (String[]) requestParams.get(name);
+            String valueStr = "";
+            for (int i = 0; i < values.length; i++) {
+                valueStr = (i == values.length - 1) ? valueStr + values[i]
+                        : valueStr + values[i] + ",";
+            }
+            //乱码解决，这段代码在出现乱码时使用。
+            //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+            params.put(name, valueStr);
+        }
+        //切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
+        //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
+        boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.CHARSET,"RSA2");
+        String strRet = new Gson().toJson(params);
+        iLogService.addLog("100001","支付宝验证",strRet);
+        return JSONResult.ok();
     }
 
     @RequestMapping("/pay_test")
     @ResponseBody
     public JSONResult payTest() {
-        payOrder("body","subject","outTradeNo","0.01");
-        return null;
+        String orderString = payOrder("我是测试数据", "App支付测试Java", "20170216test02", "0.01");
+        System.out.println(orderString);
+        return JSONResult.ok(orderString);
     }
 
-    String payOrder(String body,String subject,String outTradeNo,String totalAmount) {
+    String payOrder(String body, String subject, String outTradeNo, String totalAmount) {
         String orderString = "";
-        try{
-            //实例化客户端（参数：网关地址、商户appid、商户私钥、格式、编码、支付宝公钥、加密类型），为了取得预付订单信息
-            AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.URL, AlipayConfig.APPID,
-                    AlipayConfig.RSA_PRIVATE_KEY, AlipayConfig.FORMAT, AlipayConfig.CHARSET,
-                    AlipayConfig.ALIPAY_PUBLIC_KEY,AlipayConfig.SIGNTYPE);
 
-            //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
-            AlipayTradeAppPayRequest ali_request = new AlipayTradeAppPayRequest();
+        //实例化客户端（参数：网关地址、商户appid、商户私钥、格式、编码、支付宝公钥、加密类型），为了取得预付订单信息
+        AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.URL, AlipayConfig.APPID,
+                AlipayConfig.RSA_PRIVATE_KEY, AlipayConfig.FORMAT, AlipayConfig.CHARSET,
+                AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.SIGNTYPE);
 
-            //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式
-            AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
-
-            //业务参数传入,可以传很多，参考API
-            //model.setPassbackParams(URLEncoder.encode(request.getBody().toString())); //公用参数（附加数据）
-            model.setBody(body);                       //对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。
-            model.setSubject(subject);                 //商品名称
-            model.setOutTradeNo(outTradeNo);           //商户订单号(自动生成)
-            // model.setTimeoutExpress("30m");     			  //交易超时时间
-            model.setTotalAmount(totalAmount);         //支付金额
-            model.setProductCode("QUICK_MSECURITY_PAY");        	  //销售产品码（固定值）
-            ali_request.setBizModel(model);
-//            logger.info("====================异步通知的地址为："+alipayment.getNotifyUrl());
-            ali_request.setNotifyUrl(AlipayConfig.notify_url);        //异步回调地址（后台）
-            ali_request.setReturnUrl(AlipayConfig.return_url);	    //同步回调地址（APP）
-
-            // 这里和普通的接口调用不同，使用的是sdkExecute
-            AlipayTradeAppPayResponse alipayTradeAppPayResponse = alipayClient.sdkExecute(ali_request); //返回支付宝订单信息(预处理)
-            orderString=alipayTradeAppPayResponse.getBody();//就是orderString 可以直接给APP请求，无需再做处理。
-//            this.createAlipayMentOrder(alipaymentOrder);//创建新的商户支付宝订单
-
+        AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+//SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式(model和biz_content同时存在的情况下取biz_content)。
+        AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+        model.setBody(body);
+        model.setSubject(subject);
+        model.setOutTradeNo(outTradeNo);
+        model.setTimeoutExpress("30m");
+        model.setTotalAmount(totalAmount);
+        model.setProductCode("QUICK_MSECURITY_PAY");
+        request.setBizModel(model);
+        request.setNotifyUrl(AlipayConfig.notify_url);
+        try {
+            //这里和普通的接口调用不同，使用的是sdkExecute
+            AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
+            orderString = response.getBody();//就是orderString 可以直接给客户端请求，无需再做处理。
         } catch (AlipayApiException e) {
             e.printStackTrace();
-//            logger.info("与支付宝交互出错，未能生成订单，请检查代码！");
         }
+
         return orderString;
     }
+
 
 
 
