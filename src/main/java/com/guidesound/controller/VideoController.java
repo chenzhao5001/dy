@@ -250,6 +250,10 @@ public class VideoController extends BaseController {
         }
         if (other_grade1 != 0) {
             videos_pool_ids.add(other_grade1);
+            int temp = other_grade1 / 100;
+            if(temp == 3 || temp == 4) {
+                videos_pool_ids.add(498);
+            }
         }
         videos_pool_ids.add(999);
 

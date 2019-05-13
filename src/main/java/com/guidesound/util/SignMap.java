@@ -309,6 +309,7 @@ public class SignMap {
         commend_pools.put(401,"高一");
         commend_pools.put(402,"高二");
         commend_pools.put(403,"高三");
+        commend_pools.put(498,"初高");
         commend_pools.put(499,"高中");
         commend_pools.put(999,"公共池");
         commend_pools.put(1000,"无");
