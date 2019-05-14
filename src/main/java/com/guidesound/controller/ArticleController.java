@@ -426,6 +426,8 @@ public class ArticleController extends BaseController {
                             CommodityInfo commodityInfo = iUser.getCommodityInfoByid(item.getAttachment_id());
                             if (commodityInfo != null) {
                                 item.setCommodity(commodityInfo);
+                            } else {
+                                item.setAttachment_id(-1);
                             }
 
                         } else if (item.getAttachment_type() == 2) {  //录播课
@@ -435,8 +437,11 @@ public class ArticleController extends BaseController {
                                 videoClass.setSubject(SignMap.getSubjectTypeById(Integer.parseInt(videoClass.getSubject())));
                                 videoClass.setGrade_id(Integer.parseInt(videoClass.getGrade()));
                                 videoClass.setGrade(SignMap.getGradeTypeByID(Integer.parseInt(videoClass.getGrade())));
+                                item.setVideo_class(videoClass);
+                            } else {
+                                item.setAttachment_id(-1);
                             }
-                            item.setVideo_class(videoClass);
+
 
                         } else if (item.getAttachment_type() == 3) { // 辅导课
                             Course course = iCourse.getCouresByid(item.getAttachment_id());
@@ -459,7 +464,10 @@ public class ArticleController extends BaseController {
                                 teacherClass.setStudent_count(course.getMax_person());
                                 teacherClass.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
                                 item.setTeacher_class(teacherClass);
+                            } else {
+                                item.setAttachment_id(-1);
                             }
+
                         }
                     }
                 }
@@ -773,6 +781,8 @@ public class ArticleController extends BaseController {
                             CommodityInfo commodityInfo = iUser.getCommodityInfoByid(item.getAttachment_id());
                             if (commodityInfo != null) {
                                 item.setCommodity(commodityInfo);
+                            } else {
+                                item.setAttachment_id(-1);
                             }
 
                         } else if (item.getAttachment_type() == 2) {  //录播课
@@ -782,8 +792,11 @@ public class ArticleController extends BaseController {
                                 videoClass.setSubject(SignMap.getSubjectTypeById(Integer.parseInt(videoClass.getSubject())));
                                 videoClass.setGrade_id(Integer.parseInt(videoClass.getGrade()));
                                 videoClass.setGrade(SignMap.getGradeTypeByID(Integer.parseInt(videoClass.getGrade())));
+                                item.setVideo_class(videoClass);
+                            } else {
+                                item.setAttachment_id(-1);
                             }
-                            item.setVideo_class(videoClass);
+
 
                         } else if (item.getAttachment_type() == 3) { // 辅导课
                             Course course = iCourse.getCouresByid(item.getAttachment_id());
@@ -806,6 +819,8 @@ public class ArticleController extends BaseController {
                                 teacherClass.setStudent_count(course.getMax_person());
                                 teacherClass.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
                                 item.setTeacher_class(teacherClass);
+                            } else {
+                                item.setAttachment_id(-1);
                             }
                         }
                     }

@@ -357,14 +357,14 @@ public class OrderController extends BaseController {
         }
 
         if(true) {
-            String retTest = payOrder("我是测试数据", "App支付测试Java", "20170216test02", "0.01");
+            String retTest = payOrder("我是测试数据", "App支付测试", order_id, "0.01");
             PayRet ret = new PayRet();
             ret.setToken(retTest);
             ret.setPrice(1);
             ret.setOrder_sn("test_sn");
             return JSONResult.ok(ret);
         }
-        
+
         if (type.equals("0")) { //课堂
             OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), getCurrentUserId());
             if (orderInfo == null) {
