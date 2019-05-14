@@ -147,6 +147,8 @@ public interface ICourse {
     @Select("select * from course where id = #{agg0}")
     Course getCouresByid(int id);
 
+
+
     @Update("update course set course_pic = #{arg2} where user_id = #{arg0} and id = #{arg1}")
     void updateCoursePic(int user_id,int course_id,String pic);
     @Select("select * from course where user_id = #{arg0}")

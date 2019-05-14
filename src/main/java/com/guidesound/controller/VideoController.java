@@ -978,6 +978,7 @@ public class VideoController extends BaseController {
                             if(commodityInfo != null) {
                                 item.setCommodity(commodityInfo);
                             } else {
+                                item.setAttachment_type(0);
                                 item.setAttachment_id(-1);
                             }
 
@@ -990,13 +991,14 @@ public class VideoController extends BaseController {
                                 videoClass.setGrade(SignMap.getGradeTypeByID(Integer.parseInt(videoClass.getGrade())));
                                 item.setVideo_class(videoClass);
                             } else {
+                                item.setAttachment_type(0);
                                 item.setAttachment_id(-1);
                             }
 
 
                         } else if(item.getAttachment_type() == 3) { // 辅导课
                             Course course = iCourse.getCouresByid(item.getAttachment_id());
-                            if(course != null) {
+                            if(course != null && course.getCourse_status() == 3) {
                                 TeacherClass teacherClass = new TeacherClass();
                                 teacherClass.setCourse_id(course.getId());
                                 teacherClass.setCourse_name(course.getCourse_name());
@@ -1011,6 +1013,7 @@ public class VideoController extends BaseController {
                                 teacherClass.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
                                 item.setTeacher_class(teacherClass);
                             } else {
+                                item.setAttachment_type(0);
                                 item.setAttachment_id(-1);
                             }
                         }

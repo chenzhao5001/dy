@@ -13,16 +13,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.guidesound.Service.ILogService;
-import com.guidesound.TempStruct.ClassTime;
-import com.guidesound.TempStruct.ClassUseInfo;
-import com.guidesound.TempStruct.CourseOutline;
-import com.guidesound.TempStruct.RefundInfo;
+import com.guidesound.TempStruct.*;
 import com.guidesound.dao.IOrder;
 import com.guidesound.dao.IRecord;
 import com.guidesound.dao.IUser;
 import com.guidesound.dto.Order1V1DTO;
 import com.guidesound.dto.OrderClassDTO;
 import com.guidesound.models.*;
+import com.guidesound.models.ClassTimeInfo;
 import com.guidesound.ret.ClassOrder;
 import com.guidesound.ret.Order1V1;
 import com.guidesound.ret.PayRet;
@@ -38,6 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 
@@ -348,34 +347,57 @@ public class OrderController extends BaseController {
         return JSONResult.ok(order1V1);
     }
 
-
-    @RequestMapping("/pay")
+    @RequestMapping("/pay_callback")
     @ResponseBody
-    JSONResult pay(String type, String order_id, String pay_way) throws IOException {
-        if (type == null || order_id == null || pay_way == null) {
-            return JSONResult.errorMsg("缺少参数");
+    public JSONResult payCallBack(HttpServletRequest request) throws AlipayApiException, IOException {
+        Map<String,String> params = new HashMap<String,String>();
+        Map requestParams = request.getParameterMap();
+        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+            String name = (String) iter.next();
+            String[] values = (String[]) requestParams.get(name);
+            String valueStr = "";
+            for (int i = 0; i < values.length; i++) {
+                valueStr = (i == values.length - 1) ? valueStr + values[i]
+                        : valueStr + values[i] + ",";
+            }
+            //乱码解决，这段代码在出现乱码时使用。
+            //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+            params.put(name, valueStr);
         }
+        //切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
+        //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
+        String strParam = new Gson().toJson(params);
+        iLogService.addLog("100001","支付宝验证before",strParam);
+        boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.CHARSET,"RSA2");
+        if(flag == false) {
+            return JSONResult.errorMsg("订单验证错误");
+        }
+        String strRet = new Gson().toJson(params);
+//        iLogService.addLog("100001","支付宝验证after",strRet);
+        iOrder.addPayInfo(strRet, (int) (new Date().getTime() / 1000));
 
-        if(true) {
-            String retTest = payOrder("我是测试数据", "App支付测试", order_id, "0.01");
-            PayRet ret = new PayRet();
-            ret.setToken(retTest);
-            ret.setPrice(1);
-            ret.setOrder_sn("test_sn");
-            return JSONResult.ok(ret);
-        }
+        String body = new String(request.getParameter("body").getBytes("ISO-8859-1"),"UTF-8");
+        PayItem payItem = new Gson().fromJson(body,PayItem.class);
+        String type =  payItem.getType();
+        String order_id = payItem.getOrder_id();
+
+
+
 
         if (type.equals("0")) { //课堂
             OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), getCurrentUserId());
             if (orderInfo == null) {
+                iLogService.addLog("100001",order_id,"订单不存在");
                 return JSONResult.errorMsg("订单不存在");
             }
             if (orderInfo.getOrder_status() != 0) {
+                iLogService.addLog("100001",order_id,"此状态不能支付");
                 return JSONResult.errorMsg("此状态不能支付");
             }
 
             List<StudentClass> student = iOrder.getStudentClassByOrder(Integer.parseInt(order_id));
             if (student.size() > 0) {
+                iLogService.addLog("100001",order_id,"此订单已经支付过");
                 return JSONResult.errorMsg("此订单已经支付过");
             }
 
@@ -386,13 +408,16 @@ public class OrderController extends BaseController {
                     List<ClassTime> class_item_list = mapper_temp.readValue(order_outLine, new TypeReference<List<ClassTime>>() {
                     });
                     if (class_item_list.size() == 0) {
+                        iLogService.addLog("100001",order_id,"班课无内容");
                         return JSONResult.errorMsg("班课无内容");
                     }
                     if (class_item_list.get(0).getClass_time() < new Date().getTime() / 1000) {
+                        iLogService.addLog("100001",order_id,"已经开课，不允许支付");
                         return JSONResult.errorMsg("已经开课，不允许支付");
                     }
 
                 } catch (IOException e) {
+                    iLogService.addLog("100001",order_id,"班课课堂大纲错误");
                     return JSONResult.errorMsg("班课课堂大纲错误");
                 }
             }
@@ -413,6 +438,7 @@ public class OrderController extends BaseController {
             if (fitst_flag || orderInfo.getType() == 0) {
                 Course course = iCourse.getCourseById(orderInfo.getCourse_id());
                 if (course == null) {
+                    iLogService.addLog("100001",order_id,"辅导课不存在");
                     return JSONResult.errorMsg("辅导课不存在");
                 }
                 course.setWay(orderInfo.getWay());
@@ -434,6 +460,7 @@ public class OrderController extends BaseController {
                     group_id = TlsSigTest.createGroup(userInfo.getIm_id(), "班课群 " + course.getId(), String.valueOf(currentCount), course.getCourse_pic());
                     if (!group_id.equals(String.valueOf(currentCount))) {
                         log.info("创建群失败 im_id = userInfo.getIm_id ={} ,group_name = {} ,ret = {}", userInfo.getIm_id(), "班课群 " + course.getCourse_name(), group_id);
+                        iLogService.addLog("100001",order_id,"创建im群失败");
                         return JSONResult.errorMsg("创建im群失败");
                     }
                     UserInfo user_temp = iUser.getUser(course.getUser_id());
@@ -493,6 +520,7 @@ public class OrderController extends BaseController {
                 ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(1);
                 List<StudentClass> student_list = iOrder.getStudentClassByCourseId(orderInfo.getCourse_id());
                 if (student_list.size() >= classRoom.getMax_person()) {
+                    iLogService.addLog("100001",order_id,"超过最大上课人数，无法支付");
                     return JSONResult.errorMsg("超过最大上课人数，无法支付");
                 }
                 String info_ret = TlsSigTest.addGroupPerson(classRoom.getIm_group_id(), String.valueOf(getCurrentUserId()));
@@ -527,6 +555,7 @@ public class OrderController extends BaseController {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                iLogService.addLog("100001",order_id,"课堂大纲格式错误");
                 return JSONResult.errorMsg("课堂大纲格式错误");
             }
 
@@ -556,10 +585,12 @@ public class OrderController extends BaseController {
         } else { //录播课
             Record record = iRecord.get(Integer.parseInt(order_id));
             if (record == null || record.getRecord_course_status() != 3) {
+                iLogService.addLog("100001",order_id,"录播课信息不存在");
                 return JSONResult.errorMsg("录播课信息不存在");
             }
             List<UserRecordCourse> lists = iRecord.getRecordByUserAndId(getCurrentUserId(), Integer.parseInt(order_id));
             if (lists.size() > 0) {
+                iLogService.addLog("100001",order_id,"此录播课已经购买过");
                 return JSONResult.errorMsg("此录播课已经购买过");
             }
 
@@ -589,12 +620,91 @@ public class OrderController extends BaseController {
             userRecordCourse.setCreate_time((int) (new Date().getTime() / 1000));
             iRecord.insertRecordCourse(userRecordCourse);
         }
+        return JSONResult.ok();
+    }
 
 
+
+    @RequestMapping("/pay")
+    @ResponseBody
+    JSONResult pay(String type, String order_id, String pay_way) throws IOException {
+        if (type == null || order_id == null || pay_way == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+        if (type.equals("0")) { //课堂
+            OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), getCurrentUserId());
+            if (orderInfo == null) {
+                return JSONResult.errorMsg("订单不存在");
+            }
+            if (orderInfo.getOrder_status() != 0) {
+                return JSONResult.errorMsg("此状态不能支付");
+            }
+
+            List<StudentClass> student = iOrder.getStudentClassByOrder(Integer.parseInt(order_id));
+            if (student.size() > 0) {
+                return JSONResult.errorMsg("此订单已经支付过");
+            }
+
+            if (orderInfo.getType() == 1) {
+                String order_outLine = orderInfo.getOutline();
+                try {
+                    ObjectMapper mapper_temp = new ObjectMapper();
+                    List<ClassTime> class_item_list = mapper_temp.readValue(order_outLine, new TypeReference<List<ClassTime>>() {
+                    });
+                    if (class_item_list.size() == 0) {
+                        return JSONResult.errorMsg("班课无内容");
+                    }
+                    if (class_item_list.get(0).getClass_time() < new Date().getTime() / 1000) {
+                        return JSONResult.errorMsg("已经开课，不允许支付");
+                    }
+
+                } catch (IOException e) {
+                    return JSONResult.errorMsg("班课课堂大纲错误");
+                }
+            }
+
+
+            List<ClassRoom> r_list = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id());
+            boolean fitst_flag = true;
+            for (ClassRoom item : r_list) {
+                if (item.getIstest() != 1) {
+                    fitst_flag = false;
+                    break;
+                }
+            }
+            log.info("fitst_flag 标志 " + fitst_flag);
+            if (fitst_flag || orderInfo.getType() == 0) {
+                Course course = iCourse.getCourseById(orderInfo.getCourse_id());
+                if (course == null) {
+                    return JSONResult.errorMsg("辅导课不存在");
+                }
+            } else { //第n次班课
+                ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(1);
+                List<StudentClass> student_list = iOrder.getStudentClassByCourseId(orderInfo.getCourse_id());
+                if (student_list.size() >= classRoom.getMax_person()) {
+                    return JSONResult.errorMsg("超过最大上课人数，无法支付");
+                }
+            }
+
+        } else { //录播课
+            Record record = iRecord.get(Integer.parseInt(order_id));
+            if (record == null || record.getRecord_course_status() != 3) {
+                return JSONResult.errorMsg("录播课信息不存在");
+            }
+            List<UserRecordCourse> lists = iRecord.getRecordByUserAndId(getCurrentUserId(), Integer.parseInt(order_id));
+            if (lists.size() > 0) {
+                return JSONResult.errorMsg("此录播课已经购买过");
+            }
+        }
+
+        PayItem payItem = new PayItem();
+        payItem.setType(type);
+        payItem.setOrder_id(order_id);
+        String retTest = payOrder(new Gson().toJson(payItem), "App支付测试", order_id, "0.01");
         PayRet ret = new PayRet();
-        ret.setToken("test");
-        ret.setPrice(0);
-        ret.setOrder_sn("test_sn");
+        ret.setToken(retTest);
+        ret.setPrice(1);
+        ret.setOrder_sn(order_id);
         return JSONResult.ok(ret);
     }
 
@@ -782,30 +892,7 @@ public class OrderController extends BaseController {
         return JSONResult.ok();
     }
 
-    @RequestMapping("/pay_callback")
-    @ResponseBody
-    public JSONResult payCallBack(HttpServletRequest request) throws AlipayApiException {
-        Map<String,String> params = new HashMap<String,String>();
-        Map requestParams = request.getParameterMap();
-        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
-            String name = (String) iter.next();
-            String[] values = (String[]) requestParams.get(name);
-            String valueStr = "";
-            for (int i = 0; i < values.length; i++) {
-                valueStr = (i == values.length - 1) ? valueStr + values[i]
-                        : valueStr + values[i] + ",";
-            }
-            //乱码解决，这段代码在出现乱码时使用。
-            //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
-            params.put(name, valueStr);
-        }
-        //切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
-        //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
-        boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.CHARSET,"RSA2");
-        String strRet = new Gson().toJson(params);
-        iLogService.addLog("100001","支付宝验证",strRet);
-        return JSONResult.ok();
-    }
+
 
     @RequestMapping("/pay_test")
     @ResponseBody
