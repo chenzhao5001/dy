@@ -360,8 +360,6 @@ public class OrderController extends BaseController {
                 valueStr = (i == values.length - 1) ? valueStr + values[i]
                         : valueStr + values[i] + ",";
             }
-            //乱码解决，这段代码在出现乱码时使用。
-            //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
             params.put(name, valueStr);
         }
         //切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
@@ -370,17 +368,16 @@ public class OrderController extends BaseController {
         iLogService.addLog("100001","支付宝验证before",strParam);
         boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.CHARSET,"RSA2");
         if(flag == false) {
-            return JSONResult.errorMsg("订单验证错误");
+            iLogService.addLog("100001","订单验证错误","订单验证错误");
         }
+        iLogService.addLog("100001","支付宝验证after",strParam);
         String strRet = new Gson().toJson(params);
-//        iLogService.addLog("100001","支付宝验证after",strRet);
         iOrder.addPayInfo(strRet, (int) (new Date().getTime() / 1000));
 
         String body = new String(request.getParameter("body").getBytes("ISO-8859-1"),"UTF-8");
         PayItem payItem = new Gson().fromJson(body,PayItem.class);
         String type =  payItem.getType();
         String order_id = payItem.getOrder_id();
-
 
 
 
@@ -620,6 +617,7 @@ public class OrderController extends BaseController {
             userRecordCourse.setCreate_time((int) (new Date().getTime() / 1000));
             iRecord.insertRecordCourse(userRecordCourse);
         }
+        iLogService.addLog("100001",order_id,"支付完成");
         return JSONResult.ok();
     }
 

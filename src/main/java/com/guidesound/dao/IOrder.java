@@ -275,7 +275,7 @@ public interface IOrder {
     @Update("update class_room set test_count = test_count - 1 where class_id = #{arg0} ")
     void reduceTestClassPerson(int class_id);
 
-    @Insert("insert into pay_info (info,create_time) values(#{arg0},#{arg1})")
+    @Insert("insert into pay_info (info,create_time) values (#{arg0},#{arg1})")
     void addPayInfo(String info,int create_time);
 
 }

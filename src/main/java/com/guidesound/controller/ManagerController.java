@@ -205,11 +205,11 @@ public class ManagerController extends BaseController {
                         videoPool.setCreate_time((int) (new Date().getTime() / 1000));
                         iVideo.insertVideoPool(videoPool);
                         if(userInfo != null) {
-                            TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + ToolsFunction.URLDecoderString(video.getTitle())+ "”已经通过系统审核，由于视频质量很高，已被系统推荐。");
+                            TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + ToolsFunction.URLDecoderString(video.getTitle())+ "”已经通过系统审核，由于视频质量很高，已被系统推荐。","");
                         }
                     } else {
                         if(userInfo != null){
-                            TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + ToolsFunction.URLDecoderString(video.getTitle()) + "”已经通过系统审核。");
+                            TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + ToolsFunction.URLDecoderString(video.getTitle()) + "”已经通过系统审核。","");
                         }
                     }
                 }
@@ -227,7 +227,7 @@ public class ManagerController extends BaseController {
             if(userInfo != null) {
                 Map<Integer,String> reason = VideoExamine.getReason();
                 if(reason.containsKey(Integer.parseInt(fail_reason))) {
-                    TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + ToolsFunction.URLDecoderString(video.getTitle()) + "”未通过系统审核，未通过原因是" + reason.get(Integer.parseInt(fail_reason)));
+                    TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + ToolsFunction.URLDecoderString(video.getTitle()) + "”未通过系统审核，未通过原因是" + reason.get(Integer.parseInt(fail_reason)),"");
                 }
             }
         }
@@ -557,19 +557,19 @@ public class ManagerController extends BaseController {
 
                 if(type.equals("1")) {
                     iArticle.setExamineSuccess(Integer.parseInt(article_id),type_list);
-                    TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的文章“" + articleInfo.getHead()+ "”已经通过系统审核，由于文章质量很高已被系统推荐！");
+                    TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的文章“" + articleInfo.getHead()+ "”已经通过系统审核，由于文章质量很高已被系统推荐！","");
                 } else {
                     iArticle.setAnswerExamineSuccess(Integer.parseInt(article_id),type_list);
-                    TlsSigTest.SendMessage(userInfo.getIm_id(),"您回答的问题“" + articleInfo.getHead()+ "”已经通过系统审核，由于文章质量很高已被系统推荐！");
+                    TlsSigTest.SendMessage(userInfo.getIm_id(),"您回答的问题“" + articleInfo.getHead()+ "”已经通过系统审核，由于文章质量很高已被系统推荐！","");
                 }
 
             } else {
                 if(type.equals("1")) {
                     iArticle.setExamineSuccess(Integer.parseInt(article_id),type_list);
-                    TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的文章“" + articleInfo.getHead()+ "”已经通过系统审核。");
+                    TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的文章“" + articleInfo.getHead()+ "”已经通过系统审核。","");
                 } else {
                     iArticle.setAnswerExamineSuccess(Integer.parseInt(article_id),type_list);
-                    TlsSigTest.SendMessage(userInfo.getIm_id(),"您回答的问题“" + articleInfo.getHead()+ "”已经通过系统审核。");
+                    TlsSigTest.SendMessage(userInfo.getIm_id(),"您回答的问题“" + articleInfo.getHead()+ "”已经通过系统审核。","");
                 }
 
                 if(type.equals("1")) {
@@ -590,9 +590,11 @@ public class ManagerController extends BaseController {
                     infoMsg.setGrade(SignMap.getGradeTypeByID((Integer)articleInfo.getGrade()));
                     infoMsg.setSubject(SignMap.getSubjectTypeById(articleInfo.getSubject()));
                     infoMsg.setName(ToolsFunction.URLDecoderString(articleInfo.getHead()));
+                    String name = "";
                     if(userInfo != null) {
 //                        infoMsg.put("head",userInfo.getHead());
 //                        infoMsg.put("user_name",userInfo.getName());
+                        name = userInfo.getName();
                         infoMsg.setHead(userInfo.getHead());
                         infoMsg.setUser_name(userInfo.getName());
                     }
@@ -601,7 +603,7 @@ public class ManagerController extends BaseController {
                     List<Integer> no_send = iUser.getAllAcceptUserIds(articleInfo.getUser_id(),1);
                     for(Integer user_id : follows) {
                         if(!no_send.contains(user_id)) {
-                            TlsSigTest.SendMessage(String.valueOf(user_id),new Gson().toJson(infoMsg));
+                            TlsSigTest.SendMessage(String.valueOf(user_id),new Gson().toJson(infoMsg),name+"发布新文章");
                             iLogService.addLog("99999", "/examine_article", infoMsg.toString());
                         }
                     }
@@ -616,10 +618,10 @@ public class ManagerController extends BaseController {
             if(type.equals("1")) {
 
                 iArticle.setExamineFail(Integer.parseInt(article_id),fail_reason,fail_content);
-                TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的文章“" + articleInfo.getHead()+ "”未通过系统审核，未通过原因是“" + reason.get(Integer.parseInt(fail_reason)) + "”");
+                TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的文章“" + articleInfo.getHead()+ "”未通过系统审核，未通过原因是“" + reason.get(Integer.parseInt(fail_reason)) + "”","");
             } else {
                 iArticle.setAnswerExamineFail(Integer.parseInt(article_id),fail_reason,fail_content);
-                TlsSigTest.SendMessage(userInfo.getIm_id(),"您回答的问题“" + articleInfo.getHead()+ "”未通过系统审核，未通过原因是“" + reason.get(Integer.parseInt(fail_reason)) + "”！");
+                TlsSigTest.SendMessage(userInfo.getIm_id(),"您回答的问题“" + articleInfo.getHead()+ "”未通过系统审核，未通过原因是“" + reason.get(Integer.parseInt(fail_reason)) + "”！","");
             }
         }
         return JSONResult.ok();
@@ -889,11 +891,11 @@ public class ManagerController extends BaseController {
             if(userExamine.size() > 0) {
                 String head = userExamine.get(0).getText();
                 if(Integer.parseInt(result) == 0) {
-                    TlsSigTest.SendMessage(uid,"您修改的新头像已经通过系统审核。");
+                    TlsSigTest.SendMessage(uid,"您修改的新头像已经通过系统审核。","");
                     TlsSigTest.PushMessage(uid,"15");
                     iUser.updateHead(Integer.parseInt(uid),head);
                 } else {
-                    TlsSigTest.SendMessage(uid,"您修改的新头像未通过系统审核，未通过原因是" +  failure_content + "”。");
+                    TlsSigTest.SendMessage(uid,"您修改的新头像未通过系统审核，未通过原因是" +  failure_content + "”。","");
                 }
                 iUser.updateUserHeadFlag(Integer.parseInt(uid),1);
             }
@@ -905,10 +907,10 @@ public class ManagerController extends BaseController {
                 String name = userExamine.get(0).getText();
                 if(Integer.parseInt(result) == 0) {
                     iUser.updateName(Integer.parseInt(uid),name);
-                    TlsSigTest.SendMessage(uid,"您修改的新昵称：“" + name + "”已经通过系统审核。");
+                    TlsSigTest.SendMessage(uid,"您修改的新昵称：“" + name + "”已经通过系统审核。","");
                     TlsSigTest.PushMessage(uid,"15");
                 } else {
-                    TlsSigTest.SendMessage(uid,"您修改的新头像未通过系统审核，未通过原因是" +  failure_content + "”。");
+                    TlsSigTest.SendMessage(uid,"您修改的新头像未通过系统审核，未通过原因是" +  failure_content + "”。","");
                 }
                 iUser.updateUserNameFlag(Integer.parseInt(uid),1);
             }
@@ -919,9 +921,9 @@ public class ManagerController extends BaseController {
                 String introduction = userExamine.get(0).getText();
                 if(Integer.parseInt(result) == 0) {
                     iUser.upIntroduction(Integer.parseInt(uid),introduction);
-                    TlsSigTest.SendMessage(uid,"您修改的新用户介绍：“" + introduction + "”已经通过系统审核。");
+                    TlsSigTest.SendMessage(uid,"您修改的新用户介绍：“" + introduction + "”已经通过系统审核。","");
                 } else {
-                    TlsSigTest.SendMessage(uid,"您修改的新用户介绍“" + introduction + "”未通过系统审核，未通过原因是" +  failure_content + "”。");
+                    TlsSigTest.SendMessage(uid,"您修改的新用户介绍“" + introduction + "”未通过系统审核，未通过原因是" +  failure_content + "”。","");
                 }
                 iUser.updateUserIntroduceFlag(Integer.parseInt(uid),1);
             }
@@ -935,10 +937,10 @@ public class ManagerController extends BaseController {
                     iUser.addVideoDuration(Integer.parseInt(uid),60);
                     UserInfo userInfo = iUser.getUser(Integer.parseInt(uid));
                     int duration = userInfo.getVideo_duration() / 60;
-                    TlsSigTest.SendMessage(uid,"您申请的认证“认证信息”已经通过系统审核，除真实身份体现外，同时您已经可以上传“" + duration +"”分钟的短视频了。");
+                    TlsSigTest.SendMessage(uid,"您申请的认证“认证信息”已经通过系统审核，除真实身份体现外，同时您已经可以上传“" + duration +"”分钟的短视频了。","");
                 } else {
                     iUser.updateAuthState(Integer.parseInt(uid),3);
-                    TlsSigTest.SendMessage(uid,"您申请的`认证“认证信息”未通过系统审核，未通过原因是“审核后台提交的结果”");
+                    TlsSigTest.SendMessage(uid,"您申请的`认证“认证信息”未通过系统审核，未通过原因是“审核后台提交的结果”","");
                 }
             }
             iExamine.deleteUserExamine(Integer.parseInt(uid),3);
@@ -950,10 +952,10 @@ public class ManagerController extends BaseController {
                 if(Integer.parseInt(result) == 0) {
                     iUser.updateShopbyUserId(Integer.parseInt(uid),commodityExamines.get(0).getShop_url());
                     iUser.updateShopState(Integer.parseInt(uid),1);
-                    TlsSigTest.SendMessage(uid,"您发布的店铺“" + shop_list.get(0).getShop_url() + "”已经通过系统审核，快努力发高质量的视频推广您的商品吧！");
+                    TlsSigTest.SendMessage(uid,"您发布的店铺“" + shop_list.get(0).getShop_url() + "”已经通过系统审核，快努力发高质量的视频推广您的商品吧！","");
                 } else {
                     iUser.updateShopState(Integer.parseInt(uid),2);
-                    TlsSigTest.SendMessage(uid,"您发布的店铺“" + shop_list.get(0).getShop_url() + "”未通过系统审核，未通过原因是“" + failure_content + "”。");
+                    TlsSigTest.SendMessage(uid,"您发布的店铺“" + shop_list.get(0).getShop_url() + "”未通过系统审核，未通过原因是“" + failure_content + "”。","");
                 }
 
             }
@@ -965,10 +967,10 @@ public class ManagerController extends BaseController {
                 UserCommodity userCommodity = iUser.getCommodityById(item_id);
                 if(Integer.parseInt(result) == 0 && userCommodity != null) {
                     iUser.updateCommodityState(Integer.parseInt(item_id),1);
-                    TlsSigTest.SendMessage(uid,"您发布的商品“" + userCommodity.getCommodity_name() + "”已经通过系统审核，快努力发高质量的视频推广您的商品吧！");
+                    TlsSigTest.SendMessage(uid,"您发布的商品“" + userCommodity.getCommodity_name() + "”已经通过系统审核，快努力发高质量的视频推广您的商品吧！","");
                 } else {
                     iUser.updateCommodityState(Integer.parseInt(item_id),2);
-                    TlsSigTest.SendMessage(uid,"您发布的商品“" + userCommodity.getCommodity_name() + "”未通过系统审核，未通过原因是“" + failure_content + "”。");
+                    TlsSigTest.SendMessage(uid,"您发布的商品“" + userCommodity.getCommodity_name() + "”未通过系统审核，未通过原因是“" + failure_content + "”。","");
                 }
             }
             iExamine.deleteCommodityExamine(Integer.parseInt(item_id),5);
@@ -979,10 +981,10 @@ public class ManagerController extends BaseController {
             if (courseExamine.size() > 0) {
                 if(Integer.parseInt(result) == 0) {
                     iCourse.setTeacherState(Integer.parseInt(item_id),2);
-                    TlsSigTest.SendMessage(uid,"您添加的辅导老师“" + teacher.getName() + "”已经通过系统审核，现在可以发布辅导课程了。");
+                    TlsSigTest.SendMessage(uid,"您添加的辅导老师“" + teacher.getName() + "”已经通过系统审核，现在可以发布辅导课程了。","");
                 } else {
                     iCourse.setTeacherState(Integer.parseInt(item_id),3);
-                    TlsSigTest.SendMessage(uid,"您添加的辅导老师“" + teacher.getName() + "”未通过系统审核，未通过原因是“" + failure_content + "”。");
+                    TlsSigTest.SendMessage(uid,"您添加的辅导老师“" + teacher.getName() + "”未通过系统审核，未通过原因是“" + failure_content + "”。","");
                 }
             }
             iExamine.deleteCourseExamine(Integer.parseInt(item_id),6);
@@ -993,7 +995,7 @@ public class ManagerController extends BaseController {
                 Course course = iCourse.getCourseById(Integer.parseInt(item_id));
                 if(Integer.parseInt(result) == 0) {
                     iCourse.setCourseState(Integer.parseInt(item_id),3);
-                    TlsSigTest.SendMessage(uid,"您发布的课程“" + course.getCourse_name() + "”已经通过系统审核，快努力发高质量的视频展示您自己吧！");
+                    TlsSigTest.SendMessage(uid,"您发布的课程“" + course.getCourse_name() + "”已经通过系统审核，快努力发高质量的视频展示您自己吧！","");
                     if(course.getType() == 1) {
                         ClassRoom classRoom = new ClassRoom();
                         classRoom.setUser_id(course.getUser_id());
@@ -1024,7 +1026,7 @@ public class ManagerController extends BaseController {
                     }
                 } else {
                     iCourse.setCourseState(Integer.parseInt(item_id),2);
-                    TlsSigTest.SendMessage(uid,"您发布的课程“" + course.getCourse_name() + "”未通过系统审核，未通过原因是“" + failure_content + "”。");
+                    TlsSigTest.SendMessage(uid,"您发布的课程“" + course.getCourse_name() + "”未通过系统审核，未通过原因是“" + failure_content + "”。","");
 
                 }
             }
@@ -1038,7 +1040,7 @@ public class ManagerController extends BaseController {
                 return JSONResult.errorMsg("此状态无法审核");
             }
             if(Integer.parseInt(result) == 0) {
-                TlsSigTest.SendMessage(uid,"您发布的录播课“" + record.getRecord_course_name() + "”已经通过系统审核，快努力发高质量的视频展示您自己吧！");
+                TlsSigTest.SendMessage(uid,"您发布的录播课“" + record.getRecord_course_name() + "”已经通过系统审核，快努力发高质量的视频展示您自己吧！","");
                 iRecord.setRecordCourseStatue(Integer.parseInt(item_id),3);
                 String videos = (String) record.getVideos();
                 ObjectMapper mapper_temp = new ObjectMapper();
@@ -1071,7 +1073,7 @@ public class ManagerController extends BaseController {
                 }
 
             } else {
-                TlsSigTest.SendMessage(uid,"您发布的录播课“" + record.getRecord_course_name() + "”没有通过系统审核");
+                TlsSigTest.SendMessage(uid,"您发布的录播课“" + record.getRecord_course_name() + "”没有通过系统审核","");
                 iRecord.setRecordCourseStatue(Integer.parseInt(item_id),2);
             }
 

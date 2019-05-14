@@ -516,7 +516,7 @@ public class ClassRoomController extends BaseController {
             if(ids.size() > 0 && teacherFirstEnter) {
                 List<UserInfo> users = iUser.getUserByIds(ids);
                 for (UserInfo item : users) {
-                    TlsSigTest.SendMessage(item.getIm_id(), "你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！");
+                    TlsSigTest.SendMessage(item.getIm_id(), "你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！","");
                     log.info("进入课堂通知已发送 im_id = {} content = {}", item.getIm_id(), "test...");
                     if (!item.getPhone().equals("")) {
                         String content = "【导音教育】你的课堂: “" + classRoom.getCourse_name() + "”，老师已经进入课堂，请尽快进入课堂开始上课！";

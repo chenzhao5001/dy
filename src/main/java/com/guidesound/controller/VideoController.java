@@ -1240,6 +1240,7 @@ public class VideoController extends BaseController {
         if(videoShow == null) {
             return JSONResult.errorMsg("视频不存在");
         }
+
 //        Map<String,String> infoMsg = new HashMap<>();
 //        infoMsg.put("msg_type","7");
 //        infoMsg.put("type","2");
@@ -1258,12 +1259,14 @@ public class VideoController extends BaseController {
         infoMsg.setSubject(SignMap.getSubjectTypeById(videoShow.getSubject()));
         infoMsg.setName(ToolsFunction.URLDecoderString(videoShow.getTitle()));
         UserInfo userInfo = iUser.getUser(videoShow.getUser_id());
+        String userName = "";
         if(userInfo != null) {
 
 //            infoMsg.put("head",userInfo.getHead());
 //            infoMsg.put("user_name",userInfo.getName());
             infoMsg.setHead(userInfo.getHead());
             infoMsg.setUser_name(userInfo.getName());
+            userName = userInfo.getName();
         }
 
         List<Integer> follows = iUser.getAllFuns(videoShow.getUser_id());
@@ -1272,7 +1275,7 @@ public class VideoController extends BaseController {
         for(Integer user_id : follows) {
             if(!no_send.contains(user_id)) {
 //                TlsSigTest.SendMessage(String.valueOf(user_id),infoMsg);
-                TlsSigTest.SendMessage(String.valueOf(user_id),new Gson().toJson(infoMsg));
+                TlsSigTest.SendMessage(String.valueOf(user_id),new Gson().toJson(infoMsg),userName+"发布新视频");
                 iLogService.addLog("99999", "/video_finish", infoMsg.toString());
             }
         }

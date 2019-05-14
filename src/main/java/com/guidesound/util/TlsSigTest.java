@@ -208,7 +208,7 @@ public class TlsSigTest {
 
 
 
-    public static String SendMessage(String user_id,Object info) throws IOException {
+    public static String SendMessage(String user_id,Object info,String desc) throws IOException {
         String rand = ToolsFunction.getNumRandomString(10);
         String controlUrl = "https://console.tim.qq.com/v4/openim/sendmsg?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + rand + "&contenttype=json";
 
@@ -222,8 +222,8 @@ public class TlsSigTest {
 
         JSONObject offlinePushInfo = new JSONObject();
         offlinePushInfo.put("PushFlag",0);
-        offlinePushInfo.put("Desc",info);
-        offlinePushInfo.put("Ext",info);
+        offlinePushInfo.put("Desc",desc);
+        offlinePushInfo.put("Ext","daoyin_push");
 
 
         JSONObject jsonSend = new JSONObject();
