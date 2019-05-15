@@ -764,10 +764,11 @@ public class OrderController extends BaseController {
                 AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.SIGNTYPE);
 
         AlipayTradeQueryResponse response = null;
+
         try {
             response = alipayClient.execute(queryRequest);
         } catch (AlipayApiException e) {
-            return JSONResult.errorMsg("支付宝查询订单" + order_sn + "失败！");
+            return JSONResult.errorMsg("支付宝查询订单" + order_sn + "失败！" + e.getErrMsg());
         }
 
         if (response == null) {
@@ -775,7 +776,8 @@ public class OrderController extends BaseController {
         }
 
         if (!response.isSuccess()) {
-            return JSONResult.errorMsg("支付宝订单" + order_sn + "支付失败");
+            response.getSubMsg();
+            return JSONResult.errorMsg("支付宝订单" + order_sn + "支付失败:"  + response.getSubMsg());
         }
         return JSONResult.ok("支付宝订单" + order_sn + "支付成功");
     }
@@ -994,8 +996,5 @@ public class OrderController extends BaseController {
 
         return orderString;
     }
-
-
-
 
 }

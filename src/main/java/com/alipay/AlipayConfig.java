@@ -16,7 +16,7 @@ public class AlipayConfig {
     // 返回格式
     public static String FORMAT = "json";
     // 支付宝公钥
-    public static String ALIPAY_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp3X7v3omrxuvx6BWXSs+I5rscgIjIFH4dBWSutmM8OZQGR8HXalVXnY/EwNle2CffOcrNNxvGkk94n3DbXEGxlJPmPOR4byr2T2Et58glH525GqGog++jE56v8pPij6U6qiDI/liSdc+gBcUQJziBiAxGSiJCUbUujqH8kXhuYL98Rz14QFLLoXqygiP+Ob8Y1d8tczvANNItL3E5boSfbi6d4GDabXLJhd9tUKJNuXcgkUG2lHKS2E52TSCJGFuHHxB/gIrw/GLlgxdwt3slQjJwFHu6ZpDfhF3SAi1N9Qle7sJiH+IeUWpNlL7Iq7jIIiCouK25L0kFH3Cu5d61wIDAQAB";
+    public static String ALIPAY_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiK6qfkYFXz6x63dpz2cQNLbQh1+3OASlrRiAoQCy/1Toy/ZDEYhZVBszZpsJq73vcqut5xX2LeqfObMwbrrP65hbWq2pe9Uy7aTGvrszwaa8pNMd6/jt6SS2HYdupBvqyYl/5/dc6tBNXLifWIk0ceBR1MROGefEmp/eJl4tXF8v8+3m78SCi2bSIIPxXXuETMyQ7X7EiP0Qqp3rQGszxDhXp7SexfKNmPP+x0ZVgIFa2tHLhOxXJ43jF5AWq4n3oX1wemqvnByhHv+m5pItPsbeh8zXMoc3kMpo6FhEk780Kw3KNaC4hUG2dv9IqtPdlejp11t7GNjU0P3Jm+x6lwIDAQAB";
     // 日志记录目录
     public static String log_path = "/log";
     // RSA2
