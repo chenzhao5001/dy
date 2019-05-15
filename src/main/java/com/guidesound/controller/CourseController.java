@@ -52,7 +52,6 @@ public class CourseController extends BaseController{
     private IExamine iExamine;
 
 
-
     @RequestMapping("/add_1v1_course")
     @ResponseBody
     public JSONResult add_1v1_course(@Valid Course1V1DTO course1V1DTO,BindingResult result) {

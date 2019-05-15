@@ -359,12 +359,10 @@ public class OrderController extends BaseController {
 //        System.out.println(payItem1);
 
         try {
-            iLogService.addLog("100001","enter",request.getParameter("body"));
-
-
-            Map<String,String> params = new HashMap<String,String>();
+            iLogService.addLog("100001", "enter", request.getParameter("body"));
+            Map<String, String> params = new HashMap<String, String>();
             Map requestParams = request.getParameterMap();
-            for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+            for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext(); ) {
                 String name = (String) iter.next();
                 String[] values = (String[]) requestParams.get(name);
                 String valueStr = "";
@@ -377,37 +375,56 @@ public class OrderController extends BaseController {
             //切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
             //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
             String strParam = new Gson().toJson(params);
-            iLogService.addLog("100001","支付宝验证before",strParam);
-            boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.CHARSET,"RSA2");
-            if(flag == false) {
-                iLogService.addLog("100001","订单验证错误","订单验证错误");
+            iLogService.addLog("100001", "支付宝验证before", strParam);
+            boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.CHARSET, "RSA2");
+            if (flag == false) {
+                iLogService.addLog("100001", "订单验证错误", "订单验证错误");
             }
-            iLogService.addLog("100001","支付宝验证after",strParam);
+            iLogService.addLog("100001", "支付宝验证after", strParam);
             String strRet = new Gson().toJson(params);
             iOrder.addPayInfo(strRet, (int) (new Date().getTime() / 1000));
 
             String body = request.getParameter("body");
-            PayItem payItem = new Gson().fromJson(body,PayItem.class);
-            String type =  payItem.getType();
+            PayItem payItem = new Gson().fromJson(body, PayItem.class);
+            String type = payItem.getType();
             String order_id = payItem.getOrder_id();
+            iLogService.addLog("100001", "预处理完成", "");
 
-            iLogService.addLog("100001","预处理完成","");
+
             if (type.equals("0")) { //课堂
                 OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), getCurrentUserId());
                 if (orderInfo == null) {
-                    iLogService.addLog("100001",order_id,"订单不存在");
+                    iLogService.addLog("100001", order_id, "订单不存在");
                     return JSONResult.errorMsg("订单不存在");
                 }
                 if (orderInfo.getOrder_status() != 0) {
-                    iLogService.addLog("100001",order_id,"此状态不能支付");
+                    iLogService.addLog("100001", order_id, "此状态不能支付");
                     return JSONResult.errorMsg("此状态不能支付");
                 }
 
                 List<StudentClass> student = iOrder.getStudentClassByOrder(Integer.parseInt(order_id));
                 if (student.size() > 0) {
-                    iLogService.addLog("100001",order_id,"此订单已经支付过");
+                    iLogService.addLog("100001", order_id, "此订单已经支付过");
                     return JSONResult.errorMsg("此订单已经支付过");
                 }
+
+                //支出
+                PayOrder payOrder = new PayOrder();
+                payOrder.setType(0);
+                payOrder.setTime((int) (new Date().getTime() / 1000));
+                payOrder.setIn_or_out(1);
+                payOrder.setAmount(Integer.parseInt(request.getParameter("total_amount")));
+                payOrder.setCourse_type(0);
+                Course course_temp = iCourse.getCourseById(orderInfo.getCourse_id());
+                if (course_temp != null) {
+                    payOrder.setCourse_name(course_temp.getCourse_name());
+                }
+                payOrder.setOrder_id(Integer.parseInt(order_id));
+                payOrder.setTeacher_id(payItem.getTo_user_id());
+                payOrder.setTeacher_name(payItem.getTo_user_name());
+                payOrder.setCreate_time((int) (new Date().getTime() / 1000));
+                payOrder.setUpdate_time((int) (new Date().getTime() / 1000));
+                iOrder.insertPayOrder(payOrder);
 
                 if (orderInfo.getType() == 1) {
                     String order_outLine = orderInfo.getOutline();
@@ -416,16 +433,16 @@ public class OrderController extends BaseController {
                         List<ClassTime> class_item_list = mapper_temp.readValue(order_outLine, new TypeReference<List<ClassTime>>() {
                         });
                         if (class_item_list.size() == 0) {
-                            iLogService.addLog("100001",order_id,"班课无内容");
+                            iLogService.addLog("100001", order_id, "班课无内容");
                             return JSONResult.errorMsg("班课无内容");
                         }
                         if (class_item_list.get(0).getClass_time() < new Date().getTime() / 1000) {
-                            iLogService.addLog("100001",order_id,"已经开课，不允许支付");
+                            iLogService.addLog("100001", order_id, "已经开课，不允许支付");
                             return JSONResult.errorMsg("已经开课，不允许支付");
                         }
 
                     } catch (IOException e) {
-                        iLogService.addLog("100001",order_id,"班课课堂大纲错误");
+                        iLogService.addLog("100001", order_id, "班课课堂大纲错误");
                         return JSONResult.errorMsg("班课课堂大纲错误");
                     }
                 }
@@ -446,7 +463,7 @@ public class OrderController extends BaseController {
                 if (fitst_flag || orderInfo.getType() == 0) {
                     Course course = iCourse.getCourseById(orderInfo.getCourse_id());
                     if (course == null) {
-                        iLogService.addLog("100001",order_id,"辅导课不存在");
+                        iLogService.addLog("100001", order_id, "辅导课不存在");
                         return JSONResult.errorMsg("辅导课不存在");
                     }
                     course.setWay(orderInfo.getWay());
@@ -468,7 +485,7 @@ public class OrderController extends BaseController {
                         group_id = TlsSigTest.createGroup(userInfo.getIm_id(), "班课群 " + course.getId(), String.valueOf(currentCount), course.getCourse_pic());
                         if (!group_id.equals(String.valueOf(currentCount))) {
                             log.info("创建群失败 im_id = userInfo.getIm_id ={} ,group_name = {} ,ret = {}", userInfo.getIm_id(), "班课群 " + course.getCourse_name(), group_id);
-                            iLogService.addLog("100001",order_id,"创建im群失败");
+                            iLogService.addLog("100001", order_id, "创建im群失败");
                             return JSONResult.errorMsg("创建im群失败");
                         }
                         UserInfo user_temp = iUser.getUser(course.getUser_id());
@@ -528,7 +545,7 @@ public class OrderController extends BaseController {
                     ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(1);
                     List<StudentClass> student_list = iOrder.getStudentClassByCourseId(orderInfo.getCourse_id());
                     if (student_list.size() >= classRoom.getMax_person()) {
-                        iLogService.addLog("100001",order_id,"超过最大上课人数，无法支付");
+                        iLogService.addLog("100001", order_id, "超过最大上课人数，无法支付");
                         return JSONResult.errorMsg("超过最大上课人数，无法支付");
                     }
                     String info_ret = TlsSigTest.addGroupPerson(classRoom.getIm_group_id(), String.valueOf(getCurrentUserId()));
@@ -563,7 +580,7 @@ public class OrderController extends BaseController {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    iLogService.addLog("100001",order_id,"课堂大纲格式错误");
+                    iLogService.addLog("100001", order_id, "课堂大纲格式错误");
                     return JSONResult.errorMsg("课堂大纲格式错误");
                 }
 
@@ -593,14 +610,41 @@ public class OrderController extends BaseController {
             } else { //录播课
                 Record record = iRecord.get(Integer.parseInt(order_id));
                 if (record == null || record.getRecord_course_status() != 3) {
-                    iLogService.addLog("100001",order_id,"录播课信息不存在");
+                    iLogService.addLog("100001", order_id, "录播课信息不存在");
                     return JSONResult.errorMsg("录播课信息不存在");
                 }
                 List<UserRecordCourse> lists = iRecord.getRecordByUserAndId(getCurrentUserId(), Integer.parseInt(order_id));
                 if (lists.size() > 0) {
-                    iLogService.addLog("100001",order_id,"此录播课已经购买过");
+                    iLogService.addLog("100001", order_id, "此录播课已经购买过");
                     return JSONResult.errorMsg("此录播课已经购买过");
                 }
+
+                //收入
+                PayOrder payOrder1 = new PayOrder();
+                payOrder1.setType(4);
+                payOrder1.setTime((int) (new Date().getTime() / 1000));
+                payOrder1.setIn_or_out(0);
+                payOrder1.setAmount(Integer.parseInt(request.getParameter("total_amount")));
+                payOrder1.setCourse_name(record.getRecord_course_name());
+                payOrder1.setStudent_id(payItem.getFrom_user_id());
+                payOrder1.setStudent_name(payItem.getFrom_user_name());
+                payOrder1.setCreate_time((int) (new Date().getTime() / 1000));
+                payOrder1.setUpdate_time((int) (new Date().getTime() / 1000));
+                iOrder.insertPayOrder(payOrder1);
+
+                //支出
+                PayOrder payOrder2 = new PayOrder();
+                payOrder2.setType(5);
+                payOrder2.setTime((int) (new Date().getTime() / 1000));
+                payOrder2.setIn_or_out(1);
+                payOrder2.setAmount(Integer.parseInt(request.getParameter("total_amount")));
+                payOrder2.setCourse_name(record.getRecord_course_name());
+                payOrder2.setTeacher_id(payItem.getTo_user_id());
+                payOrder2.setTeacher_name(payItem.getTo_user_name());
+                payOrder2.setCreate_time((int) (new Date().getTime() / 1000));
+                payOrder2.setUpdate_time((int) (new Date().getTime() / 1000));
+                iOrder.insertPayOrder(payOrder2);
+
 
                 UserInfo userInfo = iUser.getUser(record.getUser_id());
                 if (record.getGrade_id() == 0) { //创建群
@@ -627,48 +671,39 @@ public class OrderController extends BaseController {
                 userRecordCourse.setUser_record_course_id(Integer.parseInt(order_id));
                 userRecordCourse.setCreate_time((int) (new Date().getTime() / 1000));
                 iRecord.insertRecordCourse(userRecordCourse);
-                String total_mount =  request.getParameter("total_amount");
-                int current_time = (int) (new Date().getTime()/1000);
+                String total_mount = request.getParameter("total_amount");
+                int current_time = (int) (new Date().getTime() / 1000);
 
                 List<UserAmount> list = iUser.getUserAmount(userRecordCourse.getUser_id());
-                if(list.size() == 0) {
-                    iUser.InsertUserAmount(userRecordCourse.getUser_id(),Integer.parseInt(total_mount),current_time,current_time);
+                if (list.size() == 0) {
+                    iUser.InsertUserAmount(userRecordCourse.getUser_id(), Integer.parseInt(total_mount), current_time, current_time);
                 } else {
                     int amount = list.get(0).getAmount() + Integer.parseInt(total_mount);
-                    iUser.updateUserAmount(userRecordCourse.getUser_id(),amount);
+                    iUser.updateUserAmount(userRecordCourse.getUser_id(), amount);
                 }
 
             }
-            iLogService.addLog("100001",order_id,"支付完成");
+            iLogService.addLog("100001", order_id, "支付完成");
             return JSONResult.ok();
-        } catch (IOException e){
+        } catch (IOException e) {
             String temp = e.getMessage();
-            iLogService.addLog("100001","错误",temp);
-
+            iLogService.addLog("100001", "错误", temp);
         }
         return JSONResult.ok();
     }
 
 
-
     @RequestMapping("/pay")
     @ResponseBody
     JSONResult pay(String type, String order_id, String pay_way) throws IOException {
-//        if(true) {
-//            order_id = String.valueOf(new Date().getTime());
-//            PayItem payItem = new PayItem();
-//            payItem.setType(type);
-//            payItem.setOrder_id(order_id);
-//            String retTest = payOrder(new Gson().toJson(payItem), "App支付测试", order_id, "0.01");
-//            PayRet ret = new PayRet();
-//            ret.setToken(retTest);
-//            ret.setPrice(1);
-//            ret.setOrder_sn(order_id);
-//            return JSONResult.ok(ret);
-//        }
         if (type == null || order_id == null || pay_way == null) {
             return JSONResult.errorMsg("缺少参数");
         }
+        int from_user_id = getCurrentUserId();
+        String from_user_name = iUser.getUser(from_user_id).getName();
+        int to_user_id;
+        String to_user_name;
+
         if (type.equals("0")) { //课堂
             OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), getCurrentUserId());
             if (orderInfo == null) {
@@ -682,6 +717,13 @@ public class OrderController extends BaseController {
             if (student.size() > 0) {
                 return JSONResult.errorMsg("此订单已经支付过");
             }
+
+            to_user_id = orderInfo.getCourse_owner_id();
+            UserInfo userInfo = iUser.getUser(to_user_id);
+            if (userInfo == null) {
+                return JSONResult.errorMsg("被支付人已注销");
+            }
+            to_user_name = userInfo.getName();
 
             if (orderInfo.getType() == 1) {
                 String order_outLine = orderInfo.getOutline();
@@ -729,6 +771,12 @@ public class OrderController extends BaseController {
             if (record == null || record.getRecord_course_status() != 3) {
                 return JSONResult.errorMsg("录播课信息不存在");
             }
+            to_user_id = record.getUser_id();
+            UserInfo userInfo = iUser.getUser(to_user_id);
+            if (userInfo == null) {
+                return JSONResult.errorMsg("被支付人已注销");
+            }
+            to_user_name = userInfo.getName();
             List<UserRecordCourse> lists = iRecord.getRecordByUserAndId(getCurrentUserId(), Integer.parseInt(order_id));
             if (lists.size() > 0) {
                 return JSONResult.errorMsg("此录播课已经购买过");
@@ -738,6 +786,10 @@ public class OrderController extends BaseController {
         PayItem payItem = new PayItem();
         payItem.setType(type);
         payItem.setOrder_id(order_id);
+        payItem.setFrom_user_id(from_user_id);
+        payItem.setFrom_user_name(from_user_name);
+        payItem.setTo_user_id(to_user_id);
+        payItem.setTo_user_name(to_user_name);
         String retTest = payOrder(new Gson().toJson(payItem), "App支付测试", order_id, "0.01");
         PayRet ret = new PayRet();
         ret.setToken(retTest);
@@ -777,7 +829,7 @@ public class OrderController extends BaseController {
 
         if (!response.isSuccess()) {
             response.getSubMsg();
-            return JSONResult.errorMsg("支付宝订单" + order_sn + "支付失败:"  + response.getSubMsg());
+            return JSONResult.errorMsg("支付宝订单" + order_sn + "支付失败:" + response.getSubMsg());
         }
         return JSONResult.ok("支付宝订单" + order_sn + "支付成功");
     }
@@ -958,7 +1010,6 @@ public class OrderController extends BaseController {
     }
 
 
-
     @RequestMapping("/pay_test")
     @ResponseBody
     public JSONResult payTest() {
@@ -995,6 +1046,97 @@ public class OrderController extends BaseController {
         }
 
         return orderString;
+    }
+
+    @RequestMapping("/purse_detail")
+    @ResponseBody
+    public JSONResult purseDetail() {
+
+        List<PayInfoRet> ret_list = new ArrayList<>();
+        List<PayOrder> list = iOrder.getPayOrder(getCurrentUserId());
+        for (PayOrder item : list) {
+            PayInfoRet payInfoRet = new PayInfoRet();
+            payInfoRet.setType(item.getType());
+            payInfoRet.setTime(item.getTime());
+            payInfoRet.setIn_or_out(item.getIn_or_out());
+            payInfoRet.setAmount(item.getAmount());
+
+            if (item.getType() == 0) {
+                CourseOrder courseOrder = new CourseOrder();
+                courseOrder.setCourse_name(item.getCourse_name());
+                courseOrder.setCourse_type(item.getCourse_type());
+                courseOrder.setOrder_id(item.getOrder_id());
+                courseOrder.setTeacher_id(item.getTeacher_id());
+                courseOrder.setTeacher_name(item.getTeacher_name());
+                payInfoRet.setCourseOrder(courseOrder);
+            } else if (item.getType() == 1) {
+                Refund refund = new Refund();
+                refund.setCourse_name(item.getCourse_name());
+                refund.setOrder_id(item.getOrder_id());
+                payInfoRet.setRefund(refund);
+
+            } else if (item.getType() == 2) {
+                TeacherClassIn teacherClassIn = new TeacherClassIn();
+                teacherClassIn.setClass_id(item.getClass_id());
+                teacherClassIn.setClass_number(item.getClass_number());
+                teacherClassIn.setCourse_name(item.getCourse_name());
+                teacherClassIn.setStudent_id(item.getStudent_id());
+                teacherClassIn.setStudent_name(item.getStudent_name());
+                payInfoRet.setTeacherClassIn(teacherClassIn);
+
+            } else if (item.getType() == 3) {
+                TeacherClassOut teacherClassOut = new TeacherClassOut();
+                teacherClassOut.setClass_id(item.getClass_id());
+                teacherClassOut.setClass_number(item.getClass_number());
+                teacherClassOut.setCourse_name(item.getCourse_name());
+                teacherClassOut.setTeacher_id(item.getTeacher_id());
+                teacherClassOut.setTeacher_name(item.getTeacher_name());
+                payInfoRet.setTeacherClassOut(teacherClassOut);
+
+            } else if (item.getType() == 4) {
+                VideoClassIn videoClassIn = new VideoClassIn();
+                videoClassIn.setCourse_name(item.getCourse_name());
+                videoClassIn.setOrder_id(item.getOrder_id());
+                videoClassIn.setStudent_id(item.getOrder_id());
+                videoClassIn.setStudent_name(item.getStudent_name());
+                payInfoRet.setVideoClassIn(videoClassIn);
+
+            } else if (item.getType() == 5) {
+                VideoClassOut videoClassOut = new VideoClassOut();
+                videoClassOut.setCourse_name(item.getCourse_name());
+                videoClassOut.setOrder_id(item.getOrder_id());
+                videoClassOut.setTeacher_id(item.getTeacher_id());
+                videoClassOut.setTeacher_name(item.getTeacher_name());
+                payInfoRet.setVideoClassOut(videoClassOut);
+            }
+            ret_list.add(payInfoRet);
+        }
+        return JSONResult.ok(ret_list);
+    }
+
+    @RequestMapping("/my_purse")
+    @ResponseBody
+    public JSONResult myPurse() {
+
+        MyPurse myPurse = new MyPurse();
+
+        int in_amount = 0;
+        int out_amount = 0;
+
+        List<PayOrder> list = iOrder.getPayOrder(getCurrentUserId());
+        for(PayOrder item : list) {
+            if(item.getIn_or_out() == 0) {
+                in_amount += item.getAmount();
+            } else {
+                out_amount += item.getAmount();
+            }
+        }
+        myPurse.setRemainder_all(in_amount - out_amount);
+        List<UserAmount> remainder_withdraw = iUser.getUserAmount(getCurrentUserId());
+        if(remainder_withdraw.size() > 0) {
+            myPurse.setRemainder_withdraw(remainder_withdraw.get(0).getAmount());
+        }
+        return JSONResult.ok(myPurse);
     }
 
 }

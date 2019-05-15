@@ -286,6 +286,13 @@ public interface IOrder {
     @Select("select * from user_order where student_id = #{arg0} and class_id = #{arg1} and status = #{arg2} and refund_amount = 0")
     List<OrderInfo> getOrderByStudentId(int student_id,int class_id,int status);
 
+    @Insert("insert into pay_order (user_id,type,time,in_or_out,amount,course_type,course_name,order_id,teacher_name,teacher_id,class_id,class_number,student_name,student_id,create_time,update_time) " +
+            "values (#{user_id},#{type},#{time},#{in_or_out},#{amount},#{course_type},#{course_name},#{order_id},#{teacher_name},#{teacher_id},#{class_id},#{class_number},#{student_name},#{student_id},#{create_time},#{update_time})")
+    void insertPayOrder(PayOrder payOrder);
+
+    @Select("select * from pay_order where user_id = #{arg0}")
+    List<PayOrder> getPayOrder(int user_id);
+
 
 
 }
