@@ -775,9 +775,9 @@ public class VideoController extends BaseController {
         ListResp ret = new ListResp();
         int count = 0;
         if (flag) {
-            count = iVideo.getPublishVidoeCountByUserId_2(Integer.parseInt(user_id));
+            count = iVideo.getPublishVidoeCountByUserId_2(Integer.parseInt(user_id)); //查自己
         } else {
-            count = iVideo.getPublishVidoeCountByUserId(Integer.parseInt(user_id));
+            count = iVideo.getPublishVidoeCountByUserId(Integer.parseInt(user_id)); //查别人
         }
         if (count == 0) {
             ret.setCount(0);

@@ -138,9 +138,9 @@ public interface IVideo {
             + "</script>")
     List<VideoShow> myCollection(@Param("iList") List<Integer> iList,int begin,int end);
 
-    @Select("select count(*) from video where user_id = #{arg0} and examine_status = 1 or examine_status = 5 or examine_status = 6 and deleted = 0")
+    @Select("select count(*) from video where user_id = #{arg0} and examine_status = 1  and deleted = 0")
     int getPublishVidoeCountByUserId(int user_id);
-    @Select("select count(*) from video where user_id = #{arg0} and (examine_status = 1 or examine_status = 0 or examine_status = 3 or examine_status = 5 or examine_status = 6) and deleted = 0")
+    @Select("select count(*) from video where user_id = #{arg0} and (examine_status = 1 or examine_status = 0 or examine_status = 3) and deleted = 0")
     int getPublishVidoeCountByUserId_2(int user_id);
     @Select("select * from video where user_id = #{arg0} and examine_status = 1 and deleted = 0 limit #{arg1},#{arg2}")
     List<VideoShow> getPublishVidoeByUserId(int user_id,int begin,int end);
