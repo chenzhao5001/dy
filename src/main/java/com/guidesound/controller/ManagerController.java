@@ -498,10 +498,10 @@ public class ManagerController extends BaseController {
     @ResponseBody
     JSONResult examineArticle(String article_id,String status,String type_list,String fail_reason,String fail_content,String type) throws IOException, InterruptedException, JMSException {
 
-        Integer userId = getUserId();
-        if ( userId == null ) {
-            return JSONResult.errorMsg("缺少m_token");
-        }
+//        Integer userId = getUserId();
+//        if ( userId == null ) {
+//            return JSONResult.errorMsg("缺少m_token");
+//        }
 
         if ( article_id == null || status == null ) {
             return JSONResult.errorMsg("缺少status 或 article_id");
@@ -572,44 +572,30 @@ public class ManagerController extends BaseController {
                     TlsSigTest.SendMessage(userInfo.getIm_id(),"您回答的问题“" + articleInfo.getHead()+ "”已经通过系统审核。","");
                 }
 
-                if(type.equals("1")) {
-
-//                    Map<String,String> infoMsg = new HashMap<>();
-//                    infoMsg.put("msg_type","7");
-//                    infoMsg.put("type","1");
-//                    infoMsg.put("id",String.valueOf(articleInfo.getId()));
-//
-//                    infoMsg.put("name",ToolsFunction.URLDecoderString(articleInfo.getHead()));
-//                    infoMsg.put("grade",SignMap.getGradeTypeByID((Integer)articleInfo.getGrade()));
-//                    infoMsg.put("subject",SignMap.getSubjectTypeById(articleInfo.getSubject()));
-
-                    InfoMsg infoMsg = new InfoMsg();
-                    infoMsg.setMsg_type(7);
-                    infoMsg.setType(1);
-                    infoMsg.setId(articleInfo.getId());
-                    infoMsg.setGrade(SignMap.getGradeTypeByID((Integer)articleInfo.getGrade()));
-                    infoMsg.setSubject(SignMap.getSubjectTypeById(articleInfo.getSubject()));
-                    infoMsg.setName(ToolsFunction.URLDecoderString(articleInfo.getHead()));
-                    String name = "";
-                    if(userInfo != null) {
-//                        infoMsg.put("head",userInfo.getHead());
-//                        infoMsg.put("user_name",userInfo.getName());
-                        name = userInfo.getName();
-                        infoMsg.setHead(userInfo.getHead());
-                        infoMsg.setUser_name(userInfo.getName());
-                    }
-
-                    List<Integer> follows = iUser.getAllFuns(articleInfo.getUser_id());
-                    List<Integer> no_send = iUser.getAllAcceptUserIds(articleInfo.getUser_id(),1);
-                    for(Integer user_id : follows) {
-                        if(!no_send.contains(user_id)) {
-                            TlsSigTest.SendMessage(String.valueOf(user_id),new Gson().toJson(infoMsg),name+"发布新文章");
-                            iLogService.addLog("99999", "/examine_article", infoMsg.toString());
-                        }
+            }
+            if(type.equals("1")) {
+                InfoMsg infoMsg = new InfoMsg();
+                infoMsg.setMsg_type(7);
+                infoMsg.setType(1);
+                infoMsg.setId(articleInfo.getId());
+                infoMsg.setGrade(SignMap.getGradeTypeByID((Integer)articleInfo.getGrade()));
+                infoMsg.setSubject(SignMap.getSubjectTypeById(articleInfo.getSubject()));
+                infoMsg.setName(ToolsFunction.URLDecoderString(articleInfo.getHead()));
+                String name = "";
+                if(userInfo != null) {
+                    name = userInfo.getName();
+                    infoMsg.setHead(userInfo.getHead());
+                    infoMsg.setUser_name(userInfo.getName());
+                }
+                List<Integer> follows = iUser.getAllFuns(articleInfo.getUser_id());
+                List<Integer> no_send = iUser.getAllAcceptUserIds(articleInfo.getUser_id(),1);
+                for(Integer user_id : follows) {
+                    if(!no_send.contains(user_id)) {
+                        String ret = TlsSigTest.SendMessage(String.valueOf(user_id),new Gson().toJson(infoMsg),name+"发布新文章");
+                        iLogService.addLog("99999", "/examine_article", String.valueOf(user_id) + "_____ ret = " + ret + "_______ info =" + infoMsg.toString());
                     }
                 }
             }
-
         } else {
             if(fail_reason == null || fail_content == null) {
                 return JSONResult.errorMsg("缺少fail_reason或fail_content");

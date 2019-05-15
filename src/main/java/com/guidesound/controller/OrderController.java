@@ -5,9 +5,12 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.domain.AlipayTradeQueryModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -350,274 +353,299 @@ public class OrderController extends BaseController {
     @RequestMapping("/pay_callback")
     @ResponseBody
     public JSONResult payCallBack(HttpServletRequest request) throws AlipayApiException, IOException {
-        Map<String,String> params = new HashMap<String,String>();
-        Map requestParams = request.getParameterMap();
-        for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
-            String name = (String) iter.next();
-            String[] values = (String[]) requestParams.get(name);
-            String valueStr = "";
-            for (int i = 0; i < values.length; i++) {
-                valueStr = (i == values.length - 1) ? valueStr + values[i]
-                        : valueStr + values[i] + ",";
+
+//        String strTemp = "{\"type\":\"1\",\"order_id\":\"1557852684355\"}";
+//        PayItem payItem1 = new Gson().fromJson(strTemp,PayItem.class);
+//        System.out.println(payItem1);
+
+        try {
+            iLogService.addLog("100001","enter",request.getParameter("body"));
+
+
+            Map<String,String> params = new HashMap<String,String>();
+            Map requestParams = request.getParameterMap();
+            for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+                String name = (String) iter.next();
+                String[] values = (String[]) requestParams.get(name);
+                String valueStr = "";
+                for (int i = 0; i < values.length; i++) {
+                    valueStr = (i == values.length - 1) ? valueStr + values[i]
+                            : valueStr + values[i] + ",";
+                }
+                params.put(name, valueStr);
             }
-            params.put(name, valueStr);
-        }
-        //切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
-        //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
-        String strParam = new Gson().toJson(params);
-        iLogService.addLog("100001","支付宝验证before",strParam);
-        boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.CHARSET,"RSA2");
-        if(flag == false) {
-            iLogService.addLog("100001","订单验证错误","订单验证错误");
-        }
-        iLogService.addLog("100001","支付宝验证after",strParam);
-        String strRet = new Gson().toJson(params);
-        iOrder.addPayInfo(strRet, (int) (new Date().getTime() / 1000));
-
-        String body = new String(request.getParameter("body").getBytes("ISO-8859-1"),"UTF-8");
-        PayItem payItem = new Gson().fromJson(body,PayItem.class);
-        String type =  payItem.getType();
-        String order_id = payItem.getOrder_id();
-
-
-
-        if (type.equals("0")) { //课堂
-            OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), getCurrentUserId());
-            if (orderInfo == null) {
-                iLogService.addLog("100001",order_id,"订单不存在");
-                return JSONResult.errorMsg("订单不存在");
+            //切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
+            //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
+            String strParam = new Gson().toJson(params);
+            iLogService.addLog("100001","支付宝验证before",strParam);
+            boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.CHARSET,"RSA2");
+            if(flag == false) {
+                iLogService.addLog("100001","订单验证错误","订单验证错误");
             }
-            if (orderInfo.getOrder_status() != 0) {
-                iLogService.addLog("100001",order_id,"此状态不能支付");
-                return JSONResult.errorMsg("此状态不能支付");
-            }
+            iLogService.addLog("100001","支付宝验证after",strParam);
+            String strRet = new Gson().toJson(params);
+            iOrder.addPayInfo(strRet, (int) (new Date().getTime() / 1000));
 
-            List<StudentClass> student = iOrder.getStudentClassByOrder(Integer.parseInt(order_id));
-            if (student.size() > 0) {
-                iLogService.addLog("100001",order_id,"此订单已经支付过");
-                return JSONResult.errorMsg("此订单已经支付过");
-            }
+            String body = request.getParameter("body");
+            PayItem payItem = new Gson().fromJson(body,PayItem.class);
+            String type =  payItem.getType();
+            String order_id = payItem.getOrder_id();
 
-            if (orderInfo.getType() == 1) {
-                String order_outLine = orderInfo.getOutline();
-                try {
+            iLogService.addLog("100001","预处理完成","");
+            if (type.equals("0")) { //课堂
+                OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), getCurrentUserId());
+                if (orderInfo == null) {
+                    iLogService.addLog("100001",order_id,"订单不存在");
+                    return JSONResult.errorMsg("订单不存在");
+                }
+                if (orderInfo.getOrder_status() != 0) {
+                    iLogService.addLog("100001",order_id,"此状态不能支付");
+                    return JSONResult.errorMsg("此状态不能支付");
+                }
+
+                List<StudentClass> student = iOrder.getStudentClassByOrder(Integer.parseInt(order_id));
+                if (student.size() > 0) {
+                    iLogService.addLog("100001",order_id,"此订单已经支付过");
+                    return JSONResult.errorMsg("此订单已经支付过");
+                }
+
+                if (orderInfo.getType() == 1) {
+                    String order_outLine = orderInfo.getOutline();
+                    try {
+                        ObjectMapper mapper_temp = new ObjectMapper();
+                        List<ClassTime> class_item_list = mapper_temp.readValue(order_outLine, new TypeReference<List<ClassTime>>() {
+                        });
+                        if (class_item_list.size() == 0) {
+                            iLogService.addLog("100001",order_id,"班课无内容");
+                            return JSONResult.errorMsg("班课无内容");
+                        }
+                        if (class_item_list.get(0).getClass_time() < new Date().getTime() / 1000) {
+                            iLogService.addLog("100001",order_id,"已经开课，不允许支付");
+                            return JSONResult.errorMsg("已经开课，不允许支付");
+                        }
+
+                    } catch (IOException e) {
+                        iLogService.addLog("100001",order_id,"班课课堂大纲错误");
+                        return JSONResult.errorMsg("班课课堂大纲错误");
+                    }
+                }
+
+                int class_id = 0;
+                int teacher_id = 0;
+                String outLine = "";
+
+                List<ClassRoom> r_list = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id());
+                boolean fitst_flag = true;
+                for (ClassRoom item : r_list) {
+                    if (item.getIstest() != 1) {
+                        fitst_flag = false;
+                        break;
+                    }
+                }
+                log.info("fitst_flag 标志 " + fitst_flag);
+                if (fitst_flag || orderInfo.getType() == 0) {
+                    Course course = iCourse.getCourseById(orderInfo.getCourse_id());
+                    if (course == null) {
+                        iLogService.addLog("100001",order_id,"辅导课不存在");
+                        return JSONResult.errorMsg("辅导课不存在");
+                    }
+                    course.setWay(orderInfo.getWay());
+                    course.setRefund_rule(orderInfo.getRefund_rule());
+                    course.setTutor_content(orderInfo.getTutor_content());
+                    ClassRoom classRoom = new ClassRoom();
+                    classRoom.setUser_id(orderInfo.getCourse_owner_id());
+                    classRoom.setCourse_id(orderInfo.getCourse_id());
+                    classRoom.setCreate_time((int) (new Date().getTime() / 1000));
+                    classRoom.setAll_hours(orderInfo.getAll_hours());
+                    classRoom.setType(orderInfo.getType());
+                    classRoom.setAll_charge(orderInfo.getAll_charge());
+                    classRoom.setPrice_one_hour(orderInfo.getPrice_one_hour());
+                    UserInfo userInfo = iUser.getUser(classRoom.getUser_id());
+
+                    String group_id = null;
+                    if (orderInfo.getType() == 1) { //创建群
+                        int currentCount = getCurrentCount();
+                        group_id = TlsSigTest.createGroup(userInfo.getIm_id(), "班课群 " + course.getId(), String.valueOf(currentCount), course.getCourse_pic());
+                        if (!group_id.equals(String.valueOf(currentCount))) {
+                            log.info("创建群失败 im_id = userInfo.getIm_id ={} ,group_name = {} ,ret = {}", userInfo.getIm_id(), "班课群 " + course.getCourse_name(), group_id);
+                            iLogService.addLog("100001",order_id,"创建im群失败");
+                            return JSONResult.errorMsg("创建im群失败");
+                        }
+                        UserInfo user_temp = iUser.getUser(course.getUser_id());
+                        String info_ret = TlsSigTest.addGroupPerson(group_id, String.valueOf(user_temp.getIm_id()));
+                        log.info("加入群拥有者 group_id = {},user_id = {},ret = {}", group_id, String.valueOf(user_temp.getIm_id()), info_ret);
+                        UserInfo user_temp2 = iUser.getUser(getCurrentUserId());
+                        info_ret = TlsSigTest.addGroupPerson(group_id, user_temp2.getIm_id());
+                        UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
+                        TlsSigTest.sendGroupMsg(group_id, "欢迎新同学：" + userInfo1.getName(), user_temp.getIm_id());
+                        log.info("加入支付用户 group_id = {},user_id = {},ret = {}", group_id, String.valueOf(getCurrentUserId()), info_ret);
+                    }
+
+                    //创建课堂
+                    iOrder.addClassRoom(classRoom);
+                    int class_number = getCurrentCount();
+                    iOrder.addRoomNumber(classRoom.getClass_id(), class_number);
+                    course.setId(classRoom.getClass_id());
+                    if (orderInfo.getType() == 0) {
+                        course.setAll_hours(orderInfo.getAll_hours());
+                        course.setPrice_one_hour(orderInfo.getPrice_one_hour());
+                        course.setAll_charge(orderInfo.getAll_charge());
+                    }
+                    //创建补充课堂信息
+                    iOrder.ClassRoomCourse(course);
+                    if (group_id != null) {
+                        iOrder.setClassRoomImGroupId(classRoom.getClass_id(), group_id);
+                    }
+
+                    class_id = classRoom.getClass_id();
+                    teacher_id = course.getUser_id();
+                    outLine = course.getOutline();
+
+                    List<ClassTime> class_item_list = null;
                     ObjectMapper mapper_temp = new ObjectMapper();
-                    List<ClassTime> class_item_list = mapper_temp.readValue(order_outLine, new TypeReference<List<ClassTime>>() {
-                    });
-                    if (class_item_list.size() == 0) {
-                        iLogService.addLog("100001",order_id,"班课无内容");
-                        return JSONResult.errorMsg("班课无内容");
+                    try {
+                        class_item_list = mapper_temp.readValue(outLine, new TypeReference<List<ClassTime>>() {
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    if (class_item_list.get(0).getClass_time() < new Date().getTime() / 1000) {
-                        iLogService.addLog("100001",order_id,"已经开课，不允许支付");
-                        return JSONResult.errorMsg("已经开课，不允许支付");
+                    if (class_item_list != null) {
+                        for (ClassTime classTime : class_item_list) {
+                            ClassTimeInfo classTimeInfo = new ClassTimeInfo();
+                            classTimeInfo.setOrder_id(Integer.parseInt(order_id));
+                            classTimeInfo.setClass_id(class_id);
+                            classTimeInfo.setStudent_id(teacher_id);
+                            classTimeInfo.setTeacher_id(teacher_id);
+                            classTimeInfo.setBegin_time(classTime.getClass_time());
+                            classTimeInfo.setEnd_time(classTime.getClass_time() + 3600 * classTime.getClass_hours());
+                            classTimeInfo.setClass_number(classTime.getClass_number());
+                            classTimeInfo.setStatus(0);
+                            iOrder.addClassTime(classTimeInfo); //老师创建学时
+                        }
                     }
-
-                } catch (IOException e) {
-                    iLogService.addLog("100001",order_id,"班课课堂大纲错误");
-                    return JSONResult.errorMsg("班课课堂大纲错误");
-                }
-            }
-
-            int class_id = 0;
-            int teacher_id = 0;
-            String outLine = "";
-
-            List<ClassRoom> r_list = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id());
-            boolean fitst_flag = true;
-            for (ClassRoom item : r_list) {
-                if (item.getIstest() != 1) {
-                    fitst_flag = false;
-                    break;
-                }
-            }
-            log.info("fitst_flag 标志 " + fitst_flag);
-            if (fitst_flag || orderInfo.getType() == 0) {
-                Course course = iCourse.getCourseById(orderInfo.getCourse_id());
-                if (course == null) {
-                    iLogService.addLog("100001",order_id,"辅导课不存在");
-                    return JSONResult.errorMsg("辅导课不存在");
-                }
-                course.setWay(orderInfo.getWay());
-                course.setRefund_rule(orderInfo.getRefund_rule());
-                course.setTutor_content(orderInfo.getTutor_content());
-                ClassRoom classRoom = new ClassRoom();
-                classRoom.setUser_id(orderInfo.getCourse_owner_id());
-                classRoom.setCourse_id(orderInfo.getCourse_id());
-                classRoom.setCreate_time((int) (new Date().getTime() / 1000));
-                classRoom.setAll_hours(orderInfo.getAll_hours());
-                classRoom.setType(orderInfo.getType());
-                classRoom.setAll_charge(orderInfo.getAll_charge());
-                classRoom.setPrice_one_hour(orderInfo.getPrice_one_hour());
-                UserInfo userInfo = iUser.getUser(classRoom.getUser_id());
-
-                String group_id = null;
-                if (orderInfo.getType() == 1) { //创建群
-                    int currentCount = getCurrentCount();
-                    group_id = TlsSigTest.createGroup(userInfo.getIm_id(), "班课群 " + course.getId(), String.valueOf(currentCount), course.getCourse_pic());
-                    if (!group_id.equals(String.valueOf(currentCount))) {
-                        log.info("创建群失败 im_id = userInfo.getIm_id ={} ,group_name = {} ,ret = {}", userInfo.getIm_id(), "班课群 " + course.getCourse_name(), group_id);
-                        iLogService.addLog("100001",order_id,"创建im群失败");
-                        return JSONResult.errorMsg("创建im群失败");
+                } else { //第n次班课
+                    log.info("班课增加成员");
+                    ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(1);
+                    List<StudentClass> student_list = iOrder.getStudentClassByCourseId(orderInfo.getCourse_id());
+                    if (student_list.size() >= classRoom.getMax_person()) {
+                        iLogService.addLog("100001",order_id,"超过最大上课人数，无法支付");
+                        return JSONResult.errorMsg("超过最大上课人数，无法支付");
                     }
-                    UserInfo user_temp = iUser.getUser(course.getUser_id());
-                    String info_ret = TlsSigTest.addGroupPerson(group_id, String.valueOf(user_temp.getIm_id()));
-                    log.info("加入群拥有者 group_id = {},user_id = {},ret = {}", group_id, String.valueOf(user_temp.getIm_id()), info_ret);
-                    UserInfo user_temp2 = iUser.getUser(getCurrentUserId());
-                    info_ret = TlsSigTest.addGroupPerson(group_id, user_temp2.getIm_id());
-                    UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
-                    TlsSigTest.sendGroupMsg(group_id, "欢迎新同学：" + userInfo1.getName(), user_temp.getIm_id());
-                    log.info("加入支付用户 group_id = {},user_id = {},ret = {}", group_id, String.valueOf(getCurrentUserId()), info_ret);
+                    String info_ret = TlsSigTest.addGroupPerson(classRoom.getIm_group_id(), String.valueOf(getCurrentUserId()));
+                    log.info("班课群增加成员 group_id = {},user_id = {},ret = {}", classRoom.getIm_group_id(), String.valueOf(getCurrentUserId()), info_ret);
+                    UserInfo userInfo = iUser.getUser(getCurrentUserId());
+                    UserInfo userInfo2 = iUser.getUser(classRoom.getUser_id());
+                    TlsSigTest.sendGroupMsg(classRoom.getIm_group_id(), "欢迎新同学：" + userInfo.getName(), userInfo2.getIm_id());
+                    class_id = classRoom.getClass_id();
+                    teacher_id = classRoom.getUser_id();
+                    outLine = classRoom.getOutline();
                 }
-
-                //创建课堂
-                iOrder.addClassRoom(classRoom);
-                int class_number = getCurrentCount();
-                iOrder.addRoomNumber(classRoom.getClass_id(), class_number);
-                course.setId(classRoom.getClass_id());
-                if (orderInfo.getType() == 0) {
-                    course.setAll_hours(orderInfo.getAll_hours());
-                    course.setPrice_one_hour(orderInfo.getPrice_one_hour());
-                    course.setAll_charge(orderInfo.getAll_charge());
-                }
-                //创建补充课堂信息
-                iOrder.ClassRoomCourse(course);
-                if (group_id != null) {
-                    iOrder.setClassRoomImGroupId(classRoom.getClass_id(), group_id);
-                }
-
-                class_id = classRoom.getClass_id();
-                teacher_id = course.getUser_id();
-                outLine = course.getOutline();
 
                 List<ClassTime> class_item_list = null;
                 ObjectMapper mapper_temp = new ObjectMapper();
+                if (outLine == null || outLine.equals("")) {
+                    outLine = "[]";
+                }
                 try {
                     class_item_list = mapper_temp.readValue(outLine, new TypeReference<List<ClassTime>>() {
                     });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (class_item_list != null) {
                     for (ClassTime classTime : class_item_list) {
                         ClassTimeInfo classTimeInfo = new ClassTimeInfo();
                         classTimeInfo.setOrder_id(Integer.parseInt(order_id));
                         classTimeInfo.setClass_id(class_id);
-                        classTimeInfo.setStudent_id(teacher_id);
+                        classTimeInfo.setStudent_id(getCurrentUserId());
                         classTimeInfo.setTeacher_id(teacher_id);
                         classTimeInfo.setBegin_time(classTime.getClass_time());
                         classTimeInfo.setEnd_time(classTime.getClass_time() + 3600 * classTime.getClass_hours());
                         classTimeInfo.setClass_number(classTime.getClass_number());
                         classTimeInfo.setStatus(0);
-                        iOrder.addClassTime(classTimeInfo); //老师创建学时
+                        iOrder.addClassTime(classTimeInfo); //学生创建学时
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    iLogService.addLog("100001",order_id,"课堂大纲格式错误");
+                    return JSONResult.errorMsg("课堂大纲格式错误");
+                }
+
+                iOrder.setOrderStatus(Integer.parseInt(order_id), 1);
+                StudentClass studentClass = new StudentClass();
+                studentClass.setUser_id(getCurrentUserId());
+                studentClass.setCourse_id(orderInfo.getCourse_id());
+                studentClass.setClass_id(class_id);
+                studentClass.setOrder_id(Integer.parseInt(order_id));
+                studentClass.setTeacher_id(orderInfo.getCourse_owner_id());
+                studentClass.setCreate_time((int) (new Date().getTime() / 1000));
+                studentClass.setUpdate_time((int) (new Date().getTime() / 1000));
+
+                iOrder.addStudentClass(studentClass);
+                iOrder.addOrderClassId(Integer.parseInt(order_id), class_id);
+
+
+                ///班课订单达到最大人数 下架课程
+                if (orderInfo.getType() == 1) {
+                    ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(1);
+                    List<StudentClass> student_list = iOrder.getStudentClassByCourseId(orderInfo.getCourse_id());
+                    if (student_list.size() >= classRoom.getMax_person()) {
+                        iCourse.setCourseState(orderInfo.getCourse_id(), 4);
                     }
                 }
-            } else { //第n次班课
-                log.info("班课增加成员");
-                ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(1);
-                List<StudentClass> student_list = iOrder.getStudentClassByCourseId(orderInfo.getCourse_id());
-                if (student_list.size() >= classRoom.getMax_person()) {
-                    iLogService.addLog("100001",order_id,"超过最大上课人数，无法支付");
-                    return JSONResult.errorMsg("超过最大上课人数，无法支付");
+
+            } else { //录播课
+                Record record = iRecord.get(Integer.parseInt(order_id));
+                if (record == null || record.getRecord_course_status() != 3) {
+                    iLogService.addLog("100001",order_id,"录播课信息不存在");
+                    return JSONResult.errorMsg("录播课信息不存在");
                 }
-                String info_ret = TlsSigTest.addGroupPerson(classRoom.getIm_group_id(), String.valueOf(getCurrentUserId()));
-                log.info("班课群增加成员 group_id = {},user_id = {},ret = {}", classRoom.getIm_group_id(), String.valueOf(getCurrentUserId()), info_ret);
-                UserInfo userInfo = iUser.getUser(getCurrentUserId());
-                UserInfo userInfo2 = iUser.getUser(classRoom.getUser_id());
-                TlsSigTest.sendGroupMsg(classRoom.getIm_group_id(), "欢迎新同学：" + userInfo.getName(), userInfo2.getIm_id());
-                class_id = classRoom.getClass_id();
-                teacher_id = classRoom.getUser_id();
-                outLine = classRoom.getOutline();
-            }
-
-            List<ClassTime> class_item_list = null;
-            ObjectMapper mapper_temp = new ObjectMapper();
-            if (outLine == null || outLine.equals("")) {
-                outLine = "[]";
-            }
-            try {
-                class_item_list = mapper_temp.readValue(outLine, new TypeReference<List<ClassTime>>() {
-                });
-                for (ClassTime classTime : class_item_list) {
-                    ClassTimeInfo classTimeInfo = new ClassTimeInfo();
-                    classTimeInfo.setOrder_id(Integer.parseInt(order_id));
-                    classTimeInfo.setClass_id(class_id);
-                    classTimeInfo.setStudent_id(getCurrentUserId());
-                    classTimeInfo.setTeacher_id(teacher_id);
-                    classTimeInfo.setBegin_time(classTime.getClass_time());
-                    classTimeInfo.setEnd_time(classTime.getClass_time() + 3600 * classTime.getClass_hours());
-                    classTimeInfo.setClass_number(classTime.getClass_number());
-                    classTimeInfo.setStatus(0);
-                    iOrder.addClassTime(classTimeInfo); //学生创建学时
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                iLogService.addLog("100001",order_id,"课堂大纲格式错误");
-                return JSONResult.errorMsg("课堂大纲格式错误");
-            }
-
-            iOrder.setOrderStatus(Integer.parseInt(order_id), 1);
-            StudentClass studentClass = new StudentClass();
-            studentClass.setUser_id(getCurrentUserId());
-            studentClass.setCourse_id(orderInfo.getCourse_id());
-            studentClass.setClass_id(class_id);
-            studentClass.setOrder_id(Integer.parseInt(order_id));
-            studentClass.setTeacher_id(orderInfo.getCourse_owner_id());
-            studentClass.setCreate_time((int) (new Date().getTime() / 1000));
-            studentClass.setUpdate_time((int) (new Date().getTime() / 1000));
-
-            iOrder.addStudentClass(studentClass);
-            iOrder.addOrderClassId(Integer.parseInt(order_id), class_id);
-
-
-            ///班课订单达到最大人数 下架课程
-            if (orderInfo.getType() == 1) {
-                ClassRoom classRoom = iOrder.getClassRoomByCourseId(orderInfo.getCourse_id()).get(1);
-                List<StudentClass> student_list = iOrder.getStudentClassByCourseId(orderInfo.getCourse_id());
-                if (student_list.size() >= classRoom.getMax_person()) {
-                    iCourse.setCourseState(orderInfo.getCourse_id(), 4);
-                }
-            }
-
-        } else { //录播课
-            Record record = iRecord.get(Integer.parseInt(order_id));
-            if (record == null || record.getRecord_course_status() != 3) {
-                iLogService.addLog("100001",order_id,"录播课信息不存在");
-                return JSONResult.errorMsg("录播课信息不存在");
-            }
-            List<UserRecordCourse> lists = iRecord.getRecordByUserAndId(getCurrentUserId(), Integer.parseInt(order_id));
-            if (lists.size() > 0) {
-                iLogService.addLog("100001",order_id,"此录播课已经购买过");
-                return JSONResult.errorMsg("此录播课已经购买过");
-            }
-
-            UserInfo userInfo = iUser.getUser(record.getUser_id());
-            if (record.getGrade_id() == 0) { //创建群
-                int currentCount = getCurrentCount();
-
-                if (userInfo != null) {
-                    TlsSigTest.createGroup(String.valueOf(userInfo.getIm_id()), "录播课群： " + record.getRecord_course_id(), String.valueOf(currentCount), record.getRecord_course_pic());
-                    TlsSigTest.addGroupPerson(String.valueOf(currentCount), String.valueOf(String.valueOf(userInfo.getIm_id())));
-                    UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
-                    TlsSigTest.addGroupPerson(String.valueOf(currentCount), String.valueOf(String.valueOf(userInfo1.getIm_id())));
-                    iRecord.setGroupId(currentCount, record.getRecord_course_id());
-                    TlsSigTest.sendGroupMsg(String.valueOf(currentCount), "欢迎新同学：" + userInfo1.getName(), userInfo.getIm_id());
+                List<UserRecordCourse> lists = iRecord.getRecordByUserAndId(getCurrentUserId(), Integer.parseInt(order_id));
+                if (lists.size() > 0) {
+                    iLogService.addLog("100001",order_id,"此录播课已经购买过");
+                    return JSONResult.errorMsg("此录播课已经购买过");
                 }
 
-            } else { //加入群
-                if (userInfo != null) {
-                    UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
-                    TlsSigTest.addGroupPerson(String.valueOf(record.getGroup_id()), String.valueOf(String.valueOf(userInfo1.getIm_id())));
-                    TlsSigTest.sendGroupMsg(String.valueOf(record.getGroup_id()), "欢迎新同学：" + userInfo1.getName(), userInfo.getIm_id());
+                UserInfo userInfo = iUser.getUser(record.getUser_id());
+                if (record.getGrade_id() == 0) { //创建群
+                    int currentCount = getCurrentCount();
+
+                    if (userInfo != null) {
+                        TlsSigTest.createGroup(String.valueOf(userInfo.getIm_id()), "录播课群： " + record.getRecord_course_id(), String.valueOf(currentCount), record.getRecord_course_pic());
+                        TlsSigTest.addGroupPerson(String.valueOf(currentCount), String.valueOf(String.valueOf(userInfo.getIm_id())));
+                        UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
+                        TlsSigTest.addGroupPerson(String.valueOf(currentCount), String.valueOf(String.valueOf(userInfo1.getIm_id())));
+                        iRecord.setGroupId(currentCount, record.getRecord_course_id());
+                        TlsSigTest.sendGroupMsg(String.valueOf(currentCount), "欢迎新同学：" + userInfo1.getName(), userInfo.getIm_id());
+                    }
+
+                } else { //加入群
+                    if (userInfo != null) {
+                        UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
+                        TlsSigTest.addGroupPerson(String.valueOf(record.getGroup_id()), String.valueOf(String.valueOf(userInfo1.getIm_id())));
+                        TlsSigTest.sendGroupMsg(String.valueOf(record.getGroup_id()), "欢迎新同学：" + userInfo1.getName(), userInfo.getIm_id());
+                    }
                 }
+                UserRecordCourse userRecordCourse = new UserRecordCourse();
+                userRecordCourse.setUser_id(getCurrentUserId());
+                userRecordCourse.setUser_record_course_id(Integer.parseInt(order_id));
+                userRecordCourse.setCreate_time((int) (new Date().getTime() / 1000));
+                iRecord.insertRecordCourse(userRecordCourse);
+                String total_mount =  request.getParameter("total_amount");
+                int current_time = (int) (new Date().getTime()/1000);
+
+                List<UserAmount> list = iUser.getUserAmount(userRecordCourse.getUser_id());
+                if(list.size() == 0) {
+                    iUser.InsertUserAmount(userRecordCourse.getUser_id(),Integer.parseInt(total_mount),current_time,current_time);
+                } else {
+                    int amount = list.get(0).getAmount() + Integer.parseInt(total_mount);
+                    iUser.updateUserAmount(userRecordCourse.getUser_id(),amount);
+                }
+
             }
-            UserRecordCourse userRecordCourse = new UserRecordCourse();
-            userRecordCourse.setUser_id(getCurrentUserId());
-            userRecordCourse.setUser_record_course_id(Integer.parseInt(order_id));
-            userRecordCourse.setCreate_time((int) (new Date().getTime() / 1000));
-            iRecord.insertRecordCourse(userRecordCourse);
+            iLogService.addLog("100001",order_id,"支付完成");
+            return JSONResult.ok();
+        } catch (IOException e){
+            String temp = e.getMessage();
+            iLogService.addLog("100001","错误",temp);
+
         }
-        iLogService.addLog("100001",order_id,"支付完成");
         return JSONResult.ok();
     }
 
@@ -626,6 +654,18 @@ public class OrderController extends BaseController {
     @RequestMapping("/pay")
     @ResponseBody
     JSONResult pay(String type, String order_id, String pay_way) throws IOException {
+//        if(true) {
+//            order_id = String.valueOf(new Date().getTime());
+//            PayItem payItem = new PayItem();
+//            payItem.setType(type);
+//            payItem.setOrder_id(order_id);
+//            String retTest = payOrder(new Gson().toJson(payItem), "App支付测试", order_id, "0.01");
+//            PayRet ret = new PayRet();
+//            ret.setToken(retTest);
+//            ret.setPrice(1);
+//            ret.setOrder_sn(order_id);
+//            return JSONResult.ok(ret);
+//        }
         if (type == null || order_id == null || pay_way == null) {
             return JSONResult.errorMsg("缺少参数");
         }
@@ -712,7 +752,32 @@ public class OrderController extends BaseController {
         if (order_sn == null) {
             return JSONResult.errorMsg("缺少 order_sn 参数");
         }
-        return JSONResult.ok();
+
+        AlipayTradeQueryRequest queryRequest = new AlipayTradeQueryRequest();
+        AlipayTradeQueryModel model = new AlipayTradeQueryModel();
+        model.setOutTradeNo(order_sn);
+        queryRequest.setBizModel(model);
+
+        //实例化客户端（参数：网关地址、商户appid、商户私钥、格式、编码、支付宝公钥、加密类型），为了取得预付订单信息
+        AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.URL, AlipayConfig.APPID,
+                AlipayConfig.RSA_PRIVATE_KEY, AlipayConfig.FORMAT, AlipayConfig.CHARSET,
+                AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.SIGNTYPE);
+
+        AlipayTradeQueryResponse response = null;
+        try {
+            response = alipayClient.execute(queryRequest);
+        } catch (AlipayApiException e) {
+            return JSONResult.errorMsg("支付宝查询订单" + order_sn + "失败！");
+        }
+
+        if (response == null) {
+            return JSONResult.errorMsg("支付宝未获取订单" + order_sn + "详情！");
+        }
+
+        if (!response.isSuccess()) {
+            return JSONResult.errorMsg("支付宝订单" + order_sn + "支付失败");
+        }
+        return JSONResult.ok("支付宝订单" + order_sn + "支付成功");
     }
 
     @RequestMapping("/add_class_time")

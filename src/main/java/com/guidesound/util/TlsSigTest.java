@@ -249,6 +249,8 @@ public class TlsSigTest {
                 .build();
         resp = client_temp.newCall(req).execute();
         String jsonString = resp.body().string();
+
+        
         JSONObject ret = new JSONObject(jsonString);
         int code = ret.getInt("ErrorCode");
         if(code != 0 ) {

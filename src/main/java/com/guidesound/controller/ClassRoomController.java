@@ -499,6 +499,7 @@ public class ClassRoomController extends BaseController {
 
             teacherEnterInfos = iOrder.getTeacherEnterInfo(Integer.parseInt(class_id), class_num);
             if (teacherEnterInfos.size() == 0) {
+
                 teacherFirstEnter = true;
                 iOrder.setTeacherEnterInfo(getCurrentUserId(), Integer.parseInt(class_id), class_num, (int) (new Date().getTime() / 1000), 1);
             } else {
@@ -532,6 +533,43 @@ public class ClassRoomController extends BaseController {
             }
             ret.setIshost(1);
         }
+
+        ////增加用户余额
+        if(classRoom.getIstest() == 0) { //正式课
+            boolean isTeacher = classRoom.getUser_id() == getCurrentUserId();
+            List<ClassTimeInfo> lists =  iOrder.getClassTimeStatusByClassId(Integer.parseInt(class_id), getCurrentUserId(), begin_time_wirte);
+            if(lists.size() > 0 ) {
+                ClassTimeInfo classTimeInfo = lists.get(0);
+                if(classTimeInfo.getStatus() == 0) {  //第一次进入
+                    int amount = 0;
+                    if(classRoom.getType() == 0) { //一对一
+                        if(isTeacher == false) {
+                            List<OrderInfo> orderList = iOrder.getOrderByStudentId(getCurrentUserId(),Integer.parseInt(class_id),1);
+                            if(orderList.size() > 0) {
+                                amount = orderList.get(0).getPrice_one_hour()*((classTimeInfo.getEnd_time() - classTimeInfo.getBegin_time()) / 3600);
+                            }
+                        }
+                    } else { //班课
+                        if(isTeacher == true) {
+                            List<OrderInfo> orderList = iOrder.getOrderByCourseOwnerId(getCurrentUserId(),Integer.parseInt(class_id),1);
+                            int count = orderList.size();
+                            if(count > 0) {
+                                amount = orderList.get(0).getPrice_one_hour()*((classTimeInfo.getEnd_time() - classTimeInfo.getBegin_time()) / 3600)*count;
+                            }
+                        }
+                    }
+                    List<UserAmount> list = iUser.getUserAmount(classRoom.getUser_id());
+                    if(list.size() == 0) {
+                        iUser.InsertUserAmount(classRoom.getUser_id(),amount,current_time,current_time);
+                    } else {
+                        amount = list.get(0).getAmount() + amount;
+                        iUser.updateUserAmount(classRoom.getUser_id(),amount);
+                    }
+                }
+            }
+        }
+
+
         iOrder.setClassTimeStatus(Integer.parseInt(class_id), getCurrentUserId(), begin_time_wirte, 1);
         ret.setRoom_number(classRoom.getRoom_number());
         return JSONResult.ok(ret);

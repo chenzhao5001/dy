@@ -53,15 +53,17 @@ public class UserController extends BaseController{
     @ResponseBody
     public JSONResult login(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String unionid = request.getParameter("unionid");
-        String name = request.getParameter("name");
+        String name = request.getParameter("name") == null? "" : request.getParameter("name");
         String head = request.getParameter("head") == null? "" : request.getParameter("head");
         String type = request.getParameter("type");
         String platform = request.getParameter("platform");
-        if (unionid == null || type == null || platform == null || name == null) {
+        if (unionid == null || type == null || platform == null) {
             return JSONResult.errorMsg("缺少参数");
         }
-        if(name.equals("")) {
-            return JSONResult.errorMsg("name 不能为空字符串");
+        if(type.equals("1")) {
+            if(name.equals("")) {
+                return JSONResult.errorMsg("name 不能为空字符串");
+            }
         }
 
         if(type.equals("2") && platform.equals("1")) {

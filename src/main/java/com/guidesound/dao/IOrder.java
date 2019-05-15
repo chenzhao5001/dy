@@ -133,6 +133,8 @@ public interface IOrder {
 
     @Update("update class_time set status = #{arg3} where class_id = #{arg0} and student_id = #{arg1} and begin_time = #{arg2}")
     void setClassTimeStatus(int class_id,int student_id, int begin_time,int status);
+
+
     @Select("select * from class_time where order_id = #{arg0} and student_id = #{arg1} and begin_time = #{arg2}")
     List<ClassTimeInfo> getClassTimeStatus(int order_id,int student_id,int begin_time);
 
@@ -277,5 +279,13 @@ public interface IOrder {
 
     @Insert("insert into pay_info (info,create_time) values (#{arg0},#{arg1})")
     void addPayInfo(String info,int create_time);
+
+    @Select("select * from user_order where course_owner_id = #{arg0} and class_id = #{arg1} and status = #{arg2} and refund_amount = 0")
+    List<OrderInfo> getOrderByCourseOwnerId(int course_owner_id,int class_id,int status);
+
+    @Select("select * from user_order where student_id = #{arg0} and class_id = #{arg1} and status = #{arg2} and refund_amount = 0")
+    List<OrderInfo> getOrderByStudentId(int student_id,int class_id,int status);
+
+
 
 }
