@@ -732,6 +732,8 @@ public class VideoController extends BaseController {
         int iSize = size == null ? 20 : Integer.parseInt(size);
         int begin = (iPage - 1) * iSize;
         int end = iSize;
+
+
         List<Integer> vidoe_ids = iVideo.getMyCollectionIds(Integer.parseInt(user_id));
         ListResp ret = new ListResp();
         if (vidoe_ids.size() == 0) {
@@ -739,16 +741,17 @@ public class VideoController extends BaseController {
             ret.setList(new ArrayList<>());
             return JSONResult.ok(ret);
         }
-        List<VideoShow> list = iVideo.myCollection(vidoe_ids, begin, end);
-        if (list.size() == 0) {
+
+        int count = iVideo.myCollectionCount(vidoe_ids);
+        if(count == 0) {
             ret.setCount(0);
             ret.setList(new ArrayList<>());
             return JSONResult.ok(ret);
         }
-
+        List<VideoShow> list = iVideo.myCollection(vidoe_ids, begin, end);
         improveVideoList(list);
 
-        ret.setCount(list.size());
+        ret.setCount(count);
         ret.setList(list);
         return JSONResult.ok(ret);
     }

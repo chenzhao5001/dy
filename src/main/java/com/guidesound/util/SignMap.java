@@ -98,6 +98,7 @@ class GradeContent {
         this.gradeName = gradeName;
     }
 }
+
 class SubjectContent {
     int id;
     String subjectName;
@@ -118,6 +119,7 @@ class SubjectContent {
         this.subjectName = subjectName;
     }
 }
+
 class ListItem implements Comparable<ListItem> {
     int id;
     String gradeName;
@@ -137,6 +139,7 @@ class ListItem implements Comparable<ListItem> {
     public void setGradeName(String gradeName) {
         this.gradeName = gradeName;
     }
+
     @Override
     public int compareTo(ListItem o) {
         return this.getId() - o.getId();
@@ -174,92 +177,93 @@ class ListInfo {
 }
 
 public class SignMap {
-    static Map<Integer,String> subject_classify;
-    static Map<Integer,Content> subject_type;
-    static Map<Integer,String> watch_type;
-    static Map<Integer,String> user_type;
-    static Map<Integer,String> grade_type;
-    static Map<Integer,String> user_level;
+    static Map<Integer, String> subject_classify;
+    static Map<Integer, Content> subject_type;
+    static Map<Integer, String> watch_type;
+    static Map<Integer, String> user_type;
+    static Map<Integer, String> grade_type;
+    static Map<Integer, String> user_level;
     static List<Content2> channel;
-    static Map<Integer,String> video_state;
-    static Map<Integer,String> commend_pools;
-    static Map<Integer,String> course_type;
-    static Map<Integer,String> course_form;
-    static Map<Integer,String> course_type_name;
-    static Map<Integer,String> sex_type;
+    static Map<Integer, String> video_state;
+    static Map<Integer, String> commend_pools;
+    static Map<Integer, String> course_type;
+    static Map<Integer, String> course_form;
+    static Map<Integer, String> course_type_name;
+    static Map<Integer, String> sex_type;
 
     static boolean flag = false;
 
     public static void Init(List<Subject> subjectList) {
-        if ( flag == false) {
+        if (flag == false) {
             flag = true;
             subject_classify = new TreeMap<>();
             subject_type = new TreeMap<>();
-            for(Subject subject : subjectList) {
-                if(!subject_classify.containsKey(subject.getLevel_1())) {
-                    subject_classify.put(subject.getLevel_1(),subject.getLevel_1_name());
+            for (Subject subject : subjectList) {
+                if (!subject_classify.containsKey(subject.getLevel_1())) {
+                    subject_classify.put(subject.getLevel_1(), subject.getLevel_1_name());
                 }
-                subject_type.put(subject.getLevel_2(),new Content(subject.getLevel_2_name(),subject.getLevel_1()));
+                subject_type.put(subject.getLevel_2(), new Content(subject.getLevel_2_name(), subject.getLevel_1()));
             }
-            subject_type.put(901,new Content("家长分享",9));
-            subject_type.put(902,new Content("学生分享",9));
-            subject_type.put(903,new Content("老师分享",9));
-            subject_type.put(904,new Content("校园生活",9));
-            subject_type.put(905,new Content("教育事件",9));
-            subject_type.put(906,new Content("学习方法",9));
-            subject_type.put(907,new Content("教育观点",9));
-            subject_type.put(908,new Content("政策法规",9));
+            subject_type.put(901, new Content("家长分享", 9));
+            subject_type.put(902, new Content("学生分享", 9));
+            subject_type.put(903, new Content("老师分享", 9));
+            subject_type.put(904, new Content("校园生活", 9));
+            subject_type.put(905, new Content("教育事件", 9));
+            subject_type.put(906, new Content("学习方法", 9));
+            subject_type.put(907, new Content("教育观点", 9));
+            subject_type.put(908, new Content("政策法规", 9));
         }
 
     }
+
     static {
 
         course_type = new TreeMap<>();
-        course_type.put(1,"1对1");
-        course_type.put(2,"班课");
-        course_type.put(3,"无");
+        course_type.put(1, "1对1");
+        course_type.put(2, "班课");
+        course_type.put(3, "无");
 
         watch_type = new TreeMap<>();
-        watch_type.put(1,"学龄前");
-        watch_type.put(2,"小学");
-        watch_type.put(3,"初中");
-        watch_type.put(4,"高中");
-        watch_type.put(5,"初高");
+        watch_type.put(1, "学龄前");
+        watch_type.put(2, "小学");
+        watch_type.put(3, "初中");
+        watch_type.put(4, "高中");
+        watch_type.put(5, "初高");
 
         user_type = new HashMap<>();
-        user_type.put(1,"普通用户");
-        user_type.put(2,"个人辅导老师");
-        user_type.put(3,"教育企业");
-        user_type.put(4,"教育达人");
-        user_type.put(5,"教育商品商家");
+        user_type.put(1, "普通用户");
+        user_type.put(2, "个人辅导老师");
+        user_type.put(3, "教育企业");
+        user_type.put(4, "教育达人");
+        user_type.put(5, "教育商品商家");
 
 
         grade_type = new TreeMap<>();
-        grade_type.put(101,"0-3岁");
-        grade_type.put(102,"幼儿园");
+        grade_type.put(101, "0-3岁");
+        grade_type.put(102, "幼儿园");
 
-        grade_type.put(201,"一年级");
-        grade_type.put(202,"二年级");
-        grade_type.put(203,"三年级");
-        grade_type.put(204,"四年级");
-        grade_type.put(205,"五年级");
-        grade_type.put(206,"六年级");
+        grade_type.put(201, "一年级");
+        grade_type.put(202, "二年级");
+        grade_type.put(203, "三年级");
+        grade_type.put(204, "四年级");
+        grade_type.put(205, "五年级");
+        grade_type.put(206, "六年级");
 
 
-        grade_type.put(301,"初一");
-        grade_type.put(302,"初二");
-        grade_type.put(303,"初三");
+        grade_type.put(301, "初一");
+        grade_type.put(302, "初二");
+        grade_type.put(303, "初三");
 
-        grade_type.put(401,"高一");
-        grade_type.put(402,"高二");
-        grade_type.put(403,"高三");
+        grade_type.put(401, "高一");
+        grade_type.put(402, "高二");
+        grade_type.put(403, "高三");
 
 
         user_level = new HashMap<>();
-        user_level.put(1,"游客");
-        user_level.put(2,"初级");
-        user_level.put(3,"中级");
-        user_level.put(4,"高级");
+        user_level.put(1, "游客");
+        user_level.put(2, "初级");
+        user_level.put(3, "中级");
+        user_level.put(4, "高级");
 
         channel = new ArrayList<>();
         Content2 content2 = new Content2();
@@ -282,80 +286,81 @@ public class SignMap {
         channel.add(content2);
 
         video_state = new HashMap<>();
-        video_state.put(0,"待审核");
-        video_state.put(1,"已完成");
-        video_state.put(2,"审核失败");
-        video_state.put(3,"转码中");
-        video_state.put(4,"转码失败");
-        video_state.put(5,"推荐池");
-        video_state.put(6,"已完成");
-        video_state.put(7,"已下架");
+        video_state.put(0, "待审核");
+        video_state.put(1, "已完成");
+        video_state.put(2, "审核失败");
+        video_state.put(3, "转码中");
+        video_state.put(4, "转码失败");
+        video_state.put(5, "推荐池");
+        video_state.put(6, "已完成");
+        video_state.put(7, "已下架");
 
         commend_pools = new TreeMap<>();
-        commend_pools.put(101,"0-3岁");
-        commend_pools.put(102,"幼儿园");
-        commend_pools.put(199,"学龄前");
+        commend_pools.put(101, "0-3岁");
+        commend_pools.put(102, "幼儿园");
+        commend_pools.put(199, "学龄前");
 
-        commend_pools.put(201,"一年级");
-        commend_pools.put(202,"二年级");
-        commend_pools.put(203,"三年级");
-        commend_pools.put(204,"四年级");
-        commend_pools.put(205,"五年级");
-        commend_pools.put(206,"六年级");
-        commend_pools.put(299,"小学");
+        commend_pools.put(201, "一年级");
+        commend_pools.put(202, "二年级");
+        commend_pools.put(203, "三年级");
+        commend_pools.put(204, "四年级");
+        commend_pools.put(205, "五年级");
+        commend_pools.put(206, "六年级");
+        commend_pools.put(299, "小学");
 
-        commend_pools.put(301,"初一");
-        commend_pools.put(302,"初二");
-        commend_pools.put(303,"初三");
-        commend_pools.put(399,"初中");
+        commend_pools.put(301, "初一");
+        commend_pools.put(302, "初二");
+        commend_pools.put(303, "初三");
+        commend_pools.put(399, "初中");
 
-        commend_pools.put(401,"高一");
-        commend_pools.put(402,"高二");
-        commend_pools.put(403,"高三");
-        commend_pools.put(498,"初高");
-        commend_pools.put(499,"高中");
-        commend_pools.put(999,"公共池");
-        commend_pools.put(1000,"无");
+        commend_pools.put(401, "高一");
+        commend_pools.put(402, "高二");
+        commend_pools.put(403, "高三");
+        commend_pools.put(498, "初高");
+        commend_pools.put(499, "高中");
+        commend_pools.put(999, "公共池");
+        commend_pools.put(1000, "无");
 
         course_form = new HashMap<>();
-        course_form.put(0,"线上");
-        course_form.put(1,"上门");
+        course_form.put(0, "线上");
+        course_form.put(1, "上门");
 
         course_type_name = new HashMap<>();
-        course_type_name.put(0,"1对1");
-        course_type_name.put(1,"班课");
+        course_type_name.put(0, "1对1");
+        course_type_name.put(1, "班课");
 
         sex_type = new HashMap<>();
-        sex_type.put(1,"男");
-        sex_type.put(2,"女");
+        sex_type.put(1, "男");
+        sex_type.put(2, "女");
     }
 
     public static String getSexById(int id) {
-        if(!sex_type.containsKey(id)) {
+        if (!sex_type.containsKey(id)) {
             return "未知";
         }
         return sex_type.get(id);
     }
 
     public static String getCourseFormById(int id) {
-        if(!course_form.containsKey(id)) {
+        if (!course_form.containsKey(id)) {
             return "未知";
         }
         return course_form.get(id);
     }
 
     public static String getCourseTypeNameById(int id) {
-        if(!course_type_name.containsKey(id)) {
+        if (!course_type_name.containsKey(id)) {
             return "未知";
         }
         return course_type_name.get(id);
     }
-    public static Map<Integer,String> getPoolList() {
+
+    public static Map<Integer, String> getPoolList() {
         return commend_pools;
     }
 
     public static String getPoolById(int pool_id) {
-        if(commend_pools.containsKey( pool_id)) {
+        if (commend_pools.containsKey(pool_id)) {
             return commend_pools.get(pool_id);
         }
         return "未知";
@@ -368,50 +373,52 @@ public class SignMap {
         return "未知";
     }
 
-    public static Map<Integer,String> getCourseType() {
+    public static Map<Integer, String> getCourseType() {
         return course_type;
     }
+
     public static List<Content2> getChannelList() throws JsonProcessingException {
         return channel;
     }
+
     public static String getUserLevelById(int id) {
-        if(user_level.containsKey(id)) {
+        if (user_level.containsKey(id)) {
             return user_level.get(id);
         }
         return "未知";
     }
 
     public static String getSubjectTypeById(int id) {
-        if(subject_type.containsKey(id)) {
+        if (subject_type.containsKey(id)) {
             return subject_type.get(id).getName();
         }
         return "未知";
     }
 
     public static List<GradeContent> getGrade() {
-        Map<Integer,String> m = new LinkedHashMap<>();
-        m.put(101,"0-3岁");
-        m.put(102,"幼儿园");
-        m.put(199,"学龄前");
-        m.put(201,"一年级");
-        m.put(202,"二年级");
-        m.put(203,"三年级");
-        m.put(204,"四年级");
-        m.put(205,"五年级");
-        m.put(206,"六年级");
+        Map<Integer, String> m = new LinkedHashMap<>();
+        m.put(101, "0-3岁");
+        m.put(102, "幼儿园");
+        m.put(199, "学龄前");
+        m.put(201, "一年级");
+        m.put(202, "二年级");
+        m.put(203, "三年级");
+        m.put(204, "四年级");
+        m.put(205, "五年级");
+        m.put(206, "六年级");
         m.put(299, "小学");
-        m.put(301,"初一");
-        m.put(302,"初二");
-        m.put(303,"初三");
+        m.put(301, "初一");
+        m.put(302, "初二");
+        m.put(303, "初三");
         m.put(399, "初中");
-        m.put(401,"高一");
-        m.put(402,"高二");
-        m.put(403,"高三");
+        m.put(401, "高一");
+        m.put(402, "高二");
+        m.put(403, "高三");
         m.put(499, "高中");
         m.put(498, "初高");
 
         List<GradeContent> list = new ArrayList<>();
-        for(Integer key : m.keySet()) {
+        for (Integer key : m.keySet()) {
             String content = m.get(key);
             GradeContent gradeItem = new GradeContent();
             gradeItem.setId(key);
@@ -421,47 +428,47 @@ public class SignMap {
         return list;
     }
 
-    public static Map<Integer,String> getGradeByClass(int type,boolean role_flag) {
-        Map<Integer,String> m = new TreeMap<>();
-        if(type == 1) {
-            m.put(101,"0-3岁");
-            m.put(102,"幼儿园");
-            if(role_flag == true) {
-                m.put(199,"学龄前");
+    public static Map<Integer, String> getGradeByClass(int type, boolean role_flag) {
+        Map<Integer, String> m = new TreeMap<>();
+        if (type == 1) {
+            m.put(101, "0-3岁");
+            m.put(102, "幼儿园");
+            if (role_flag == true) {
+                m.put(199, "学龄前");
             }
-        } else if(type == 2){
-            m.put(201,"一年级");
-            m.put(202,"二年级");
-            m.put(203,"三年级");
-            m.put(204,"四年级");
-            m.put(205,"五年级");
-            m.put(206,"六年级");
-            if(role_flag == true) {
+        } else if (type == 2) {
+            m.put(201, "一年级");
+            m.put(202, "二年级");
+            m.put(203, "三年级");
+            m.put(204, "四年级");
+            m.put(205, "五年级");
+            m.put(206, "六年级");
+            if (role_flag == true) {
                 m.put(299, "小学");
             }
         } else if (type == 3) {
-            m.put(301,"初一");
-            m.put(302,"初二");
-            m.put(303,"初三");
-            if(role_flag == true) {
+            m.put(301, "初一");
+            m.put(302, "初二");
+            m.put(303, "初三");
+            if (role_flag == true) {
                 m.put(399, "初中");
             }
-        } else if(type == 4){
-            m.put(401,"高一");
-            m.put(402,"高二");
-            m.put(403,"高三");
-            if(role_flag == true) {
+        } else if (type == 4) {
+            m.put(401, "高一");
+            m.put(402, "高二");
+            m.put(403, "高三");
+            if (role_flag == true) {
                 m.put(499, "高中");
             }
-        } else if(type == 5){
-            m.put(301,"初一");
-            m.put(302,"初二");
-            m.put(303,"初三");
-            m.put(399,"初三");
-            m.put(401,"高一");
-            m.put(402,"高二");
-            m.put(403,"高三");
-            if(role_flag == true) {
+        } else if (type == 5) {
+            m.put(301, "初一");
+            m.put(302, "初二");
+            m.put(303, "初三");
+            m.put(399, "初三");
+            m.put(401, "高一");
+            m.put(402, "高二");
+            m.put(403, "高三");
+            if (role_flag == true) {
                 m.put(399, "初中");
                 m.put(499, "高中");
                 m.put(498, "初高");
@@ -472,16 +479,16 @@ public class SignMap {
 
 
     public static String getGradeTypeByID(int id) {
-        if(grade_type.containsKey(id)) {
+        if (grade_type.containsKey(id)) {
             return grade_type.get(id);
         }
-        if(id == 199) {
+        if (id == 199) {
             return "学龄前";
         }
-        if(id == 299) {
+        if (id == 299) {
             return "小学";
         }
-        if(id == 399) {
+        if (id == 399) {
             return "初中";
         }
         if (id == 499) {
@@ -492,45 +499,47 @@ public class SignMap {
         }
         return "未知";
     }
+
     public static String getSubjectClassifyById(int id) {
-        if(subject_classify.containsKey(id)) {
+        if (subject_classify.containsKey(id)) {
             return subject_classify.get(id);
         }
         return "未知";
     }
 
     public static String getWatchById(int id) {
-        if(watch_type.containsKey(id)) {
+        if (watch_type.containsKey(id)) {
             return watch_type.get(id);
         }
         return "未知";
     }
 
     public static String getUserTypeById(int id) {
-        if(user_type.containsKey(id)) {
+        if (user_type.containsKey(id)) {
             return user_type.get(id);
         }
         return "未知";
     }
 
-    public static Map<Integer,String> getSubjectClassifyList() {
+    public static Map<Integer, String> getSubjectClassifyList() {
         return subject_classify;
     }
 
-    public static Map<Integer,Content> getSubjectTypeList() {
+    public static Map<Integer, Content> getSubjectTypeList() {
         return subject_type;
     }
 
-    public static Map<Integer,String> getWatchList() {
+    public static Map<Integer, String> getWatchList() {
         return watch_type;
     }
 
-    public static Map<Integer,String> getUserTypeList() {
+    public static Map<Integer, String> getUserTypeList() {
         return user_type;
     }
+
     public static Object getGradeTypeInfo2(boolean web_flag) {
         List<Content3> list = new ArrayList<>();
-        for (Integer id: grade_type.keySet()) {
+        for (Integer id : grade_type.keySet()) {
             String info = grade_type.get(id);
             Content3 temp = new Content3();
             temp.id = id;
@@ -561,7 +570,7 @@ public class SignMap {
         } else {
             Content3 temp = new Content3();
             temp = new Content3();
-            temp.id = 0 ;
+            temp.id = 0;
             temp.info = "全部";
             list.add(temp);
         }
@@ -569,7 +578,7 @@ public class SignMap {
     }
 
 
-    public static Map<Integer,String> getGradeTypeList() {
+    public static Map<Integer, String> getGradeTypeList() {
         return grade_type;
     }
 
@@ -597,23 +606,23 @@ public class SignMap {
         gradeInfo5.setLevel("初高");
         gradeInfo5.setList(new ArrayList<>());
 
-        for(Integer key : grade_type.keySet()) {
+        for (Integer key : grade_type.keySet()) {
             String content = grade_type.get(key);
             ListItem gradeItem = new ListItem();
 
             gradeItem.setId(key);
             gradeItem.setGradeName(content);
-            if ( key / 100 ==  1 ) {
+            if (key / 100 == 1) {
                 gradeInfo1.getList().add(gradeItem);
             }
-            if ( key / 100 ==  2) {
+            if (key / 100 == 2) {
                 gradeInfo2.getList().add(gradeItem);
             }
-            if (key / 100 ==  3) {
+            if (key / 100 == 3) {
                 gradeInfo3.getList().add(gradeItem);
                 gradeInfo5.getList().add(gradeItem);
             }
-            if (key / 100 ==  4) {
+            if (key / 100 == 4) {
                 gradeInfo4.getList().add(gradeItem);
                 gradeInfo5.getList().add(gradeItem);
             }
@@ -625,7 +634,7 @@ public class SignMap {
         Collections.sort(gradeInfo4.getList());
         Collections.sort(gradeInfo5.getList());
 
-        List<ListInfo> list  = new ArrayList<>();
+        List<ListInfo> list = new ArrayList<>();
         list.add(gradeInfo1);
         list.add(gradeInfo2);
         list.add(gradeInfo3);
@@ -675,7 +684,7 @@ public class SignMap {
         info10.setLevel("业余爱好");
         info10.setList(new ArrayList<>());
 
-        for(Integer key : subject_type.keySet()) {
+        for (Integer key : subject_type.keySet()) {
             Content content = subject_type.get(key);
             ListItem item = new ListItem();
             item.setId(key);
@@ -721,7 +730,7 @@ public class SignMap {
         Collections.sort(info8.getList());
         Collections.sort(info10.getList());
 
-        List<ListInfo> list  = new ArrayList<>();
+        List<ListInfo> list = new ArrayList<>();
         list.add(info1);
         list.add(info2);
         list.add(info3);
@@ -737,7 +746,7 @@ public class SignMap {
 
     public static Object getSubjectList() {
         List<SubjectContent> list = new ArrayList<>();
-        for(Integer key : subject_type.keySet()) {
+        for (Integer key : subject_type.keySet()) {
             Content content = subject_type.get(key);
             SubjectContent item = new SubjectContent();
             item.setId(key);
@@ -747,18 +756,18 @@ public class SignMap {
         return list;
     }
 
-//    static public List<Content2> getArticleChannel() {
+    //    static public List<Content2> getArticleChannel() {
 //        return article_channel;
 //    }
-    static public List<Content2> getChannelList(int grade_stage,boolean type) {
+    static public List<Content2> getChannelList(int grade_stage, boolean type) {
         List<Content2> list = new ArrayList<>();
         Content2 content2 = null;
-        if(type == true) {
-            content2 = new Content2();
-            content2.setChannel_info("1");
-            content2.setChannel_name("推荐");
-            list.add(content2);
-        }
+
+        content2 = new Content2();
+        content2.setChannel_info("1");
+        content2.setChannel_name("推荐");
+        list.add(content2);
+
 
         content2 = new Content2();
         content2.setChannel_info("801,802,803,901,902,903,904,905,906,907,908");
@@ -771,7 +780,7 @@ public class SignMap {
         list.add(content2);
 
 
-        if(type == true) {
+        if (type == true) {
             content2 = new Content2();
             content2.setChannel_info("2");
             content2.setChannel_name("问答");

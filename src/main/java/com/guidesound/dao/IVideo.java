@@ -138,6 +138,15 @@ public interface IVideo {
             + "</script>")
     List<VideoShow> myCollection(@Param("iList") List<Integer> iList,int begin,int end);
 
+    @Select("<script>"
+            + "SELECT count(*) FROM video WHERE id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " and examine_status = 1"
+            + "</script>")
+    int myCollectionCount(@Param("iList") List<Integer> iList);
+
     @Select("select count(*) from video where user_id = #{arg0} and examine_status = 1  and deleted = 0")
     int getPublishVidoeCountByUserId(int user_id);
     @Select("select count(*) from video where user_id = #{arg0} and (examine_status = 1 or examine_status = 0 or examine_status = 3) and deleted = 0")

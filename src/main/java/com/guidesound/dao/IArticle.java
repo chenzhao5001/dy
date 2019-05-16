@@ -234,6 +234,9 @@ public interface IArticle {
     @Select("select article_id from articleCollection where user_id = #{arg0} and deleted = 0 limit #{arg1},#{arg2}")
     List<Integer> getCollectIdsByUserid(int user_id,int begin,int end);
 
+    @Select("select article_id from articleCollection where user_id = #{arg0} and deleted = 0")
+    List<Integer> getAllCollectIdsByUserid(int user_id);
+
     @Select("<script>"
             + "select * from  article WHERE id IN "
             + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
@@ -275,6 +278,25 @@ public interface IArticle {
             + "</foreach>"
             + "</script>")
     List<ArticleInfo> getArticlebyIds(@Param("iList") List<Integer> iList);
+
+
+    @Select("<script>"
+            + "SELECT count(*) FROM article WHERE id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    int getArticlebCountyIds(@Param("iList") List<Integer> iList);
+
+    @Select("<script>"
+            + "SELECT * FROM article WHERE id IN "
+            + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + " limit #{arg1},#{arg2}"
+            + "</script>")
+    List<ArticleInfo> getArticlebyIdsAndScope(@Param("iList") List<Integer> iList,int begin,int end);
+
 
 
     @Update("update article set examine_status = 1 where id = #{arg0}")

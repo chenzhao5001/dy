@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.*;
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -141,14 +142,21 @@ public class ArticleController extends BaseController {
         int iSize = (size == null || size.equals("")) ? 20 : Integer.parseInt(size);
         int begin = (iPage - 1) * iSize;
         int end = iSize;
-        int count = iArticle.getCollectCountByUserid(getCurrentUserId());
+
+
+        List<Integer> ids = iArticle.getAllCollectIdsByUserid(getCurrentUserId());
+        if(ids.size() == 0) {
+            ListResp listResp = new ListResp();
+            listResp.setCount(0);
+            listResp.setList(new ArrayList() );
+        }
+
+        int count = iArticle.getArticlebCountyIds(ids);
+        System.out.println(count);
         List<ArticleInfo> list = new ArrayList<>();
         if (count > 0) {
-            List<Integer> ids = iArticle.getCollectIdsByUserid(getCurrentUserId(), begin, end);
-            if (ids.size() > 0) {
-                list = iArticle.getArticleByid(ids);
-                getExtendInfo(list);
-            }
+            list = iArticle.getArticlebyIdsAndScope(ids, begin, end);
+            getExtendInfo(list);
         }
 
         ListResp listResp = new ListResp();
