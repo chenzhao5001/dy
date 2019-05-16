@@ -548,6 +548,48 @@ public class ClassRoomController extends BaseController {
                             if(orderList.size() > 0) {
                                 amount = orderList.get(0).getPrice_one_hour()*((classTimeInfo.getEnd_time() - classTimeInfo.getBegin_time()) / 3600);
                             }
+
+                            for(OrderInfo info : orderList) {
+
+                                ///老师收入
+                                int time = (int) (new Date().getTime() / 1000);
+                                PayOrder payOrder = new PayOrder();
+                                payOrder.setUser_id(info.getCourse_owner_id());
+                                payOrder.setType(4);
+                                payOrder.setTime(time);
+                                payOrder.setIn_or_out(0);
+                                payOrder.setAmount(amount);
+
+                                payOrder.setCourse_name(info.getCourse_name());
+                                payOrder.setClass_id(classRoom.getClass_id());
+                                payOrder.setClass_number(classTimeInfo.getClass_number());
+                                String student_name = iUser.getUser(getCurrentUserId()).getName();
+                                payOrder.setStudent_name(student_name);
+                                payOrder.setStudent_id(getCurrentUserId());
+                                iOrder.insertPayOrder(payOrder);
+
+
+                                //学生支出
+                                payOrder = new PayOrder();
+                                payOrder.setUser_id(getCurrentUserId());
+                                payOrder.setType(5);
+                                payOrder.setTime(time);
+                                payOrder.setIn_or_out(1);
+                                payOrder.setAmount(amount);
+
+                                payOrder.setCourse_name(info.getCourse_name());
+                                payOrder.setClass_id(classRoom.getClass_id());
+                                payOrder.setClass_number(classTimeInfo.getClass_number());
+                                UserInfo userInfo = iUser.getUser(info.getCourse_owner_id());
+                                if(userInfo != null) {
+                                    String TeacherName = userInfo.getName();
+                                    payOrder.setTeacher_name(TeacherName);
+                                }
+                                payOrder.setTeacher_id(info.getCourse_owner_id());
+                                iOrder.insertPayOrder(payOrder);
+                            }
+
+
                         }
                     } else { //班课
                         if(isTeacher == true) {
@@ -555,6 +597,52 @@ public class ClassRoomController extends BaseController {
                             int count = orderList.size();
                             if(count > 0) {
                                 amount = orderList.get(0).getPrice_one_hour()*((classTimeInfo.getEnd_time() - classTimeInfo.getBegin_time()) / 3600)*count;
+                            }
+
+
+                            for(OrderInfo info : orderList) {
+
+                                int student_id = info.getStudent_id();
+                                String student_name = "";
+                                UserInfo userInfo = iUser.getUser(student_id);
+                                if(userInfo != null) {
+                                    student_name = userInfo.getName();
+                                }
+
+                                ///老师收入
+                                int time = (int) (new Date().getTime() / 1000);
+                                PayOrder payOrder = new PayOrder();
+                                payOrder.setUser_id(getCurrentUserId());
+                                payOrder.setType(4);
+                                payOrder.setTime(time);
+                                payOrder.setIn_or_out(0);
+                                payOrder.setAmount(amount);
+                                payOrder.setCourse_name(info.getCourse_name());
+                                payOrder.setClass_id(classRoom.getClass_id());
+                                payOrder.setClass_number(classTimeInfo.getClass_number());
+                                payOrder.setStudent_name(student_name);
+                                payOrder.setStudent_id(student_id);
+                                iOrder.insertPayOrder(payOrder);
+
+
+                                //学生支出
+                                payOrder = new PayOrder();
+                                payOrder.setUser_id(student_id);
+                                payOrder.setType(5);
+                                payOrder.setTime(time);
+                                payOrder.setIn_or_out(1);
+                                payOrder.setAmount(amount);
+
+                                payOrder.setCourse_name(info.getCourse_name());
+                                payOrder.setClass_id(classRoom.getClass_id());
+                                payOrder.setClass_number(classTimeInfo.getClass_number());
+                                userInfo = iUser.getUser(getCurrentUserId());
+                                if(userInfo != null) {
+                                    String TeacherName = userInfo.getName();
+                                    payOrder.setTeacher_name(TeacherName);
+                                }
+                                payOrder.setTeacher_id(info.getCourse_owner_id());
+                                iOrder.insertPayOrder(payOrder);
                             }
                         }
                     }

@@ -220,6 +220,10 @@
         <if test="sType != null and sType == 105">
             ORDER BY collection_count DESC
         </if>
+
+        <if test="sType == 0">
+            ORDER BY create_time DESC
+        </if>
         <!--<if test="sType != null and sType == 106">-->
             <!--ORDER BY play_count DESC-->
         <!--</if>-->

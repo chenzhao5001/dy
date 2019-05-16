@@ -761,14 +761,15 @@ public class SignMap {
         }
 
         content2 = new Content2();
-        content2.setChannel_info("101,102,103,104,105,106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702");
+        content2.setChannel_info("801,802,803,901,902,903,904,905,906,907,908");
         content2.setChannel_name("放松");
         list.add(content2);
 
         content2 = new Content2();
-        content2.setChannel_info("801,802,803,901,902,903,904,905,906,907,908");
-        content2.setChannel_name("认真");
+        content2.setChannel_info("101,102,103,104,105,106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702");
+        content2.setChannel_name("专注");
         list.add(content2);
+
 
         if(type == true) {
             content2 = new Content2();

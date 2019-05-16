@@ -260,8 +260,8 @@ public interface IVideo {
     @Select("select * from video where pools != \"\" "  )
     List<VideoShow> getVideoPoolsNotNull();
 
-    @Insert("insert into video_pools (video_id,user_id,subject,video_pool,create_time) " +
-            "value (#{video_id},#{user_id},#{subject},#{video_pool},#{create_time})")
+    @Insert("insert into video_pools (video_id,user_id,subject,video_pool,pool_flag,create_time) " +
+            "value (#{video_id},#{user_id},#{subject},#{video_pool},1,#{create_time})")
     void insertVideoPool(VideoPool videoPool);
 
 
@@ -280,13 +280,25 @@ public interface IVideo {
     List<VideoPool> getVideoPoolByInfo(int video_id,int pool);
 
 
+    @Delete("delete from video_pools where video_id = #{arg0}")
+    void deleteVideoPoolByVideoId(String video_id);
+    @Update("update video set type_list = #{arg1} where id = #{arg0}")
+    void setVideoPoolTypeList(int video_id,String type_list);
+    @Update("update video_pools set pool_flag = #{arg1} where video_id = #{arg0}")
+    void setPoolFlag(int video_id,int flag);
+    @Update("update video_pools set subject_flag = #{arg1} where video_id = #{arg0}")
+    void setSubjectFlag(int video_id,int flag);
+
+
+
+
 
 /////////////////////////////////////////////////////////
     ///推荐查询相关接口
-    @Select("select distinct video_id from video_pools left join video on video_id = video.id where  examine_status = 1 limit #{arg0},#{arg1}")
+    @Select("select distinct video_id from video_pools left join video on video_id = video.id where  examine_status = 1 and pool_flag = 1 limit #{arg0},#{arg1}")
     List<Integer> videoAllIdsInVideoPools(int begin,int end);
 
-    @Select("select distinct video_id from video_pools left join video on video_id = video.id  where examine_status = 1 and video_pools.create_time > #{arg2} limit #{arg0},#{arg1}")
+    @Select("select distinct video_id from video_pools left join video on video_id = video.id  where examine_status = 1 and pool_flag = 1 and video_pools.create_time > #{arg2} limit #{arg0},#{arg1}")
     List<Integer> videoAllIdsInVideoPoolsToday(int begin,int end,int time);
 
     @Select("<script>"
@@ -294,6 +306,7 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and pool_flag = 1 "
             + " and examine_status = 1 "
             + " limit #{arg1},#{arg2}"
             + "</script>")
@@ -304,11 +317,15 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and pool_flag = 1 "
             + " and video_pools.create_time > #{arg3}"
             + " and  examine_status = 1"
             + " limit #{arg1},#{arg2}"
             + "</script>")
     List<Integer> videoIdsByPoolsIdsInVideoPoolsToday(@Param("iList") List<Integer> iList,int begin,int end,int time);
+
+
+
 
     @Select("<script>"
             + "SELECT distinct video_id FROM video_pools left join video on video_id = video.id  WHERE video_pools.subject IN "
@@ -319,6 +336,7 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iPoolList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and  subject_flag = 1 "
             + " and  examine_status = 1 "
             + " limit #{arg2},#{arg3}"
             + "</script>")
@@ -333,6 +351,7 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iPoolList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and  subject_flag = 1 "
             + " and examine_status = 1 "
             + " and video_pools.create_time > #{arg4}"
             + " limit #{arg2},#{arg3}"
@@ -345,6 +364,7 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and  subject_flag = 1 "
             + " and examine_status = 1 "
             + " limit #{arg1},#{arg2}"
             + "</script>")
@@ -355,6 +375,7 @@ public interface IVideo {
             + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and  subject_flag = 1 "
             + " and video_pools.create_time > #{arg3}"
             + " and  examine_status = 1 "
             + " limit #{arg1},#{arg2}"

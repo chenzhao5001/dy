@@ -247,9 +247,17 @@ public interface IArticle {
     @Select("select * from article_pools where article_id = #{arg0} and article_pool = #{arg1}")
     List<ArticlePool> getArticlePoolByInfo(int articleID,int poolID);
 
-    @Insert("insert into article_pools (article_id,user_id,subject,article_pool,create_time) " +
-            "value (#{article_id},#{user_id},#{subject},#{article_pool},#{create_time})")
+    @Insert("insert into article_pools (article_id,user_id,subject,article_pool,pool_flag,create_time) " +
+            "value (#{article_id},#{user_id},#{subject},#{article_pool},1,#{create_time})")
     void insertArticlePool(ArticlePool articlePool);
+
+    @Delete("delete from article_pools where article_id = #{arg0}")
+    void deleteArticlePoolByArticleId(String article_id);
+
+    @Update("update article_pools set pool_flag = #{arg1} where article_id = #{arg0}")
+    void setPoolFlag(int article_id,int flag);
+    @Update("update article_pools set subject_flag = #{arg1} where article_id = #{arg0}")
+    void setSubjectFlag(int article_id,int flag);
 
     @Delete("delete from article_pools where article_id = #{arg0} and article_pool = #{arg1}")
     void removeArticleFromPools(int article_id,int pool);
@@ -292,10 +300,10 @@ public interface IArticle {
 
 
 
-    @Select("select distinct article_id from article_pools left join article on article_id = article.id  where type = 1 and examine_status = 1 and article_pools.create_time > #{arg2} limit #{arg0},#{arg1}")
+    @Select("select distinct article_id from article_pools left join article on article_id = article.id  where type = 1 and pool_flag = 1 and examine_status = 1 and article_pools.create_time > #{arg2} limit #{arg0},#{arg1}")
     List<Integer> articleAllIdsInArticlePoolsToday(int begin,int end,int time);
 
-    @Select("select distinct article_id from article_pools left join article on article_id = article.id  where type = 1 and examine_status = 1 limit #{arg0},#{arg1}")
+    @Select("select distinct article_id from article_pools left join article on article_id = article.id  where type = 1  and pool_flag = 1  and examine_status = 1 limit #{arg0},#{arg1}")
     List<Integer> articleAllIdsInArticlePools(int begin,int end);
 
     @Select("<script>"
@@ -303,6 +311,7 @@ public interface IArticle {
             + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and pool_flag = 1 "
             + " and article_pools.create_time > #{arg3}"
             + " and  examine_status = 1"
             + " and  type = 1 "
@@ -316,6 +325,7 @@ public interface IArticle {
             + "<foreach item='item' index='index' collection='iList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and pool_flag = 1 "
             + " and examine_status = 1 "
             + " and  type = 1 "
             + " limit #{arg1},#{arg2}"
@@ -330,6 +340,7 @@ public interface IArticle {
             + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and subject_flag = 1 "
             + " and article_pools.create_time > #{arg3}"
             + " and  examine_status = 1 "
             + " limit #{arg1},#{arg2}"
@@ -341,6 +352,7 @@ public interface IArticle {
             + "<foreach item='item' index='index' collection='iSubjectList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and subject_flag = 1 "
             + " and examine_status = 1 "
             + " limit #{arg1},#{arg2}"
             + "</script>")
@@ -356,6 +368,7 @@ public interface IArticle {
             + "<foreach item='item' index='index' collection='iPoolList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and subject_flag = 1 "
             + " and examine_status = 1 "
             + " and article_pools.create_time > #{arg4}"
             + " limit #{arg2},#{arg3}"
@@ -371,6 +384,7 @@ public interface IArticle {
             + "<foreach item='item' index='index' collection='iPoolList' open='(' separator=',' close=')'>"
             + "#{item}"
             + "</foreach>"
+            + " and subject_flag = 1 "
             + " and  examine_status = 1 "
             + " limit #{arg2},#{arg3}"
             + "</script>")

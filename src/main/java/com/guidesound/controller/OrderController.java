@@ -408,11 +408,12 @@ public class OrderController extends BaseController {
                     return JSONResult.errorMsg("此订单已经支付过");
                 }
 
-                //支出
+                //学生收入
                 PayOrder payOrder = new PayOrder();
+                payOrder.setUser_id(payItem.getFrom_user_id());
                 payOrder.setType(0);
                 payOrder.setTime((int) (new Date().getTime() / 1000));
-                payOrder.setIn_or_out(1);
+                payOrder.setIn_or_out(0);
                 payOrder.setAmount(Integer.parseInt(request.getParameter("total_amount")));
                 payOrder.setCourse_type(0);
                 Course course_temp = iCourse.getCourseById(orderInfo.getCourse_id());
@@ -607,6 +608,8 @@ public class OrderController extends BaseController {
                     }
                 }
 
+
+
             } else { //录播课
                 Record record = iRecord.get(Integer.parseInt(order_id));
                 if (record == null || record.getRecord_course_status() != 3) {
@@ -619,31 +622,50 @@ public class OrderController extends BaseController {
                     return JSONResult.errorMsg("此录播课已经购买过");
                 }
 
-                //收入
-                PayOrder payOrder1 = new PayOrder();
-                payOrder1.setType(4);
-                payOrder1.setTime((int) (new Date().getTime() / 1000));
-                payOrder1.setIn_or_out(0);
-                payOrder1.setAmount(Integer.parseInt(request.getParameter("total_amount")));
-                payOrder1.setCourse_name(record.getRecord_course_name());
-                payOrder1.setStudent_id(payItem.getFrom_user_id());
-                payOrder1.setStudent_name(payItem.getFrom_user_name());
-                payOrder1.setCreate_time((int) (new Date().getTime() / 1000));
-                payOrder1.setUpdate_time((int) (new Date().getTime() / 1000));
-                iOrder.insertPayOrder(payOrder1);
+                //老师收入
+                PayOrder payOrder = new PayOrder();
+                payOrder.setUser_id(payItem.getTo_user_id());
+                payOrder.setType(4);
+                payOrder.setTime((int) (new Date().getTime() / 1000));
+                payOrder.setIn_or_out(0);
+                payOrder.setAmount(Integer.parseInt(request.getParameter("total_amount")));
+                payOrder.setCourse_name(record.getRecord_course_name());
+                payOrder.setStudent_id(payItem.getFrom_user_id());
+                payOrder.setStudent_name(payItem.getFrom_user_name());
+                payOrder.setCreate_time((int) (new Date().getTime() / 1000));
+                payOrder.setUpdate_time((int) (new Date().getTime() / 1000));
+                iOrder.insertPayOrder(payOrder);
 
-                //支出
-                PayOrder payOrder2 = new PayOrder();
-                payOrder2.setType(5);
-                payOrder2.setTime((int) (new Date().getTime() / 1000));
-                payOrder2.setIn_or_out(1);
-                payOrder2.setAmount(Integer.parseInt(request.getParameter("total_amount")));
-                payOrder2.setCourse_name(record.getRecord_course_name());
-                payOrder2.setTeacher_id(payItem.getTo_user_id());
-                payOrder2.setTeacher_name(payItem.getTo_user_name());
-                payOrder2.setCreate_time((int) (new Date().getTime() / 1000));
-                payOrder2.setUpdate_time((int) (new Date().getTime() / 1000));
-                iOrder.insertPayOrder(payOrder2);
+
+
+                //学生收入
+                payOrder = new PayOrder();
+                payOrder.setUser_id(payItem.getFrom_user_id());
+                payOrder.setType(4);
+                payOrder.setTime((int) (new Date().getTime() / 1000));
+                payOrder.setIn_or_out(0);
+                payOrder.setAmount(Integer.parseInt(request.getParameter("total_amount")));
+                payOrder.setCourse_name(record.getRecord_course_name());
+                payOrder.setStudent_id(payItem.getFrom_user_id());
+                payOrder.setStudent_name(payItem.getFrom_user_name());
+                payOrder.setCreate_time((int) (new Date().getTime() / 1000));
+                payOrder.setUpdate_time((int) (new Date().getTime() / 1000));
+                iOrder.insertPayOrder(payOrder);
+
+
+                //学生支出
+                payOrder = new PayOrder();
+                payOrder.setUser_id(payItem.getFrom_user_id());
+                payOrder.setType(5);
+                payOrder.setTime((int) (new Date().getTime() / 1000));
+                payOrder.setIn_or_out(1);
+                payOrder.setAmount(Integer.parseInt(request.getParameter("total_amount")));
+                payOrder.setCourse_name(record.getRecord_course_name());
+                payOrder.setTeacher_id(payItem.getTo_user_id());
+                payOrder.setTeacher_name(payItem.getTo_user_name());
+                payOrder.setCreate_time((int) (new Date().getTime() / 1000));
+                payOrder.setUpdate_time((int) (new Date().getTime() / 1000));
+                iOrder.insertPayOrder(payOrder);
 
 
                 UserInfo userInfo = iUser.getUser(record.getUser_id());
@@ -1004,8 +1026,22 @@ public class OrderController extends BaseController {
             return JSONResult.errorMsg("金额不符");
         }
 
+
+
         iOrder.setRefundAmount(Integer.parseInt(order_id), leaveMoney, (int) (new Date().getTime() / 1000));
         iOrder.setOrderStatus(Integer.parseInt(order_id), 2);
+
+        PayOrder payOrder = new PayOrder();
+        payOrder.setType(1);
+        payOrder.setTime((int) (new Date().getTime() / 1000));
+        payOrder.setIn_or_out(1);
+        payOrder.setAmount(Integer.parseInt(refund_amount));
+        payOrder.setCourse_name(order.getCourse_name());
+        payOrder.setOrder_id(Integer.parseInt(order_id));
+        payOrder.setCreate_time((int) (new Date().getTime() / 1000));
+        payOrder.setUpdate_time((int) (new Date().getTime() / 1000));
+        iOrder.insertPayOrder(payOrder);
+
         return JSONResult.ok();
     }
 

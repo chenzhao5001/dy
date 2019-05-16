@@ -160,19 +160,23 @@ public class ManagerController extends BaseController {
     @ResponseBody
     JSONResult examineVideo(String video_id,String status,String type_list,String fail_reason,String fail_content) throws IOException, InterruptedException, JMSException {
 
-        Integer userId = getUserId();
-        if ( userId == null ) {
-            return JSONResult.errorMsg("缺少m_token");
-        }
+//        Integer userId = getUserId();
+//        if ( userId == null ) {
+//            return JSONResult.errorMsg("缺少m_token");
+//        }
 
         if ( video_id == null || status == null ) {
             return JSONResult.errorMsg("缺少status 或 video_id");
         }
+
+        //删除推荐池
+        iVideo.deleteVideoPoolByVideoId(video_id);
+        iVideo.setVideoPoolTypeList(Integer.parseInt(video_id),"");
+
         if(Integer.parseInt(status) == 1) {
             if(type_list == null) {
                 return JSONResult.errorMsg("缺少type_list");
             }
-
             MessageProducer messageProducer = null;
             Session session = null;
 
@@ -185,13 +189,17 @@ public class ManagerController extends BaseController {
                 session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
                 Destination destination = session.createQueue(qName);
                 messageProducer = session.createProducer(destination);
-                if(messageProducer != null || messageProducer != null) {
+                VideoShow video = iVideo.getVideoById(video_id);
+
+                if(messageProducer != null && session != null &&  video != null && video.getVideo_show_path().equals("")) {
                     TextMessage textMessage = session.createTextMessage(String.valueOf(video_id));
                     messageProducer.send(textMessage);
+                    iVideo.setExamineLoading(Integer.parseInt(video_id),type_list);
+                } else {
+                    iVideo.setVideoPoolTypeList(Integer.parseInt(video_id),type_list);
                 }
                 connection.close();
-                iVideo.setExamineLoading(Integer.parseInt(video_id),type_list);
-                VideoShow video = iVideo.getVideoById(video_id);
+
                 UserInfo userInfo = iUser.getUser(video.getUser_id());
                 if(status.equals("1")) {
                     if(type_list.contains("1")) {
@@ -212,6 +220,18 @@ public class ManagerController extends BaseController {
                             TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + ToolsFunction.URLDecoderString(video.getTitle()) + "”已经通过系统审核。","");
                         }
                     }
+                }
+
+                if(type_list.contains("1")) {
+                    iVideo.setPoolFlag(Integer.parseInt(video_id),1);
+                } else {
+                    iVideo.setPoolFlag(Integer.parseInt(video_id),0);
+                }
+
+                if(type_list.contains("2")) {
+                    iVideo.setSubjectFlag(Integer.parseInt(video_id),1);
+                } else {
+                    iVideo.setSubjectFlag(Integer.parseInt(video_id),0);
                 }
 
             } catch (JMSException e) {
@@ -539,13 +559,19 @@ public class ManagerController extends BaseController {
             }
         }
 
+        //删除推荐池
+        iArticle.deleteArticlePoolByArticleId(article_id);
+        if(type.equals("1")) {
+            iArticle.setExamineSuccess(Integer.parseInt(article_id),"");
+        } else {
+            iArticle.setAnswerExamineSuccess(Integer.parseInt(article_id),"");
+        }
 
         if(Integer.parseInt(status) == 1) {
             if(type_list == null) {
                 return JSONResult.errorMsg("缺少type_list");
             }
-            if(type_list.contains("1")) {
-
+            if(type_list.contains("1") || type_list.contains("2")) {
                 iArticle.setPoolByArticleId(article_id,","+ articleInfo.getGrade());
                 ArticlePool articlePool = new ArticlePool();
                 articlePool.setUser_id(articleInfo.getUser_id());
@@ -564,6 +590,7 @@ public class ManagerController extends BaseController {
                 }
 
             } else {
+
                 if(type.equals("1")) {
                     iArticle.setExamineSuccess(Integer.parseInt(article_id),type_list);
                     TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的文章“" + articleInfo.getHead()+ "”已经通过系统审核。","");
@@ -571,8 +598,21 @@ public class ManagerController extends BaseController {
                     iArticle.setAnswerExamineSuccess(Integer.parseInt(article_id),type_list);
                     TlsSigTest.SendMessage(userInfo.getIm_id(),"您回答的问题“" + articleInfo.getHead()+ "”已经通过系统审核。","");
                 }
-
             }
+
+            if(type_list.contains("1")) {
+                iArticle.setPoolFlag(Integer.parseInt(article_id),1);
+            } else {
+                iArticle.setPoolFlag(Integer.parseInt(article_id),0);
+            }
+
+            if(type_list.contains("2")) {
+                iArticle.setSubjectFlag(Integer.parseInt(article_id),1);
+            } else {
+                iArticle.setSubjectFlag(Integer.parseInt(article_id),0);
+            }
+
+
             if(type.equals("1")) {
                 InfoMsg infoMsg = new InfoMsg();
                 infoMsg.setMsg_type(7);
