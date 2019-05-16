@@ -206,6 +206,9 @@ public class SignMap {
             subject_type.put(903,new Content("老师分享",9));
             subject_type.put(904,new Content("校园生活",9));
             subject_type.put(905,new Content("教育事件",9));
+            subject_type.put(906,new Content("学习方法",9));
+            subject_type.put(907,new Content("教育观点",9));
+            subject_type.put(908,new Content("政策法规",9));
         }
 
     }
@@ -755,110 +758,124 @@ public class SignMap {
             content2.setChannel_info("1");
             content2.setChannel_name("推荐");
             list.add(content2);
+        }
+
+        content2 = new Content2();
+        content2.setChannel_info("101,102,103,104,105,106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702");
+        content2.setChannel_name("放松");
+        list.add(content2);
+
+        content2 = new Content2();
+        content2.setChannel_info("801,802,803,901,902,903,904,905,906,907,908");
+        content2.setChannel_name("认真");
+        list.add(content2);
+
+        if(type == true) {
             content2 = new Content2();
             content2.setChannel_info("2");
             content2.setChannel_name("问答");
             list.add(content2);
         }
 
-        if(grade_stage == 101) {
-            content2 = new Content2();
-            content2.setChannel_info("801");
-            content2.setChannel_name("育儿");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("101,102,103,104,105,106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,802,803,901,902,903,904,905,1001");
-            content2.setChannel_name("其他");
-            list.add(content2);
-
-        } else if(grade_stage == 102){
-            content2 = new Content2();
-            content2.setChannel_info("101,102,103");
-            content2.setChannel_name("学知识");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("201,202,203,204,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,104,105,106,107,108,109,601,602,701,702,801,802,803,901,902,903,904,905,1001");
-            content2.setChannel_name("其他");
-            list.add(content2);
-        } else if(grade_stage == 2){
-            content2 = new Content2();
-            content2.setChannel_info("101,102,103");
-            content2.setChannel_name("学知识");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("201,202,203,204,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,104,105,106,107,108,109,601,602,701,702,801,802,803,901,902,903,904,905,1001");
-            content2.setChannel_name("其他");
-            list.add(content2);
-
-        } else if(grade_stage == 3){
-            content2 = new Content2();
-            content2.setChannel_info("101");
-            content2.setChannel_name("语文");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("102");
-            content2.setChannel_name("数学");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("103");
-            content2.setChannel_name("英语");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("104");
-            content2.setChannel_name("物理");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("105");
-            content2.setChannel_name("化学");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803,901,902,903,904,905,1001");
-            content2.setChannel_name("其他");
-            list.add(content2);
-
-        } else if(grade_stage == 4){
-            content2 = new Content2();
-            content2.setChannel_info("101");
-            content2.setChannel_name("语文");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("102");
-            content2.setChannel_name("数学");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("103");
-            content2.setChannel_name("英语");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("104");
-            content2.setChannel_name("物理");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("105");
-            content2.setChannel_name("化学");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803,901,902,903,904,905,1001");
-            content2.setChannel_name("其他 ");
-            list.add(content2);
-        } else {
-            content2 = new Content2();
-            content2.setChannel_info("101");
-            content2.setChannel_name("语文");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("102");
-            content2.setChannel_name("数学");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("103");
-            content2.setChannel_name("英语");
-            list.add(content2);
-            content2 = new Content2();
-            content2.setChannel_info("104,105,106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803,901,902,903,904,905,1001");
-            content2.setChannel_name("其他");
-            list.add(content2);
-        }
+//
+//        if(grade_stage == 101) {
+//            content2 = new Content2();
+//            content2.setChannel_info("801");
+//            content2.setChannel_name("育儿");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("101,102,103,104,105,106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,802,803,901,902,903,904,905,1001");
+//            content2.setChannel_name("其他");
+//            list.add(content2);
+//
+//        } else if(grade_stage == 102){
+//            content2 = new Content2();
+//            content2.setChannel_info("101,102,103");
+//            content2.setChannel_name("学知识");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("201,202,203,204,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,104,105,106,107,108,109,601,602,701,702,801,802,803,901,902,903,904,905,1001");
+//            content2.setChannel_name("其他");
+//            list.add(content2);
+//        } else if(grade_stage == 2){
+//            content2 = new Content2();
+//            content2.setChannel_info("101,102,103");
+//            content2.setChannel_name("学知识");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("201,202,203,204,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,104,105,106,107,108,109,601,602,701,702,801,802,803,901,902,903,904,905,1001");
+//            content2.setChannel_name("其他");
+//            list.add(content2);
+//
+//        } else if(grade_stage == 3){
+//            content2 = new Content2();
+//            content2.setChannel_info("101");
+//            content2.setChannel_name("语文");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("102");
+//            content2.setChannel_name("数学");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("103");
+//            content2.setChannel_name("英语");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("104");
+//            content2.setChannel_name("物理");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("105");
+//            content2.setChannel_name("化学");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803,901,902,903,904,905,1001");
+//            content2.setChannel_name("其他");
+//            list.add(content2);
+//
+//        } else if(grade_stage == 4){
+//            content2 = new Content2();
+//            content2.setChannel_info("101");
+//            content2.setChannel_name("语文");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("102");
+//            content2.setChannel_name("数学");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("103");
+//            content2.setChannel_name("英语");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("104");
+//            content2.setChannel_name("物理");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("105");
+//            content2.setChannel_name("化学");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803,901,902,903,904,905,1001");
+//            content2.setChannel_name("其他 ");
+//            list.add(content2);
+//        } else {
+//            content2 = new Content2();
+//            content2.setChannel_info("101");
+//            content2.setChannel_name("语文");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("102");
+//            content2.setChannel_name("数学");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("103");
+//            content2.setChannel_name("英语");
+//            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("104,105,106,107,108,109,201,202,203,301,302,303,304,305,401,402,403,404,405,406,501,502,503,504,601,602,701,702,801,802,803,901,902,903,904,905,1001");
+//            content2.setChannel_name("其他");
+//            list.add(content2);
+//        }
         return list;
     }
 
