@@ -34,6 +34,15 @@ public class ArticleAnswer {
     private VideoClass video_class;
     private TeacherClass teacher_class;
     private CommodityInfo commodity;
+    int examine_status;
+
+    public int getExamine_status() {
+        return examine_status;
+    }
+
+    public void setExamine_status(int examine_status) {
+        this.examine_status = examine_status;
+    }
 
     public String getAsk_info() {
         return ask_info;

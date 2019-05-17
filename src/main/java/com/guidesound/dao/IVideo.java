@@ -222,6 +222,7 @@ public interface IVideo {
     @Update("update video set examine_status = 7 where id = #{arg0}")
     void downVideo(int video_id);
 
+
     @Insert("insert into videoChat (video_id,first_user_id,first_comment,second_user_id,second_comment,create_time) " +
             "value (#{video_id},#{first_user_id},#{first_comment},#{second_user_id},#{second_comment},#{create_time})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
@@ -294,6 +295,9 @@ public interface IVideo {
     void setPoolFlag(int video_id,int flag);
     @Update("update video_pools set subject_flag = #{arg1} where video_id = #{arg0}")
     void setSubjectFlag(int video_id,int flag);
+
+    @Update("update video set type_list = \"\",examine_reason = 0,fail_content = \"\",pools = \"\"   where id = #{arg0}")
+    void resetVideoState(int video_id);
 
 
 

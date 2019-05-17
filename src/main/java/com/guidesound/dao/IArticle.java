@@ -313,6 +313,9 @@ public interface IArticle {
     @Update("update article set pools = #{arg1} where id = #{arg0}")
     void setPoolByArticleId(String article_id,String pools);
 
+    @Update("update article set type_list = \"\",examine_reason = 0,fail_content = \"\",pools = \"\"   where id = #{arg0}")
+    void resetArticleState(String article);
+
 
     ////文章推荐相关
     @Select("select * from article_index where user_guid = #{arg0} and param = #{arg1}")
