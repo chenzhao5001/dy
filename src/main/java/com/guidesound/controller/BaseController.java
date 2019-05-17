@@ -20,6 +20,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URLDecoder;
 
 //@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class BaseController {
@@ -73,6 +74,22 @@ public class BaseController {
             }
         }
         return currentUserID;
+    }
+
+    Integer getUserId() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        Cookie[] cookies = request.getCookies();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("m_token")) {
+                    String token = cookie.getValue();
+                    token = URLDecoder.decode(token);
+                    int user_id = TockenUtil.getUserIdByTocket(token);
+                    return user_id;
+                }
+            }
+        }
+        return null;
     }
 
 }

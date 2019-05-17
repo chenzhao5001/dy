@@ -1564,6 +1564,13 @@ public class ArticleController extends BaseController {
         }
         List<ArticleInfo> list_temp = iArticle.findArticle(articleFind);
         getExtendInfo(list_temp);
+
+        for(ArticleInfo item :list_temp) {
+            if(getUserId() != null) {
+                item.setType(1);
+            }
+        }
+
         ret.setCount(count_temp);
         ret.setList(list_temp);
         return JSONResult.ok(ret);

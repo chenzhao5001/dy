@@ -255,23 +255,6 @@ public class ManagerController extends BaseController {
     }
 
 
-
-    Integer getUserId() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        Cookie[] cookies = request.getCookies();
-        if(cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("m_token")) {
-                    String token = cookie.getValue();
-                    token = URLDecoder.decode(token);
-                    int user_id = TockenUtil.getUserIdByTocket(token);
-                    return user_id;
-                }
-            }
-        }
-        return null;
-    }
-
     List<ArticleVerify> getArticleShowByAnswers(List<ArticleAnswer> answerList) {
         if (answerList.size() > 0) {
             List<Integer> userIds = new ArrayList<>();
