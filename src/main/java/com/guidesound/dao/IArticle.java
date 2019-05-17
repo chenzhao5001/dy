@@ -191,6 +191,12 @@ public interface IArticle {
     @Select("select * from articleAnswer where id = #{arg0}")
     ArticleAnswer getAnswerById(int id);
 
+    @Insert("insert into user_article_finish (user_guid,article_id,create_time) values (#{arg0},#{arg1},#{arg2})")
+    void insertArticleFinish(String userGuid,int video_id,int create_time);
+
+    @Select("select count(*) from user_article_finish where user_guid = #{arg0} and article_id = #{arg1}")
+    int getArticleFinishCount(String userGuid,int video_id);
+
 
 
     @Update("update article set examine_status = 2,examine_reason = #{arg1},fail_content = #{arg2} where id = #{arg0}")

@@ -230,7 +230,7 @@ public class VideoController extends BaseController {
         if (channel == null || user_guid == null) {
             return JSONResult.errorMsg("缺少channel 或 user_guid");
         }
-//        iLogService.addLog(user_guid, "/list_by_channel", channel);
+        iLogService.addLog(user_guid, "/list_by_channel", channel);
         List<Integer> video_ids = new ArrayList<>();
         int grade = 0;
 
@@ -870,25 +870,12 @@ public class VideoController extends BaseController {
         if (user_guid == null || video_id == null) {
             return JSONResult.errorMsg("缺少 user_guid 或 video_id");
         }
-        List<UserPlayFinish> list = iVideo.getUserPlayInfo(user_guid);
-        if (list.size() > 0) {
-            UserPlayFinish userPlayFinish = list.get(0);
-            String videos = userPlayFinish.getFinish_videos();
-            ArrayList<String> arrVidoe = new ArrayList<>();
-            if (!videos.equals("")) {
-                arrVidoe = new ArrayList<String>(Arrays.asList(videos.split(",")));
-                if (!arrVidoe.contains(video_id)) {
-                    arrVidoe.add(video_id);
-                }
-            } else {
-                arrVidoe.add(video_id);
-            }
-            String strVideos = StringUtils.join(arrVidoe, ",");
-            iVideo.upPlayFinish(userPlayFinish.getId(), strVideos);
 
-        } else {
-            iVideo.createPlayFinish(user_guid, video_id, (int) (new Date().getTime() / 1000));
+        int count = iVideo.getVidoeFinishCount(user_guid,Integer.parseInt(video_id));
+        if(count == 0) {
+            iVideo.insertVidoeFinish(user_guid,Integer.parseInt(video_id), (int) (new Date().getTime() / 1000));
         }
+
         return JSONResult.ok();
     }
 

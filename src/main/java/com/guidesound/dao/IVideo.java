@@ -177,8 +177,12 @@ public interface IVideo {
     @Select("select count(*) from userVideoPush where user_guid = #{arg0}")
     int getPushVideoCountByUserGuid(String user_guid);
 
-    @Select("select finish_videos from userPlayFinish where user_guid = #{arg0}")
-    String getFinishVideoByUserGuid(String user_guid);
+
+    @Insert("insert into userPlayFinish (user_guid,video_id,create_time) values (#{arg0},#{arg1},#{arg2})")
+    void insertVidoeFinish(String userGuid,int video_id,int create_time);
+
+    @Select("select count(*) from userPlayFinish where user_guid = #{arg0} and video_id = #{arg1}")
+    int getVidoeFinishCount(String userGuid,int video_id);
 
     @Delete("delete from userVideoPush where user_guid = #{arg0}")
     void deletePushVideoByUserGuid(String user_guid);
@@ -196,14 +200,7 @@ public interface IVideo {
             + "</script>")
     void addRecommend(@Param("iList") List<Integer> iList);
 
-    @Select("select * from userPlayFinish where user_guid = #{arg0}")
-    List<UserPlayFinish> getUserPlayInfo(String user_guid);
 
-    @Update("update userPlayFinish set finish_videos = #{arg1} where id = #{arg0}")
-    void upPlayFinish(int id,String videos);
-
-    @Insert("insert into userPlayFinish (user_guid,finish_videos,create_time) values (#{arg0},#{arg1},#{arg2})")
-    void createPlayFinish(String user_guid,String finish_videos,int create_time);
 
     @Select("SELECT * FROM video where user_id in (SELECT id from user WHERE dy_id div 10000 > 1000)")
     List<VideoShow> FooTemp();

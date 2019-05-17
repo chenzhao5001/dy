@@ -17,6 +17,8 @@ import com.qcloud.cos.model.PutObjectResult;
 import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Select;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -1576,6 +1578,21 @@ public class ArticleController extends BaseController {
         return JSONResult.ok(ret);
     }
 
+    @RequestMapping("/read_finish")
+    @ResponseBody
+    JSONResult readFinish(String user_guid,String article_id) {
+        if(user_guid == null || article_id == null) {
+            return JSONResult.errorMsg("缺少 user_guid 或 article_id");
+        }
+
+        int count = iArticle.getArticleFinishCount(user_guid,Integer.parseInt(article_id));
+        if(count == 0) {
+            iArticle.insertArticleFinish(user_guid,Integer.parseInt(article_id), (int) (new Date().getTime() / 1000));
+        }
+        return JSONResult.ok();
+    }
+
+
     @RequestMapping("/up_pool")
     @ResponseBody
     JSONResult upPool() {
@@ -1596,5 +1613,7 @@ public class ArticleController extends BaseController {
         }
         return JSONResult.ok();
     }
+
+
 
 }

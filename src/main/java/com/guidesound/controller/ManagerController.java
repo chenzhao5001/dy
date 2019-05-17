@@ -203,15 +203,6 @@ public class ManagerController extends BaseController {
                 UserInfo userInfo = iUser.getUser(video.getUser_id());
                 if(status.equals("1")) {
                     if(type_list.contains("1")) {
-                        iVideo.setPoolByVideoId(video_id,","+ video.getWatch_type());
-                        VideoPool videoPool = new VideoPool();
-                        videoPool.setUser_id(video.getUser_id());
-                        videoPool.setSubject(video.getSubject());
-                        videoPool.setUser_id(video.getUser_id());
-                        videoPool.setVideo_pool(video.getWatch_type());
-                        videoPool.setVideo_id(video.getId());
-                        videoPool.setCreate_time((int) (new Date().getTime() / 1000));
-                        iVideo.insertVideoPool(videoPool);
                         if(userInfo != null) {
                             TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + ToolsFunction.URLDecoderString(video.getTitle())+ "”已经通过系统审核，由于视频质量很高，已被系统推荐。","");
                         }
@@ -220,6 +211,18 @@ public class ManagerController extends BaseController {
                             TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的短视频“" + ToolsFunction.URLDecoderString(video.getTitle()) + "”已经通过系统审核。","");
                         }
                     }
+                }
+
+                if(type_list.contains("1") || type_list.contains("2")) {
+                    iVideo.setPoolByVideoId(video_id,","+ video.getWatch_type());
+                    VideoPool videoPool = new VideoPool();
+                    videoPool.setUser_id(video.getUser_id());
+                    videoPool.setSubject(video.getSubject());
+                    videoPool.setUser_id(video.getUser_id());
+                    videoPool.setVideo_pool(video.getWatch_type());
+                    videoPool.setVideo_id(video.getId());
+                    videoPool.setCreate_time((int) (new Date().getTime() / 1000));
+                    iVideo.insertVideoPool(videoPool);
                 }
 
                 if(type_list.contains("1")) {
@@ -627,10 +630,10 @@ public class ManagerController extends BaseController {
             if(type.equals("1")) {
 
                 iArticle.setExamineFail(Integer.parseInt(article_id),fail_reason,fail_content);
-                TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的文章“" + articleInfo.getHead()+ "”未通过系统审核，未通过原因是“" + reason.get(Integer.parseInt(fail_reason)) + "”","");
+                TlsSigTest.SendMessage(userInfo.getIm_id(),"您发布的文章“" + articleInfo.getHead()+ "”未通过系统审核，未通过原因是“" + fail_content + "”","");
             } else {
                 iArticle.setAnswerExamineFail(Integer.parseInt(article_id),fail_reason,fail_content);
-                TlsSigTest.SendMessage(userInfo.getIm_id(),"您回答的问题“" + articleInfo.getHead()+ "”未通过系统审核，未通过原因是“" + reason.get(Integer.parseInt(fail_reason)) + "”！","");
+                TlsSigTest.SendMessage(userInfo.getIm_id(),"您回答的问题“" + articleInfo.getHead()+ "”未通过系统审核，未通过原因是“" + fail_content + "”！","");
             }
         }
         return JSONResult.ok();

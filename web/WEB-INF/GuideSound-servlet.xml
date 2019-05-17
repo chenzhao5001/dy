@@ -67,6 +67,7 @@
             <mvc:exclude-mapping path="/article/answer_comment_list"/>
             <mvc:exclude-mapping path="/article/answer_preview"/>
             <mvc:exclude-mapping path="/article/article_list"/>
+            <mvc:exclude-mapping path="/article/read_finish"/>
 
 
             <mvc:exclude-mapping path="/edit/**"/>
