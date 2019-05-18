@@ -299,6 +299,12 @@ public interface IVideo {
     @Update("update video set type_list = \"\",examine_reason = 0,fail_content = \"\",pools = \"\"   where id = #{arg0}")
     void resetVideoState(int video_id);
 
+    @Select("select * from video_pools")
+    List<VideoPools> getVideoPools();
+
+    @Insert("insert into video_pools (user_id,subject,video_id,video_pool,pool_flag,subject_flag,create_time,update_time) " +
+            "values (#{user_id},#{subject},#{video_id},#{video_pool},#{pool_flag},#{subject_flag},#{create_time},#{update_time})")
+    void insertVideoPools(VideoPools videoPools);
 
 
 

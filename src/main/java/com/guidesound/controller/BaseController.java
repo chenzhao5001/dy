@@ -29,6 +29,10 @@ public class BaseController {
     static String region;
     static COSClient cosClient = null;
     static OkHttpClient okHttpClient;
+
+    double platformCostRatio = 0.95;
+    double alipayCostRatio = 0.994;
+
     static {
         articleBucketName = "pic-article-1257964795";
         videoBucketName = "video-1257964795";

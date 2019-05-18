@@ -230,7 +230,7 @@ public class VideoController extends BaseController {
         if (channel == null || user_guid == null) {
             return JSONResult.errorMsg("缺少channel 或 user_guid");
         }
-        iLogService.addLog(user_guid, "/list_by_channel", channel);
+//        iLogService.addLog(user_guid, "/list_by_channel", channel);
         List<Integer> video_ids = new ArrayList<>();
         int grade = 0;
 
@@ -1196,27 +1196,40 @@ public class VideoController extends BaseController {
     @RequestMapping("/up_pool")
     @ResponseBody
     JSONResult upPool() {
-        List<VideoShow> lists = iVideo.getVideoPoolsNotNull();
+
+        List<VideoPools> lists = iVideo.getVideoPools();
         for (int i = 0; i < 100; i++) {
             Collections.shuffle(lists);
         }
 
-        for (VideoShow item : lists) {
-            String pools = (String) item.getPools();
-            String[] strarray = pools.split(",");
-            for (String str : strarray) {
-                if (str != null && !str.equals("")) {
-                    VideoPool videoPool = new VideoPool();
-                    videoPool.setVideo_id(item.getId());
-                    videoPool.setVideo_pool(Integer.parseInt(str));
-                    videoPool.setUser_id(item.getUser_id());
-                    videoPool.setSubject(item.getSubject());
-//                    videoPool.setCreate_time((int) (new Date().getTime() / 1000));
-                    iVideo.insertVideoPool(videoPool);
-                }
-            }
+        for(VideoPools videoPools : lists) {
+            iVideo.insertVideoPools(videoPools);
         }
+
+
         return JSONResult.ok();
+
+//        List<VideoShow> lists = iVideo.getVideoPoolsNotNull();
+//        for (int i = 0; i < 100; i++) {
+//            Collections.shuffle(lists);
+//        }
+//
+//        for (VideoShow item : lists) {
+//            String pools = (String) item.getPools();
+//            String[] strarray = pools.split(",");
+//            for (String str : strarray) {
+//                if (str != null && !str.equals("")) {
+//                    VideoPool videoPool = new VideoPool();
+//                    videoPool.setVideo_id(item.getId());
+//                    videoPool.setVideo_pool(Integer.parseInt(str));
+//                    videoPool.setUser_id(item.getUser_id());
+//                    videoPool.setSubject(item.getSubject());
+////                    videoPool.setCreate_time((int) (new Date().getTime() / 1000));
+//                    iVideo.insertVideoPool(videoPool);
+//                }
+//            }
+//        }
+//        return JSONResult.ok();
     }
 
     @RequestMapping("/video_finish")
@@ -1266,7 +1279,7 @@ public class VideoController extends BaseController {
             if(!no_send.contains(user_id)) {
 //                TlsSigTest.SendMessage(String.valueOf(user_id),infoMsg);
                 TlsSigTest.SendMessage(String.valueOf(user_id),new Gson().toJson(infoMsg),userName+"发布新视频");
-                iLogService.addLog("99999", "/video_finish", infoMsg.toString());
+//                iLogService.addLog("99999", "/video_finish", infoMsg.toString());
             }
         }
 

@@ -1207,7 +1207,7 @@ public class ArticleController extends BaseController {
     @ResponseBody
     JSONResult channelArticle(String channel_id, String user_guid) {
 
-        iLogService.addLog(user_guid, "/channel_article", channel_id);
+//        iLogService.addLog(user_guid, "/channel_article", channel_id);
         if (channel_id == null || user_guid == null) {
             return JSONResult.errorMsg("缺少 channel_id 或 user_guid 参数");
         }

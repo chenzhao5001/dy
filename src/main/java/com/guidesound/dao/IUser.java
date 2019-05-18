@@ -446,9 +446,16 @@ public interface IUser {
     List<UserAmount> getUserAmount(int user_id);
     @Insert("insert into user_amount (user_id,amount,create_time,update_time) values (#{arg0},#{arg1},#{arg2},#{arg3})")
     void InsertUserAmount(int user_id,int amount,int create_time,int update_time);
-
     @Update("update user_amount set amount = #{arg1} where user_id = #{arg0}")
     void updateUserAmount(int user_id,int amount);
+
+
+    @Select("select * from user_surplus_amount where user_id = #{arg0}")
+    List<UserSurplusAmount> getUserSurplusAmount(int user_id);
+    @Insert("insert into user_surplus_amount (user_id,amount) values (#{arg0},#{arg1})")
+    void InsertUserSurplusAmount(int user_id,int amount);
+    @Update("update user_surplus_amount set amount = #{arg1} where user_id = #{arg0}")
+    void updateUserSurplusAmount(int user_id,int amount);
 
 
 }

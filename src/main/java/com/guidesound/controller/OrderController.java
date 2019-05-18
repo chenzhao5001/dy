@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.guidesound.Service.ICommonService;
 import com.guidesound.Service.ILogService;
 import com.guidesound.TempStruct.*;
 import com.guidesound.dao.IOrder;
@@ -56,6 +57,9 @@ public class OrderController extends BaseController {
 
     @Autowired
     private ILogService iLogService;
+
+    @Autowired
+    private ICommonService iCommonService;
 
     int getCurrentCount() {
         int count = iOrder.getCurrentCount();
@@ -354,12 +358,8 @@ public class OrderController extends BaseController {
     @ResponseBody
     public JSONResult payCallBack(HttpServletRequest request) throws AlipayApiException, IOException {
 
-//        String strTemp = "{\"type\":\"1\",\"order_id\":\"1557852684355\"}";
-//        PayItem payItem1 = new Gson().fromJson(strTemp,PayItem.class);
-//        System.out.println(payItem1);
-
         try {
-            iLogService.addLog("100001", "enter", request.getParameter("body"));
+            iLogService.addLog("100001", "/pay_callback  enter", request.getParameter("body"));
             Map<String, String> params = new HashMap<String, String>();
             Map requestParams = request.getParameterMap();
             for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext(); ) {
@@ -375,24 +375,27 @@ public class OrderController extends BaseController {
             //切记alipaypublickey是支付宝的公钥，请去open.alipay.com对应应用下查看。
             //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
             String strParam = new Gson().toJson(params);
-            iLogService.addLog("100001", "支付宝验证before", strParam);
+            iLogService.addLog("100001", "/pay_callback 支付宝验证before", strParam);
             boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.CHARSET, "RSA2");
             if (flag == false) {
-                iLogService.addLog("100001", "订单验证错误", "订单验证错误");
+                iLogService.addLog("100001", "/pay_callback 订单验证错误", "订单验证错误");
             }
-            iLogService.addLog("100001", "支付宝验证after", strParam);
+            iLogService.addLog("100001", "/pay_callback 支付宝验证after", strParam);
             String strRet = new Gson().toJson(params);
             iOrder.addPayInfo(strRet, (int) (new Date().getTime() / 1000));
 
             String body = request.getParameter("body");
+//            String body ="{\"type\":\"0\",\"order_id\":\"145\",\"from_user_id\":545,\"from_user_name\":\"卓月\",\"to_user_id\":411,\"to_user_name\":\"就瞅你！hahaha\"}";
+
             PayItem payItem = new Gson().fromJson(body, PayItem.class);
             String type = payItem.getType();
             String order_id = payItem.getOrder_id();
-            iLogService.addLog("100001", "预处理完成", "");
+            iLogService.addLog("100001", "/pay_callback 预处理完成", new Gson().toJson(payItem));
 
+            double amount = Double.valueOf(request.getParameter("total_amount")) * 100;
 
             if (type.equals("0")) { //课堂
-                OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), getCurrentUserId());
+                OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), payItem.getFrom_user_id());
                 if (orderInfo == null) {
                     iLogService.addLog("100001", order_id, "订单不存在");
                     return JSONResult.errorMsg("订单不存在");
@@ -414,7 +417,8 @@ public class OrderController extends BaseController {
                 payOrder.setType(0);
                 payOrder.setTime((int) (new Date().getTime() / 1000));
                 payOrder.setIn_or_out(0);
-                payOrder.setAmount(Integer.parseInt(request.getParameter("total_amount")));
+
+                payOrder.setAmount((int) (amount * 100));
                 payOrder.setCourse_type(0);
                 Course course_temp = iCourse.getCourseById(orderInfo.getCourse_id());
                 if (course_temp != null) {
@@ -427,6 +431,7 @@ public class OrderController extends BaseController {
                 payOrder.setUpdate_time((int) (new Date().getTime() / 1000));
                 iOrder.insertPayOrder(payOrder);
 
+                iCommonService.changeUserSurplusAmount(payItem.getFrom_user_id(),(int) (amount * 100));
                 if (orderInfo.getType() == 1) {
                     String order_outLine = orderInfo.getOutline();
                     try {
@@ -460,7 +465,7 @@ public class OrderController extends BaseController {
                         break;
                     }
                 }
-                log.info("fitst_flag 标志 " + fitst_flag);
+
                 if (fitst_flag || orderInfo.getType() == 0) {
                     Course course = iCourse.getCourseById(orderInfo.getCourse_id());
                     if (course == null) {
@@ -492,11 +497,11 @@ public class OrderController extends BaseController {
                         UserInfo user_temp = iUser.getUser(course.getUser_id());
                         String info_ret = TlsSigTest.addGroupPerson(group_id, String.valueOf(user_temp.getIm_id()));
                         log.info("加入群拥有者 group_id = {},user_id = {},ret = {}", group_id, String.valueOf(user_temp.getIm_id()), info_ret);
-                        UserInfo user_temp2 = iUser.getUser(getCurrentUserId());
+                        UserInfo user_temp2 = iUser.getUser(payItem.getFrom_user_id());
                         info_ret = TlsSigTest.addGroupPerson(group_id, user_temp2.getIm_id());
-                        UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
+                        UserInfo userInfo1 = iUser.getUser(payItem.getFrom_user_id());
                         TlsSigTest.sendGroupMsg(group_id, "欢迎新同学：" + userInfo1.getName(), user_temp.getIm_id());
-                        log.info("加入支付用户 group_id = {},user_id = {},ret = {}", group_id, String.valueOf(getCurrentUserId()), info_ret);
+                        log.info("加入支付用户 group_id = {},user_id = {},ret = {}", group_id, String.valueOf(payItem.getFrom_user_id()), info_ret);
                     }
 
                     //创建课堂
@@ -549,9 +554,9 @@ public class OrderController extends BaseController {
                         iLogService.addLog("100001", order_id, "超过最大上课人数，无法支付");
                         return JSONResult.errorMsg("超过最大上课人数，无法支付");
                     }
-                    String info_ret = TlsSigTest.addGroupPerson(classRoom.getIm_group_id(), String.valueOf(getCurrentUserId()));
-                    log.info("班课群增加成员 group_id = {},user_id = {},ret = {}", classRoom.getIm_group_id(), String.valueOf(getCurrentUserId()), info_ret);
-                    UserInfo userInfo = iUser.getUser(getCurrentUserId());
+                    String info_ret = TlsSigTest.addGroupPerson(classRoom.getIm_group_id(), String.valueOf(payItem.getFrom_user_id()));
+                    log.info("班课群增加成员 group_id = {},user_id = {},ret = {}", classRoom.getIm_group_id(), String.valueOf(payItem.getFrom_user_id()), info_ret);
+                    UserInfo userInfo = iUser.getUser(payItem.getFrom_user_id());
                     UserInfo userInfo2 = iUser.getUser(classRoom.getUser_id());
                     TlsSigTest.sendGroupMsg(classRoom.getIm_group_id(), "欢迎新同学：" + userInfo.getName(), userInfo2.getIm_id());
                     class_id = classRoom.getClass_id();
@@ -571,7 +576,7 @@ public class OrderController extends BaseController {
                         ClassTimeInfo classTimeInfo = new ClassTimeInfo();
                         classTimeInfo.setOrder_id(Integer.parseInt(order_id));
                         classTimeInfo.setClass_id(class_id);
-                        classTimeInfo.setStudent_id(getCurrentUserId());
+                        classTimeInfo.setStudent_id(payItem.getFrom_user_id());
                         classTimeInfo.setTeacher_id(teacher_id);
                         classTimeInfo.setBegin_time(classTime.getClass_time());
                         classTimeInfo.setEnd_time(classTime.getClass_time() + 3600 * classTime.getClass_hours());
@@ -587,7 +592,7 @@ public class OrderController extends BaseController {
 
                 iOrder.setOrderStatus(Integer.parseInt(order_id), 1);
                 StudentClass studentClass = new StudentClass();
-                studentClass.setUser_id(getCurrentUserId());
+                studentClass.setUser_id(payItem.getFrom_user_id());
                 studentClass.setCourse_id(orderInfo.getCourse_id());
                 studentClass.setClass_id(class_id);
                 studentClass.setOrder_id(Integer.parseInt(order_id));
@@ -616,7 +621,7 @@ public class OrderController extends BaseController {
                     iLogService.addLog("100001", order_id, "录播课信息不存在");
                     return JSONResult.errorMsg("录播课信息不存在");
                 }
-                List<UserRecordCourse> lists = iRecord.getRecordByUserAndId(getCurrentUserId(), Integer.parseInt(order_id));
+                List<UserRecordCourse> lists = iRecord.getRecordByUserAndId(payItem.getFrom_user_id(), Integer.parseInt(order_id));
                 if (lists.size() > 0) {
                     iLogService.addLog("100001", order_id, "此录播课已经购买过");
                     return JSONResult.errorMsg("此录播课已经购买过");
@@ -628,7 +633,7 @@ public class OrderController extends BaseController {
                 payOrder.setType(4);
                 payOrder.setTime((int) (new Date().getTime() / 1000));
                 payOrder.setIn_or_out(0);
-                payOrder.setAmount(Integer.parseInt(request.getParameter("total_amount")));
+                payOrder.setAmount((int) (amount * 100 * platformCostRatio));
                 payOrder.setCourse_name(record.getRecord_course_name());
                 payOrder.setStudent_id(payItem.getFrom_user_id());
                 payOrder.setStudent_name(payItem.getFrom_user_name());
@@ -644,7 +649,7 @@ public class OrderController extends BaseController {
                 payOrder.setType(4);
                 payOrder.setTime((int) (new Date().getTime() / 1000));
                 payOrder.setIn_or_out(0);
-                payOrder.setAmount(Integer.parseInt(request.getParameter("total_amount")));
+                payOrder.setAmount((int) (amount * 100));
                 payOrder.setCourse_name(record.getRecord_course_name());
                 payOrder.setStudent_id(payItem.getFrom_user_id());
                 payOrder.setStudent_name(payItem.getFrom_user_name());
@@ -659,7 +664,7 @@ public class OrderController extends BaseController {
                 payOrder.setType(5);
                 payOrder.setTime((int) (new Date().getTime() / 1000));
                 payOrder.setIn_or_out(1);
-                payOrder.setAmount(Integer.parseInt(request.getParameter("total_amount")));
+                payOrder.setAmount((int) (amount * 100));
                 payOrder.setCourse_name(record.getRecord_course_name());
                 payOrder.setTeacher_id(payItem.getTo_user_id());
                 payOrder.setTeacher_name(payItem.getTo_user_name());
@@ -675,7 +680,7 @@ public class OrderController extends BaseController {
                     if (userInfo != null) {
                         TlsSigTest.createGroup(String.valueOf(userInfo.getIm_id()), "录播课群： " + record.getRecord_course_id(), String.valueOf(currentCount), record.getRecord_course_pic());
                         TlsSigTest.addGroupPerson(String.valueOf(currentCount), String.valueOf(String.valueOf(userInfo.getIm_id())));
-                        UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
+                        UserInfo userInfo1 = iUser.getUser(payItem.getFrom_user_id());
                         TlsSigTest.addGroupPerson(String.valueOf(currentCount), String.valueOf(String.valueOf(userInfo1.getIm_id())));
                         iRecord.setGroupId(currentCount, record.getRecord_course_id());
                         TlsSigTest.sendGroupMsg(String.valueOf(currentCount), "欢迎新同学：" + userInfo1.getName(), userInfo.getIm_id());
@@ -683,26 +688,20 @@ public class OrderController extends BaseController {
 
                 } else { //加入群
                     if (userInfo != null) {
-                        UserInfo userInfo1 = iUser.getUser(getCurrentUserId());
+                        UserInfo userInfo1 = iUser.getUser(payItem.getFrom_user_id());
                         TlsSigTest.addGroupPerson(String.valueOf(record.getGroup_id()), String.valueOf(String.valueOf(userInfo1.getIm_id())));
                         TlsSigTest.sendGroupMsg(String.valueOf(record.getGroup_id()), "欢迎新同学：" + userInfo1.getName(), userInfo.getIm_id());
                     }
                 }
                 UserRecordCourse userRecordCourse = new UserRecordCourse();
-                userRecordCourse.setUser_id(getCurrentUserId());
+                userRecordCourse.setUser_id(payItem.getFrom_user_id());
                 userRecordCourse.setUser_record_course_id(Integer.parseInt(order_id));
                 userRecordCourse.setCreate_time((int) (new Date().getTime() / 1000));
                 iRecord.insertRecordCourse(userRecordCourse);
-                String total_mount = request.getParameter("total_amount");
-                int current_time = (int) (new Date().getTime() / 1000);
 
-                List<UserAmount> list = iUser.getUserAmount(userRecordCourse.getUser_id());
-                if (list.size() == 0) {
-                    iUser.InsertUserAmount(userRecordCourse.getUser_id(), Integer.parseInt(total_mount), current_time, current_time);
-                } else {
-                    int amount = list.get(0).getAmount() + Integer.parseInt(total_mount);
-                    iUser.updateUserAmount(userRecordCourse.getUser_id(), amount);
-                }
+                //可提现金额
+                iCommonService.changeUserAmount(userRecordCourse.getUser_id(),(int) (amount* 100 * platformCostRatio));
+                iCommonService.changeUserSurplusAmount(userRecordCourse.getUser_id(),(int) (amount* 100 * platformCostRatio));
 
             }
             iLogService.addLog("100001", order_id, "支付完成");
@@ -721,11 +720,13 @@ public class OrderController extends BaseController {
         if (type == null || order_id == null || pay_way == null) {
             return JSONResult.errorMsg("缺少参数");
         }
+        iLogService.addLog(String.valueOf(getCurrentUserId()), "/pay 请求参数", type + " " + order_id + " " + pay_way);
         int from_user_id = getCurrentUserId();
         String from_user_name = iUser.getUser(from_user_id).getName();
         int to_user_id;
         String to_user_name;
 
+        double amount = 0;
         if (type.equals("0")) { //课堂
             OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), getCurrentUserId());
             if (orderInfo == null) {
@@ -745,6 +746,7 @@ public class OrderController extends BaseController {
             if (userInfo == null) {
                 return JSONResult.errorMsg("被支付人已注销");
             }
+            amount = orderInfo.getAll_charge();
             to_user_name = userInfo.getName();
 
             if (orderInfo.getType() == 1) {
@@ -803,6 +805,7 @@ public class OrderController extends BaseController {
             if (lists.size() > 0) {
                 return JSONResult.errorMsg("此录播课已经购买过");
             }
+            amount = record.getPrice();
         }
 
         PayItem payItem = new PayItem();
@@ -812,7 +815,13 @@ public class OrderController extends BaseController {
         payItem.setFrom_user_name(from_user_name);
         payItem.setTo_user_id(to_user_id);
         payItem.setTo_user_name(to_user_name);
-        String retTest = payOrder(new Gson().toJson(payItem), "App支付测试", order_id, "0.01");
+
+        iLogService.addLog(String.valueOf(getCurrentUserId()), "/pay 支付参数", new Gson().toJson(payItem));
+        iLogService.addLog(String.valueOf(getCurrentUserId()), "/pay 订单", order_id);
+
+        String strAmount = String.valueOf(amount / 100);
+
+        String retTest = payOrder(new Gson().toJson(payItem), "App支付测试", order_id, strAmount);
         PayRet ret = new PayRet();
         ret.setToken(retTest);
         ret.setPrice(1);
