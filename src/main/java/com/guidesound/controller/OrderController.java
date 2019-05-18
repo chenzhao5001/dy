@@ -385,7 +385,7 @@ public class OrderController extends BaseController {
             iOrder.addPayInfo(strRet, (int) (new Date().getTime() / 1000));
 
             String body = request.getParameter("body");
-//            String body ="{\"type\":\"0\",\"order_id\":\"145\",\"from_user_id\":545,\"from_user_name\":\"卓月\",\"to_user_id\":411,\"to_user_name\":\"就瞅你！hahaha\"}";
+//            String body ="{\"type\":\"0\",\"order_id\":\"144\",\"from_user_id\":545,\"from_user_name\":\"卓月\",\"to_user_id\":411,\"to_user_name\":\"就瞅你！hahaha\"}";
 
             PayItem payItem = new Gson().fromJson(body, PayItem.class);
             String type = payItem.getType();
@@ -393,6 +393,7 @@ public class OrderController extends BaseController {
             iLogService.addLog("100001", "/pay_callback 预处理完成", new Gson().toJson(payItem));
 
             double amount = Double.valueOf(request.getParameter("total_amount")) * 100;
+
 
             if (type.equals("0")) { //课堂
                 OrderInfo orderInfo = iOrder.getUserByOrderIdAndUserId(Integer.parseInt(order_id), payItem.getFrom_user_id());
@@ -1037,19 +1038,23 @@ public class OrderController extends BaseController {
 
 
 
-        iOrder.setRefundAmount(Integer.parseInt(order_id), leaveMoney, (int) (new Date().getTime() / 1000));
-        iOrder.setOrderStatus(Integer.parseInt(order_id), 2);
-
         PayOrder payOrder = new PayOrder();
+        payOrder.setUser_id(getCurrentUserId());
         payOrder.setType(1);
         payOrder.setTime((int) (new Date().getTime() / 1000));
         payOrder.setIn_or_out(1);
-        payOrder.setAmount(Integer.parseInt(refund_amount));
+        payOrder.setAmount(Integer.parseInt(refund_amount) * 100);
         payOrder.setCourse_name(order.getCourse_name());
         payOrder.setOrder_id(Integer.parseInt(order_id));
         payOrder.setCreate_time((int) (new Date().getTime() / 1000));
         payOrder.setUpdate_time((int) (new Date().getTime() / 1000));
+        iLogService.addLog(String.valueOf(getCurrentUserId()),"/refund_amount 退费", new Gson().toJson(payOrder));
         iOrder.insertPayOrder(payOrder);
+
+        iCommonService.changeUserSurplusAmount(getCurrentUserId(),- Integer.parseInt(refund_amount) * 100);
+
+        iOrder.setRefundAmount(Integer.parseInt(order_id), leaveMoney, (int) (new Date().getTime() / 1000));
+        iOrder.setOrderStatus(Integer.parseInt(order_id), 2);
 
         return JSONResult.ok();
     }
