@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.guidesound.Service.ICommonService;
 import com.guidesound.TempStruct.*;
 import com.guidesound.dao.*;
@@ -420,6 +421,8 @@ public class ClassRoomController extends BaseController {
     @RequestMapping("/enter_class_room")
     @ResponseBody
     JSONResult enterClassRoom(String class_id) throws IOException {
+
+        log.info("/enter_class_room enter  user_id = {} ,class_id = {}",getCurrentUserId(),class_id);
         if (class_id == null) {
             return JSONResult.errorMsg("缺少 class_id 参数");
         }
@@ -662,13 +665,15 @@ public class ClassRoomController extends BaseController {
 
         iOrder.setClassTimeStatus(Integer.parseInt(class_id), getCurrentUserId(), begin_time_wirte, 1);
         ret.setRoom_number(classRoom.getRoom_number());
+        log.info("/enter_class_room leave ret = {}",new Gson().toJson(ret));
         return JSONResult.ok(ret);
     }
 
     @RequestMapping("/leave_class_room")
     @ResponseBody
     JSONResult leaveClassRoom(String class_id) {
-        log.info("退出房间：user_id{},class_id",getCurrentUserId(),class_id);
+
+        log.info("/leave_class_room  enter user_id = {},class_id = {}",getCurrentUserId(),class_id);
         if (class_id == null) {
             return JSONResult.errorMsg("缺少 class_id 参数");
         }
@@ -683,7 +688,7 @@ public class ClassRoomController extends BaseController {
                 iOrder.reduceTestClassPerson(Integer.parseInt(class_id));
             }
         }
-
+        log.info("/leave_class_room");
         return JSONResult.ok();
     }
 
