@@ -21,4 +21,6 @@ public class AlipayConfig {
     public static String log_path = "/log";
     // RSA2
     public static String SIGNTYPE = "RSA2";
+
+
 }
