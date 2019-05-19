@@ -5,30 +5,78 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.guidesound.Service.ILogService;
 import com.guidesound.TempStruct.InfoMsg;
-import com.guidesound.TempStruct.RecordVideo;
-import com.guidesound.dao.*;
-import com.guidesound.dao.UserCommodity;
-import com.guidesound.models.*;
-import com.guidesound.ret.*;
-import com.guidesound.util.*;
 import com.guidesound.TempStruct.ItemInfo;
+import com.guidesound.TempStruct.RecordVideo;
+import com.guidesound.dao.IArticle;
+import com.guidesound.dao.IExamine;
+import com.guidesound.dao.IInUser;
+import com.guidesound.dao.IOrder;
+import com.guidesound.dao.IRecord;
+import com.guidesound.dao.IUser;
+import com.guidesound.dao.IVideo;
+import com.guidesound.dao.UserCommodity;
+import com.guidesound.models.ArticleAnswer;
+import com.guidesound.models.ArticleInfo;
+import com.guidesound.models.ArticlePool;
+import com.guidesound.models.ArticleVerify;
+import com.guidesound.models.ClassRoom;
+import com.guidesound.models.CommodityExamine;
+import com.guidesound.models.Course;
+import com.guidesound.models.CourseExamine;
+import com.guidesound.models.InUser;
+import com.guidesound.models.Record;
+import com.guidesound.models.RecordExamine;
+import com.guidesound.models.Teacher;
+import com.guidesound.models.TestRecordCourse;
+import com.guidesound.models.UserExamine;
+import com.guidesound.models.UserInfo;
+import com.guidesound.models.UserShop;
+import com.guidesound.models.Video;
+import com.guidesound.models.VideoInfo;
+import com.guidesound.models.VideoPool;
+import com.guidesound.models.VideoShow;
+import com.guidesound.models.VideoUser;
+import com.guidesound.models.VideoVerify;
+import com.guidesound.ret.Authentication;
+import com.guidesound.ret.UserAudit;
+import com.guidesound.ret.WonderfulPart;
+import com.guidesound.util.JSONResult;
+import com.guidesound.util.SignMap;
+import com.guidesound.util.TlsSigTest;
+import com.guidesound.util.TockenUtil;
+import com.guidesound.util.ToolsFunction;
+import com.guidesound.util.VerifyCodeUtils;
+import com.guidesound.util.VideoExamine;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.jms.*;
-import javax.servlet.http.Cookie;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.*;
-import java.net.URLDecoder;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
@@ -158,6 +206,19 @@ public class ManagerController extends BaseController {
         return JSONResult.ok(new ArrayList<>());
     }
 
+    private Triple<Connection , Session , MessageProducer> buildMQMembers() throws JMSException {
+        MessageProducer messageProducer = null;
+        Session session = null;
+
+        String mqUrl = "tcp://139.199.112.147:61616";
+        String qName = "examine";
+        ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(mqUrl);
+        Connection connection = connectionFactory.createConnection();
+        connection.start();
+        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        Destination destination = session.createQueue(qName);
+        return Triple.of(connection , session , messageProducer);
+    }
     @RequestMapping(value = "/examine_video")
     @ResponseBody
     JSONResult examineVideo(String video_id, String status, String type_list, String fail_reason, String fail_content) throws IOException, InterruptedException, JMSException {
@@ -197,30 +258,20 @@ public class ManagerController extends BaseController {
                 return JSONResult.errorMsg("缺少type_list");
             }
 
-            MessageProducer messageProducer = null;
-            Session session = null;
 
-            String mqUrl = "tcp://139.199.112.147:61616";
-            String qName = "examine";
-            ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(mqUrl);
             try {
-                Connection connection = connectionFactory.createConnection();
-                connection.start();
-                session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-                Destination destination = session.createQueue(qName);
-                messageProducer = session.createProducer(destination);
-
-                if (messageProducer != null && session != null && video != null && video.getVideo_show_path().equals("")) {
-                    TextMessage textMessage = session.createTextMessage(String.valueOf(video_id));
-                    messageProducer.send(textMessage);
+                Triple<Connection , Session , MessageProducer> mqMembers = buildMQMembers();
+                if (video.getVideo_show_path().equals("")) {
+                    TextMessage textMessage = mqMembers.getMiddle().createTextMessage(String.valueOf(video_id));
+                    mqMembers.getRight().send(textMessage);
                     iVideo.setExamineLoading(Integer.parseInt(video_id), type_list);
                 } else {
                     iVideo.setVideoPoolTypeList(Integer.parseInt(video_id), type_list);
                 }
-                connection.close();
+                mqMembers.getLeft().close();
 
                 UserInfo userInfo = iUser.getUser(video.getUser_id());
-                if (status.equals("1") && send_flag == true) {
+                if (status.equals("1") && send_flag) {
                     if (type_list.contains("1")) {
                         if (userInfo != null) {
                             TlsSigTest.SendMessage(userInfo.getIm_id(), "您发布的短视频“" + ToolsFunction.URLDecoderString(video.getTitle()) + "”已经通过系统审核，由于视频质量很高，已被系统推荐。", "");
@@ -266,7 +317,7 @@ public class ManagerController extends BaseController {
             iVideo.setExamineFail(Integer.parseInt(video_id), fail_reason, fail_content);
             video = iVideo.getVideoById(video_id);
             UserInfo userInfo = iUser.getUser(video.getUser_id());
-            if (userInfo != null && send_flag == true) {
+            if (userInfo != null && send_flag) {
                 Map<Integer, String> reason = VideoExamine.getReason();
                 if (reason.containsKey(Integer.parseInt(fail_reason))) {
                     TlsSigTest.SendMessage(userInfo.getIm_id(), "您发布的短视频“" + ToolsFunction.URLDecoderString(video.getTitle()) + "”未通过系统审核，未通过原因是" + reason.get(Integer.parseInt(fail_reason)), "");
@@ -1111,14 +1162,30 @@ public class ManagerController extends BaseController {
             if (Integer.parseInt(result) == 0) {
                 TlsSigTest.SendMessage(uid, "您发布的录播课“" + record.getRecord_course_name() + "”已经通过系统审核，快努力发高质量的视频展示您自己吧！", "");
                 iRecord.setRecordCourseStatue(Integer.parseInt(item_id), 3);
-                String videos = (String) record.getVideos();
+                Connection connection = null;
+                try {
+                    Triple<Connection , Session , MessageProducer> mqMembers = buildMQMembers();
+                    TextMessage textMessage = mqMembers.getMiddle().createTextMessage("recordCourseId:"+item_id);
+                    mqMembers.getRight().send(textMessage);
+                    connection = mqMembers.getLeft();
+                } catch (Exception e) {
+                    log.error(e);
+                }finally {
+                    if(connection != null){
+                        try {
+                            connection.close();
+                        }catch (Exception e){
+                            log.error(e);
+                        }
+                    }
+                }
+
                 ObjectMapper mapper_temp = new ObjectMapper();
                 List<RecordVideo> recordVideoList = null;
                 try {
                     JavaType javaType = getCollectionType(ArrayList.class, RecordVideo.class);
                     recordVideoList = mapper_temp.readValue((String) record.getVideos(), javaType);
                     for (RecordVideo recordVideo : recordVideoList) {
-
                         try {
                             if (recordVideo.getWonderful_part() != null) {
                                 WonderfulPart wonderfulPart = recordVideo.getWonderful_part();
