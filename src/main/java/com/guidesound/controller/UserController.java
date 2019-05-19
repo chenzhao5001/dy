@@ -18,6 +18,7 @@ import com.guidesound.dao.*;
 import com.guidesound.dao.UserCommodity;
 import com.guidesound.models.*;
 import com.guidesound.resp.ListResp;
+import com.guidesound.ret.AlipayInfo;
 import com.guidesound.util.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1706,9 +1707,11 @@ public class UserController extends BaseController{
     @RequestMapping("/alipay_config")
     @ResponseBody
     JSONResult alipayConfig() {
-
-
-        return JSONResult.ok();
+        AlipayInfo alipayInfo = new AlipayInfo();
+        alipayInfo.setAppId(AlipayConfig.APPID);
+        alipayInfo.setpId(AlipayConfig.PID);
+        alipayInfo.setPayRatio("0.994");
+        return JSONResult.ok(alipayInfo);
 
     }
 

@@ -22,5 +22,8 @@ public class AlipayConfig {
     // RSA2
     public static String SIGNTYPE = "RSA2";
 
+    // PID
+    public static String PID = "2088331904892058";
+
 
 }
