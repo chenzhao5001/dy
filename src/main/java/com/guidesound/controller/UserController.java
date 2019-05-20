@@ -8,6 +8,7 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayFundTransToaccountTransferRequest;
 import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -1658,7 +1659,14 @@ public class UserController extends BaseController{
 
     @RequestMapping("/cash_out")
     @ResponseBody
-    JSONResult cashOut() throws AlipayApiException {
+    JSONResult cashOut(String auth_code,String scope,String alipay_open_id,String  user_id) throws AlipayApiException {
+
+        if(auth_code == null || scope == null || alipay_open_id == null || user_id == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        if(true)
+            return JSONResult.ok("待实现");
         String PAYEE_TYPE = "ALIPAY_LOGONID";//支付宝登录号，支持邮箱和手机号格式。
         //  private String PAYEE_TYPE = "ALIPAY_USERID";//支付宝账号对应的支付宝唯一用户号。以2088开头的16位纯数字组成
 
@@ -1706,11 +1714,18 @@ public class UserController extends BaseController{
 
     @RequestMapping("/alipay_config")
     @ResponseBody
-    JSONResult alipayConfig() {
+    JSONResult alipayConfig() throws AlipayApiException {
+//        String AlipaySignature.rsaSign(Map<String, String> params, String privateKey, String charset)
+        Map<String, String> params = new HashMap<>();
+        params.put("sign_type",AlipayConfig.SIGNTYPE);
+        String sign = AlipaySignature.rsaSign(params,AlipayConfig.RSA_PRIVATE_KEY,AlipayConfig.CHARSET);
+
         AlipayInfo alipayInfo = new AlipayInfo();
         alipayInfo.setAppId(AlipayConfig.APPID);
         alipayInfo.setpId(AlipayConfig.PID);
         alipayInfo.setPayRatio("0.994");
+        alipayInfo.setSign(sign);
+        alipayInfo.setSign_type(AlipayConfig.SIGNTYPE);
         return JSONResult.ok(alipayInfo);
 
     }
