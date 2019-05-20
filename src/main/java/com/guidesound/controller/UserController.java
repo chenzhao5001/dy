@@ -1,13 +1,25 @@
 package com.guidesound.controller;
 
 
+import com.alipay.Alipay;
+import com.alipay.AlipayConfig;
+import com.alipay.Result;
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayFundTransToaccountTransferRequest;
+import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.dao.*;
 import com.guidesound.dao.UserCommodity;
 import com.guidesound.models.*;
 import com.guidesound.resp.ListResp;
+import com.guidesound.ret.AlipayInfo;
 import com.guidesound.util.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
+import static com.alipay.AlipayConfig.ALIPAY_PUBLIC_KEY;
 
 
 /**
@@ -1641,6 +1654,79 @@ public class UserController extends BaseController{
             }
         }
         return JSONResult.ok();
+    }
+
+
+    @RequestMapping("/cash_out")
+    @ResponseBody
+    JSONResult cashOut(String auth_code,String scope,String alipay_open_id,String  user_id) throws AlipayApiException {
+
+        if(auth_code == null || scope == null || alipay_open_id == null || user_id == null) {
+            return JSONResult.errorMsg("缺少参数");
+        }
+
+        if(true)
+            return JSONResult.ok("待实现");
+        String PAYEE_TYPE = "ALIPAY_LOGONID";//支付宝登录号，支持邮箱和手机号格式。
+        //  private String PAYEE_TYPE = "ALIPAY_USERID";//支付宝账号对应的支付宝唯一用户号。以2088开头的16位纯数字组成
+
+        //实例化客户端（参数：网关地址、商户appid、商户私钥、格式、编码、支付宝公钥、加密类型），为了取得预付订单信息
+        AlipayClient alipayClient = new DefaultAlipayClient(AlipayConfig.URL, AlipayConfig.APPID,
+                AlipayConfig.RSA_PRIVATE_KEY, AlipayConfig.FORMAT, AlipayConfig.CHARSET,
+                AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.SIGNTYPE);
+
+        AlipayFundTransToaccountTransferRequest request = new AlipayFundTransToaccountTransferRequest();
+
+        Alipay alipay = new Alipay();
+        alipay.setOut_biz_no(String.valueOf(new Date().getTime()));
+        alipay.setPayee_type(PAYEE_TYPE);
+        alipay.setAmount("0.1");
+        alipay.setPayer_show_name("测试名称");
+        alipay.setPayee_account("15210896938");
+        alipay.setPayee_real_name("陈朝");
+        alipay.setRemark("萌点用户提现");
+        //转成json格式放入
+        String json = new Gson().toJson(alipay);
+        request.setBizContent(json);
+        AlipayFundTransToaccountTransferResponse response=null;
+        Map<String, Object> map = new HashMap<String,Object>();
+        try{
+            response = alipayClient.execute(request);
+            if("10000".equals(response.getCode())){
+                map.put("code", response.getCode());
+                map.put("success", "true");
+                map.put("des", "转账成功");
+            }else{
+                map.put("code", response.getCode());
+                map.put("sub_code", response.getSubCode());//详情状态码
+                map.put("success", "false");
+                map.put("sub_msg", response.getSubMsg());//详情原因
+                return JSONResult.errorMsg(response.getSubMsg());
+            }
+        }catch(AlipayApiException e){
+            e.printStackTrace();
+            map.put("success", "false");
+            map.put("des", "转账失败！");
+            return JSONResult.errorMsg("转账失败");
+        }
+        return JSONResult.ok("转账成功");
+    }
+
+    @RequestMapping("/alipay_config")
+    @ResponseBody
+    JSONResult alipayConfig() throws AlipayApiException {
+//        String AlipaySignature.rsaSign(Map<String, String> params, String privateKey, String charset)
+        Map<String, String> params = new HashMap<>();
+        params.put("sign_type",AlipayConfig.SIGNTYPE);
+        String sign = AlipaySignature.rsaSign(params,AlipayConfig.RSA_PRIVATE_KEY,AlipayConfig.CHARSET);
+
+        AlipayInfo alipayInfo = new AlipayInfo();
+        alipayInfo.setAppId(AlipayConfig.APPID);
+        alipayInfo.setpId(AlipayConfig.PID);
+        alipayInfo.setPayRatio("0.994");
+        alipayInfo.setSign(sign);
+        alipayInfo.setSign_type(AlipayConfig.SIGNTYPE);
+        return JSONResult.ok(alipayInfo);
 
     }
 

@@ -1154,7 +1154,7 @@ public class ManagerController extends BaseController {
         } else if (type.equals("9")) {
             Record record = iRecord.get(Integer.parseInt(item_id));
             if (record == null) {
-                return JSONResult.errorMsg("辅导课不存在");
+                return JSONResult.errorMsg("录播课不存在");
             }
             if (record.getRecord_course_status() != 1) {
                 return JSONResult.errorMsg("此状态无法审核");
