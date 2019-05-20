@@ -217,6 +217,7 @@ public class ManagerController extends BaseController {
         connection.start();
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Destination destination = session.createQueue(qName);
+        messageProducer = session.createProducer(destination);
         return Triple.of(connection , session , messageProducer);
     }
     @RequestMapping(value = "/examine_video")
@@ -1006,6 +1007,7 @@ public class ManagerController extends BaseController {
     @RequestMapping(value = "/examine_common")
     @ResponseBody
     public JSONResult videoExamineCommon(String type, String uid, String item_id, String result, String failure_id, String failure_content) throws IOException {
+        log.error("11111" + type);
         if (type.equals("0")) { //头像
             List<UserExamine> userExamine = iExamine.getUserExamineByInfo(Integer.parseInt(uid), Integer.parseInt(type));
             if (userExamine.size() > 0) {
@@ -1159,6 +1161,7 @@ public class ManagerController extends BaseController {
             if (record.getRecord_course_status() != 1) {
                 return JSONResult.errorMsg("此状态无法审核");
             }
+            log.error("222222::" +result);
             if (Integer.parseInt(result) == 0) {
                 TlsSigTest.SendMessage(uid, "您发布的录播课“" + record.getRecord_course_name() + "”已经通过系统审核，快努力发高质量的视频展示您自己吧！", "");
                 iRecord.setRecordCourseStatue(Integer.parseInt(item_id), 3);
@@ -1167,6 +1170,7 @@ public class ManagerController extends BaseController {
                     Triple<Connection , Session , MessageProducer> mqMembers = buildMQMembers();
                     TextMessage textMessage = mqMembers.getMiddle().createTextMessage("recordCourseId:"+item_id);
                     mqMembers.getRight().send(textMessage);
+                    log.error("======================================" + textMessage.getText());
                     connection = mqMembers.getLeft();
                 } catch (Exception e) {
                     log.error(e);
