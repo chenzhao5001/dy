@@ -1164,7 +1164,7 @@ public class ManagerController extends BaseController {
             log.error("222222::" +result);
             if (Integer.parseInt(result) == 0) {
                 TlsSigTest.SendMessage(uid, "您发布的录播课“" + record.getRecord_course_name() + "”已经通过系统审核，快努力发高质量的视频展示您自己吧！", "");
-                iRecord.setRecordCourseStatue(Integer.parseInt(item_id), 3);
+                iRecord.setRecordCourseStatue(Integer.parseInt(item_id), 4);
                 Connection connection = null;
                 try {
                     Triple<Connection , Session , MessageProducer> mqMembers = buildMQMembers();
