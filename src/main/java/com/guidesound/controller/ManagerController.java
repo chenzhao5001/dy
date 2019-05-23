@@ -1007,14 +1007,16 @@ public class ManagerController extends BaseController {
     @RequestMapping(value = "/examine_common")
     @ResponseBody
     public JSONResult videoExamineCommon(String type, String uid, String item_id, String result, String failure_id, String failure_content) throws IOException {
-        log.error("11111" + type);
+        UserInfo userInfo = iUser.getUserInfo(uid);
         if (type.equals("0")) { //头像
             List<UserExamine> userExamine = iExamine.getUserExamineByInfo(Integer.parseInt(uid), Integer.parseInt(type));
             if (userExamine.size() > 0) {
                 String head = userExamine.get(0).getText();
                 if (Integer.parseInt(result) == 0) {
                     TlsSigTest.SendMessage(uid, "您修改的新头像已经通过系统审核。", "");
-                    TlsSigTest.PushMessage(uid, "15");
+//                    TlsSigTest.PushMessage(uid, "15");
+                    TlsSigTest.setUserHeadAndName(userInfo.getIm_id(),head,"");
+                    TlsSigTest.setUserHeadAndName(userInfo.getIm_id_2(),head,"");
                     iUser.updateHead(Integer.parseInt(uid), head);
                 } else {
                     TlsSigTest.SendMessage(uid, "您修改的新头像未通过系统审核，未通过原因是" + failure_content + "”。", "");
@@ -1030,7 +1032,9 @@ public class ManagerController extends BaseController {
                 if (Integer.parseInt(result) == 0) {
                     iUser.updateName(Integer.parseInt(uid), name);
                     TlsSigTest.SendMessage(uid, "您修改的新昵称：“" + name + "”已经通过系统审核。", "");
-                    TlsSigTest.PushMessage(uid, "15");
+//                    TlsSigTest.PushMessage(uid, "15");
+                    TlsSigTest.setUserHeadAndName(userInfo.getIm_id(),"",name);
+                    TlsSigTest.setUserHeadAndName(userInfo.getIm_id_2(),"",name);
                 } else {
                     TlsSigTest.SendMessage(uid, "您修改的新头像未通过系统审核，未通过原因是" + failure_content + "”。", "");
                 }
@@ -1057,7 +1061,7 @@ public class ManagerController extends BaseController {
                 if (Integer.parseInt(result) == 0) {
                     iUser.updateAuthState(Integer.parseInt(uid), 1);
                     iUser.addVideoDuration(Integer.parseInt(uid), 60);
-                    UserInfo userInfo = iUser.getUser(Integer.parseInt(uid));
+//                    UserInfo userInfo = iUser.getUser(Integer.parseInt(uid));
                     int duration = userInfo.getVideo_duration() / 60;
                     TlsSigTest.SendMessage(uid, "您申请的认证“认证信息”已经通过系统审核，除真实身份体现外，同时您已经可以上传“" + duration + "”分钟的短视频了。", "");
                 } else {

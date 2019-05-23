@@ -196,6 +196,8 @@ public class UserController extends BaseController{
             user.setIm_id(im_id);
             user.setIm_sig(im_sig);
 
+            TlsSigTest.setUserHeadAndName(im_id,head,name);
+
             String info = TlsSigTest.SendMessageByUser(im_id,"403","欢迎您成为导音用户，有任何问题随时咨询我！");
             log.info("发送注册消息1 info = {}",info);
         } else if(userList.isEmpty() && !userList_2.isEmpty() ){
@@ -236,6 +238,7 @@ public class UserController extends BaseController{
             iUser.setIm2Info(user.getId(),im_id2,im_sig_2);
             user.setIm_id_2(im_id2);
             user.setIm_sig_2(im_sig_2);
+            TlsSigTest.setUserHeadAndName(im_id2,head,name);
         }
         return JSONResult.ok(user);
     }
@@ -869,7 +872,7 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value = "/update_head")
     @ResponseBody
-    JSONResult upHead(String head_url) {
+    JSONResult upHead(String head_url) throws IOException {
         if(head_url == null) {
             return JSONResult.errorMsg("缺少参数head_url");
         }
@@ -1727,9 +1730,29 @@ public class UserController extends BaseController{
         alipayInfo.setSign(sign);
         alipayInfo.setSign_type(AlipayConfig.SIGNTYPE);
         return JSONResult.ok(alipayInfo);
-
     }
 
+    @RequestMapping("/update_old_head_and_name")
+    @ResponseBody
+    JSONResult updateOldHeadAndName() throws IOException, InterruptedException {
+        List<String> r = new ArrayList<>();
+        List<UserInfo> lists = iUser.getAllUser();
+        for(UserInfo info : lists) {
+            String name = info.getName();
+            String head = info.getHead();
+            if(!info.getIm_id().equals("")) {
+                String ret = TlsSigTest.setUserHeadAndName(info.getIm_id(),head,name);
+                Thread.sleep(15);
+                r.add(ret);
+            }
+            if(!info.getIm_id_2().equals("")) {
+                String ret = TlsSigTest.setUserHeadAndName(info.getIm_id_2(),head,name);
+                r.add(ret);
+                Thread.sleep(15);
+            }
+        }
+        return JSONResult.ok(r);
+    }
 
 
 }

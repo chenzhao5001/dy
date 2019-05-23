@@ -2,9 +2,8 @@ package com.guidesound.util;
 
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
-import com.guidesound.TempStruct.ImGroupMsg;
-import com.guidesound.TempStruct.ImGroupMsgInfo;
-import com.guidesound.TempStruct.ImGroupMsgMsgContent;
+import com.google.gson.GsonBuilder;
+import com.guidesound.TempStruct.*;
 import okhttp3.*;
 import org.json.JSONObject;
 import org.junit.Assert;
@@ -160,6 +159,61 @@ public class TlsSigTest {
             return ret.toString();
         }
         return "";
+    }
+
+    public static String setUserHeadAndName(String im_id,String head,String name) throws IOException {
+
+        String rand = ToolsFunction.getNumRandomString(10);
+        String controlUrl = "https://console.tim.qq.com/v4/profile/portrait_set?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + rand + "&contenttype=json";
+
+        ProfileInfo info = new ProfileInfo();
+        info.setFrom_Account(im_id);
+
+        List<ProfileItem> profileItems = new ArrayList<>();
+        if(head != null && !head.equals("")) {
+            ProfileItem profileItem = new ProfileItem();
+            profileItem.setTag("Tag_Profile_IM_Image");
+            profileItem.setValue(head);
+
+            profileItems.add(profileItem);
+            String temp = new Gson().toJson(profileItem);
+            System.out.println(temp);
+
+            profileItems.add(profileItem);
+        }
+
+        if(name != null && !name.equals("")) {
+            ProfileItem profileItem = new ProfileItem();
+            profileItem.setTag("Tag_Profile_IM_Nick");
+            profileItem.setValue(name);
+
+            profileItems.add(profileItem);
+            String temp = new Gson().toJson(profileItem);
+            System.out.println(temp);
+        }
+
+        info.setProfileItem(profileItems);
+        Gson gson = new GsonBuilder()
+                .serializeNulls()
+                .create();
+
+        String sendInfo = gson.toJson(info);
+
+
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, sendInfo);
+        Request req = new Request.Builder()
+                .url(controlUrl)
+                .post(body)
+                .build();
+        Response resp;
+        OkHttpClient client_temp = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+        resp = client_temp.newCall(req).execute();
+        String jsonString = resp.body().string();
+        return jsonString;
     }
 
     public static String SendMessageByUser(String to_im_id, String from_im_id,String info) throws IOException {
