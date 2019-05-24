@@ -1068,7 +1068,7 @@ public class OrderController extends BaseController {
         iLogService.addLog(String.valueOf(getCurrentUserId()),"/refund_amount 退费", new Gson().toJson(payOrder));
         iOrder.insertPayOrder(payOrder);
 
-        iCommonService.changeUserSurplusAmount(getCurrentUserId(),- Integer.parseInt(refund_amount) * 100);
+        iCommonService.changeUserAmount(getCurrentUserId(), (int) (Integer.parseInt(refund_amount) * 100*platformCostRatio));
 
         iOrder.setRefundAmount(Integer.parseInt(order_id), leaveMoney, (int) (new Date().getTime() / 1000));
         iOrder.setOrderStatus(Integer.parseInt(order_id), 2);

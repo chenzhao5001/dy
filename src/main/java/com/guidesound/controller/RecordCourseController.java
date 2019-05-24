@@ -1,7 +1,9 @@
 package com.guidesound.controller;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.TempStruct.ClassTime;
@@ -12,11 +14,9 @@ import com.guidesound.dao.IExamine;
 import com.guidesound.dao.IRecord;
 import com.guidesound.dao.IUser;
 import com.guidesound.dto.RecordDTO;
-import com.guidesound.models.CourseExamine;
-import com.guidesound.models.Record;
-import com.guidesound.models.UserInfo;
-import com.guidesound.models.UserRecordCourse;
+import com.guidesound.models.*;
 import com.guidesound.ret.RecordItem;
+import com.guidesound.ret.WonderfulPart;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.SignMap;
 import com.guidesound.util.ToolsFunction;
@@ -80,7 +80,7 @@ public class RecordCourseController extends BaseController {
 
     @RequestMapping("/list")
     @ResponseBody
-    JSONResult list(String who,String user_id) {
+    JSONResult list(String who, String user_id) {
         if (who == null || user_id == null) {
             return JSONResult.errorMsg("缺少 who 或 user_id 参数");
         }
@@ -116,21 +116,21 @@ public class RecordCourseController extends BaseController {
 
         record.setRecord_owner_id(record.getUser_id());
         UserInfo userInfo = iUser.getUser(record.getUser_id());
-        if(userInfo != null) {
+        if (userInfo != null) {
             record.setRecord_owner_name(userInfo.getName());
             record.setRecord_owner_head(userInfo.getHead());
         }
 
-        record.setGrade_id((Integer)record.getGrade());
+        record.setGrade_id((Integer) record.getGrade());
         record.setGrade(SignMap.getGradeTypeByID(record.getGrade_id()));
-        record.setSubject_id((Integer)record.getSubject());
+        record.setSubject_id((Integer) record.getSubject());
         record.setSubject(SignMap.getSubjectTypeById(record.getSubject_id()));
 
         int count = iRecord.getUserRecordCountByCourseId(record.getRecord_course_id());
         record.setStudent_count(count);
 
-        List<UserRecordCourse> lists_temp = iRecord.getUserRecordByUserIdAndCourseId(getCurrentUserId(),record.getRecord_course_id());
-        if(lists_temp.size() == 0) {
+        List<UserRecordCourse> lists_temp = iRecord.getUserRecordByUserIdAndCourseId(getCurrentUserId(), record.getRecord_course_id());
+        if (lists_temp.size() == 0) {
             record.setIs_pay(false);
         } else {
             record.setIs_pay(true);
@@ -161,7 +161,7 @@ public class RecordCourseController extends BaseController {
         List<UserRecordCourse> userRecords = iRecord.getUserRecordByCourseId(Integer.parseInt(record_course_id));
         List<Integer> user_ids = new ArrayList<>();
         user_ids.add(record.getUser_id());
-        for(UserRecordCourse userRecordCourse : userRecords) {
+        for (UserRecordCourse userRecordCourse : userRecords) {
             user_ids.add(userRecordCourse.getUser_id());
         }
         try {
@@ -169,9 +169,9 @@ public class RecordCourseController extends BaseController {
             System.out.println(temp);
             JavaType javaType = getCollectionType(ArrayList.class, RecordVideo.class);
             recordVideoList = mapper_temp.readValue((String) record.getVideos(), javaType);
-            for(RecordVideo recordVideo : recordVideoList) {
+            for (RecordVideo recordVideo : recordVideoList) {
                 String cdnClassUrl = recordVideo.getClass_url().replace("cos.ap-beijing", "file");
-                if(!user_ids.contains(getCurrentUserId()) && recordVideo.getCharge_type() == 1) {
+                if (!user_ids.contains(getCurrentUserId()) && recordVideo.getCharge_type() == 1) {
                     recordVideo.setClass_url("");
                 } else {
                     recordVideo.setClass_url(cdnClassUrl);
@@ -189,4 +189,51 @@ public class RecordCourseController extends BaseController {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
     }
+
+    ///录播课审核成功
+    @RequestMapping("/record_course_finish")
+    @ResponseBody
+    public JSONResult recordCourseFinish(String record_course_id) {
+        iLogService.addLog("转码服务器","record_course_finish",record_course_id);
+        if (record_course_id == null) {
+            return JSONResult.errorMsg("缺少 record_course_id 参数");
+        }
+
+        Record record = iRecord.get(Integer.parseInt(record_course_id));
+
+        ObjectMapper mapper_temp = new ObjectMapper();
+        List<RecordVideo> recordVideoList = null;
+        try {
+            JavaType javaType = getCollectionType(ArrayList.class, RecordVideo.class);
+            recordVideoList = mapper_temp.readValue((String) record.getVideos(), javaType);
+            for (RecordVideo recordVideo : recordVideoList) {
+                try {
+                    if (recordVideo.getWonderful_part() != null) {
+                        WonderfulPart wonderfulPart = recordVideo.getWonderful_part();
+                        TestRecordCourse testRecordCourse = new TestRecordCourse();
+                        testRecordCourse.setUser_id(record.getUser_id());
+                        testRecordCourse.setRecord_course_id(record.getRecord_course_id());
+                        testRecordCourse.setClass_NO(recordVideo.getClass_number());
+                        testRecordCourse.setClass_name(recordVideo.getClass_title());
+                        testRecordCourse.setClass_url(recordVideo.getClass_url());
+                        testRecordCourse.setTime_start(wonderfulPart.getTime_start());
+                        testRecordCourse.setTime_end(wonderfulPart.getTime_end());
+                        testRecordCourse.setPicture(wonderfulPart.getPicture());
+                        iRecord.addTestRecordCourse(testRecordCourse);
+                    }
+                } catch (Exception e) {
+                    System.out.println(1111);
+                }
+            }
+            return JSONResult.ok();
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return JSONResult.ok();
+    }
+
 }

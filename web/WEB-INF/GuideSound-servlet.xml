@@ -84,6 +84,8 @@
             <mvc:exclude-mapping path="/course/teacher_by_id"/>
 
             <mvc:exclude-mapping path="/record/list"/>
+            <mvc:exclude-mapping path="/record/record_course_finish"/>
+
             <mvc:exclude-mapping path="/order/pay_callback"/>
 
 

@@ -1187,35 +1187,6 @@ public class ManagerController extends BaseController {
                         }
                     }
                 }
-
-                ObjectMapper mapper_temp = new ObjectMapper();
-                List<RecordVideo> recordVideoList = null;
-                try {
-                    JavaType javaType = getCollectionType(ArrayList.class, RecordVideo.class);
-                    recordVideoList = mapper_temp.readValue((String) record.getVideos(), javaType);
-                    for (RecordVideo recordVideo : recordVideoList) {
-                        try {
-                            if (recordVideo.getWonderful_part() != null) {
-                                WonderfulPart wonderfulPart = recordVideo.getWonderful_part();
-                                TestRecordCourse testRecordCourse = new TestRecordCourse();
-                                testRecordCourse.setUser_id(record.getUser_id());
-                                testRecordCourse.setRecord_course_id(record.getRecord_course_id());
-                                testRecordCourse.setClass_NO(recordVideo.getClass_number());
-                                testRecordCourse.setClass_name(recordVideo.getClass_title());
-                                testRecordCourse.setClass_url(recordVideo.getClass_url());
-                                testRecordCourse.setTime_start(wonderfulPart.getTime_start());
-                                testRecordCourse.setTime_end(wonderfulPart.getTime_end());
-                                testRecordCourse.setPicture(wonderfulPart.getPicture());
-                                iRecord.addTestRecordCourse(testRecordCourse);
-                            }
-                        } catch (Exception e) {
-                            System.out.println(1111);
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
             } else {
                 TlsSigTest.SendMessage(uid, "您发布的录播课“" + record.getRecord_course_name() + "”没有通过系统审核", "");
                 iRecord.setRecordCourseStatue(Integer.parseInt(item_id), 2);
