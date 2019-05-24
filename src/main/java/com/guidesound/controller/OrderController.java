@@ -827,12 +827,19 @@ public class OrderController extends BaseController {
         payItem.setTo_user_id(to_user_id);
         payItem.setTo_user_name(to_user_name);
 
+        String alipayOrder = "";
+        if(type.equals("0")) {
+            alipayOrder = "a" + order_id;
+        } else {
+            alipayOrder = "b" + order_id;
+        }
+
         iLogService.addLog(String.valueOf(getCurrentUserId()), "/pay 支付参数", new Gson().toJson(payItem));
-        iLogService.addLog(String.valueOf(getCurrentUserId()), "/pay 订单", order_id);
+        iLogService.addLog(String.valueOf(getCurrentUserId()), "/pay 订单", alipayOrder);
 
         String strAmount = String.valueOf(amount / 100);
 
-        String retTest = payOrder(new Gson().toJson(payItem), "App支付测试", order_id, strAmount);
+        String retTest = payOrder(new Gson().toJson(payItem), "App支付测试", alipayOrder, strAmount);
         PayRet ret = new PayRet();
         ret.setToken(retTest);
         ret.setPrice(1);
@@ -1160,7 +1167,7 @@ public class OrderController extends BaseController {
                 videoClassIn.setCourse_name(item.getCourse_name());
 //                String strOrder = ToolsFunction.timeStamp2Date(String.valueOf(item.getCreate_time()),"yyyyMMddHHmmss") + (10000000+ item.getOrder_id());
                 videoClassIn.setOrder_id(String.valueOf(item.getOrder_id()));
-                videoClassIn.setStudent_id(item.getOrder_id());
+                videoClassIn.setStudent_id(item.getStudent_id());
                 videoClassIn.setStudent_name(item.getStudent_name());
                 payInfoRet.setVideo_class_in(videoClassIn);
 
