@@ -1,6 +1,7 @@
 package com.guidesound.controller;
 
 import com.guidesound.dao.IArticle;
+import com.guidesound.dao.IRecord;
 import com.guidesound.dao.IUser;
 import com.guidesound.dao.IVideo;
 import com.guidesound.models.*;
@@ -48,6 +49,8 @@ public class EditController extends BaseController {
     @Autowired
     IUser iUser;
 
+    @Autowired
+    IRecord iRecord;
     @RequestMapping(value = "/upload")
     @ResponseBody
     public Object upload(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -167,6 +170,9 @@ public class EditController extends BaseController {
         if(userInfo != null) {
             deleteObject(userInfo.getHead());
         }
+
+        iRecord.deleteRecordCourseByUserId(user_id);
+        iRecord.deleteTestRecordCourseByUserId(user_id);
         iUser.deleteUser(user_id);
         return JSONResult.ok();
 

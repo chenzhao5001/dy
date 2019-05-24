@@ -65,6 +65,12 @@ public interface IRecord {
     @Delete("delete from record_course where user_id = #{arg0} and record_course_id = #{arg1}")
     void delete(int user_id,int record_course_id);
 
+    @Delete("delete from record_course where user_id = #{arg0}")
+    void deleteRecordCourseByUserId(int user_id);
+
+    @Delete("delete from test_record_course where user_id = #{arg0}")
+    void deleteTestRecordCourseByUserId(int user_id);
+
     @Select("select * from record_course where user_id = #{arg0}")
     List<Record> list(int user_id);
 
@@ -96,7 +102,7 @@ public interface IRecord {
     @Insert("insert into user_record_course (user_id,user_record_course_id,create_time) values (#{user_id},#{user_record_course_id},#{create_time})")
     void insertRecordCourse(UserRecordCourse userRecordCourse);
 
-    @Select("select * from user_record_course where user_id = #{arg0}")
+    @Select("select * from user_record_course where user_id = #{arg0} order by id desc")
     List<UserRecordCourse> getRecordByUserId(int user_id);
 
     @Select("select count(*) from user_record_course where user_record_course_id = #{arg0}")
@@ -115,7 +121,7 @@ public interface IRecord {
             "values (#{user_id},#{record_course_id},#{class_NO},#{class_url},#{class_name},#{time_start},#{time_end},#{picture})")
     void addTestRecordCourse(TestRecordCourse testRecordCourse);
 
-    @Select("select * from test_record_course")
+    @Select("select * from test_record_course order by id desc")
     List<TestRecordCourse> getAllTestRecordCourse();
 
     @Select("select * from record_course where record_course_id = #{arg0}")

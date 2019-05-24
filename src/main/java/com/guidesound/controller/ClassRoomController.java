@@ -562,7 +562,7 @@ public class ClassRoomController extends BaseController {
                                 int time = (int) (new Date().getTime() / 1000);
                                 PayOrder payOrder = new PayOrder();
                                 payOrder.setUser_id(info.getCourse_owner_id());
-                                payOrder.setType(4);
+                                payOrder.setType(2);
                                 payOrder.setTime(time);
                                 payOrder.setIn_or_out(0);
                                 payOrder.setAmount((int) (amount*100*platformCostRatio));
@@ -581,7 +581,7 @@ public class ClassRoomController extends BaseController {
                                 //学生支出
                                 payOrder = new PayOrder();
                                 payOrder.setUser_id(getCurrentUserId());
-                                payOrder.setType(5);
+                                payOrder.setType(3);
                                 payOrder.setTime(time);
                                 payOrder.setIn_or_out(1);
                                 payOrder.setAmount((int) (amount*100));
@@ -595,6 +595,8 @@ public class ClassRoomController extends BaseController {
                                     payOrder.setTeacher_name(TeacherName);
                                 }
                                 payOrder.setTeacher_id(info.getCourse_owner_id());
+                                payOrder.setCreate_time((int) (new Date().getTime() / 1000));
+                                payOrder.setUpdate_time((int) (new Date().getTime() / 1000));
                                 iOrder.insertPayOrder(payOrder);
                                 iCommonService.changeUserSurplusAmount(getCurrentUserId(),(int)( - amount*100));
                             }
@@ -603,8 +605,12 @@ public class ClassRoomController extends BaseController {
                         if(isTeacher == true) {
                             List<OrderInfo> orderList = iOrder.getOrderByCourseOwnerId(getCurrentUserId(),Integer.parseInt(class_id),1);
                             int count = orderList.size();
+                            int all_amount = 0;
+                            int one_mount = 0;
                             if(count > 0) {
-                                amount = orderList.get(0).getPrice_one_hour()*((classTimeInfo.getEnd_time() - classTimeInfo.getBegin_time()) / 3600)*count;
+                                one_mount = orderList.get(0).getPrice_one_hour()*((classTimeInfo.getEnd_time() - classTimeInfo.getBegin_time()) / 3600);
+                                all_amount = one_mount * count;
+
                             }
 
 
@@ -621,28 +627,30 @@ public class ClassRoomController extends BaseController {
                                 int time = (int) (new Date().getTime() / 1000);
                                 PayOrder payOrder = new PayOrder();
                                 payOrder.setUser_id(getCurrentUserId());
-                                payOrder.setType(4);
+                                payOrder.setType(2);
                                 payOrder.setTime(time);
                                 payOrder.setIn_or_out(0);
-                                payOrder.setAmount((int) (amount*100*platformCostRatio));
+                                payOrder.setAmount((int) (all_amount*100*platformCostRatio));
                                 payOrder.setCourse_name(info.getCourse_name());
                                 payOrder.setClass_id(classRoom.getClass_id());
                                 payOrder.setClass_number(classTimeInfo.getClass_number());
                                 payOrder.setStudent_name(student_name);
                                 payOrder.setStudent_id(student_id);
+                                payOrder.setCreate_time((int) (new Date().getTime() / 1000));
+                                payOrder.setUpdate_time((int) (new Date().getTime() / 1000));
                                 iOrder.insertPayOrder(payOrder);
 
-                                iCommonService.changeUserAmount(getCurrentUserId(), (int) (amount*100*platformCostRatio));
-                                iCommonService.changeUserSurplusAmount(getCurrentUserId(),(int) (amount*100*platformCostRatio));
+                                iCommonService.changeUserAmount(getCurrentUserId(), (int) (all_amount*100*platformCostRatio));
+                                iCommonService.changeUserSurplusAmount(getCurrentUserId(),(int) (all_amount*100*platformCostRatio));
 
 
                                 //学生支出
                                 payOrder = new PayOrder();
                                 payOrder.setUser_id(student_id);
-                                payOrder.setType(5);
+                                payOrder.setType(3);
                                 payOrder.setTime(time);
                                 payOrder.setIn_or_out(1);
-                                payOrder.setAmount((int) (amount*100));
+                                payOrder.setAmount((int) (one_mount*100));
 
                                 payOrder.setCourse_name(info.getCourse_name());
                                 payOrder.setClass_id(classRoom.getClass_id());
@@ -653,8 +661,10 @@ public class ClassRoomController extends BaseController {
                                     payOrder.setTeacher_name(TeacherName);
                                 }
                                 payOrder.setTeacher_id(info.getCourse_owner_id());
+                                payOrder.setCreate_time((int) (new Date().getTime() / 1000));
+                                payOrder.setUpdate_time((int) (new Date().getTime() / 1000));
                                 iOrder.insertPayOrder(payOrder);
-                                iCommonService.changeUserSurplusAmount(student_id,(int) ( - amount*100));
+                                iCommonService.changeUserSurplusAmount(student_id,(int) ( - one_mount*100));
                             }
                         }
                     }
@@ -920,8 +930,7 @@ public class ClassRoomController extends BaseController {
 
             classInfoList.add(classInfo);
         }
-        //正式课排序
-        classInfoList = sortClassInfo(classInfoList);
+
 
         ///录播课
         List<UserRecordCourse> record_list = iRecord.getRecordByUserId(getCurrentUserId());
@@ -999,6 +1008,16 @@ public class ClassRoomController extends BaseController {
                 classInfo.setTeacher_class(null);
                 classInfo.setVideo_class(videoClass1);
                 classInfoList.add(classInfo);
+            }
+        }
+
+        Map<String,ClassInfo> ing_class = new HashMap<>();
+        Map<String,ClassInfo> over_class = new HashMap<>();
+        for(ClassInfo classInfo : classInfoList) {
+            if(classInfo.getTeacher_class() != null) {
+
+            } else {
+
             }
 
         }
@@ -1089,9 +1108,18 @@ public class ClassRoomController extends BaseController {
                     classInfo_list.add(classInfo);
                 }
             }
+        }
 
+        Map<Integer,ClassInfo> noOverMap = new TreeMap<>();
+        Map<Integer,ClassInfo> overMap = new TreeMap<>();
+
+
+        for (ClassInfo item : classInfo_list) {
 
         }
+
+        //正式课排序
+//        classInfoList = sortClassInfo(classInfoList);
 
         return JSONResult.ok(classInfo_list);
     }

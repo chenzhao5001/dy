@@ -11,6 +11,7 @@ public class ClassTimeInfo {
     int end_time;
     int status;
 
+
     public int getClass_number() {
         return class_number;
     }

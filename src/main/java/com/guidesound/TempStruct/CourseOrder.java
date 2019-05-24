@@ -3,7 +3,7 @@ package com.guidesound.TempStruct;
 public class CourseOrder {
     int course_type;
     String course_name;
-    int order_id;
+    String order_id;
     String teacher_name;
     int teacher_id;
 
@@ -23,11 +23,11 @@ public class CourseOrder {
         this.course_name = course_name;
     }
 
-    public int getOrder_id() {
+    public String getOrder_id() {
         return order_id;
     }
 
-    public void setOrder_id(int order_id) {
+    public void setOrder_id(String order_id) {
         this.order_id = order_id;
     }
 

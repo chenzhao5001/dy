@@ -127,7 +127,6 @@ public interface IOrder {
     List<ClassRoom> getClassRoomByCourseId(int course_id);
 
 
-
     @Update("update class_room set new_class_time = #{arg1} where class_id = #{arg0}")
     void setClassTime(int class_id,String class_time);
 
@@ -216,7 +215,7 @@ public interface IOrder {
     @Select("select * from class_room where user_id = #{arg0}")
     List<ClassRoom> getClassInfoByUserId(int user_id);
 
-    @Select("select * from class_room where type = #{arg0} and istest = #{arg1} and test_time > #{arg2}")
+    @Select("select * from class_room where type = #{arg0} and istest = #{arg1} and test_time > #{arg2} order by class_id desc")
     List<ClassRoom> getAllClassRoom(int type,int isTest,int endTime);
 
     @Select("select * from class_room where user_id = #{arg0}")
@@ -225,8 +224,8 @@ public interface IOrder {
     @Select("select * from class_room where user_id = #{arg0} and istest = 1")
     List<ClassRoom> getTestClassRoomByUserId(int user_id);
 
-    @Insert("insert into class_time (class_id,order_id,teacher_id,student_id,begin_time,end_time,status)" +
-            " value(#{class_id},#{order_id},#{teacher_id},#{student_id},#{begin_time},#{end_time},#{status})")
+    @Insert("insert into class_time (class_id,order_id,teacher_id,student_id,class_number,begin_time,end_time,status)" +
+            " value(#{class_id},#{order_id},#{teacher_id},#{student_id},#{class_number},#{begin_time},#{end_time},#{status})")
     void addClassTime(ClassTimeInfo classTime);
 
     @Select("select * from class_time where order_id = #{arg0} and student_id = #{arg1} and begin_time < #{arg2}")
@@ -290,9 +289,10 @@ public interface IOrder {
             "values (#{user_id},#{type},#{time},#{in_or_out},#{amount},#{course_type},#{course_name},#{order_id},#{teacher_name},#{teacher_id},#{class_id},#{class_number},#{student_name},#{student_id},#{create_time},#{update_time})")
     void insertPayOrder(PayOrder payOrder);
 
-    @Select("select * from pay_order where user_id = #{arg0}")
+    @Select("select * from pay_order where user_id = #{arg0} order by id desc")
     List<PayOrder> getPayOrder(int user_id);
 
-
+    @Select("select count(*) from user_order where course_id = #{arg0} and student_id = #{arg1} and order_status = #{arg2}")
+    int getOrderByStudentAndCourseId(int course_id,int student_id,int status);
 
 }

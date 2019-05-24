@@ -135,7 +135,10 @@ public class OrderController extends BaseController {
             return JSONResult.errorMsg("不是课程拥有者，无法发布订单");
         }
 
-
+        int count = iOrder.getOrderByStudentAndCourseId(Integer.parseInt(orderClassDTO.getCourse_id()),Integer.parseInt(orderClassDTO.getStudent_id()),1);
+        if(count > 0) {
+            return JSONResult.errorMsg("此课程已经购买过");
+        }
         orderClassDTO.setType(1);
         orderClassDTO.setCreate_time((int) (new Date().getTime() / 1000));
         orderClassDTO.setUser_id(user_id);
@@ -1122,14 +1125,16 @@ public class OrderController extends BaseController {
                 CourseOrder courseOrder = new CourseOrder();
                 courseOrder.setCourse_name(item.getCourse_name());
                 courseOrder.setCourse_type(item.getCourse_type());
-                courseOrder.setOrder_id(item.getOrder_id());
+//                String strOrder = ToolsFunction.timeStamp2Date(String.valueOf(item.getCreate_time()),"yyyyMMddHHmmss") + (10000000+ item.getOrder_id());
+                courseOrder.setOrder_id(String.valueOf(item.getOrder_id()));
                 courseOrder.setTeacher_id(item.getTeacher_id());
                 courseOrder.setTeacher_name(item.getTeacher_name());
-                payInfoRet.setCourseOrder(courseOrder);
+                payInfoRet.setCourse_order(courseOrder);
             } else if (item.getType() == 1) {
                 Refund refund = new Refund();
                 refund.setCourse_name(item.getCourse_name());
-                refund.setOrder_id(item.getOrder_id());
+//                String strOrder = ToolsFunction.timeStamp2Date(String.valueOf(item.getCreate_time()),"yyyyMMddHHmmss") + (10000000+ item.getOrder_id());
+                refund.setOrder_id(String.valueOf(item.getOrder_id()));
                 payInfoRet.setRefund(refund);
 
             } else if (item.getType() == 2) {
@@ -1153,7 +1158,8 @@ public class OrderController extends BaseController {
             } else if (item.getType() == 4) {
                 VideoClassIn videoClassIn = new VideoClassIn();
                 videoClassIn.setCourse_name(item.getCourse_name());
-                videoClassIn.setOrder_id(item.getOrder_id());
+//                String strOrder = ToolsFunction.timeStamp2Date(String.valueOf(item.getCreate_time()),"yyyyMMddHHmmss") + (10000000+ item.getOrder_id());
+                videoClassIn.setOrder_id(String.valueOf(item.getOrder_id()));
                 videoClassIn.setStudent_id(item.getOrder_id());
                 videoClassIn.setStudent_name(item.getStudent_name());
                 payInfoRet.setVideo_class_in(videoClassIn);
@@ -1161,7 +1167,8 @@ public class OrderController extends BaseController {
             } else if (item.getType() == 5) {
                 VideoClassOut videoClassOut = new VideoClassOut();
                 videoClassOut.setCourse_name(item.getCourse_name());
-                videoClassOut.setOrder_id(item.getOrder_id());
+//                String strOrder = ToolsFunction.timeStamp2Date(String.valueOf(item.getCreate_time()),"yyyyMMddHHmmss") + (10000000+ item.getOrder_id());
+                videoClassOut.setOrder_id(String.valueOf(item.getOrder_id()));
                 videoClassOut.setTeacher_id(item.getTeacher_id());
                 videoClassOut.setTeacher_name(item.getTeacher_name());
                 payInfoRet.setVideo_class_out(videoClassOut);

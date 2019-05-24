@@ -6,7 +6,7 @@ public class PayInfoRet {
     int in_or_out;
     int amount;
 
-    CourseOrder courseOrder;
+    CourseOrder course_order;
     Refund refund;
     TeacherClassIn teacher_class_in;
     TeacherClassOut teacher_class_out;
@@ -45,12 +45,12 @@ public class PayInfoRet {
         this.amount = amount;
     }
 
-    public CourseOrder getCourseOrder() {
-        return courseOrder;
+    public CourseOrder getCourse_order() {
+        return course_order;
     }
 
-    public void setCourseOrder(CourseOrder courseOrder) {
-        this.courseOrder = courseOrder;
+    public void setCourse_order(CourseOrder course_order) {
+        this.course_order = course_order;
     }
 
     public Refund getRefund() {
