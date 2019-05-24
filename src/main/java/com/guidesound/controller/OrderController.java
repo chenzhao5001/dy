@@ -418,13 +418,11 @@ public class OrderController extends BaseController {
                 payOrder.setType(0);
                 payOrder.setTime((int) (new Date().getTime() / 1000));
                 payOrder.setIn_or_out(0);
-
                 payOrder.setAmount((int) (amount * 100));
+
                 payOrder.setCourse_type(0);
-                Course course_temp = iCourse.getCourseById(orderInfo.getCourse_id());
-                if (course_temp != null) {
-                    payOrder.setCourse_name(course_temp.getCourse_name());
-                }
+                payOrder.setCourse_name(orderInfo.getCourse_name());
+
                 payOrder.setOrder_id(Integer.parseInt(order_id));
                 payOrder.setTeacher_id(payItem.getTo_user_id());
                 payOrder.setTeacher_name(payItem.getTo_user_name());
@@ -645,19 +643,25 @@ public class OrderController extends BaseController {
 
 
 
-                //学生收入
+                //学生订单收入
                 payOrder = new PayOrder();
                 payOrder.setUser_id(payItem.getFrom_user_id());
-                payOrder.setType(4);
+                payOrder.setType(0);
                 payOrder.setTime((int) (new Date().getTime() / 1000));
                 payOrder.setIn_or_out(0);
                 payOrder.setAmount((int) (amount * 100));
+
+                payOrder.setCourse_type(1);
                 payOrder.setCourse_name(record.getRecord_course_name());
                 payOrder.setOrder_id(record.getRecord_course_id());
-                payOrder.setStudent_id(payItem.getFrom_user_id());
-                payOrder.setStudent_name(payItem.getFrom_user_name());
-                payOrder.setCreate_time((int) (new Date().getTime() / 1000));
-                payOrder.setUpdate_time((int) (new Date().getTime() / 1000));
+                payOrder.setTeacher_id(payItem.getTo_user_id());
+                payOrder.setTeacher_name(payItem.getTo_user_name());
+
+
+//                payOrder.setStudent_id(payItem.getFrom_user_id());
+//                payOrder.setStudent_name(payItem.getFrom_user_name());
+//                payOrder.setCreate_time((int) (new Date().getTime() / 1000));
+//                payOrder.setUpdate_time((int) (new Date().getTime() / 1000));
                 iOrder.insertPayOrder(payOrder);
 
 
@@ -704,8 +708,8 @@ public class OrderController extends BaseController {
                 iRecord.insertRecordCourse(userRecordCourse);
 
                 //可提现金额
-                iCommonService.changeUserAmount(userRecordCourse.getUser_id(),(int) (amount* 100 * platformCostRatio));
-                iCommonService.changeUserSurplusAmount(userRecordCourse.getUser_id(),(int) (amount* 100 * platformCostRatio));
+                iCommonService.changeUserAmount(payItem.getTo_user_id(),(int) (amount* 100 * platformCostRatio));
+                iCommonService.changeUserSurplusAmount(payItem.getTo_user_id(),(int) (amount* 100 * platformCostRatio));
 
             }
             iLogService.addLog("100001", order_id, "支付完成");
