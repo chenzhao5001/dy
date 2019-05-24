@@ -188,8 +188,8 @@ public class UserController extends BaseController{
             user.setLevel(1);
             user.setBackground_url("http://background-1257964795.cos.ap-beijing.myqcloud.com/main_background.jpg");
             iUser.addUserByUnionid(user);
-            iUser.setDyId(user.getId(),10010000 + user  .getId());
-            user.setDy_id(String.valueOf(10010000 + user.getId()));
+            iUser.setDyId(user.getId(),10000000 + user  .getId());
+            user.setDy_id(String.valueOf(10000000 + user.getId()));
             String im_id = String.valueOf(user.getId());
             String im_sig = TlsSigTest.getUrlSig(String.valueOf(im_id));
             iUser.setImInfo(user.getId(),im_id,im_sig);

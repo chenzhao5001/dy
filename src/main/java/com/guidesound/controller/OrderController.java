@@ -636,6 +636,7 @@ public class OrderController extends BaseController {
                 payOrder.setIn_or_out(0);
                 payOrder.setAmount((int) (amount * 100 * platformCostRatio));
                 payOrder.setCourse_name(record.getRecord_course_name());
+                payOrder.setOrder_id(record.getRecord_course_id());
                 payOrder.setStudent_id(payItem.getFrom_user_id());
                 payOrder.setStudent_name(payItem.getFrom_user_name());
                 payOrder.setCreate_time((int) (new Date().getTime() / 1000));
@@ -652,6 +653,7 @@ public class OrderController extends BaseController {
                 payOrder.setIn_or_out(0);
                 payOrder.setAmount((int) (amount * 100));
                 payOrder.setCourse_name(record.getRecord_course_name());
+                payOrder.setOrder_id(record.getRecord_course_id());
                 payOrder.setStudent_id(payItem.getFrom_user_id());
                 payOrder.setStudent_name(payItem.getFrom_user_name());
                 payOrder.setCreate_time((int) (new Date().getTime() / 1000));
@@ -667,6 +669,7 @@ public class OrderController extends BaseController {
                 payOrder.setIn_or_out(1);
                 payOrder.setAmount((int) (amount * 100));
                 payOrder.setCourse_name(record.getRecord_course_name());
+                payOrder.setOrder_id(record.getRecord_course_id());
                 payOrder.setTeacher_id(payItem.getTo_user_id());
                 payOrder.setTeacher_name(payItem.getTo_user_name());
                 payOrder.setCreate_time((int) (new Date().getTime() / 1000));
