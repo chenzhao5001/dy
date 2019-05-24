@@ -219,6 +219,9 @@ public class RecordCourseController extends BaseController {
                         testRecordCourse.setClass_NO(recordVideo.getClass_number());
                         testRecordCourse.setClass_name(recordVideo.getClass_title());
                         testRecordCourse.setClass_url(recordVideo.getClass_url());
+                        if(wonderfulPart.getTime_start() == 0 && wonderfulPart.getTime_end() == 0 && wonderfulPart.getPicture() == null) {
+                            continue;
+                        }
                         testRecordCourse.setTime_start(wonderfulPart.getTime_start());
                         testRecordCourse.setTime_end(wonderfulPart.getTime_end());
                         testRecordCourse.setPicture(wonderfulPart.getPicture() != null ? wonderfulPart.getPicture(): "");

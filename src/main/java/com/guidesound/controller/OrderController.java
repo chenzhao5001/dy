@@ -842,8 +842,8 @@ public class OrderController extends BaseController {
         String retTest = payOrder(new Gson().toJson(payItem), "App支付测试", alipayOrder, strAmount);
         PayRet ret = new PayRet();
         ret.setToken(retTest);
-        ret.setPrice(1);
-        ret.setOrder_sn(order_id);
+        ret.setPrice(strAmount);
+        ret.setOrder_sn(alipayOrder);
         return JSONResult.ok(ret);
     }
 

@@ -2,7 +2,7 @@ package com.guidesound.ret;
 
 public class PayRet {
     String token;
-    int price;
+    String price;
     String order_sn;
 
     public String getToken() {
@@ -13,11 +13,11 @@ public class PayRet {
         this.token = token;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
