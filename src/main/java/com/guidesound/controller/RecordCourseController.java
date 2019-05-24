@@ -194,12 +194,15 @@ public class RecordCourseController extends BaseController {
     @RequestMapping("/record_course_finish")
     @ResponseBody
     public JSONResult recordCourseFinish(String record_course_id) {
-        iLogService.addLog("转码服务器","record_course_finish",record_course_id);
         if (record_course_id == null) {
             return JSONResult.errorMsg("缺少 record_course_id 参数");
         }
+        iLogService.addLog("转码服务器","record_course_finish",record_course_id);
 
         Record record = iRecord.get(Integer.parseInt(record_course_id));
+        if(record == null) {
+            return JSONResult.errorMsg("课程不存在");
+        }
 
         ObjectMapper mapper_temp = new ObjectMapper();
         List<RecordVideo> recordVideoList = null;
@@ -218,11 +221,12 @@ public class RecordCourseController extends BaseController {
                         testRecordCourse.setClass_url(recordVideo.getClass_url());
                         testRecordCourse.setTime_start(wonderfulPart.getTime_start());
                         testRecordCourse.setTime_end(wonderfulPart.getTime_end());
-                        testRecordCourse.setPicture(wonderfulPart.getPicture());
+                        testRecordCourse.setPicture(wonderfulPart.getPicture() != null ? wonderfulPart.getPicture(): "");
                         iRecord.addTestRecordCourse(testRecordCourse);
                     }
                 } catch (Exception e) {
-                    System.out.println(1111);
+                    return JSONResult.errorMsg(e.getMessage());
+//                    System.out.println(e);
                 }
             }
             return JSONResult.ok();

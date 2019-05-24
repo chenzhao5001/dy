@@ -1068,7 +1068,7 @@ public class OrderController extends BaseController {
         iLogService.addLog(String.valueOf(getCurrentUserId()),"/refund_amount 退费", new Gson().toJson(payOrder));
         iOrder.insertPayOrder(payOrder);
 
-        iCommonService.changeUserAmount(getCurrentUserId(), (int) (Integer.parseInt(refund_amount) * 100*platformCostRatio));
+        iCommonService.changeUserAmount(getCurrentUserId(), (int) (Integer.parseInt(refund_amount) * 100));
 
         iOrder.setRefundAmount(Integer.parseInt(order_id), leaveMoney, (int) (new Date().getTime() / 1000));
         iOrder.setOrderStatus(Integer.parseInt(order_id), 2);
@@ -1194,15 +1194,22 @@ public class OrderController extends BaseController {
         int in_amount = 0;
         int out_amount = 0;
 
-        List<PayOrder> list = iOrder.getPayOrder(getCurrentUserId());
-        for(PayOrder item : list) {
-            if(item.getIn_or_out() == 0) {
-                in_amount += item.getAmount();
-            } else {
-                out_amount += item.getAmount();
-            }
+//        List<PayOrder> list = iOrder.getPayOrder(getCurrentUserId());
+//        for(PayOrder item : list) {
+//            if(item.getIn_or_out() == 0) {
+//                in_amount += item.getAmount();
+//            } else {
+//                out_amount += item.getAmount();
+//            }
+//        }
+//        myPurse.setRemainder_all(in_amount - out_amount);
+
+
+        List<UserSurplusAmount> remainder_all = iUser.getUserSurplusAmount(getCurrentUserId());
+        if(remainder_all.size() > 0) {
+            myPurse.setRemainder_all(remainder_all.get(0).getAmount());
         }
-        myPurse.setRemainder_all(in_amount - out_amount);
+
         List<UserAmount> remainder_withdraw = iUser.getUserAmount(getCurrentUserId());
         if(remainder_withdraw.size() > 0) {
             myPurse.setRemainder_withdraw(remainder_withdraw.get(0).getAmount());
