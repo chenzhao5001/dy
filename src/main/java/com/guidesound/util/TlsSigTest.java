@@ -160,6 +160,34 @@ public class TlsSigTest {
         }
         return "";
     }
+    public static String getImUserInfo(ArrayList<String> im_ids) throws IOException {
+        String rand = ToolsFunction.getNumRandomString(10);
+        String controlUrl = "https://console.tim.qq.com/v4/profile/portrait_get?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + rand + "&contenttype=json";
+        ImUserParam imUserParam = new ImUserParam();
+//        List<String> im_ids = new ArrayList<>();
+//        im_ids.add(im_id);
+        List<String> params = new ArrayList<>();
+        params.add("Tag_Profile_IM_Nick");
+        params.add("Tag_Profile_IM_Image");
+        imUserParam.setTo_Account(im_ids);
+        imUserParam.setTagList(params);
+        String sendInfo = new Gson().toJson(imUserParam);
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, sendInfo);
+        Request req = new Request.Builder()
+                .url(controlUrl)
+                .post(body)
+                .build();
+        Response resp;
+        OkHttpClient client_temp = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+        resp = client_temp.newCall(req).execute();
+        String jsonString = resp.body().string();
+        return jsonString;
+
+    }
 
     public static String setUserHeadAndName(String im_id,String head,String name) throws IOException {
 

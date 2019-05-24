@@ -196,7 +196,7 @@ public class UserController extends BaseController{
             user.setIm_id(im_id);
             user.setIm_sig(im_sig);
 
-            TlsSigTest.setUserHeadAndName(im_id,head,name);
+            upUserHeadAndName(im_id,head,name);
 
             String info = TlsSigTest.SendMessageByUser(im_id,"403","欢迎您成为导音用户，有任何问题随时咨询我！");
             log.info("发送注册消息1 info = {}",info);
@@ -238,7 +238,7 @@ public class UserController extends BaseController{
             iUser.setIm2Info(user.getId(),im_id2,im_sig_2);
             user.setIm_id_2(im_id2);
             user.setIm_sig_2(im_sig_2);
-            TlsSigTest.setUserHeadAndName(im_id2,head,name);
+            upUserHeadAndName(im_id2,head,name);
         }
         return JSONResult.ok(user);
     }
@@ -1741,17 +1741,32 @@ public class UserController extends BaseController{
             String name = info.getName();
             String head = info.getHead();
             if(!info.getIm_id().equals("")) {
-                String ret = TlsSigTest.setUserHeadAndName(info.getIm_id(),head,name);
+                String ret = upUserHeadAndName(info.getIm_id(),head,name);
                 Thread.sleep(15);
                 r.add(ret);
             }
             if(!info.getIm_id_2().equals("")) {
-                String ret = TlsSigTest.setUserHeadAndName(info.getIm_id_2(),head,name);
+                String ret = upUserHeadAndName(info.getIm_id_2(),head,name);
                 r.add(ret);
                 Thread.sleep(15);
             }
         }
         return JSONResult.ok(r);
+    }
+
+    @RequestMapping("/get_im_info")
+    @ResponseBody
+    JSONResult getImUserInfo() throws IOException {
+
+        List<UserInfo> lists = iUser.getAllUser();
+        ArrayList<String> id_ids = new ArrayList<>();
+        for(UserInfo info : lists) {
+            id_ids.add(info.getIm_id());
+            id_ids.add(info.getIm_id_2());
+        }
+
+        String ret = TlsSigTest.getImUserInfo(id_ids);
+        return JSONResult.ok(ret);
     }
 
 

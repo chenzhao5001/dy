@@ -1132,7 +1132,7 @@ public class OrderController extends BaseController {
                 teacherClassIn.setCourse_name(item.getCourse_name());
                 teacherClassIn.setStudent_id(item.getStudent_id());
                 teacherClassIn.setStudent_name(item.getStudent_name());
-                payInfoRet.setTeacherClassIn(teacherClassIn);
+                payInfoRet.setTeacher_class_in(teacherClassIn);
 
             } else if (item.getType() == 3) {
                 TeacherClassOut teacherClassOut = new TeacherClassOut();
@@ -1141,7 +1141,7 @@ public class OrderController extends BaseController {
                 teacherClassOut.setCourse_name(item.getCourse_name());
                 teacherClassOut.setTeacher_id(item.getTeacher_id());
                 teacherClassOut.setTeacher_name(item.getTeacher_name());
-                payInfoRet.setTeacherClassOut(teacherClassOut);
+                payInfoRet.setTeacher_class_out(teacherClassOut);
 
             } else if (item.getType() == 4) {
                 VideoClassIn videoClassIn = new VideoClassIn();
@@ -1149,7 +1149,7 @@ public class OrderController extends BaseController {
                 videoClassIn.setOrder_id(item.getOrder_id());
                 videoClassIn.setStudent_id(item.getOrder_id());
                 videoClassIn.setStudent_name(item.getStudent_name());
-                payInfoRet.setVideoClassIn(videoClassIn);
+                payInfoRet.setVideo_class_in(videoClassIn);
 
             } else if (item.getType() == 5) {
                 VideoClassOut videoClassOut = new VideoClassOut();
@@ -1157,7 +1157,7 @@ public class OrderController extends BaseController {
                 videoClassOut.setOrder_id(item.getOrder_id());
                 videoClassOut.setTeacher_id(item.getTeacher_id());
                 videoClassOut.setTeacher_name(item.getTeacher_name());
-                payInfoRet.setVideoClassOut(videoClassOut);
+                payInfoRet.setVideo_class_out(videoClassOut);
             }
             ret_list.add(payInfoRet);
         }

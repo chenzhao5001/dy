@@ -1,8 +1,10 @@
 package com.guidesound.controller;
 
 
+import com.guidesound.Service.ILogService;
 import com.guidesound.dao.ICourse;
 import com.guidesound.util.SignMap;
+import com.guidesound.util.TlsSigTest;
 import com.guidesound.util.TockenUtil;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
@@ -20,6 +22,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.URLDecoder;
 
 //@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -46,6 +49,9 @@ public class BaseController {
     static Logger log;
     @Autowired
     ICourse iCourse;
+
+    @Autowired
+    ILogService iLogService;
 
 
     BaseController() {
@@ -95,5 +101,8 @@ public class BaseController {
         }
         return null;
     }
-
+    String upUserHeadAndName(String im_id,String head,String name) throws IOException {
+        iLogService.addLog("im_设置","im_id = " + im_id + ",head = " + head + ",name = " + name,"");
+        return TlsSigTest.setUserHeadAndName(im_id,head,name);
+    }
 }

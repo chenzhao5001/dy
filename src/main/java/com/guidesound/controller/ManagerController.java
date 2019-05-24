@@ -1015,8 +1015,8 @@ public class ManagerController extends BaseController {
                 if (Integer.parseInt(result) == 0) {
                     TlsSigTest.SendMessage(uid, "您修改的新头像已经通过系统审核。", "");
 //                    TlsSigTest.PushMessage(uid, "15");
-                    TlsSigTest.setUserHeadAndName(userInfo.getIm_id(),head,"");
-                    TlsSigTest.setUserHeadAndName(userInfo.getIm_id_2(),head,"");
+                    upUserHeadAndName(userInfo.getIm_id(),head,"");
+                    upUserHeadAndName(userInfo.getIm_id_2(),head,"");
                     iUser.updateHead(Integer.parseInt(uid), head);
                 } else {
                     TlsSigTest.SendMessage(uid, "您修改的新头像未通过系统审核，未通过原因是" + failure_content + "”。", "");
@@ -1033,8 +1033,8 @@ public class ManagerController extends BaseController {
                     iUser.updateName(Integer.parseInt(uid), name);
                     TlsSigTest.SendMessage(uid, "您修改的新昵称：“" + name + "”已经通过系统审核。", "");
 //                    TlsSigTest.PushMessage(uid, "15");
-                    TlsSigTest.setUserHeadAndName(userInfo.getIm_id(),"",name);
-                    TlsSigTest.setUserHeadAndName(userInfo.getIm_id_2(),"",name);
+                    upUserHeadAndName(userInfo.getIm_id(),"",name);
+                    upUserHeadAndName(userInfo.getIm_id_2(),"",name);
                 } else {
                     TlsSigTest.SendMessage(uid, "您修改的新头像未通过系统审核，未通过原因是" + failure_content + "”。", "");
                 }

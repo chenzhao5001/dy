@@ -8,10 +8,10 @@ public class PayInfoRet {
 
     CourseOrder courseOrder;
     Refund refund;
-    TeacherClassIn teacherClassIn;
-    TeacherClassOut teacherClassOut;
-    VideoClassIn videoClassIn;
-    VideoClassOut videoClassOut;
+    TeacherClassIn teacher_class_in;
+    TeacherClassOut teacher_class_out;
+    VideoClassIn video_class_in;
+    VideoClassOut video_class_out;
 
     public int getType() {
         return type;
@@ -61,35 +61,35 @@ public class PayInfoRet {
         this.refund = refund;
     }
 
-    public TeacherClassIn getTeacherClassIn() {
-        return teacherClassIn;
+    public TeacherClassIn getTeacher_class_in() {
+        return teacher_class_in;
     }
 
-    public void setTeacherClassIn(TeacherClassIn teacherClassIn) {
-        this.teacherClassIn = teacherClassIn;
+    public void setTeacher_class_in(TeacherClassIn teacher_class_in) {
+        this.teacher_class_in = teacher_class_in;
     }
 
-    public TeacherClassOut getTeacherClassOut() {
-        return teacherClassOut;
+    public TeacherClassOut getTeacher_class_out() {
+        return teacher_class_out;
     }
 
-    public void setTeacherClassOut(TeacherClassOut teacherClassOut) {
-        this.teacherClassOut = teacherClassOut;
+    public void setTeacher_class_out(TeacherClassOut teacher_class_out) {
+        this.teacher_class_out = teacher_class_out;
     }
 
-    public VideoClassIn getVideoClassIn() {
-        return videoClassIn;
+    public VideoClassIn getVideo_class_in() {
+        return video_class_in;
     }
 
-    public void setVideoClassIn(VideoClassIn videoClassIn) {
-        this.videoClassIn = videoClassIn;
+    public void setVideo_class_in(VideoClassIn video_class_in) {
+        this.video_class_in = video_class_in;
     }
 
-    public VideoClassOut getVideoClassOut() {
-        return videoClassOut;
+    public VideoClassOut getVideo_class_out() {
+        return video_class_out;
     }
 
-    public void setVideoClassOut(VideoClassOut videoClassOut) {
-        this.videoClassOut = videoClassOut;
+    public void setVideo_class_out(VideoClassOut video_class_out) {
+        this.video_class_out = video_class_out;
     }
 }
