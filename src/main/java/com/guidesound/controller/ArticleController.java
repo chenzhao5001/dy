@@ -1303,6 +1303,9 @@ public class ArticleController extends BaseController {
         ListResp ret = new ListResp();
         if (article_ids.size() > 0) {
             List<ArticleInfo> articles = iArticle.getArticlebyIds(article_ids);
+            Collections.shuffle(articles);
+            articles = shiftArticle(articles);
+
             getExtendInfo(articles);
             ret.setCount(articles.size());
             ret.setList(articles);
@@ -1311,6 +1314,33 @@ public class ArticleController extends BaseController {
             ret.setList(article_ids);
         }
         return JSONResult.ok(ret);
+    }
+
+    List<ArticleInfo> shiftArticle(List<ArticleInfo> lists) {
+
+        List<ArticleInfo> lists_recommend = new ArrayList<>();
+        List<ArticleInfo> list_other = new ArrayList<>();
+
+        for(ArticleInfo item : lists) {
+            if(lists_recommend.size() == 0 || lists_recommend.size() == 1) {
+                lists_recommend.add(item);
+            } else {
+                for (int i = 0; i < lists_recommend.size(); i++) {
+                    if(i +1 < lists_recommend.size() && lists_recommend.get(i).getUser_id() != item.getUser_id() && lists_recommend.get(i +1 ).getUser_id() != item.getUser_id()) {
+                        lists_recommend.add(i+1,item);
+                        break;
+                    }
+                    if(i == lists_recommend.size() -1) {
+                        list_other.add(item);
+                    }
+                }
+            }
+        }
+        for(ArticleInfo articleInfo : list_other) {
+            lists_recommend.add(articleInfo);
+        }
+        return lists_recommend;
+
     }
 
     @RequestMapping("/comment_answer")

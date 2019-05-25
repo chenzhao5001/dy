@@ -321,6 +321,8 @@ public class VideoController extends BaseController {
         ListResp ret = new ListResp();
         if (video_ids.size() > 0) {
             List<VideoShow> videos = iVideo.getVideobyIds(video_ids);
+            Collections.shuffle(videos);
+            videos = shiftVideo(videos);
             improveVideoList(videos);
             ret.setCount(videos.size());
             ret.setList(videos);
@@ -329,6 +331,32 @@ public class VideoController extends BaseController {
             ret.setList(video_ids);
         }
         return JSONResult.ok(ret);
+    }
+    List<VideoShow> shiftVideo(List<VideoShow> lists) {
+
+        List<VideoShow> lists_recommend = new ArrayList<>();
+        List<VideoShow> list_other = new ArrayList<>();
+
+        for(VideoShow item : lists) {
+            if(lists_recommend.size() == 0 || lists_recommend.size() == 1) {
+                lists_recommend.add(item);
+            } else {
+                for (int i = 0; i < lists_recommend.size(); i++) {
+                    if(i +1 < lists_recommend.size() && lists_recommend.get(i).getUser_id() != item.getUser_id() && lists_recommend.get(i +1 ).getUser_id() != item.getUser_id()) {
+                        lists_recommend.add(i+1,item);
+                        break;
+                    }
+                    if(i == lists_recommend.size() -1) {
+                        list_other.add(item);
+                    }
+                }
+            }
+        }
+        for(VideoShow videoShow : list_other) {
+            lists_recommend.add(videoShow);
+        }
+        return lists_recommend;
+
     }
 
     List<VideoShow> getRecVideos(List<VideoShow> all_list, String user_guid) {
@@ -1193,33 +1221,87 @@ public class VideoController extends BaseController {
         return JSONResult.ok();
     }
 
-    @RequestMapping("/up_pool")
-    @ResponseBody
-    JSONResult upPool() {
 
-        List<VideoPools> lists = iVideo.getVideoPools();
+    List<VideoPools> foo_shift(List<VideoPools> lists) {
+
         List<VideoPools> lists_recommend = new ArrayList<>();
         List<VideoPools> list_other = new ArrayList<>();
-//        List<VideoPools> lists_subject = new ArrayList<>();
 
         for(VideoPools item : lists) {
-                if(lists_recommend.size() == 0 || lists_recommend.size() == 1) {
-                    lists_recommend.add(item);
-                } else {
-                    for (int i = 0; i < lists_recommend.size(); i++) {
-                        if(i +1 < lists_recommend.size() && lists_recommend.get(i).getUser_id() != item.getUser_id() && lists_recommend.get(i +1 ).getUser_id() != item.getUser_id()) {
-                            lists_recommend.add(i+1,item);
-                            break;
-                        }
-                        if(i == lists_recommend.size() -1) {
-                            list_other.add(item);
-                        }
+            if(lists_recommend.size() == 0 || lists_recommend.size() == 1) {
+                lists_recommend.add(item);
+            } else {
+                for (int i = 0; i < lists_recommend.size(); i++) {
+                    if(i +1 < lists_recommend.size() && lists_recommend.get(i).getUser_id() != item.getUser_id() && lists_recommend.get(i +1 ).getUser_id() != item.getUser_id()) {
+                        lists_recommend.add(i+1,item);
+                        break;
+                    }
+                    if(i == lists_recommend.size() -1) {
+                        list_other.add(item);
                     }
                 }
+            }
         }
         for(VideoPools videoPools : list_other) {
             lists_recommend.add(videoPools);
         }
+        return lists_recommend;
+
+    }
+
+    @RequestMapping("/up_pool")
+    @ResponseBody
+    JSONResult upPool() {
+        List<VideoPools> lists = iVideo.getVideoPools();
+        List<Integer> ids = new ArrayList<>();
+        for(VideoPools item : lists) {
+            ids.add(item.getId());
+        }
+//2469
+        Collections.shuffle(lists);
+        for(VideoPools videoPools : lists) {
+            iVideo.insertVideoPoolTemp(videoPools);
+        }
+
+        iVideo.deleteVideosPoolsByIds(ids);
+
+
+
+
+
+
+
+//        Map<String,List<VideoPools>> map = new HashMap<>();
+//        List<VideoPools> lists = iVideo.getVideoPools();
+//        for(VideoPools item : lists) {
+//            if(!map.containsKey(String.valueOf(item.getVideo_pool()))) {
+//                List<VideoPools> temp = new ArrayList<>();
+//                temp.add(item);
+//                map.put(String.valueOf(item.getVideo_pool()),temp);
+//            } else {
+//                map.get(String.valueOf(item.getVideo_pool())).add(item);
+//            }
+//        }
+//        lists.clear();
+//        for(String key: map.keySet()) {
+//            List<VideoPools> temp = map.get(key);
+//            temp = foo_shift(temp);
+//            for(VideoPools videoPools : temp) {
+//                lists.add(videoPools);
+//            }
+//        }
+
+
+
+//
+//        for(VideoPools videoPools : lists) {
+//            iVideo.insertVideoPoolTemp(videoPools);
+//        }
+
+//        1021
+//        1383
+
+//        1384 +361 = 1745
 
 //            for (String str : strarray) {
 //                if (str != null && !str.equals("")) {

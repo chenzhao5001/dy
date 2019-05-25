@@ -272,7 +272,7 @@ public interface IVideo {
     void insertVideoPool(VideoPool videoPool);
 
 
-    @Insert("insert into video_pools (video_id,user_id,subject,video_pool,pool_flag,pool_flag,subject_flag,create_time) " +
+    @Insert("insert into video_pools (video_id,user_id,subject,video_pool,pool_flag,subject_flag,create_time) " +
             "value (#{video_id},#{user_id},#{subject},#{video_pool},#{pool_flag},#{subject_flag},#{create_time})")
     void insertVideoPoolTemp(VideoPools videoPools);
 
@@ -403,6 +403,14 @@ public interface IVideo {
             + " limit #{arg1},#{arg2}"
             + "</script>")
     List<Integer> videoAllIdsInVideoPoolsBySubjectToday(@Param("iSubjectList") List<Integer> iSubjectList,int begin,int end,int time);
+
+    @Select("<script>"
+            + "delete from video_pools WHERE id IN "
+            + "<foreach item='item' index='index' collection='iVideoIds' open='(' separator=',' close=')'>"
+            + "#{item}"
+            + "</foreach>"
+            + "</script>")
+    void deleteVideosPoolsByIds(@Param("iVideoIds") List<Integer> ids);
 
 ///////////////////////////////////////////////////////
 
