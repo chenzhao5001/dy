@@ -458,6 +458,13 @@ public interface IUser {
     @Update("update user_surplus_amount set amount = #{arg1} where user_id = #{arg0}")
     void updateUserSurplusAmount(int user_id,int amount);
 
+    @Select("select alipay_user_id from user where id = #{arg0}")
+    String getAliPayUserId(int user_id);
+    @Update("update user set alipay_user_id = #{arg1} where id = #{arg0}")
+    void setAliPayUserId(int user_id,String alipay_user_id);
+
+    @Insert("insert into user_cash_out (user_id,alipay_user_id,biz_no,amount,create_time) values (#{arg0},#{arg1},#{arg2},#{arg3},#{arg4})")
+    void inserCashOutInfo(int user_id,String alipay_user_id,String biz_no,String amount,int create_time);
 
 }
 

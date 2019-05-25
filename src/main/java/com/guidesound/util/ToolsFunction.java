@@ -15,6 +15,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -331,6 +333,12 @@ public class ToolsFunction {
             e.printStackTrace();
         }
         return result;
+    }
+
+    //保留两位小数
+    public static double formatDouble2(double d) {
+        BigDecimal bg = new BigDecimal(d).setScale(2, RoundingMode.UP);
+        return bg.doubleValue();
     }
 
  }

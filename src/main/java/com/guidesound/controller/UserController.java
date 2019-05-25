@@ -3,17 +3,20 @@ package com.guidesound.controller;
 
 import com.alipay.Alipay;
 import com.alipay.AlipayConfig;
-import com.alipay.Result;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayFundTransToaccountTransferRequest;
+import com.alipay.api.request.AlipaySystemOauthTokenRequest;
+import com.alipay.api.request.AlipayUserInfoShareRequest;
 import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
+import com.alipay.api.response.AlipaySystemOauthTokenResponse;
+import com.alipay.api.response.AlipayUserInfoShareResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.guidesound.Service.ICommonService;
 import com.guidesound.TempStruct.CourseOutline;
 import com.guidesound.dao.*;
 import com.guidesound.dao.UserCommodity;
@@ -55,6 +58,10 @@ public class UserController extends BaseController{
     private IArticle iArticle;
     @Autowired
     private IExamine iExamine;
+    @Autowired
+    private ICommonService iCommonService;
+    @Autowired
+    private IOrder iOrder;
 
     /**
      * 用户登录
@@ -434,6 +441,8 @@ public class UserController extends BaseController{
                 String im_id_2 = "dy" + String.valueOf(user.getId());
                 String im_sig_2 = TlsSigTest.getUrlSig(im_id_2);
                 iUser.setIm2Info(user.getId(),im_id_2,im_sig_2);
+                TlsSigTest.setUserHeadAndName(im_id,"",name);
+                TlsSigTest.setUserHeadAndName(im_id_2,"",name);
 
                 user.setIm_id(im_id);
                 user.setIm_sig(im_sig);
@@ -1662,15 +1671,26 @@ public class UserController extends BaseController{
 
     @RequestMapping("/cash_out")
     @ResponseBody
-    JSONResult cashOut(String auth_code,String scope,String alipay_open_id,String  user_id) throws AlipayApiException {
+    JSONResult cashOut(String auth_code,String  user_id,String amount) throws AlipayApiException {
 
-        if(auth_code == null || scope == null || alipay_open_id == null || user_id == null) {
+        if(auth_code == null || user_id == null || amount == null) {
             return JSONResult.errorMsg("缺少参数");
         }
 
-        if(true)
-            return JSONResult.ok("待实现");
-        String PAYEE_TYPE = "ALIPAY_LOGONID";//支付宝登录号，支持邮箱和手机号格式。
+        int current_user_id = getCurrentUserId();
+        if(current_user_id == 0) {
+            return JSONResult.errorMsg("无法获取当前用户id");
+        }
+
+        List<UserAmount> userAmounts = iUser.getUserAmount(current_user_id);
+        if(userAmounts.size() == 0 ||userAmounts.get(0).getAmount() < Integer.parseInt(amount)) {
+            return JSONResult.errorMsg("可用余额不够");
+        }
+//        iUser.getAliPayUserId()
+
+        log.info("用户提现 auth_code = {},user_id = {},amount = {}",auth_code,user_id,amount);
+
+        String PAYEE_TYPE = "ALIPAY_USERID";//支付宝登录号，支持邮箱和手机号格式。
         //  private String PAYEE_TYPE = "ALIPAY_USERID";//支付宝账号对应的支付宝唯一用户号。以2088开头的16位纯数字组成
 
         //实例化客户端（参数：网关地址、商户appid、商户私钥、格式、编码、支付宝公钥、加密类型），为了取得预付订单信息
@@ -1678,32 +1698,56 @@ public class UserController extends BaseController{
                 AlipayConfig.RSA_PRIVATE_KEY, AlipayConfig.FORMAT, AlipayConfig.CHARSET,
                 AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.SIGNTYPE);
 
-        AlipayFundTransToaccountTransferRequest request = new AlipayFundTransToaccountTransferRequest();
+        AlipaySystemOauthTokenRequest alipaySystemOauthTokenRequest = new AlipaySystemOauthTokenRequest();
+        alipaySystemOauthTokenRequest.setCode(auth_code);
+        alipaySystemOauthTokenRequest.setGrantType("authorization_code");
+        AlipaySystemOauthTokenResponse oauthTokenResponse = alipayClient.execute(alipaySystemOauthTokenRequest);
+        String accessToken = oauthTokenResponse.getAccessToken();
 
+        AlipayUserInfoShareRequest alipayUserInfoShareRequest = new AlipayUserInfoShareRequest();
+        AlipayUserInfoShareResponse userinfoShareResponse = alipayClient.execute(alipayUserInfoShareRequest, accessToken);
+        String ali_user_id = userinfoShareResponse.getUserId();
+
+        iCommonService.updateAliPayUserId(current_user_id,ali_user_id);
+
+        AlipayFundTransToaccountTransferRequest request = new AlipayFundTransToaccountTransferRequest();
         Alipay alipay = new Alipay();
-        alipay.setOut_biz_no(String.valueOf(new Date().getTime()));
+        alipay.setOut_biz_no(String.valueOf(user_id) +  "__"  +  ToolsFunction.getNumRandomString(10));
         alipay.setPayee_type(PAYEE_TYPE);
-        alipay.setAmount("0.1");
-        alipay.setPayer_show_name("测试名称");
-        alipay.setPayee_account("15210896938");
-        alipay.setPayee_real_name("陈朝");
-        alipay.setRemark("萌点用户提现");
+        double tAmount = ToolsFunction.formatDouble2((double)Integer.parseInt(amount)* alipayCostRatio / 100);
+        alipay.setAmount(String.valueOf(tAmount));
+        alipay.setPayer_show_name("导音教育");
+        alipay.setPayee_account(ali_user_id);
+        alipay.setRemark("导音教育提现");
         //转成json格式放入
         String json = new Gson().toJson(alipay);
+
+        log.info("提现请求参数 request = {}",json);
         request.setBizContent(json);
         AlipayFundTransToaccountTransferResponse response=null;
         Map<String, Object> map = new HashMap<String,Object>();
         try{
             response = alipayClient.execute(request);
             if("10000".equals(response.getCode())){
-                map.put("code", response.getCode());
-                map.put("success", "true");
-                map.put("des", "转账成功");
+                iUser.inserCashOutInfo(current_user_id,alipay.getPayee_account(),alipay.getOut_biz_no(),alipay.getAmount(), (int) (new Date().getTime() / 1000));
+                iCommonService.changeUserAmount(current_user_id,-Integer.parseInt(amount));
+                iCommonService.changeUserSurplusAmount(current_user_id,-Integer.parseInt(amount));
+
+                int time = (int) (new Date().getTime() / 1000);
+                PayOrder payOrder = new PayOrder();
+                payOrder.setUser_id(current_user_id);
+                payOrder.setType(6);
+                payOrder.setTime(time);
+                payOrder.setIn_or_out(1);
+                payOrder.setAmount((int) Math.round(((double)Integer.parseInt(amount)*platformCostRatio)));
+                iOrder.insertPayOrder(payOrder);
+
             }else{
                 map.put("code", response.getCode());
                 map.put("sub_code", response.getSubCode());//详情状态码
                 map.put("success", "false");
                 map.put("sub_msg", response.getSubMsg());//详情原因
+                log.info("提现失败 code = {},sub_code = {},sub_msg = {}",response.getCode(),response.getSubCode(),response.getSubMsg());
                 return JSONResult.errorMsg(response.getSubMsg());
             }
         }catch(AlipayApiException e){

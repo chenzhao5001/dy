@@ -15,6 +15,8 @@ public class CommonServiceImpl implements ICommonService {
 
     @Autowired
     IUser iUser;
+
+
     @Override
     public void changeUserSurplusAmount(int user_id, int change_amount) {
         List<UserSurplusAmount> lists =  iUser.getUserSurplusAmount(user_id);
@@ -38,6 +40,13 @@ public class CommonServiceImpl implements ICommonService {
             UserAmount userAmount = lists.get(0);
             int amount = userAmount.getAmount() + change_amount;
             iUser.updateUserAmount(user_id,amount);
+        }
+    }
+
+    public void updateAliPayUserId(int user_id,String alipay_user_id) {
+        String alipay_user_id_temp = iUser.getAliPayUserId(user_id);
+        if(alipay_user_id_temp == null || alipay_user_id_temp.equals("")) {
+            iUser.setAliPayUserId(user_id,alipay_user_id);
         }
 
     }

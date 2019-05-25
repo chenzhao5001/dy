@@ -472,7 +472,7 @@ public class ClassRoomController extends BaseController {
             //限制最大人数
             if (classRoom.getUser_id() != getCurrentUserId()) {
                 int testPerson = iOrder.testClassPerson(Integer.parseInt(class_id));
-                if (testPerson >= 2) {
+                if (testPerson > 10) {
                     return JSONResult.errorMsg("试听课学生超过最大人数");
                 } else {
                     iOrder.updateTestClassPerson(Integer.parseInt(class_id));
