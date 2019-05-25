@@ -1739,7 +1739,7 @@ public class UserController extends BaseController{
                 payOrder.setType(6);
                 payOrder.setTime(time);
                 payOrder.setIn_or_out(1);
-                payOrder.setAmount((int) Math.round(((double)Integer.parseInt(amount)*platformCostRatio)));
+                payOrder.setAmount((int) Math.round(((double)Integer.parseInt(amount)*alipayCostRatio)));
                 iOrder.insertPayOrder(payOrder);
 
             }else{

@@ -335,9 +335,9 @@ public class ToolsFunction {
         return result;
     }
 
-    //保留两位小数
+    //四舍五入保留两位小数
     public static double formatDouble2(double d) {
-        BigDecimal bg = new BigDecimal(d).setScale(2, RoundingMode.UP);
+        BigDecimal bg = new BigDecimal(d).setScale(2,BigDecimal.ROUND_HALF_UP);
         return bg.doubleValue();
     }
 
