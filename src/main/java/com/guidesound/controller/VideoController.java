@@ -1198,14 +1198,40 @@ public class VideoController extends BaseController {
     JSONResult upPool() {
 
         List<VideoPools> lists = iVideo.getVideoPools();
-        for (int i = 0; i < 100; i++) {
-            Collections.shuffle(lists);
+        List<VideoPools> lists_recommend = new ArrayList<>();
+        List<VideoPools> list_other = new ArrayList<>();
+//        List<VideoPools> lists_subject = new ArrayList<>();
+
+        for(VideoPools item : lists) {
+                if(lists_recommend.size() == 0 || lists_recommend.size() == 1) {
+                    lists_recommend.add(item);
+                } else {
+                    for (int i = 0; i < lists_recommend.size(); i++) {
+                        if(i +1 < lists_recommend.size() && lists_recommend.get(i).getUser_id() != item.getUser_id() && lists_recommend.get(i +1 ).getUser_id() != item.getUser_id()) {
+                            lists_recommend.add(i+1,item);
+                            break;
+                        }
+                        if(i == lists_recommend.size() -1) {
+                            list_other.add(item);
+                        }
+                    }
+                }
+        }
+        for(VideoPools videoPools : list_other) {
+            lists_recommend.add(videoPools);
         }
 
-        for(VideoPools videoPools : lists) {
-            iVideo.insertVideoPools(videoPools);
-        }
-
+//            for (String str : strarray) {
+//                if (str != null && !str.equals("")) {
+//                    VideoPool videoPool = new VideoPool();
+//                    videoPool.setVideo_id(item.getId());
+//                    videoPool.setVideo_pool(Integer.parseInt(str));
+//                    videoPool.setUser_id(item.getUser_id());
+//                    videoPool.setSubject(item.getSubject());
+////                    videoPool.setCreate_time((int) (new Date().getTime() / 1000));
+//                    iVideo.insertVideoPool(videoPool);
+//                }
+//            }
 
         return JSONResult.ok();
 

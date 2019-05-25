@@ -272,6 +272,12 @@ public interface IVideo {
     void insertVideoPool(VideoPool videoPool);
 
 
+    @Insert("insert into video_pools (video_id,user_id,subject,video_pool,pool_flag,pool_flag,subject_flag,create_time) " +
+            "value (#{video_id},#{user_id},#{subject},#{video_pool},#{pool_flag},#{subject_flag},#{create_time})")
+    void insertVideoPoolTemp(VideoPools videoPools);
+
+
+
 
     @Select("<script>"
             + "SELECT * FROM video WHERE id IN "

@@ -1187,6 +1187,9 @@ public class ManagerController extends BaseController {
                         }
                     }
                 }
+
+
+
             } else {
                 TlsSigTest.SendMessage(uid, "您发布的录播课“" + record.getRecord_course_name() + "”没有通过系统审核", "");
                 iRecord.setRecordCourseStatue(Integer.parseInt(item_id), 2);
