@@ -1055,7 +1055,7 @@ public class OrderController extends BaseController {
                     int beginTime = item.getClass_time();
                     int endTime = beginTime + 3600 * item.getClass_hours();
                     int currentTime = (int) (new Date().getTime() / 1000);
-                    if (currentTime >= beginTime && currentTime <= endTime) {
+                    if (currentTime >= beginTime - 600 && currentTime <= endTime) { //提前十分钟不许退费
                         return JSONResult.errorMsg("上课期间不允许退款");
                     }
                 }

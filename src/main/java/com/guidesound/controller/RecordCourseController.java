@@ -171,11 +171,12 @@ public class RecordCourseController extends BaseController {
             recordVideoList = mapper_temp.readValue((String) record.getVideos(), javaType);
             for (RecordVideo recordVideo : recordVideoList) {
                 String cdnClassUrl = recordVideo.getClass_url().replace("cos.ap-beijing", "file");
-                if (!user_ids.contains(getCurrentUserId()) && recordVideo.getCharge_type() == 1) {
-                    recordVideo.setClass_url("");
-                } else {
+                if (user_ids.contains(getCurrentUserId()) || recordVideo.getCharge_type() == 0 || recordVideo.getCharge_type() == 1) {
                     recordVideo.setClass_url(cdnClassUrl);
+                } else {
+                    recordVideo.setClass_url("");
                 }
+
             }
             record.setVideos(recordVideoList);
         } catch (IOException e) {

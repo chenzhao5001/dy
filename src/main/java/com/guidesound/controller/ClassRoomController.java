@@ -372,6 +372,7 @@ public class ClassRoomController extends BaseController {
                 nextClassInfo.next_class_NO = 0;
                 nextClassInfo.next_clsss_time = 0;
                 nextClassInfo.next_class_hour = 0;
+
                 if (classRoom.getUser_id() == getCurrentUserId()) {
                     nextClassInfo.next_class_name = "需要你发布新课时";
                 } else {
@@ -610,9 +611,7 @@ public class ClassRoomController extends BaseController {
                             if(count > 0) {
                                 one_mount = orderList.get(0).getPrice_one_hour()*((classTimeInfo.getEnd_time() - classTimeInfo.getBegin_time()) / 3600);
                                 all_amount = one_mount * count;
-
                             }
-
 
                             for(OrderInfo info : orderList) {
 
@@ -916,6 +915,9 @@ public class ClassRoomController extends BaseController {
                     student.setOrder_status(getTeacherClassState(item));
                 }
                 teacherClass1.setStudent(student);
+                if(student.getOrder_status() == 2) { //已经退费
+                    teacherClass1.setNext_class_name("");
+                }
                 teacherClass1.setTeacher(null);
             } else if (item.flag == 1) { //老师
                 Teacher teacher = new Teacher();
@@ -923,6 +925,9 @@ public class ClassRoomController extends BaseController {
                 teacher.setClass_info_status(getTeacherClassState(item));
                 teacherClass1.setStudent(null);
                 teacherClass1.setTeacher(teacher);
+                if(teacher.getClass_info_status() == 4) { //已经退费
+                    teacherClass1.setNext_class_name("");
+                }
             }
             ClassInfo classInfo = new ClassInfo();
 
