@@ -23,6 +23,15 @@ public class TeacherClass1 {
        int student_id;
        String student_name;
        String student_head;
+       int create_time;
+
+    public int getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(int create_time) {
+        this.create_time = create_time;
+    }
 
     public int getStudent_id() {
         return student_id;

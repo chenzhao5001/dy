@@ -859,7 +859,7 @@ public class OrderController extends BaseController {
         if(type.equals("0")) {
             alipayOrder = "a" + order_id;
         } else {
-            alipayOrder = "b" + order_id;
+            alipayOrder = "b" +getCurrentUserId() + " _" + order_id;
         }
 
 

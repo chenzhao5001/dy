@@ -29,6 +29,15 @@ public class Record {
     int record_owner_id;
     String record_owner_name;
     String record_owner_head;
+    int create_time;
+
+    public int getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(int create_time) {
+        this.create_time = create_time;
+    }
 
     public int getRecord_owner_id() {
         return record_owner_id;

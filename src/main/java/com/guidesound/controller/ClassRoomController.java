@@ -859,6 +859,7 @@ public class ClassRoomController extends BaseController {
             teacherClass1.setCourse_name(item.getCourse_name());
             teacherClass1.setCourse_pic(item.getCourse_pic());
             teacherClass1.setCourse_owner_id(item.getUser_id());
+            teacherClass1.setCreate_time(item.getCreate_time());
             UserInfo userInfo = iUser.getUser(item.getUser_id());
             if (userInfo != null) {
                 teacherClass1.setCourse_owner_name(userInfo.getName());
@@ -982,6 +983,7 @@ public class ClassRoomController extends BaseController {
                 videoClass1.setRecord_course_pic(record.getRecord_course_pic());
                 videoClass1.setRecord_course_name(record.getRecord_course_name());
                 videoClass1.setRecord_owner_id(record.getUser_id());
+                videoClass1.setCreate_time(record.getCreate_time());
                 if(user_maps.containsKey(record.getUser_id())) {
                     videoClass1.setRecord_owner_head(user_maps.get(record.getUser_id()).getHead());
                     videoClass1.setRecord_owner_name(user_maps.get(record.getUser_id()).getName());
@@ -1011,15 +1013,46 @@ public class ClassRoomController extends BaseController {
             }
         }
 
-        Map<String,ClassInfo> ing_class = new HashMap<>();
-        Map<String,ClassInfo> over_class = new HashMap<>();
+        Map<Integer,ClassInfo> ing_class = new HashMap<>();
+        Map<Integer,ClassInfo> over_class = new HashMap<>();
         for(ClassInfo classInfo : classInfoList) {
-            if(classInfo.getTeacher_class() != null) {
+            if(classInfo.getTeacher_class() != null) { //正式课
+                TeacherClass1 teacherClass1 = (TeacherClass1) classInfo.getTeacher_class();
+                if(teacherClass1.getNext_class_name().equals("班课前试听")) {
+                    ing_class.put(teacherClass1.getCreate_time(),classInfo);
+                } else {
+                    if(teacherClass1.getNext_class_name().equals("等待老师发布新课时") || teacherClass1.getNext_class_name().equals("需要你发布新课时")) {
+                        ing_class.put(teacherClass1.getCreate_time(),classInfo);
+                    } else if(teacherClass1.getNext_class_NO() == 0) {
+                        over_class.put(teacherClass1.getCreate_time(),classInfo);
+                    } else {
+                        ing_class.put(teacherClass1.getCreate_time(),classInfo);
+                    }
+                }
 
             } else {
-
+                VideoClass1 videoClass1 = (VideoClass1) classInfo.getVideo_class();
+                ing_class.put(videoClass1.getCreate_time(),classInfo);
             }
+        }
+        List<ClassInfo> list_ing_temp = new ArrayList<>();
+        List<ClassInfo> list_over_temp = new ArrayList<>();
 
+        for(int key : ing_class.keySet()) {
+            list_ing_temp.add(ing_class.get(key));
+        }
+        Collections.reverse(list_ing_temp);
+
+        for(int key : over_class.keySet()) {
+            list_over_temp.add(over_class.get(key));
+        }
+        Collections.reverse(list_over_temp);
+        classInfoList.clear();
+        for(ClassInfo classInfo :list_ing_temp) {
+            classInfoList.add(classInfo);
+        }
+        for(ClassInfo classInfo :list_over_temp) {
+            classInfoList.add(classInfo);
         }
         return JSONResult.ok(classInfoList);
     }

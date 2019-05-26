@@ -17,6 +17,15 @@ public class VideoClass1 {
     int last_class_NO;
     String last_class_name;
     int last_class_pos;
+    int create_time;
+
+    public int getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(int create_time) {
+        this.create_time = create_time;
+    }
 
     public int getRecord_course_id() {
         return record_course_id;
