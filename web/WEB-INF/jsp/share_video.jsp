@@ -6,8 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>Title</title>
-    <link rel="stylesheet" href="/css/h5/h5.css">
+    <title>导音视频分享</title>
+    <link rel="stylesheet" href="../css/h5/h5.css">
     <style>
         .top {
             background-color: rgba(127,93,0,.8);
@@ -142,19 +142,19 @@
 
     <img src="${user_head}" class="header">
     <div class = "item">
-        <img src="/icon/h5/video_1.png" alt="">
+        <img src="../icon/h5/video_1.png" alt="">
         <p>${praise_count}</p>
     </div>
     <div class = "item">
-        <img src="/icon/h5/video_2.png" alt="">
+        <img src="../icon/h5/video_2.png" alt="">
         <p>${chat_count}</p>
     </div>
     <div class = "item">
-        <img src="/icon/h5/video_3.png" alt="">
+        <img src="../icon/h5/video_3.png" alt="">
         <p>${collection_count}</p>
     </div>
     <div class = "item">
-        <img src="/icon/h5/video_4.png" alt="">
+        <img src="../icon/h5/video_4.png" alt="">
         <p>${shared_count}</p>
     </div>
 </div>

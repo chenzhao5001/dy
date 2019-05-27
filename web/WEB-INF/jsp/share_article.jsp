@@ -6,13 +6,13 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="/css/h5/h5.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="../css/h5/h5.css">
+    <title>导音文章分享</title>
 
     <style>
-        body {
-            overflow-y:hidden
-        }
+        /*body {*/
+            /*overflow-y:hidden*/
+        /*}*/
         .top {
             background-color: rgba(127, 93, 0, .8);
             height: .6rem;
@@ -75,7 +75,7 @@
             margin-top: .1rem;
             margin-bottom: .1rem;
             width: 3.87rem;
-            height: .60rem;
+            height: .65rem;
             color: #333333;
             font-size: .24rem;
 
@@ -109,7 +109,7 @@
             text-align: center;
         }
         .article_content p{
-            font-size: .16rem;
+            font-size: .21rem;
             margin: 0;
         }
         .article_content img {

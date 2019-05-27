@@ -31,6 +31,7 @@
             <mvc:exclude-mapping path="/baidu_verify_GXXFRgzYdE.html"/>
             <mvc:exclude-mapping path="/js/**"/>
             <mvc:exclude-mapping path="/css/**"/>
+            <mvc:exclude-mapping path="/icon/**"/>
             <mvc:exclude-mapping path="/tmp/**"/>
             <mvc:exclude-mapping path="/static/**"/>
             <mvc:exclude-mapping path="/statics/**"/>

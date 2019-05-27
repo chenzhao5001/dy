@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="guidesound">
+  <artifact type="war" name="guidesound">
     <output-path>$PROJECT_DIR$/classes/artifacts/guidesound</output-path>
-    <root id="root">
+    <root id="archive" name="guidesound.war">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="guide_sound" />
