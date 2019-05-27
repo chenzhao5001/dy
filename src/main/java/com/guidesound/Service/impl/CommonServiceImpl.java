@@ -3,10 +3,7 @@ package com.guidesound.Service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.guidesound.Service.ICommonService;
 import com.guidesound.TempStruct.ItemInfo;
-import com.guidesound.dao.ICourse;
-import com.guidesound.dao.IRecord;
-import com.guidesound.dao.IUser;
-import com.guidesound.dao.IVideo;
+import com.guidesound.dao.*;
 import com.guidesound.models.*;
 import com.guidesound.ret.CommodityInfo;
 import com.guidesound.ret.TeacherClass;
@@ -14,7 +11,10 @@ import com.guidesound.ret.VideoClass;
 import com.guidesound.util.SignMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
@@ -31,6 +31,9 @@ public class CommonServiceImpl implements ICommonService {
 
     @Autowired
     IRecord iRecord;
+
+    @Autowired
+    IArticle iArticle;
 
     @Override
     public void changeUserSurplusAmount(int user_id, int change_amount) {
@@ -200,5 +203,147 @@ public class CommonServiceImpl implements ICommonService {
         }
     }
 
+    @Override
+    public void improveArticleList(List<ArticleInfo> list,int user_id) {
+        if (list.size() < 1) {
+            return;
+        }
+        int currentUserID = user_id;
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        List<Integer> collectList = new ArrayList<>();
+        List<Integer> followList = new ArrayList<>();
+        List<Integer> praiseList = new ArrayList<>();
+        if (currentUserID != 0) {
+            collectList = iArticle.getArticleListByUserId(currentUserID);
+            followList = iUser.getFollowUsers(currentUserID);
+            praiseList = iArticle.getPraiseListByUserId(currentUserID);
+        }
+
+
+        List<Integer> user_ids = new ArrayList<>();
+        for (ArticleInfo item : list) {
+            if (collectList.contains(item.getId())) {
+                item.setCollection(true);
+            }
+            if (followList.contains(item.getUser_id())) {
+                item.setFollow(true);
+            }
+            if (praiseList.contains(item.getId())) {
+                item.setPraise(true);
+            }
+
+            if(item.getType() == 1) {
+                item.setSubject_name(SignMap.getSubjectTypeById(item.getSubject()));
+            } else {
+                item.setSubject_name(SignMap.getSubjectTypeById(item.getAsk_subject()));
+            }
+
+            item.setContent_url(request.getScheme() + "://" + request.getServerName() + ":"
+                    + request.getServerPort() + "/guidesound/article/preview?article_id=" + item.getId());
+            if (!user_ids.contains(item.getUser_id())) {
+                user_ids.add(item.getUser_id());
+            }
+
+            //推荐池解析
+            String[] temps = ((String) item.getPools()).split(",");
+            List<ItemInfo> poolList = new ArrayList<>();
+            for (String cell : temps) {
+                if (cell.equals("")) {
+                    continue;
+                }
+                ItemInfo itemInfo = new ItemInfo();
+                itemInfo.setId(Integer.parseInt(cell));
+                itemInfo.setInfo(SignMap.getPoolById(Integer.parseInt(cell)));
+                poolList.add(itemInfo);
+
+            }
+            if (poolList.size() > 0) {
+                item.setPools(poolList);
+            }
+
+            item.setArticle_state(SignMap.getVideoState(item.getExamine_status()));
+
+        }
+
+
+        if (user_ids.size() > 0) {
+            List<UserInfo> userList = iUser.getUserByIds(user_ids);
+            Map<Integer, UserInfo> userMap = new HashMap<>();
+            for (UserInfo user : userList) {
+                userMap.put(user.getId(), user);
+            }
+            for (ArticleInfo item : list) {
+                if (userMap.containsKey(item.getUser_id())) {
+                    item.setUser_head(userMap.get(item.getUser_id()).getHead());
+                    item.setUser_name(userMap.get(item.getUser_id()).getName());
+                    item.setUser_type(userMap.get(item.getUser_id()).getType());
+                    item.setAuth_info(userMap.get(item.getUser_id()).getAuth_info());
+                    item.setUser_subject(userMap.get(item.getUser_id()).getSubject());
+                    item.setUser_subject_name(SignMap.getSubjectTypeById(userMap.get(item.getUser_id()).getSubject()));
+
+                    item.setUser_grade(userMap.get(item.getUser_id()).getGrade());
+                    item.setUser_grade_name(SignMap.getGradeTypeByID(userMap.get(item.getUser_id()).getGrade()));
+
+                    item.setUser_grade_level(userMap.get(item.getUser_id()).getGrade_level());
+                    item.setUser_grade_level_name(SignMap.getWatchById(userMap.get(item.getUser_id()).getGrade_level()));
+                    item.setGrade(SignMap.getGradeTypeByID((Integer)item.getGrade()));
+
+
+                    if (item.getAttachment_id() != 0) {
+                        if (item.getAttachment_type() == 1) { // 商品
+                            CommodityInfo commodityInfo = iUser.getCommodityInfoByid(item.getAttachment_id());
+                            if (commodityInfo != null) {
+                                item.setCommodity(commodityInfo);
+                            } else {
+                                item.setAttachment_type(0);
+                                item.setAttachment_id(-1);
+                            }
+
+                        } else if (item.getAttachment_type() == 2) {  //录播课
+                            VideoClass videoClass = iRecord.getVideoClass(item.getAttachment_id());
+                            if (videoClass != null) {
+                                videoClass.setSubject_id(Integer.parseInt(videoClass.getSubject()));
+                                videoClass.setSubject(SignMap.getSubjectTypeById(Integer.parseInt(videoClass.getSubject())));
+                                videoClass.setGrade_id(Integer.parseInt(videoClass.getGrade()));
+                                videoClass.setGrade(SignMap.getGradeTypeByID(Integer.parseInt(videoClass.getGrade())));
+                                item.setVideo_class(videoClass);
+                            } else {
+                                item.setAttachment_type(0);
+                                item.setAttachment_id(-1);
+                            }
+
+
+                        } else if (item.getAttachment_type() == 3) { // 辅导课
+                            Course course = iCourse.getCouresByid(item.getAttachment_id());
+                            if (course != null && course.getCourse_status() == 3) {
+                                TeacherClass teacherClass = new TeacherClass();
+                                teacherClass.setCourse_id(course.getId());
+                                teacherClass.setCourse_name(course.getCourse_name());
+                                teacherClass.setCourse_pic(course.getCourse_pic());
+                                teacherClass.setCourse_status(course.getCourse_status());
+                                teacherClass.setCourse_type(course.getType());
+                                teacherClass.setCourse_type_name(SignMap.getCourseTypeNameById(course.getType()));
+                                teacherClass.setForm(SignMap.getCourseFormById(course.getForm()));
+                                teacherClass.setGrade(SignMap.getGradeTypeByID(course.getGrade()));
+                                if(course.getType() == 0) {
+                                    teacherClass.setPrice(course.getPrice_one_hour());
+                                } else {
+                                    teacherClass.setPrice(course.getAll_charge());
+                                }
+
+                                teacherClass.setStudent_count(course.getMax_person());
+                                teacherClass.setSubject(SignMap.getSubjectTypeById(course.getSubject()));
+                                item.setTeacher_class(teacherClass);
+                            } else {
+                                item.setAttachment_type(0);
+                                item.setAttachment_id(-1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return;
+    }
 
 }

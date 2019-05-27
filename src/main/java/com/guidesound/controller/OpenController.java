@@ -4,13 +4,18 @@ import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import com.guidesound.Service.ICommonService;
+import com.guidesound.dao.IArticle;
 import com.guidesound.dao.ITool;
 import com.guidesound.dao.IVideo;
 import com.guidesound.models.AppVersion;
+import com.guidesound.models.ArticleInfo;
 import com.guidesound.models.VideoShow;
 import com.guidesound.resp.ListResp;
 import com.guidesound.util.JSONResult;
 import com.guidesound.util.ToolsFunction;
+import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,6 +40,9 @@ public class OpenController extends BaseController {
 
     @Autowired
     IVideo iVideo;
+
+    @Autowired
+    IArticle iArticle;
 
     @Autowired
     ICommonService iCommonService;
@@ -216,7 +224,30 @@ public class OpenController extends BaseController {
             return "about";
         }
         if (type.equals("0")) { // 文章
-            return "share_article";
+            ArticleInfo articleInfo = iArticle.getArticle(Integer.parseInt(avid));
+            if (articleInfo != null) {
+                List<ArticleInfo> lists = new ArrayList<>();
+                lists.add(articleInfo);
+                iCommonService.improveArticleList(lists, 0);
+                articleInfo = lists.get(0);
+
+                model.addAttribute("user_head", articleInfo.getUser_head());
+                model.addAttribute("user_name", articleInfo.getUser_name());
+                model.addAttribute("user_sing", "我是" + articleInfo.getUser_name() + "，这里都是初高中学习类文章呦");
+
+                model.addAttribute("article_title",articleInfo.getHead());
+
+                String url = iArticle.getArticleContentUrl(Integer.parseInt(avid));
+                Request request = new Request.Builder().url(url).build();
+                Call call = okHttpClient.newCall(request);
+                Response response = call.execute();
+                String content = response.body().string();
+                model.addAttribute("article_content",content);
+                return "share_article";
+            } else {
+                model.addAttribute("error_info", "因查询的文章不存在");
+                return "err";
+            }
         } else {  //视频
             VideoShow videoShow = iVideo.getVideoById(avid);
             if (videoShow != null) {
@@ -226,7 +257,7 @@ public class OpenController extends BaseController {
                 videoShow = lists.get(0);
                 model.addAttribute("user_head", videoShow.getUser_head());
                 model.addAttribute("user_name", videoShow.getUser_name());
-                model.addAttribute("user_sing", "这里填什么？");
+                model.addAttribute("user_sing", "我是" + videoShow.getUser_name() + "，这里都是初高中学习类短视频呦");
 
                 model.addAttribute("pic_up_path", videoShow.getPic_up_path());
                 model.addAttribute("praise_count", videoShow.getPraise_count());
@@ -239,11 +270,12 @@ public class OpenController extends BaseController {
                 model.addAttribute("video_title", ToolsFunction.URLDecoderString(videoShow.getTitle()));
 
                 return "share_video";
+            } else {
+
+                model.addAttribute("error_info", "您分享的视频不存在");
+                return "err";
             }
         }
-
-        return "err";
-
     }
 
 }

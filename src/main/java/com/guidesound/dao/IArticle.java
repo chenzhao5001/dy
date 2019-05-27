@@ -253,6 +253,9 @@ public interface IArticle {
     @Select("select * from article where id = #{arg0}")
     ArticleInfo getArticle(int id);
 
+    @Select("select content from article where id = #{arg0}")
+    String getArticleContentUrl(int id);
+
     @Select("select * from article_pools where article_id = #{arg0} and article_pool = #{arg1}")
     List<ArticlePool> getArticlePoolByInfo(int articleID,int poolID);
 

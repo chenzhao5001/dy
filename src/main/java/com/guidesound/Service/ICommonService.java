@@ -1,5 +1,6 @@
 package com.guidesound.Service;
 
+import com.guidesound.models.ArticleInfo;
 import com.guidesound.models.VideoShow;
 
 import java.util.List;
@@ -15,5 +16,8 @@ public interface ICommonService {
 
     //增加视频扩展信息
     void improveVideoList(List<VideoShow> list_temp, int user_id);
+
+    //增加文章扩展信息
+    void improveArticleList(List<ArticleInfo> list, int user_id);
 
 }
