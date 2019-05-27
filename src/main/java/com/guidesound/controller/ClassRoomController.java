@@ -225,7 +225,7 @@ public class ClassRoomController extends BaseController {
                             if (orderInfo.getRefund_amount() != 0) {
                                 return 4;
                             } else {
-                                if (all_hours == orderInfo.getAll_hours() && last_time < new Date().getTime() / 1000) {
+                                if (all_hours == orderInfo.getAll_hours() && last_time + 3600 * last_hour < new Date().getTime() / 1000) {
                                     return 3;
                                 } else {
                                     return orderInfo.getOrder_status();
@@ -238,9 +238,9 @@ public class ClassRoomController extends BaseController {
             }
 
         } else { //班课
-            if (classRoom.getUser_id() == getCurrentUserId()) {
+            if (classRoom.getUser_id() == getCurrentUserId()) { //老师
                 ClassTime courseOutline = beanList.get(beanList.size() - 1);
-                if (courseOutline.getClass_time() < new Date().getTime() / 1000) {
+                if (courseOutline.getClass_time() + 3600*courseOutline.getClass_hours() < new Date().getTime() / 1000) {
                     return 3;
                 } else {
                     if (iOrder.getNoReturnOrderByClassId(classRoom.getClass_id()) > 0) {
@@ -259,7 +259,7 @@ public class ClassRoomController extends BaseController {
                         if (orderInfo.getRefund_amount() > 0) {
                             return 4;
                         } else {
-                            if (last_time < new Date().getTime() / 1000) {
+                            if (last_time + 3600*last_hour < new Date().getTime() / 1000) {
                                 return 3;
                             } else {
                                 return orderInfo.getOrder_status();
@@ -1026,7 +1026,17 @@ public class ClassRoomController extends BaseController {
                 if(teacherClass1.getNext_class_name().equals("班课前试听")) {
                     ing_class.put(teacherClass1.getCreate_time(),classInfo);
                 } else {
-                    if(teacherClass1.getNext_class_name().equals("等待老师发布新课时") || teacherClass1.getNext_class_name().equals("需要你发布新课时")) {
+                    int class_status = 0;
+                    if(teacherClass1.getStudent() != null) {
+                        Student student = (Student)teacherClass1.getStudent();
+                        class_status = student.getOrder_status();
+                    } else {
+                        Teacher teacher = (Teacher)teacherClass1.getTeacher();
+                        class_status = teacher.getClass_info_status();
+                    }
+                    if(class_status == 4) { //退费完成
+                        over_class.put(teacherClass1.getCreate_time(),classInfo);
+                    } else if(teacherClass1.getNext_class_name().equals("等待老师发布新课时") || teacherClass1.getNext_class_name().equals("需要你发布新课时")) {
                         ing_class.put(teacherClass1.getCreate_time(),classInfo);
                     } else if(teacherClass1.getNext_class_NO() == 0) {
                         over_class.put(teacherClass1.getCreate_time(),classInfo);

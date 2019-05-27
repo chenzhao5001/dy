@@ -653,7 +653,7 @@ public class SignMap {
         ListInfo info6 = new ListInfo();//
         ListInfo info7 = new ListInfo();//
         ListInfo info8 = new ListInfo();//
-        ListInfo info10 = new ListInfo();//
+//        ListInfo info10 = new ListInfo();//
 
         info1.setId(1);
         info1.setLevel("文化课");
@@ -680,9 +680,9 @@ public class SignMap {
         info8.setLevel("家长课");
         info8.setList(new ArrayList<>());
 
-        info10.setId(10);
-        info10.setLevel("业余爱好");
-        info10.setList(new ArrayList<>());
+//        info10.setId(10);
+//        info10.setLevel("业余爱好");
+//        info10.setList(new ArrayList<>());
 
         for (Integer key : subject_type.keySet()) {
             Content content = subject_type.get(key);
@@ -714,9 +714,9 @@ public class SignMap {
                 case 8:
                     info8.getList().add(item);
                     break;
-                case 10:
-                    info10.getList().add(item);
-                    break;
+//                case 10:
+//                    info10.getList().add(item);
+//                    break;
             }
         }
 
@@ -728,7 +728,7 @@ public class SignMap {
         Collections.sort(info6.getList());
         Collections.sort(info7.getList());
         Collections.sort(info8.getList());
-        Collections.sort(info10.getList());
+//        Collections.sort(info10.getList());
 
         List<ListInfo> list = new ArrayList<>();
         list.add(info1);
@@ -739,7 +739,7 @@ public class SignMap {
         list.add(info6);
         list.add(info7);
         list.add(info8);
-        list.add(info10);
+//        list.add(info10);
         return list;
     }
 

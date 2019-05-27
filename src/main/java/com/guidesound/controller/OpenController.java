@@ -1,20 +1,43 @@
 package com.guidesound.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.gson.Gson;
+import com.guidesound.Service.ICommonService;
 import com.guidesound.dao.ITool;
+import com.guidesound.dao.IVideo;
 import com.guidesound.models.AppVersion;
+import com.guidesound.models.VideoShow;
+import com.guidesound.resp.ListResp;
 import com.guidesound.util.JSONResult;
+import com.guidesound.util.ToolsFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.tools.Tool;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/open")
-public class OpenController {
+public class OpenController extends BaseController {
 
 
     @Autowired
     ITool iTool;
+
+    @Autowired
+    IVideo iVideo;
+
+    @Autowired
+    ICommonService iCommonService;
 
     class AppInfo {
         int upgrade_type;
@@ -48,14 +71,14 @@ public class OpenController {
 
     @RequestMapping(value = "/version")
     @ResponseBody
-    JSONResult version(String os_type,String os_version) {
-        if(os_type == null || os_version == null) {
+    JSONResult version(String os_type, String os_version) {
+        if (os_type == null || os_version == null) {
             return JSONResult.errorMsg("缺少参数 os_type 或 os_version");
         }
         AppVersion appVersion = iTool.getVersion();
         AppInfo appInfo = new AppInfo();
-        if(os_type.equals("0")) { //android
-            if(os_version.equals(appVersion.getAndroid_version())) {
+        if (os_type.equals("0")) { //android
+            if (os_version.equals(appVersion.getAndroid_version())) {
                 appInfo.setUpgrade_type(2);
             } else {
                 appInfo.setUpgrade_type(appVersion.getAndroid_type());
@@ -65,7 +88,7 @@ public class OpenController {
 
         } else { //ios
 
-            if(os_version.equals(appVersion.getIos_version())) {
+            if (os_version.equals(appVersion.getIos_version())) {
                 appInfo.setUpgrade_type(2);
             } else {
                 appInfo.setUpgrade_type(appVersion.getIos_type());
@@ -102,6 +125,7 @@ public class OpenController {
     String about() {
         return "about";
     }
+
     @RequestMapping(value = "/privacy_policy")
     String privacyPolicy() {
         return "privacyPolicy";
@@ -186,6 +210,40 @@ public class OpenController {
     }
 
 
+    @RequestMapping(value = "/share")
+    String share(String type, String avid, ModelMap model) throws IOException {
+        if (type == null || avid == null) {
+            return "about";
+        }
+        if (type.equals("0")) { // 文章
+            return "share_article";
+        } else {  //视频
+            VideoShow videoShow = iVideo.getVideoById(avid);
+            if (videoShow != null) {
+                List<VideoShow> lists = new ArrayList<>();
+                lists.add(videoShow);
+                iCommonService.improveVideoList(lists, 0);
+                videoShow = lists.get(0);
+                model.addAttribute("user_head", videoShow.getUser_head());
+                model.addAttribute("user_name", videoShow.getUser_name());
+                model.addAttribute("user_sing", "这里填什么？");
 
+                model.addAttribute("pic_up_path", videoShow.getPic_up_path());
+                model.addAttribute("praise_count", videoShow.getPraise_count());
+                model.addAttribute("chat_count", videoShow.getChat_count());
+                model.addAttribute("collection_count", videoShow.getCollection_count());
+                model.addAttribute("shared_count", videoShow.getShared_count());
+
+                model.addAttribute("video_subject", videoShow.getWatch_type_name() + videoShow.getSubject_name());
+                model.addAttribute("video_user_name", "@" + videoShow.getUser_name());
+                model.addAttribute("video_title", ToolsFunction.URLDecoderString(videoShow.getTitle()));
+
+                return "share_video";
+            }
+        }
+
+        return "err";
+
+    }
 
 }
