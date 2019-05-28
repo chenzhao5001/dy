@@ -1610,7 +1610,7 @@ public class UserController extends BaseController{
 
     @RequestMapping("/report_question")
     @ResponseBody
-    JSONResult reportQuestion(String question,String phone_number,String verify_code) {
+    JSONResult reportQuestion(String question,String phone_number,String verify_code) throws IOException {
         if(question == null || phone_number == null || verify_code == null) {
             return JSONResult.errorMsg("缺少 question, verify_code 或 phone_number 参数");
         }
@@ -1619,7 +1619,11 @@ public class UserController extends BaseController{
         if(count <= 0) {
             return JSONResult.errorMsg("验证码错误");
         }
+        UserInfo userInfo = iUser.getUser(getCurrentUserId());
+        String name = userInfo.getName();
         iUser.reportQusetion(question,phone_number, (int) (new Date().getTime() / 1000));
+        String info = "意见反馈：用户昵称：" + name + "，手机号：" + phone_number  + "，问题：”" + question  + "“。";
+        TlsSigTest.PushMessage("403",info);
         return JSONResult.ok();
     }
 
