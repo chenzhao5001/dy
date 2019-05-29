@@ -1817,76 +1817,76 @@ public class UserController extends BaseController{
         return JSONResult.ok(ret);
     }
 
-//    @RequestMapping("/share")
-//    @ResponseBody
-//    JSONResult share(String type,String avid) {
-//        class Info {
-//            String title;
-//            String content;
-//            String pic;
-//            String url;
-//
-//            public String getTitle() {
-//                return title;
-//            }
-//
-//            public void setTitle(String title) {
-//                this.title = title;
-//            }
-//
-//            public String getContent() {
-//                return content;
-//            }
-//
-//            public void setContent(String content) {
-//                this.content = content;
-//            }
-//
-//            public String getPic() {
-//                return pic;
-//            }
-//
-//            public void setPic(String pic) {
-//                this.pic = pic;
-//            }
-//
-//            public String getUrl() {
-//                return url;
-//            }
-//
-//            public void setUrl(String url) {
-//                this.url = url;
-//            }
-//        }
-//        Info info = new Info();
-//        if(type == null || avid == null) {
-//            return JSONResult.errorMsg("缺少 type 或 avid");
-//        }
-//
-//        if(type.equals("0")) {
-//            ArticleInfo articleInfo = iArticle.getArticle(Integer.parseInt(avid));
-//            if(articleInfo != null) {
-//                iArticle.addArticleShare(Integer.parseInt(avid));
-//                info.setTitle(articleInfo.getHead());
-//                info.setContent("暂时固定为“看视频、读文章、发现好老师。”");
-//                info.setPic(iUser.getUser(getCurrentUserId()).getHead());
-//                String url = "https://daoyinjiaoyu.com/guidesound/open/share?user_id=" + getCurrentUserId() + "&type=0&avid="+avid;
-//                info.setUrl(url);
-//            }
-//        } else {
-//            VideoShow videoShow = iVideo.getVideoById(avid);
-//            if(videoShow != null) {
-//                iVideo.addShareCount(Integer.parseInt(avid));
-//                info.setTitle(ToolsFunction.URLDecoderString(videoShow.getTitle()));
-//                info.setContent("暂时固定为“看视频、读文章、发现好老师。”");
-//                info.setPic(iUser.getUser(getCurrentUserId()).getHead());
-//                String url = "https://daoyinjiaoyu.com/guidesound/open/share?user_id=" + getCurrentUserId() + "&type=1&avid="+avid;
-//                info.setUrl(url);
-//            }
-//        }
-//
-//        return JSONResult.ok(info);
-//    }
+    @RequestMapping("/share")
+    @ResponseBody
+    JSONResult share(String type,String avid) {
+        class Info {
+            String title;
+            String content;
+            String pic;
+            String url;
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public String getContent() {
+                return content;
+            }
+
+            public void setContent(String content) {
+                this.content = content;
+            }
+
+            public String getPic() {
+                return pic;
+            }
+
+            public void setPic(String pic) {
+                this.pic = pic;
+            }
+
+            public String getUrl() {
+                return url;
+            }
+
+            public void setUrl(String url) {
+                this.url = url;
+            }
+        }
+        Info info = new Info();
+        if(type == null || avid == null) {
+            return JSONResult.errorMsg("缺少 type 或 avid");
+        }
+
+        if(type.equals("0")) {
+            ArticleInfo articleInfo = iArticle.getArticle(Integer.parseInt(avid));
+            if(articleInfo != null) {
+                iArticle.addArticleShare(Integer.parseInt(avid));
+                info.setTitle(articleInfo.getHead());
+                info.setContent("暂时固定为“看视频、读文章、发现好老师。”");
+                info.setPic(iUser.getUser(getCurrentUserId()).getHead());
+                String url = "https://daoyinjiaoyu.com/guidesound/open/share?user_id=" + getCurrentUserId() + "&type=0&avid="+avid;
+                info.setUrl(url);
+            }
+        } else {
+            VideoShow videoShow = iVideo.getVideoById(avid);
+            if(videoShow != null) {
+                iVideo.addShareCount(Integer.parseInt(avid));
+                info.setTitle(ToolsFunction.URLDecoderString(videoShow.getTitle()));
+                info.setContent("“看视频、读文章、发现好老师。”");
+                info.setPic(iUser.getUser(getCurrentUserId()).getHead());
+                String url = "https://daoyinjiaoyu.com/guidesound/open/share?user_id=" + getCurrentUserId() + "&type=1&avid="+avid;
+                info.setUrl(url);
+            }
+        }
+
+        return JSONResult.ok(info);
+    }
 
 
 

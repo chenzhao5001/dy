@@ -224,78 +224,78 @@ public class OpenController extends BaseController {
 
 
 //    @RequestMapping(value = "/share")
-//    String share(String type, String avid,String user_id, ModelMap model) throws IOException {
-//        if (type == null || avid == null || user_id == null) {
-//            model.addAttribute("error_info", "缺少参数");
-//            return "err";
-//        }
-//        UserInfo userInfo = iUser.getUser(Integer.parseInt(user_id));
-//        if(userInfo == null) {
-//            model.addAttribute("error_info", "分享用户不存在");
-//            return "err";
-//        }
-//
-//        String store_url = "http://itunes.apple.com/app/id1445981196";
-//        if (type.equals("0")) { // 文章
-//            ArticleInfo articleInfo = iArticle.getArticle(Integer.parseInt(avid));
-//            if (articleInfo != null) {
-//                List<ArticleInfo> lists = new ArrayList<>();
-//                lists.add(articleInfo);
-//                iCommonService.improveArticleList(lists, 0);
-//                articleInfo = lists.get(0);
-//
-//                model.addAttribute("user_head", userInfo.getHead());
-//                model.addAttribute("user_name", userInfo.getName());
-//                model.addAttribute("user_sing", "我是" + userInfo.getName() + "，这里都是初高中学习类文章呦");
-//
-//                model.addAttribute("article_title",articleInfo.getHead());
-//
-//                String url = iArticle.getArticleContentUrl(Integer.parseInt(avid));
-//                Request request = new Request.Builder().url(url).build();
-//                Call call = okHttpClient.newCall(request);
-//                Response response = call.execute();
-//                String content = response.body().string();
-//                model.addAttribute("article_content",content);
-//                model.addAttribute("store_url",store_url);
-//                return "share_article";
-//            } else {
-//                model.addAttribute("error_info", "因查询的文章不存在");
-//                return "err";
-//            }
-//        } else {  //视频
-//            VideoShow videoShow = iVideo.getVideoById(avid);
-//            if (videoShow != null) {
-//                List<VideoShow> lists = new ArrayList<>();
-//                lists.add(videoShow);
-//                iCommonService.improveVideoList(lists, 0);
-//                videoShow = lists.get(0);
-//
-//                model.addAttribute("user_head", userInfo.getHead());
-//                model.addAttribute("user_name", userInfo.getName());
-//
-//                model.addAttribute("user_sing", "我是" + userInfo.getName() + "，这里都是初高中学习类短视频呦");
-//
-//                model.addAttribute("pic_up_path", videoShow.getPic_up_path());
-//                model.addAttribute("praise_count", videoShow.getPraise_count());
-//                model.addAttribute("chat_count", videoShow.getChat_count());
-//                model.addAttribute("collection_count", videoShow.getCollection_count());
-//                model.addAttribute("shared_count", videoShow.getShared_count());
-//
-//                model.addAttribute("video_subject", videoShow.getWatch_type_name() + videoShow.getSubject_name());
-//                model.addAttribute("video_user_name", "@" + videoShow.getUser_name());
-//                model.addAttribute("video_title", ToolsFunction.URLDecoderString(videoShow.getTitle()));
-//
-////                model.addAttribute("video_show_url", videoShow.getVideo_show_path().replace("http","https"));
-//                model.addAttribute("video_show_url", videoShow.getVideo_show_path());
-//                model.addAttribute("store_url",store_url);
-//
-//                return "share_video";
-//            } else {
-//
-//                model.addAttribute("error_info", "您分享的视频不存在");
-//                return "err";
-//            }
-//        }
-//    }
+    String share(String type, String avid,String user_id, ModelMap model) throws IOException {
+        if (type == null || avid == null || user_id == null) {
+            model.addAttribute("error_info", "缺少参数");
+            return "err";
+        }
+        UserInfo userInfo = iUser.getUser(Integer.parseInt(user_id));
+        if(userInfo == null) {
+            model.addAttribute("error_info", "分享用户不存在");
+            return "err";
+        }
+
+        String store_url = "http://itunes.apple.com/app/id1445981196";
+        if (type.equals("0")) { // 文章
+            ArticleInfo articleInfo = iArticle.getArticle(Integer.parseInt(avid));
+            if (articleInfo != null) {
+                List<ArticleInfo> lists = new ArrayList<>();
+                lists.add(articleInfo);
+                iCommonService.improveArticleList(lists, 0);
+                articleInfo = lists.get(0);
+
+                model.addAttribute("user_head", userInfo.getHead());
+                model.addAttribute("user_name", userInfo.getName());
+                model.addAttribute("user_sing", "我是" + userInfo.getName() + "，这里都是初高中学习类文章呦");
+
+                model.addAttribute("article_title",articleInfo.getHead());
+
+                String url = iArticle.getArticleContentUrl(Integer.parseInt(avid));
+                Request request = new Request.Builder().url(url).build();
+                Call call = okHttpClient.newCall(request);
+                Response response = call.execute();
+                String content = response.body().string();
+                model.addAttribute("article_content",content);
+                model.addAttribute("store_url",store_url);
+                return "share_article";
+            } else {
+                model.addAttribute("error_info", "因查询的文章不存在");
+                return "err";
+            }
+        } else {  //视频
+            VideoShow videoShow = iVideo.getVideoById(avid);
+            if (videoShow != null) {
+                List<VideoShow> lists = new ArrayList<>();
+                lists.add(videoShow);
+                iCommonService.improveVideoList(lists, 0);
+                videoShow = lists.get(0);
+
+                model.addAttribute("user_head", userInfo.getHead());
+                model.addAttribute("user_name", userInfo.getName());
+
+                model.addAttribute("user_sing", "我是" + userInfo.getName() + "，这里都是初高中学习类短视频呦");
+
+                model.addAttribute("pic_up_path", videoShow.getPic_up_path());
+                model.addAttribute("praise_count", videoShow.getPraise_count());
+                model.addAttribute("chat_count", videoShow.getChat_count());
+                model.addAttribute("collection_count", videoShow.getCollection_count());
+                model.addAttribute("shared_count", videoShow.getShared_count());
+
+                model.addAttribute("video_subject", videoShow.getWatch_type_name() + videoShow.getSubject_name());
+                model.addAttribute("video_user_name", "@" + videoShow.getUser_name());
+                model.addAttribute("video_title", ToolsFunction.URLDecoderString(videoShow.getTitle()));
+
+//                model.addAttribute("video_show_url", videoShow.getVideo_show_path().replace("http","https"));
+                model.addAttribute("video_show_url", videoShow.getVideo_show_path());
+                model.addAttribute("store_url",store_url);
+
+                return "share_video";
+            } else {
+
+                model.addAttribute("error_info", "您分享的视频不存在");
+                return "err";
+            }
+        }
+    }
 
 }

@@ -1051,8 +1051,8 @@ public class ArticleController extends BaseController {
             iArticle.praiseMainArticcleComment(Integer.parseInt(comment_id));
 
             UserAction userAction = new UserAction();
-            userAction.setFrom_user_id(Integer.parseInt(first_user_id));
-            userAction.setTo_user_id(currentUser.getId());
+            userAction.setFrom_user_id(getCurrentUserId());
+            userAction.setTo_user_id(Integer.parseInt(first_user_id));
             userAction.setType(203);
             userAction.setContent_id(Integer.parseInt(comment_id));
             userAction.setContent_url("");
