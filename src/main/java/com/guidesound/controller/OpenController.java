@@ -6,9 +6,11 @@ import com.google.gson.Gson;
 import com.guidesound.Service.ICommonService;
 import com.guidesound.dao.IArticle;
 import com.guidesound.dao.ITool;
+import com.guidesound.dao.IUser;
 import com.guidesound.dao.IVideo;
 import com.guidesound.models.AppVersion;
 import com.guidesound.models.ArticleInfo;
+import com.guidesound.models.UserInfo;
 import com.guidesound.models.VideoShow;
 import com.guidesound.resp.ListResp;
 import com.guidesound.util.JSONResult;
@@ -46,6 +48,9 @@ public class OpenController extends BaseController {
 
     @Autowired
     ICommonService iCommonService;
+
+    @Autowired
+    IUser iUser;
 
     class AppInfo {
         int upgrade_type;
@@ -219,10 +224,18 @@ public class OpenController extends BaseController {
 
 
     @RequestMapping(value = "/share")
-    String share(String type, String avid, ModelMap model) throws IOException {
-        if (type == null || avid == null) {
-            return "about";
+    String share(String type, String avid,String user_id, ModelMap model) throws IOException {
+        if (type == null || avid == null || user_id == null) {
+            model.addAttribute("error_info", "缺少参数");
+            return "err";
         }
+        UserInfo userInfo = iUser.getUser(Integer.parseInt(user_id));
+        if(userInfo == null) {
+            model.addAttribute("error_info", "分享用户不存在");
+            return "err";
+        }
+
+        String store_url = "http://itunes.apple.com/app/id1445981196";
         if (type.equals("0")) { // 文章
             ArticleInfo articleInfo = iArticle.getArticle(Integer.parseInt(avid));
             if (articleInfo != null) {
@@ -231,9 +244,9 @@ public class OpenController extends BaseController {
                 iCommonService.improveArticleList(lists, 0);
                 articleInfo = lists.get(0);
 
-                model.addAttribute("user_head", articleInfo.getUser_head());
-                model.addAttribute("user_name", articleInfo.getUser_name());
-                model.addAttribute("user_sing", "我是" + articleInfo.getUser_name() + "，这里都是初高中学习类文章呦");
+                model.addAttribute("user_head", userInfo.getHead());
+                model.addAttribute("user_name", userInfo.getName());
+                model.addAttribute("user_sing", "我是" + userInfo.getName() + "，这里都是初高中学习类文章呦");
 
                 model.addAttribute("article_title",articleInfo.getHead());
 
@@ -243,6 +256,7 @@ public class OpenController extends BaseController {
                 Response response = call.execute();
                 String content = response.body().string();
                 model.addAttribute("article_content",content);
+                model.addAttribute("store_url",store_url);
                 return "share_article";
             } else {
                 model.addAttribute("error_info", "因查询的文章不存在");
@@ -255,9 +269,11 @@ public class OpenController extends BaseController {
                 lists.add(videoShow);
                 iCommonService.improveVideoList(lists, 0);
                 videoShow = lists.get(0);
-                model.addAttribute("user_head", videoShow.getUser_head());
-                model.addAttribute("user_name", videoShow.getUser_name());
-                model.addAttribute("user_sing", "我是" + videoShow.getUser_name() + "，这里都是初高中学习类短视频呦");
+
+                model.addAttribute("user_head", userInfo.getHead());
+                model.addAttribute("user_name", userInfo.getName());
+
+                model.addAttribute("user_sing", "我是" + userInfo.getName() + "，这里都是初高中学习类短视频呦");
 
                 model.addAttribute("pic_up_path", videoShow.getPic_up_path());
                 model.addAttribute("praise_count", videoShow.getPraise_count());
@@ -268,6 +284,10 @@ public class OpenController extends BaseController {
                 model.addAttribute("video_subject", videoShow.getWatch_type_name() + videoShow.getSubject_name());
                 model.addAttribute("video_user_name", "@" + videoShow.getUser_name());
                 model.addAttribute("video_title", ToolsFunction.URLDecoderString(videoShow.getTitle()));
+
+//                model.addAttribute("video_show_url", videoShow.getVideo_show_path().replace("http","https"));
+                model.addAttribute("video_show_url", videoShow.getVideo_show_path());
+                model.addAttribute("store_url",store_url);
 
                 return "share_video";
             } else {

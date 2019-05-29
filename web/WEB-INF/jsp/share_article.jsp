@@ -125,7 +125,7 @@
         <p class="name">${user_name}</p>
         <p class="sign_name">${user_sing}</p>
     </div>
-    <a href="#" class="get_app fr">打开看看</a>
+    <a href="${store_url}" class="get_app fr">打开看看</a>
 </div>
 
 

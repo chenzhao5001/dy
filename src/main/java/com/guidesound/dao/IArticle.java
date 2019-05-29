@@ -45,6 +45,9 @@ public interface IArticle {
     @Insert("insert into articlePraise (user_id,article_id,create_time) value (#{arg0},#{arg1},#{arg2})")
     void addPraise(int user_id,int article_id,int time);
 
+    @Update("update article set share_count = share_count + 1 where id = #{arg0}")
+    void addArticleShare(int article_id);
+
     @Insert("insert into articleChat (article_id,first_user_id,first_comment,second_user_id,second_comment,create_time) " +
             "value (#{article_id},#{first_user_id},#{first_comment},#{second_user_id},#{second_comment},#{create_time})")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
