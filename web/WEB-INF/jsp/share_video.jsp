@@ -10,15 +10,31 @@
     <link rel="stylesheet" href="../css/h5/h5.css">
     <script src="../js/jquery-2.1.4.js"></script>
 
+    <script>
+        function isIPhone(){ //判断是否是ios
+            var u = navigator.userAgent;
+            var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+            return isIOS;
+        }
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i)=="micromessenger") { // ios和andoid通用判断微信
+            if(isIPhone() == false) {
+                $("html").css("font-size","16.103043230274vw");
+            }
+        }
+
+    </script>
+
     <style>
 
         .top {
             position: absolute;
             top: 0;
             left: 0;
-            background-color: rgba(127, 93, 0, .8);
+            background-color: rgba(0, 0, 0, .5);
             height: .6rem;
-            padding: .07rem .13rem .08rem .12rem;
+            width: 100%;
+            padding: .07rem 0 .08rem .12rem;
 
         }
 
@@ -57,7 +73,7 @@
 
         .top .get_app {
             margin-top: 0.06rem;
-            margin-left: 0.08rem;
+            margin-right: .1rem;
             display: block;
             width: 0.83rem;
             height: 0.32rem;
@@ -139,14 +155,44 @@
         }
 
         .bk_other {
-            position: fixed;
-            right: 0;
-            bottom: 0;
+            position: absolute;
             width: 100%;
             height: 100%;
             background-size: cover;
         }
 
+        .play {
+            position: absolute;
+            width:100%;
+            height:75%;
+            /*margin: 0 auto;*/
+            top: .6rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+        .play .play_btn {
+            height: 1.5rem;
+            width: 1.5rem;
+            filter:alpha(Opacity=50);
+            -moz-opacity:0.5;
+            opacity: 0.5;
+        }
+
+        .speed {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            bottom: .05rem;
+            height: .05rem;
+            background-color: rgba(0,0,0,.1);
+        }
+        .speed .inner {
+            width: 0;
+            height: .05rem;
+            background: green;
+        }
     </style>
 </head>
 <body>
@@ -154,7 +200,6 @@
 
 <video
         class="bk_other"
-        id="videoALL"
         src="${video_show_url}"
         poster="${pic_up_path}"
         preload="auto"
@@ -166,7 +211,9 @@
         x5-video-orientation="portraint"
         style="object-fit:fill">
 </video>
-
+<div class="play">
+    <img class = "play_btn" src="../icon/h5/play.png" alt="">
+</div>
 
 <%--<video autoplayloopposter="${pic_up_path}" class="bk_other video">--%>
 <%--<source src="${video_show_url}" type="video/mp4">--%>
@@ -178,7 +225,7 @@
         <p class="name">${user_name}</p>
         <p class="sign_name">${user_sing}</p>
     </div>
-    <a href="${store_url}" class="get_app fl">打开看看</a>
+    <a href="${store_url}" class="get_app fr">打开看看</a>
 </div>
 <div class="vodeo_info">
 
@@ -210,14 +257,34 @@
     </ul>
 </div>
 
+<div class = "speed">
+    <div class="inner"></div>
+</div>
+
 <script>
+    var speed_temp = null;
+
     var play_flag = false;
-    $("video").on("click", function () {
+    $(".play").on("click", function () {
+        if(speed_temp == null) {
+            speed_temp = setInterval(function () {
+                // console.log(($("video")[0]).currentTime)
+                // console.log(($("video")[0]).duration)
+
+                var radio_temp = ($("video")[0]).currentTime / (($("video")[0]).duration)
+                var radio=Number(radio_temp*100).toFixed(1);
+                radio+="%";
+                console.log(radio);
+                $(".speed .inner").css("width",radio);
+            },500)
+        }
         if(play_flag == false) {
             ($("video")[0]).play();
+            $(".play_btn").hide();
             play_flag = true;
         } else {
             ($("video")[0]).pause();
+            $(".play_btn").show();
             play_flag = false;
         }
 

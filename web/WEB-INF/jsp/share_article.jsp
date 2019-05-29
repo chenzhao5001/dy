@@ -14,7 +14,7 @@
             /*overflow-y:hidden*/
         /*}*/
         .top {
-            background-color: rgba(127, 93, 0, .8);
+            background-color: rgba(0, 0, 0, .5);
             height: .6rem;
             padding: .07rem .1rem .08rem .12rem;
         }
