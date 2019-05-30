@@ -155,7 +155,9 @@ public class ArticleController extends BaseController {
             ListResp listResp = new ListResp();
             listResp.setCount(0);
             listResp.setList(new ArrayList() );
+            return JSONResult.ok(listResp);
         }
+
 
         int count = iArticle.getArticlebCountyIds(ids);
         System.out.println(count);

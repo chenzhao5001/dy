@@ -9,8 +9,7 @@
     <list default="true" id="b7c7c742-9c4d-41b3-a82e-f22b8938a7fb" name="Default" comment="批量处理审核">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/OpenController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/OpenController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/js/video.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/js/video.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -41,10 +40,27 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="1053" column="57" selection-start-line="1053" selection-start-column="57" selection-end-line="1053" selection-end-column="57" />
+            <state relative-caret-position="209">
+              <caret line="157" column="43" selection-start-line="157" selection-start-column="43" selection-end-line="157" selection-end-column="43" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.0.8.RELEASE/spring-web-5.0.8.RELEASE.jar!/org/springframework/web/method/support/InvocableHandlerMethod.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="209">
+              <caret line="126" selection-start-line="126" selection-end-line="126" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/js/video.js">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -63,30 +79,6 @@
               <caret line="210" column="21" selection-start-line="210" selection-start-column="21" selection-end-line="210" selection-end-column="21" />
               <folding>
                 <element signature="n#style#0;n#video#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="142">
-              <caret line="112" selection-start-line="112" selection-end-line="115" selection-end-column="6" />
-              <folding>
-                <element signature="n#style#0;n#video#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/css/video.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <folding>
-                <element signature="e#545#5538#1" expanded="true" />
-                <element signature="e#5555#13257#1" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -168,7 +160,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>/my_class_room</find>
       <find>getTeacherClassState</find>
       <find>class_info_status</find>
       <find>/my_class</find>
@@ -198,6 +189,7 @@
       <find>/share</find>
       <find>/praise</find>
       <find>/action</find>
+      <find>/collect_list</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -269,7 +261,6 @@
         <option value="$PROJECT_DIR$/web/WEB-INF/jsp/err.jsp" />
         <option value="$PROJECT_DIR$/web/WEB-INF/GuideSound-servlet.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/dao/IArticle.java" />
-        <option value="$PROJECT_DIR$/web/js/video.js" />
         <option value="$PROJECT_DIR$/web/css/video.css" />
         <option value="$PROJECT_DIR$/web/index.html" />
         <option value="$PROJECT_DIR$/web/css/h5/h5.css" />
@@ -277,6 +268,7 @@
         <option value="$PROJECT_DIR$/web/WEB-INF/jsp/share_video.jsp" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/OpenController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/UserController.java" />
+        <option value="$PROJECT_DIR$/web/js/video.js" />
         <option value="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java" />
       </list>
     </option>
@@ -369,18 +361,17 @@
             <path>
               <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
               <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
-              <item name="classes" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-              <item name="guidesound" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
-              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
               <item name="out" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
               <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
+              <item name="out" type="462c0819:PsiDirectoryNode" />
+              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
+              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -422,85 +413,11 @@
               <item name="com" type="462c0819:PsiDirectoryNode" />
               <item name="guidesound" type="462c0819:PsiDirectoryNode" />
               <item name="controller" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
-              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="guidesound" type="462c0819:PsiDirectoryNode" />
-              <item name="controller" type="462c0819:PsiDirectoryNode" />
-              <item name="VideoController.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
-            </path>
-            <path>
-              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
-              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
-              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
               <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
               <item name="target" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
-              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
-              <item name="web" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
-              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
-              <item name="web" type="462c0819:PsiDirectoryNode" />
-              <item name="css" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
-              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
-              <item name="web" type="462c0819:PsiDirectoryNode" />
-              <item name="css" type="462c0819:PsiDirectoryNode" />
-              <item name="h5" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
-              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
-              <item name="web" type="462c0819:PsiDirectoryNode" />
-              <item name="icon" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
-              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
-              <item name="web" type="462c0819:PsiDirectoryNode" />
-              <item name="icon" type="462c0819:PsiDirectoryNode" />
-              <item name="h5" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
-              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
-              <item name="web" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
-              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
-              <item name="web" type="462c0819:PsiDirectoryNode" />
-              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
-              <item name="guide_sound" type="462c0819:PsiDirectoryNode" />
-              <item name="web" type="462c0819:PsiDirectoryNode" />
-              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
-              <item name="jsp" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="guide_sound" type="b2602c69:ProjectViewProjectNode" />
@@ -522,7 +439,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1559144236642" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1559206566592" />
     <property name="editor.config.ad.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../gy_examine" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
@@ -790,7 +707,7 @@
       <workItem from="1558438781439" duration="90000" />
       <workItem from="1558620487512" duration="108004000" />
       <workItem from="1558975668283" duration="873000" />
-      <workItem from="1558976804688" duration="44611000" />
+      <workItem from="1558976804688" duration="48260000" />
     </task>
     <task id="LOCAL-00001" summary="批量处理审核">
       <created>1558372062743</created>
@@ -803,7 +720,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1952899000" />
+    <option name="totallyTimeSpent" value="1956548000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -816,7 +733,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48539326" visible="true" weight="0.25402144" />
       <window_info id="Structure" order="1" weight="0.24932976" />
@@ -919,30 +835,6 @@
     <MESSAGE value="批量处理审核" />
     <option name="LAST_COMMIT_MESSAGE" value="批量处理审核" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java</url>
-          <line>1214</line>
-          <properties />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java</url>
-          <line>1294</line>
-          <properties />
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java</url>
-          <line>1160</line>
-          <properties />
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
@@ -1020,13 +912,6 @@
             <element signature="e#875#876#0" expanded="true" />
             <element signature="e#920#921#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.0.8.RELEASE/spring-web-5.0.8.RELEASE.jar!/org/springframework/web/method/support/InvocableHandlerMethod.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="126" selection-start-line="126" selection-end-line="126" />
         </state>
       </provider>
     </entry>
@@ -1189,13 +1074,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/js/video.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="19" column="746" selection-start-line="19" selection-start-column="746" selection-end-line="19" selection-end-column="746" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/js/jquery-2.1.4.js">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1299,10 +1177,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/web/js/video.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/5.0.8.RELEASE/spring-web-5.0.8.RELEASE.jar!/org/springframework/web/method/support/InvocableHandlerMethod.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="126" selection-start-line="126" selection-end-line="126" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ArticleController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="1053" column="57" selection-start-line="1053" selection-start-column="57" selection-end-line="1053" selection-end-column="57" />
+        <state relative-caret-position="209">
+          <caret line="157" column="43" selection-start-line="157" selection-start-column="43" selection-end-line="157" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
