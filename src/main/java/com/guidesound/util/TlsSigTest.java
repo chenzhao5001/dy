@@ -119,6 +119,44 @@ public class TlsSigTest {
     }
 
 
+    public static String PushTextMessage(String user_id,String info) throws IOException {
+        String rand = ToolsFunction.getNumRandomString(10);
+        String controlUrl = "https://console.tim.qq.com/v4/openim/sendmsg?usersig=" + control_usersig + "&identifier=" + user_control + "&sdkappid=1400158534&random=" + rand + "&contenttype=json";
+
+        JSONObject Info = new JSONObject();
+        Info.put("Text",info);
+        JSONObject cell = new JSONObject();
+        cell.put("MsgType","TIMTextElem");
+        cell.put("MsgContent",Info);
+        List<JSONObject> arr = new ArrayList<>();
+        arr.add(cell);
+
+        JSONObject jsonSend = new JSONObject();
+        jsonSend.put("SyncOtherMachine", 2);
+        jsonSend.put("To_Account", user_id);
+        jsonSend.put("MsgLifeTime", 60);
+        jsonSend.put("MsgRandom", 1234);
+        jsonSend.put("MsgTimeStamp", new Date().getTime() / 1000);
+        jsonSend.put("MsgBody",arr);
+        String send = jsonSend.toString();
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+        RequestBody body = RequestBody.create(JSON, send);
+        Request req = new Request.Builder()
+                .url(controlUrl)
+                .post(body)
+                .build();
+        Response resp;
+        OkHttpClient client_temp = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+        resp = client_temp.newCall(req).execute();
+        String jsonString = resp.body().string();
+        JSONObject ret = new JSONObject(jsonString);
+        int code = ret.getInt("ErrorCode");
+        return ret.toString();
+    }
+
     //发送控制消息
     public static String PushMessage(String user_id,String info) throws IOException {
         String rand = ToolsFunction.getNumRandomString(10);

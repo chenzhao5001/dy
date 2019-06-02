@@ -1623,7 +1623,8 @@ public class UserController extends BaseController{
         String name = userInfo.getName();
         iUser.reportQusetion(question,phone_number, (int) (new Date().getTime() / 1000));
         String info = "意见反馈：用户昵称：" + name + "，手机号：" + phone_number  + "，问题：”" + question  + "“。";
-        TlsSigTest.PushMessage("403",info);
+        TlsSigTest.SendMessage("403", info, info);
+//        TlsSigTest.PushTextMessage("403",info);
         return JSONResult.ok();
     }
 
