@@ -1,8 +1,12 @@
 package com.guidesound.Service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guidesound.Service.ICommonService;
+import com.guidesound.TempStruct.ClassTime;
 import com.guidesound.TempStruct.ItemInfo;
+import com.guidesound.TempStruct.NextClassInfo;
 import com.guidesound.dao.*;
 import com.guidesound.models.*;
 import com.guidesound.ret.CommodityInfo;
@@ -15,6 +19,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -35,6 +40,8 @@ public class CommonServiceImpl implements ICommonService {
     @Autowired
     IArticle iArticle;
 
+    @Autowired
+    IOrder iOrder;
     @Override
     public void changeUserSurplusAmount(int user_id, int change_amount) {
         List<UserSurplusAmount> lists =  iUser.getUserSurplusAmount(user_id);
@@ -344,6 +351,112 @@ public class CommonServiceImpl implements ICommonService {
             }
         }
         return;
+    }
+
+
+    //1 结束 2 未结束 3 课程大纲失败 4 大纲无数据 5 当前没有发布的学时
+    @Override
+    public  NextClassInfo isClassFinish(int class_id,int user_id) {
+        NextClassInfo nextClassInfo = new NextClassInfo();
+        nextClassInfo.next_class_NO = -1;
+        ClassRoom classRoom = iOrder.getClassRoomById(class_id);
+        List<ClassTime> class_item_list = null;
+        ObjectMapper mapper_temp = new ObjectMapper();
+        try {
+            if (classRoom.getOutline().equals("") || classRoom.getOutline() == null) {
+                class_item_list = new ArrayList<>();
+            } else {
+                class_item_list = mapper_temp.readValue(classRoom.getOutline(), new TypeReference<List<ClassTime>>() {
+                });
+            }
+
+        } catch (IOException e) {
+            nextClassInfo.next_class_NO = 0;
+            nextClassInfo.next_class_name = "解析大纲失败";
+            nextClassInfo.next_clsss_time = 0;
+            nextClassInfo.next_class_hour = 0;
+            return nextClassInfo;
+
+        }
+
+        if (class_item_list.size() == 0 && classRoom.getType() == 1) {
+            nextClassInfo.next_class_NO = 0;
+            nextClassInfo.next_class_name = "大纲无内容";
+            nextClassInfo.next_clsss_time = 0;
+            nextClassInfo.next_class_hour = 0;
+            return nextClassInfo;
+        } else if (class_item_list.size() == 0 && classRoom.getType() == 0) {
+            nextClassInfo.next_class_NO = 0;
+            nextClassInfo.next_clsss_time = 0;
+            nextClassInfo.next_class_hour = 0;
+            if (classRoom.getUser_id() == user_id) {
+                nextClassInfo.next_class_name = "需要你发布新课时";
+            } else {
+                nextClassInfo.next_class_name = "等待老师发布新课时";
+            }
+            return nextClassInfo;
+        }
+        ClassTime lastClassTime = class_item_list.get(class_item_list.size() - 1);
+        if (classRoom.getType() == 0) { //1v1
+            int all_time = 0;
+            for (ClassTime item : class_item_list) {
+                all_time += item.getClass_hours();
+            }
+            if (all_time >= classRoom.getAll_hours() && lastClassTime.getClass_time() + lastClassTime.getClass_hours() * 3600 < new Date().getTime() / 1000) {
+                nextClassInfo.next_class_NO = 0;
+                nextClassInfo.next_class_name = "课程已结束";
+                nextClassInfo.next_clsss_time = 0;
+                nextClassInfo.next_class_hour = 0;
+                return nextClassInfo;
+            }
+            if (all_time < classRoom.getAll_hours() && (lastClassTime.getClass_time() + lastClassTime.getClass_hours() * 3600) < new Date().getTime() / 1000) {
+                nextClassInfo.next_class_NO = 0;
+                nextClassInfo.next_clsss_time = 0;
+                nextClassInfo.next_class_hour = 0;
+
+                if (classRoom.getUser_id() == user_id) {
+                    nextClassInfo.next_class_name = "需要你发布新课时";
+                } else {
+                    nextClassInfo.next_class_name = "等待老师发布新课时";
+                }
+                return nextClassInfo;
+            }
+        } else { //班课
+            if (lastClassTime.getClass_time() + lastClassTime.getClass_hours() * 3600 < new Date().getTime() / 1000) {
+                nextClassInfo.next_class_NO = 0;
+                nextClassInfo.next_class_name = "课程已结束";
+                nextClassInfo.next_clsss_time = 0;
+                nextClassInfo.next_class_hour = 0;
+                return nextClassInfo;
+            }
+        }
+
+        //当前时间
+        for (ClassTime item : class_item_list) {
+            int beginTime = item.getClass_time();
+            int endTime = item.getClass_time() + 3600 * item.getClass_hours();
+            int currentTime = (int) (new Date().getTime() / 1000);
+            if (currentTime >= beginTime && currentTime <= endTime) {
+                nextClassInfo.next_class_name = item.getClass_content();
+                nextClassInfo.next_class_hour = item.getClass_hours();
+                nextClassInfo.next_clsss_time = item.getClass_time();
+                nextClassInfo.next_class_NO = item.getClass_number();
+                return nextClassInfo;
+            }
+        }
+        //下次课时间
+        for (ClassTime item : class_item_list) {
+            int beginTime = item.getClass_time();
+            int currentTime = (int) (new Date().getTime() / 1000);
+            if (currentTime < beginTime + 3600 * item.getClass_hours()) {
+                nextClassInfo.next_class_name = item.getClass_content();
+                nextClassInfo.next_class_hour = item.getClass_hours();
+                nextClassInfo.next_clsss_time = item.getClass_time();
+                nextClassInfo.next_class_NO = item.getClass_number();
+                break;
+            }
+        }
+        return nextClassInfo;
     }
 
 }

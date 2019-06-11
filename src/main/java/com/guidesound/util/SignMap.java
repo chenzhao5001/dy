@@ -779,10 +779,10 @@ public class SignMap {
             content2.setChannel_name("专注");
             list.add(content2);
 
-            content2 = new Content2();
-            content2.setChannel_info("2");
-            content2.setChannel_name("问答");
-            list.add(content2);
+//            content2 = new Content2();
+//            content2.setChannel_info("2");
+//            content2.setChannel_name("问答");
+//            list.add(content2);
         } else {
 
             Content2 content2 = new Content2();

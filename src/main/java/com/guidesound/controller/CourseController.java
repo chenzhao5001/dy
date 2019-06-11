@@ -3,19 +3,19 @@ package com.guidesound.controller;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.guidesound.Service.ICommonService;
 import com.guidesound.TempStruct.ClassTime;
 import com.guidesound.TempStruct.CourseOutline;
+import com.guidesound.TempStruct.NextClassInfo;
 import com.guidesound.dao.ICourse;
 import com.guidesound.dao.IExamine;
+import com.guidesound.dao.IOrder;
 import com.guidesound.dao.IUser;
 import com.guidesound.dto.Course1V1DTO;
 import com.guidesound.dto.CourseClassDTO;
 import com.guidesound.dto.TeacherDTO;
 import com.guidesound.find.IntroductionInfo;
-import com.guidesound.models.Course;
-import com.guidesound.models.CourseExamine;
-import com.guidesound.models.Teacher;
-import com.guidesound.models.User;
+import com.guidesound.models.*;
 import com.guidesound.ret.Course1V1;
 import com.guidesound.ret.CourseClass;
 import com.guidesound.ret.CourseItem;
@@ -50,6 +50,10 @@ public class CourseController extends BaseController{
     private IUser iUser;
     @Autowired
     private IExamine iExamine;
+    @Autowired
+    private IOrder iOrder;
+    @Autowired
+    private ICommonService iCommonService;
 
 
     @RequestMapping("/add_1v1_course")
@@ -465,7 +469,17 @@ public class CourseController extends BaseController{
         if(course_id == null) {
             return JSONResult.errorMsg("缺少 course_id");
         }
+
+        List<ClassRoom> listClassRoom = iOrder.getClassRoomByCourseId(Integer.parseInt(course_id));
+        for(ClassRoom classRoom : listClassRoom) {
+            NextClassInfo nextClassInfo = iCommonService.isClassFinish(classRoom.getClass_id(),0);
+            if(nextClassInfo.next_class_name.equals("课程已结束")) {
+                return JSONResult.errorMsg("暂时不支持此功能");
+            }
+        }
+
         iCourse.updateCourseType(Integer.parseInt(course_id),5);
+
         return JSONResult.ok();
     }
 
@@ -475,6 +489,15 @@ public class CourseController extends BaseController{
         if(course_id == null) {
             return JSONResult.errorMsg("缺少 course_id");
         }
+
+        List<ClassRoom> listClassRoom = iOrder.getClassRoomByCourseId(Integer.parseInt(course_id));
+        for(ClassRoom classRoom : listClassRoom) {
+            NextClassInfo nextClassInfo = iCommonService.isClassFinish(classRoom.getClass_id(),0);
+            if(nextClassInfo.next_class_name.equals("课程已结束")) {
+                return JSONResult.errorMsg("暂时不支持此功能");
+            }
+        }
+
         iCourse.deleteCourse(Integer.parseInt(course_id));
         return JSONResult.ok();
     }

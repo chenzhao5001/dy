@@ -1052,6 +1052,9 @@ public class ManagerController extends BaseController {
                     TlsSigTest.SendMessage(uid, "您修改的新用户介绍“" + introduction + "”未通过系统审核，未通过原因是" + failure_content + "”。", "");
                 }
                 iUser.updateUserIntroduceFlag(Integer.parseInt(uid), 1);
+                if(userInfo.getUser_introduce().equals("")) {
+                    iUser.addVideoDuration(Integer.parseInt(uid), 60);
+                }
             }
             iExamine.deleteUserExamine(Integer.parseInt(uid), 2);
 
@@ -1060,7 +1063,7 @@ public class ManagerController extends BaseController {
             if (userExamine.size() > 0) {
                 if (Integer.parseInt(result) == 0) {
                     iUser.updateAuthState(Integer.parseInt(uid), 1);
-                    iUser.addVideoDuration(Integer.parseInt(uid), 60);
+                    iUser.addVideoDuration(Integer.parseInt(uid), 120);
 //                    UserInfo userInfo = iUser.getUser(Integer.parseInt(uid));
                     int duration = userInfo.getVideo_duration() / 60;
                     TlsSigTest.SendMessage(uid, "您申请的认证“认证信息”已经通过系统审核，除真实身份体现外，同时您已经可以上传“" + duration + "”分钟的短视频了。", "");

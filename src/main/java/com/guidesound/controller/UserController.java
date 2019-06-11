@@ -1431,8 +1431,11 @@ public class UserController extends BaseController{
 //            return JSONResult.errorMsg("已经设置过地区");
 //        }
 
+        UserInfo userInfo = iUser.getUser(getCurrentUserId());
         iUser.setUserArea(currentUser.getId(),province,city,area);
-        iUser.addVideoDuration(currentUser.getId(),60);
+        if(!userInfo.getProvince().equals("") && !userInfo.getCity().equals("") && !userInfo.getArea().equals("")) {
+            iUser.addVideoDuration(currentUser.getId(),60);
+        }
         return JSONResult.ok();
     }
 

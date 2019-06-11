@@ -294,7 +294,7 @@ public interface IUser {
 
     @Select("select count(*) from user_action where to_user_id = #{arg0}")
     int getUserActionCount(int user_id);
-    @Select("select * from user_action where to_user_id = #{arg0} limit #{arg1},#{arg2}")
+    @Select("select * from user_action where to_user_id = #{arg0} order by id desc limit #{arg1},#{arg2}")
     public List<UserAction> getUserAction(int user_id,int begin,int end);
 
     @Delete("delete from user_action where to_user_id = #{arg0} and flag = #{arg1}")

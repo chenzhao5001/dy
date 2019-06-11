@@ -307,12 +307,12 @@ public class ClassRoomController extends BaseController {
     @Autowired
     ICommonService iCommonService;
 
-    class NextClassInfo {
-        int next_class_NO;
-        String next_class_name;
-        int next_clsss_time;
-        int next_class_hour;
-    }
+//    class NextClassInfo {
+//        int next_class_NO;
+//        String next_class_name;
+//        int next_clsss_time;
+//        int next_class_hour;
+//    }
 
     //1 结束 2 未结束 3 课程大纲失败 4 大纲无数据 5 当前没有发布的学时
     NextClassInfo isClassFinish(int class_id) {
