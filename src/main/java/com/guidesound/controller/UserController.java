@@ -990,21 +990,6 @@ public class UserController extends BaseController{
         return JSONResult.ok();
     }
 
-    /**
-     *设置省市接口
-     */
-//    @RequestMapping(value = "/set_area")
-//    @ResponseBody
-//    public JSONResult setArea(String province, String city,String area) {
-//        if (province == null || city == null || area == null) {
-//            return JSONResult.errorMsg("缺少province 或 city 或 area 字段");
-//        }
-//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-//        User currentUser = (User)request.getAttribute("user_info");
-//
-//        iUser.updateProvinceAndCity(currentUser.getId(),province,city,area);
-//        return  JSONResult.ok();
-//    }
 
     /**
      *设置学科接口
@@ -1433,7 +1418,7 @@ public class UserController extends BaseController{
 
         UserInfo userInfo = iUser.getUser(getCurrentUserId());
         iUser.setUserArea(currentUser.getId(),province,city,area);
-        if(!userInfo.getProvince().equals("") && !userInfo.getCity().equals("") && !userInfo.getArea().equals("")) {
+        if(userInfo.getProvince().equals("") && userInfo.getCity().equals("") && userInfo.getArea().equals("")) {
             iUser.addVideoDuration(currentUser.getId(),60);
         }
         return JSONResult.ok();
