@@ -88,6 +88,7 @@ public class OpenController extends BaseController {
         if (os_type == null || os_version == null) {
             return JSONResult.errorMsg("缺少参数 os_type 或 os_version");
         }
+        iLogService.addLog("升级接口",os_type + " " + os_version,"");
         AppVersion appVersion = iTool.getVersion();
         AppInfo appInfo = new AppInfo();
         if (os_type.equals("0")) { //android
@@ -109,7 +110,7 @@ public class OpenController extends BaseController {
             appInfo.setUpgrade_message(appVersion.getIos_message());
             appInfo.setDownload_url(appVersion.getIos_download_url());
         }
-
+        appInfo.setUpgrade_type(2);
         return JSONResult.ok(appInfo);
     }
 

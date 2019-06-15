@@ -476,7 +476,7 @@ public class ClassRoomController extends BaseController {
                 if (testPerson > 10) {
                     return JSONResult.errorMsg("试听课学生超过最大人数");
                 } else {
-                    iOrder.updateTestClassPerson(Integer.parseInt(class_id));
+//                    iOrder.updateTestClassPerson(Integer.parseInt(class_id));
                 }
             }
 
@@ -538,6 +538,9 @@ public class ClassRoomController extends BaseController {
         } else { //学生
             if (teacherEnterInfos.size() == 0 || teacherEnterInfos.get(0).getState() == 0) {
                 return JSONResult.errorMsg("老师未进入");
+            }
+            if(classRoom.getIstest() == 1) { //限制课前试听，增加人数
+                iOrder.updateTestClassPerson(Integer.parseInt(class_id));
             }
             ret.setIshost(1);
         }
