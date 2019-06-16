@@ -1611,6 +1611,9 @@ public class ArticleController extends BaseController {
 
         ret.setCount(count_temp);
         ret.setList(list_temp);
+
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        response.setHeader("Access-Control-Allow-Origin","*");
         return JSONResult.ok(ret);
     }
 

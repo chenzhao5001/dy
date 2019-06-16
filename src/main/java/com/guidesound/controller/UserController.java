@@ -687,6 +687,8 @@ public class UserController extends BaseController{
             userInfo.setIm_id_2(im_id2);
             userInfo.setIm_sig_2(im_sig_2);
         }
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        response.setHeader("Access-Control-Allow-Origin","*");
 
         return JSONResult.ok(userInfo);
     }
