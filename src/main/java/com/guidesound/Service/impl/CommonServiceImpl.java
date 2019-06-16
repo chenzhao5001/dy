@@ -245,6 +245,7 @@ public class CommonServiceImpl implements ICommonService {
                 item.setSubject_name(SignMap.getSubjectTypeById(item.getAsk_subject()));
             }
 
+
             item.setContent_url(request.getScheme() + "://" + request.getServerName() + ":"
                     + request.getServerPort() + "/guidesound/article/preview?article_id=" + item.getId());
             if (!user_ids.contains(item.getUser_id())) {

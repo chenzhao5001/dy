@@ -29,6 +29,7 @@ public class ArticleInfo {
     private int user_grade_level;
     private String user_grade_level_name;
     private String content_url;
+    private String content;
     private String type_list;
     private Object pools;
 
@@ -50,6 +51,13 @@ public class ArticleInfo {
     int play_count;
     String auth_info;
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public int getAsk_subject() {
         return ask_subject;
