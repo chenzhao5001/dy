@@ -1861,7 +1861,7 @@ public class UserController extends BaseController{
                 info.setTitle(articleInfo.getHead());
                 info.setContent("暂时固定为“看视频、读文章、发现好老师。”");
                 info.setPic(iUser.getUser(getCurrentUserId()).getHead());
-                String url = "https://daoyinjiaoyu.com/guidesound/open/share?user_id=" + getCurrentUserId() + "&type=0&avid="+avid;
+                String url = "https://www.daoyinjiaoyu.com/static/share/article.html?user_id=" + getCurrentUserId() + "&type=0&avid="+avid;
                 info.setUrl(url);
             }
         } else {
@@ -1871,7 +1871,7 @@ public class UserController extends BaseController{
                 info.setTitle(ToolsFunction.URLDecoderString(videoShow.getTitle()));
                 info.setContent("“看视频、读文章、发现好老师。”");
                 info.setPic(iUser.getUser(getCurrentUserId()).getHead());
-                String url = "https://daoyinjiaoyu.com/guidesound/open/share?user_id=" + getCurrentUserId() + "&type=1&avid="+avid;
+                String url = "http://www.daoyinjiaoyu.com/static/share/video.html?user_id=" + getCurrentUserId() + "&type=1&avid="+avid;
                 info.setUrl(url);
             }
         }
