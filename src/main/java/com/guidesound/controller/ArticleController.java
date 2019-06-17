@@ -1049,7 +1049,7 @@ public class ArticleController extends BaseController {
         if (null == iArticle.findArticcleCommentPraise(currentUser.getId(), Integer.parseInt(comment_id))) {
             String first_user_id = iArticle.getUserIdByCommentId(Integer.valueOf(comment_id));
             String second_user_id = iArticle.getSecondUserIdByCommentId(Integer.valueOf(comment_id));
-            TlsSigTest.PushMessage(second_user_id, "8");
+            TlsSigTest.PushMessage(first_user_id, "8");
             iArticle.praiseArticcleComment(currentUser.getId(), Integer.parseInt(comment_id), (int) (new Date().getTime() / 1000));
             iArticle.praiseMainArticcleComment(Integer.parseInt(comment_id));
 

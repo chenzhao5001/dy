@@ -32,6 +32,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
@@ -1335,6 +1337,8 @@ public class ManagerController extends BaseController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        response.setHeader("Access-Control-Allow-Origin","*");
 
         return JSONResult.ok(record);
     }

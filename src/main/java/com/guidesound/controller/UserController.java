@@ -1336,6 +1336,11 @@ public class UserController extends BaseController{
         }
         List<Integer> user_list = new ArrayList<>();
         for(UserAction item : actionList) {
+            if(item.getType() == 203) {
+                int article_id = iArticle.getArticleIdFromCommentById(item.getContent_id());
+                item.setContent_id(article_id);
+            }
+
             if(!user_list.contains(item.getFrom_user_id())) {
                 user_list.add(item.getFrom_user_id());
             }
