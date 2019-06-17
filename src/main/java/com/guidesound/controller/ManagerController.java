@@ -1,12 +1,11 @@
 package com.guidesound.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.guidesound.Service.ILogService;
-import com.guidesound.TempStruct.InfoMsg;
-import com.guidesound.TempStruct.ItemInfo;
-import com.guidesound.TempStruct.RecordVideo;
+import com.guidesound.TempStruct.*;
 import com.guidesound.dao.IArticle;
 import com.guidesound.dao.IExamine;
 import com.guidesound.dao.IInUser;
@@ -15,28 +14,7 @@ import com.guidesound.dao.IRecord;
 import com.guidesound.dao.IUser;
 import com.guidesound.dao.IVideo;
 import com.guidesound.dao.UserCommodity;
-import com.guidesound.models.ArticleAnswer;
-import com.guidesound.models.ArticleInfo;
-import com.guidesound.models.ArticlePool;
-import com.guidesound.models.ArticleVerify;
-import com.guidesound.models.ClassRoom;
-import com.guidesound.models.CommodityExamine;
-import com.guidesound.models.Course;
-import com.guidesound.models.CourseExamine;
-import com.guidesound.models.InUser;
-import com.guidesound.models.Record;
-import com.guidesound.models.RecordExamine;
-import com.guidesound.models.Teacher;
-import com.guidesound.models.TestRecordCourse;
-import com.guidesound.models.UserExamine;
-import com.guidesound.models.UserInfo;
-import com.guidesound.models.UserShop;
-import com.guidesound.models.Video;
-import com.guidesound.models.VideoInfo;
-import com.guidesound.models.VideoPool;
-import com.guidesound.models.VideoShow;
-import com.guidesound.models.VideoUser;
-import com.guidesound.models.VideoVerify;
+import com.guidesound.models.*;
 import com.guidesound.ret.Authentication;
 import com.guidesound.ret.UserAudit;
 import com.guidesound.ret.WonderfulPart;
@@ -1275,6 +1253,97 @@ public class ManagerController extends BaseController {
         }
         return JSONResult.ok(list);
     }
+
+    ///////////////
+    ///////////////
+    @RequestMapping("/get_by_id")
+    @ResponseBody
+    JSONResult getById(String record_course_id) {
+        if (record_course_id == null) {
+            return JSONResult.errorMsg("");
+        }
+        Record record = iRecord.get(Integer.parseInt(record_course_id));
+        if (record == null) {
+            return JSONResult.ok();
+        }
+
+        record.setRecord_owner_id(record.getUser_id());
+        UserInfo userInfo = iUser.getUser(record.getUser_id());
+        if (userInfo != null) {
+            record.setRecord_owner_name(userInfo.getName());
+            record.setRecord_owner_head(userInfo.getHead());
+        }
+
+        record.setGrade_id((Integer) record.getGrade());
+        record.setGrade(SignMap.getGradeTypeByID(record.getGrade_id()));
+        record.setSubject_id((Integer) record.getSubject());
+        record.setSubject(SignMap.getSubjectTypeById(record.getSubject_id()));
+
+        int count = iRecord.getUserRecordCountByCourseId(record.getRecord_course_id());
+        record.setStudent_count(count);
+
+        List<UserRecordCourse> lists_temp = iRecord.getUserRecordByUserIdAndCourseId(getCurrentUserId(), record.getRecord_course_id());
+        if (lists_temp.size() == 0) {
+            record.setIs_pay(false);
+        } else {
+            record.setIs_pay(true);
+        }
+
+        List<RecordTeacherPic> recordTeacherPicList = null;
+        ObjectMapper mapper_temp = new ObjectMapper();
+        try {
+            recordTeacherPicList = mapper_temp.readValue((String) record.getIntro_teacher_pic(), new TypeReference<List<RecordTeacherPic>>() {
+            });
+            record.setIntro_teacher_pic(recordTeacherPicList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        mapper_temp = new ObjectMapper();
+        List<RecordCoursePic> recordCoursePicList = null;
+        try {
+            recordCoursePicList = mapper_temp.readValue((String) record.getIntro_course_pic(), new TypeReference<List<RecordCoursePic>>() {
+            });
+            record.setIntro_course_pic(recordCoursePicList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        mapper_temp = new ObjectMapper();
+        List<RecordVideo> recordVideoList = null;
+        List<UserRecordCourse> userRecords = iRecord.getUserRecordByCourseId(Integer.parseInt(record_course_id));
+        List<Integer> user_ids = new ArrayList<>();
+        user_ids.add(record.getUser_id());
+        for (UserRecordCourse userRecordCourse : userRecords) {
+            user_ids.add(userRecordCourse.getUser_id());
+        }
+        try {
+            String temp = (String) record.getVideos();
+            System.out.println(temp);
+            JavaType javaType = getCollectionType(ArrayList.class, RecordVideo.class);
+            recordVideoList = mapper_temp.readValue((String) record.getVideos(), javaType);
+            for (RecordVideo recordVideo : recordVideoList) {
+                String cdnClassUrl = recordVideo.getClass_url().replace("cos.ap-beijing", "file");
+                if (user_ids.contains(getCurrentUserId()) || recordVideo.getCharge_type() == 0 || recordVideo.getCharge_type() == 1) {
+                    recordVideo.setClass_url(cdnClassUrl);
+                } else {
+                    recordVideo.setClass_url("");
+                }
+
+            }
+            record.setVideos(recordVideoList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return JSONResult.ok(record);
+    }
+
+//    public static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
+//        ObjectMapper mapper = new ObjectMapper();
+//        return mapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
+//    }
+
 }
 
 

@@ -1204,7 +1204,8 @@ public class VideoController extends BaseController {
 
         if (null == iVideo.findVideoCommentPraise(currentUser.getId(), Integer.parseInt(comment_id))) {
             String first_user_id = iVideo.getUserIdByCommentId(Integer.valueOf(comment_id));
-            TlsSigTest.PushMessage(first_user_id, "7");
+            String second_user_id = iVideo.getSecondUserIdByCommentId(Integer.valueOf(comment_id));
+            TlsSigTest.PushMessage(second_user_id, "7");
 
             UserAction userAction = new UserAction();
             userAction.setFrom_user_id(Integer.parseInt(first_user_id));

@@ -246,6 +246,10 @@ public interface IVideo {
     @Select("select first_user_id from videoChat where id = #{arg0}")
     String getUserIdByCommentId(int id);
 
+    @Select("select second_user_id from videoChat where id = #{arg0}")
+    String getSecondUserIdByCommentId(int id);
+
+
     @Insert("insert into videoChatPraise (user_id,comment_id,create_time) value (#{arg0},#{arg1},#{arg2})")
     void praiseVideoComment(int user_id,int commment_id,int create_time);
 

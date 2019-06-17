@@ -1048,7 +1048,8 @@ public class ArticleController extends BaseController {
 
         if (null == iArticle.findArticcleCommentPraise(currentUser.getId(), Integer.parseInt(comment_id))) {
             String first_user_id = iArticle.getUserIdByCommentId(Integer.valueOf(comment_id));
-            TlsSigTest.PushMessage(first_user_id, "8");
+            String second_user_id = iArticle.getSecondUserIdByCommentId(Integer.valueOf(comment_id));
+            TlsSigTest.PushMessage(second_user_id, "8");
             iArticle.praiseArticcleComment(currentUser.getId(), Integer.parseInt(comment_id), (int) (new Date().getTime() / 1000));
             iArticle.praiseMainArticcleComment(Integer.parseInt(comment_id));
 
@@ -1065,7 +1066,21 @@ public class ArticleController extends BaseController {
         } else {
             return JSONResult.errorMsg("已经点过赞了");
         }
-        return JSONResult.ok();
+        Integer article_id = iArticle.getArticleIdFromCommentById(Integer.parseInt(comment_id));
+        class Info {
+            int article_id;
+
+            public int getArticle_id() {
+                return article_id;
+            }
+
+            public void setArticle_id(int article_id) {
+                this.article_id = article_id;
+            }
+        }
+        Info info = new Info();
+        info.setArticle_id(article_id);
+        return JSONResult.ok(info);
     }
 
     /**

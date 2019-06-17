@@ -95,6 +95,10 @@ public interface IArticle {
     @Select("select * from answerChat where answer_id = #{arg0} and deleted = 0 order by create_time desc limit #{arg1},#{arg2}")
     List<AnswerComment> getAnswerCommentList(int answer_id, int begin, int end);
 
+    @Select("select article_id from articleChat where id = #{arg0}")
+    Integer getArticleIdFromCommentById(int id);
+
+
     @Select("select content from article where id = #{arg0}")
     String getContentById(int article_id);
 
@@ -130,6 +134,9 @@ public interface IArticle {
 
     @Select("select first_user_id from articleChat where id = #{arg0}")
     String getUserIdByCommentId(int id);
+
+    @Select("select second_user_id from articleChat where id = #{arg0}")
+    String getSecondUserIdByCommentId(int id);
 
     @Select("select comment_id from articleChatPraise where user_id = #{arg0} and deleted = 0")
     List<Integer> getPraiseCommentArticle(int user_id);
