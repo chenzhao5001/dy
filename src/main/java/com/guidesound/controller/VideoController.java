@@ -1208,8 +1208,8 @@ public class VideoController extends BaseController {
             TlsSigTest.PushMessage(first_user_id, "7");
 
             UserAction userAction = new UserAction();
-            userAction.setFrom_user_id(Integer.parseInt(first_user_id));
-            userAction.setTo_user_id(currentUser.getId());
+            userAction.setFrom_user_id(currentUser.getId());
+            userAction.setTo_user_id(Integer.parseInt(first_user_id));
             userAction.setType(103);
             userAction.setFlag(2);
             userAction.setContent_id(Integer.parseInt(comment_id));
