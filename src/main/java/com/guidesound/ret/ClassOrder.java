@@ -34,6 +34,15 @@ public class ClassOrder {
         String class_content;
         int class_status;
         int student_id;
+        int class_id;
+
+    public int getClass_id() {
+        return class_id;
+    }
+
+    public void setClass_id(int class_id) {
+        this.class_id = class_id;
+    }
 
     public int getStudent_id() {
         return student_id;

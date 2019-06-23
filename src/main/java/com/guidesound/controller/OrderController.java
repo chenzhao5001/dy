@@ -207,7 +207,7 @@ public class OrderController extends BaseController {
             courseOutline.setClass_status(0);
             if (courseOutline.getClass_time() + courseOutline.getClass_hours() * 3600 < new Date().getTime() / 1000) {
 
-                List<ClassTimeInfo> classTimeInfo_teacher = iOrder.getClassTimeStatus(Integer.parseInt(order_id), classOrder.getCourse_owner_id(), courseOutline.getClass_time());
+                List<ClassTimeInfo> classTimeInfo_teacher = iOrder.getClassTimeStatusByClassId(classOrder.getClass_id(), classOrder.getCourse_owner_id(), courseOutline.getClass_time());
                 if (classTimeInfo_teacher.size() > 0 && classTimeInfo_teacher.get(0).getStatus() == 1) {
                     hour_theory_use += courseOutline.getClass_hours();
                 }
@@ -285,7 +285,11 @@ public class OrderController extends BaseController {
         int hour_actual_use = 0;
         int hour_forget_use = 0;
         int hour_surplus_use = 0;
+
+
+
         int all_time = order1V1.getAll_hours();
+        hour_surplus_use = all_time;
 
         List<ClassTime> class_item_list = new ArrayList<>();
         ObjectMapper mapper_temp = new ObjectMapper();

@@ -179,7 +179,7 @@ public class ClassRoomController extends BaseController {
 
     }
 
-    int getTeacherClassState(ClassRoom classRoom) {
+    int getTeacherClassState(ClassRoom classRoom,int order_id) {
         if (classRoom.getIstest() == 1) {
             return 1;
         }
@@ -219,7 +219,9 @@ public class ClassRoomController extends BaseController {
                 } else { //学生
                     List<StudentClass> list_student = iOrder.getStudentClassByClassId(classRoom.getClass_id());
                     if (list_student.size() != 0) {
-                        int order_id = list_student.get(0).getOrder_id();
+                        if(order_id == 0 ) {
+                            order_id = list_student.get(0).getOrder_id();
+                        }
                         OrderInfo orderInfo = iOrder.getOrderById(order_id);
                         if (orderInfo != null) {
                             if (orderInfo.getRefund_amount() != 0) {
@@ -253,7 +255,10 @@ public class ClassRoomController extends BaseController {
 
                 List<StudentClass> list_student = iOrder.getStudentClassByClassId(classRoom.getClass_id());
                 if (list_student.size() != 0) {
-                    int order_id = list_student.get(0).getOrder_id();
+                    if(order_id == 0) {
+                        order_id = list_student.get(0).getOrder_id();
+                    }
+
                     OrderInfo orderInfo = iOrder.getOrderById(order_id);
                     if (orderInfo != null) {
                         if (orderInfo.getRefund_amount() > 0) {
@@ -613,7 +618,8 @@ public class ClassRoomController extends BaseController {
                             int one_mount = 0;
                             if(count > 0) {
                                 one_mount = orderList.get(0).getPrice_one_hour()*((classTimeInfo.getEnd_time() - classTimeInfo.getBegin_time()) / 3600);
-                                all_amount = one_mount * count;
+//                                all_amount = one_mount * count;
+                                all_amount = one_mount;
                             }
 
                             for(OrderInfo info : orderList) {
@@ -763,7 +769,7 @@ public class ClassRoomController extends BaseController {
             classRoomRet.setOutline(beanList);
         }
 
-        int state = getTeacherClassState(classRoom);
+        int state = getTeacherClassState(classRoom,0);
         classRoomRet.setClass_info_status(state);
         //学生id  1v1 使用
         int student_id = 0;
@@ -915,7 +921,7 @@ public class ClassRoomController extends BaseController {
                 List<StudentClass> s_list = iOrder.getStudentClassByInfo(getCurrentUserId(), item.getClass_id());
                 if (s_list.size() > 0) {
                     student.setOrder_id(s_list.get(0).getOrder_id());
-                    student.setOrder_status(getTeacherClassState(item));
+                    student.setOrder_status(getTeacherClassState(item,s_list.get(0).getOrder_id()));
                 }
                 teacherClass1.setStudent(student);
                 if(student.getOrder_status() == 2) { //已经退费
@@ -925,7 +931,7 @@ public class ClassRoomController extends BaseController {
             } else if (item.flag == 1) { //老师
                 Teacher teacher = new Teacher();
                 teacher.setIstest(item.getIstest());
-                teacher.setClass_info_status(getTeacherClassState(item));
+                teacher.setClass_info_status(getTeacherClassState(item,0));
                 teacherClass1.setStudent(null);
                 teacherClass1.setTeacher(teacher);
                 if(teacher.getClass_info_status() == 4) { //已经退费
