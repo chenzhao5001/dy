@@ -6,7 +6,10 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b7c7c742-9c4d-41b3-a82e-f22b8938a7fb" name="Default" comment="批量处理审核" />
+    <list default="true" id="b7c7c742-9c4d-41b3-a82e-f22b8938a7fb" name="Default" comment="批量处理审核">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -75,8 +78,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="1350" column="1" selection-start-line="1350" selection-start-column="1" selection-end-line="1350" selection-end-column="1" />
+            <state relative-caret-position="258">
+              <caret line="1246" column="43" lean-forward="true" selection-start-line="1246" selection-start-column="43" selection-end-line="1246" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -156,7 +159,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>upUserHeadAndName</find>
       <find>/down_course</find>
       <find>/set_area</find>
       <find>addLog</find>
@@ -186,6 +188,7 @@
       <find>hour_surplus_use</find>
       <find>/my_class_room</find>
       <find>getTeacherClassState</find>
+      <find>get_by_id</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -321,7 +324,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="145" />
     <option name="y" value="140" />
     <option name="width" value="765" />
@@ -460,7 +463,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1561562050574" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1561646612234" />
     <property name="editor.config.ad.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../gy_examine" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
@@ -738,7 +741,7 @@
       <workItem from="1560864922081" duration="928000" />
       <workItem from="1560997937181" duration="266000" />
       <workItem from="1561000265800" duration="1209000" />
-      <workItem from="1561294880826" duration="10140000" />
+      <workItem from="1561294880826" duration="10712000" />
     </task>
     <task id="LOCAL-00001" summary="批量处理审核">
       <created>1558372062743</created>
@@ -751,7 +754,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2003656000" />
+    <option name="totallyTimeSpent" value="2004228000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -778,13 +781,13 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49932975" weight="0.30736545" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.42492917" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.45509383" visible="true" weight="0.18130311" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.45509383" visible="true" weight="0.42492917" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3286119" />
       <window_info anchor="bottom" id="Application Servers" order="7" weight="0.3286119" />
       <window_info anchor="bottom" id="Spring" order="8" weight="0.3286119" />
-      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.49262735" weight="0.28895184" />
+      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.49262735" weight="0.58498585" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5160858" side_tool="true" weight="0.3696884" />
       <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.4256032" weight="0.2776204" />
       <window_info anchor="bottom" id="Problems" order="12" weight="0.3286119" />
@@ -1286,8 +1289,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/guidesound/controller/ManagerController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="1350" column="1" selection-start-line="1350" selection-start-column="1" selection-end-line="1350" selection-end-column="1" />
+        <state relative-caret-position="258">
+          <caret line="1246" column="43" lean-forward="true" selection-start-line="1246" selection-start-column="43" selection-end-line="1246" selection-end-column="43" />
         </state>
       </provider>
     </entry>

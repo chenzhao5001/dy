@@ -1243,7 +1243,7 @@ public class ManagerController extends BaseController {
             temp.setGrade_id((Integer) item.getGrade());
             temp.setGrade(SignMap.getGradeTypeByID((Integer) item.getGrade()));
             temp.setSubject_id((Integer) item.getSubject());
-            temp.setSubject(SignMap.getGradeTypeByID((Integer) item.getSubject()));
+            temp.setSubject(SignMap.getSubjectTypeById((Integer) item.getSubject()));
             temp.setPrice(item.getPrice());
             temp.setRecord_course_id(item.getRecord_course_id());
             temp.setRecord_course_name(item.getRecord_course_name());
